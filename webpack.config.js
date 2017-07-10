@@ -5,7 +5,7 @@ var uglifyJsPlugin = require('uglify-js-plugin');
 
 var devtool = "source-map";
 var plugins = [];
-plugins.push(new cleanWebpackPlugin(['build/*.{js,map}', 'build/images/*.{png,jpg,jpeg,gif}', 'build/font/*.woff'],
+plugins.push(new cleanWebpackPlugin(['build/*.{js,map}', 'build/images/*.{png,jpg,jpeg,gif}'],
   {
     root: '',
     verbose: true,
@@ -21,16 +21,24 @@ if (compile_mode == "prod") {
 }
 //'E:\\git\\MediaManagementSuite\\Src\\App\\ContentCenter\\Web\\src\\libs\\mam'
 module.exports = {
-  entry: __dirname + '/src/js/build/main.js',
+  entry: __dirname + '/src/js/main.js',
   output: {
-    filename: 'mam-user-selector.js',
-    chunkFilename: '[name].[chunkhash:5].chunk.js'
+      path: __dirname + '/build',
+      publicPath : "/build/",
+      filename: "monk.js",
+      chunkFilename: '[name].[chunkhash:5].chunk.js'
   },
   devtool: devtool,  //生成source file
   module: {
     loaders: [
-      { test: /\.(css|scss)$/, loader: 'style-loader!css-loader!sass-loader' },
-      { test: /\.(jpg|png)$/, loader: 'url-loader?limit=16384&name=images/[name].[hash].[ext]' }
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            query: {
+                presets: ['es2015']
+            }
+        }
     ]
   },
   plugins: plugins

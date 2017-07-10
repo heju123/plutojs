@@ -1,17 +1,15 @@
 {
-  "name": "mam-user-selector",
+  "name": "monk",
   "version": "1.0.0",
   "description": "",
-  "main": "mam-user-selector.js",
+  "main": "",
   "devDependencies": {
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
-    "css-loader": "*",
     "lite-server": "^2.3.0",
-    "node-sass": "*",
-    "sass-loader": "*",
-    "style-loader": "*",
     "uglify-js-plugin": "*",
-    "url-loader": "*",
     "webpack": "*"
   },
   "scripts": {
@@ -19,6 +17,6 @@
     "dev": "webpack --env=dev --progress --watch",
     "test": "lite-server"
   },
-  "author": "",
+  "author": "HEJU",
   "license": "ISC"
 }

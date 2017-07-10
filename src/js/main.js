@@ -1,7 +1,9 @@
 /**
- * Created by heju on 2017/5/31.
+ * Created by heju on 2017/7/10.
  */
 
-var Main = function () {
-    console.log("123");
-};
+class Main {
+    constructor(){
+        console.log("123");
+    }
+}
