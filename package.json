@@ -1,0 +1,24 @@
+{
+  "name": "mam-user-selector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mam-user-selector.js",
+  "devDependencies": {
+    "clean-webpack-plugin": "*",
+    "css-loader": "*",
+    "lite-server": "^2.3.0",
+    "node-sass": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "uglify-js-plugin": "*",
+    "url-loader": "*",
+    "webpack": "*"
+  },
+  "scripts": {
+    "build": "webpack -p --env=prod && webpack --env=dev",
+    "dev": "webpack --env=dev --progress --watch",
+    "test": "lite-server"
+  },
+  "author": "",
+  "license": "ISC"
+}
