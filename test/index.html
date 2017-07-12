@@ -4,9 +4,26 @@
     <title>测试页面</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="libs/jquery.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="../build/monk.js"></script>
+    <style>
+        body{
+            padding:0px;
+            margin:0px;
+        }
+
+        #mainBox{
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-    
+    <div id="mainBox"></div>
+    <script>
+        $("#mainBox").width($(window).width());
+        $("#mainBox").height($(window).height());
+
+        var monk = new window.Monk("mainBox");
+    </script>
 </body>
 </html>
