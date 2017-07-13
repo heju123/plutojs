@@ -93,7 +93,7 @@ var Main = function () {
 
     _createClass(Main, [{
         key: "run",
-        value: function run() {
+        value: function run(rootPanel) {
             this.fps.startLoop();
         }
     }]);
