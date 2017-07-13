@@ -70,26 +70,91 @@
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by heju on 2017/7/10.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _fps = __webpack_require__(1);
+
+var _fps2 = _interopRequireDefault(_fps);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Main = function () {
+    function Main(eleId) {
+        _classCallCheck(this, Main);
+
+        var mainBody = document.getElementById(eleId);
+        this.fps = new _fps2.default(mainBody);
+    }
+
+    _createClass(Main, [{
+        key: "run",
+        value: function run() {
+            this.fps.startLoop();
+        }
+    }]);
+
+    return Main;
+}();
+
+window.Monk = Main;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Created by heju on 2017/7/10.
+ * Created by heju on 2017/7/13.
  */
+var Fps = function () {
+    function Fps(mainBody) {
+        _classCallCheck(this, Fps);
 
-var Main = function Main(eleId) {
-    _classCallCheck(this, Main);
+        this.canvas = document.createElement("CANVAS");
+        mainBody.appendChild(this.canvas);
+        this.canvas.width = mainBody.offsetWidth;
+        this.canvas.height = mainBody.offsetHeight;
+        this.ctx = this.canvas.getContext('2d');
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    }
 
-    var canvasDom = document.getElementById(eleId);
-    var canvas = document.createElement("CANVAS");
-    canvas.width = canvasDom.offsetWidth;
-    canvas.height = canvasDom.offsetHeight;
-    canvasDom.appendChild(canvas);
-    var ctx = canvas.getContext('2d');
-    ctx.strokeStyle = "#000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-};
+    /** 开始循环绘制 */
 
-window.Monk = Main;
+
+    _createClass(Fps, [{
+        key: "startLoop",
+        value: function startLoop() {
+            window.requestAnimationFrame(this.draw.bind(this));
+        }
+    }, {
+        key: "draw",
+        value: function draw() {
+            this.ctx.strokeStyle = "#000";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            window.requestAnimationFrame(this.draw.bind(this));
+        }
+    }]);
+
+    return Fps;
+}();
+
+exports.default = Fps;
 
 /***/ })
 /******/ ]);

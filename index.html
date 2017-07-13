@@ -4,8 +4,8 @@
     <title>测试页面</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="jquery.min.js"></script>
-    <script src="../build/monk.js"></script>
+    <script src="test/jquery.min.js"></script>
+    <script src="build/monk.js"></script>
     <style>
         body{
             padding:0px;
@@ -24,6 +24,8 @@
         $("#mainBox").height($(window).height());
 
         var monk = new window.Monk("mainBox");
+
+        monk.run();
     </script>
 </body>
 </html>
