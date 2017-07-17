@@ -2,6 +2,81 @@
  * Created by heju on 2017/7/14.
  */
 let commonUtil = {
+    asyncLoadedScripts: {},
+    asyncLoadedScriptsCallbackQueue: {},
+    getScriptDomFromUrl : (url)=>{
+        let dom;
+        if (/.+\.js$/.test(url))
+        {
+            dom = document.createElement("SCRIPT");
+            dom.setAttribute("type", "text/javascript");
+            dom.setAttribute("src", url);
+        }
+        else if(/.+\.css$/.test(url))
+        {
+            dom = document.createElement('link');
+            dom.href = url;
+            dom.type = "text/css";
+            dom.rel="stylesheet";
+        }
+        return dom;
+    },
+    /**
+     * 异步加载script或css
+     */
+    asyncLoadScript: (url, callback) => {
+        let $this = commonUtil;
+        if ($this.asyncLoadedScripts[url] != undefined)//已加载script标签
+        {
+            if (callback && typeof(callback) == "function") {
+                if ($this.asyncLoadedScripts[url] == 0)//未执行首个script标签的回调
+                {
+                    if (!$this.asyncLoadedScriptsCallbackQueue[url]) {
+                        $this.asyncLoadedScriptsCallbackQueue[url] = [];
+                    }
+                    $this.asyncLoadedScriptsCallbackQueue[url].push(callback);
+                }
+                else {
+                    callback.apply($this, []);
+                }
+            }
+            return;
+        }
+        $this.asyncLoadedScripts[url] = 0;
+        let scriptDom = $this.getScriptDomFromUrl(url);
+        if (scriptDom.readyState) {
+            scriptDom.onreadystatechange = function () {
+                if (scriptDom.readyState == "loaded" || scriptDom.readyState == "complete") {
+                    scriptDom.onreadystatechange = null;
+                    $this.asyncLoadedScripts[url] = 1;
+                    if (callback && typeof(callback) == "function") {
+                        callback.apply($this, []);
+                    }
+                    if ($this.asyncLoadedScriptsCallbackQueue[url]) {
+                        for (let i = 0, j = $this.asyncLoadedScriptsCallbackQueue[url].length; i < j; i++) {
+                            $this.asyncLoadedScriptsCallbackQueue[url][i].apply($this, []);
+                        }
+                        $this.asyncLoadedScriptsCallbackQueue[url] = undefined;
+                    }
+                }
+            }
+        }
+        else {
+            scriptDom.onload = function () {
+                $this.asyncLoadedScripts[url] = 1;
+                if (callback && typeof(callback) == "function") {
+                    callback.apply($this, []);
+                }
+                if ($this.asyncLoadedScriptsCallbackQueue[url]) {
+                    for (let i = 0, j = $this.asyncLoadedScriptsCallbackQueue[url].length; i < j; i++) {
+                        $this.asyncLoadedScriptsCallbackQueue[url][i].apply($this, []);
+                    }
+                    $this.asyncLoadedScriptsCallbackQueue[url] = undefined;
+                }
+            }
+        }
+        document.getElementsByTagName('head')[0].appendChild(scriptDom);
+    },
     concatList : (list, addList)=>{
         addList.forEach((item)=>{
             list.push(item);

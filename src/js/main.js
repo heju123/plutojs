@@ -2,6 +2,7 @@
  * Created by heju on 2017/7/10.
  */
 import Fps from "./ui/fps.js";
+import httpUtil from "./util/httpUtil.js";
 
 class Main {
     constructor(eleId){
@@ -10,7 +11,9 @@ class Main {
     }
 
     run(rootPanel){
-        this.fps.startLoop();
+        httpUtil.get("/monk-config.json").then((res)=>{
+            this.fps.startLoop();
+        });
     }
 }
 

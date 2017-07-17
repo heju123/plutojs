@@ -79,6 +79,10 @@ var _fps = __webpack_require__(1);
 
 var _fps2 = _interopRequireDefault(_fps);
 
+var _httpUtil = __webpack_require__(2);
+
+var _httpUtil2 = _interopRequireDefault(_httpUtil);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94,7 +98,11 @@ var Main = function () {
     _createClass(Main, [{
         key: "run",
         value: function run(rootPanel) {
-            this.fps.startLoop();
+            var _this = this;
+
+            _httpUtil2.default.get("/monk-config.json").then(function (res) {
+                _this.fps.startLoop();
+            });
         }
     }]);
 
@@ -144,6 +152,8 @@ var Fps = function () {
     }, {
         key: "draw",
         value: function draw() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
             this.ctx.strokeStyle = "#000";
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -155,6 +165,80 @@ var Fps = function () {
 }();
 
 exports.default = Fps;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/**
+ * Created by heju on 2017/2/10.
+ */
+var httpUtil = {
+    getGetParamStr: function getGetParamStr(param, normal) {
+        var str = "";
+        if (param != undefined) {
+            for (var key in param) {
+                if (normal) {
+                    str += key + "=" + param[key] + "&";
+                } else {
+                    str += "/" + param[key];
+                }
+            }
+            if (normal) {
+                str = str.substring(0, str.length - 1);
+            }
+        }
+        return str;
+    },
+    get: function get(url, param) {
+        return new Promise(function (resolve, reject) {
+            var purl = url;
+            if (param) {
+                purl = url + httpUtil.getGetParamStr(param);
+            }
+            var xmlhttp = void 0;
+            if (window.XMLHttpRequest) {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    resolve(xmlhttp.responseText);
+                }
+            };
+            xmlhttp.open("GET", purl, true);
+            xmlhttp.send();
+        });
+    },
+    post: function post(url, param, callback, errCallback) {
+        $.ajax({
+            type: "post",
+            contentType: 'application/json',
+            data: JSON.stringify(param),
+            url: url,
+            success: function success(data, textStatus, jqXHR) {
+                if (callback && typeof callback == "function") {
+                    callback.apply(this, [data]);
+                }
+            },
+            error: function error(jqXHR, textStatus, errorThrown) {
+                if (errCallback && typeof errCallback == "function") {
+                    errCallback.apply(this, [textStatus]);
+                }
+            }
+        });
+    }
+};
+exports.default = httpUtil;
 
 /***/ })
 /******/ ]);
