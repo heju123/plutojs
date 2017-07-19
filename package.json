@@ -8,14 +8,12 @@
     "babel-loader": "*",
     "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
-    "lite-server": "^2.3.0",
     "uglify-js-plugin": "*",
     "webpack": "*"
   },
   "scripts": {
     "build": "webpack -p --env=prod && webpack --env=dev",
-    "dev": "webpack --env=dev --progress --watch",
-    "test": "lite-server -c lite-server.json"
+    "dev": "webpack --env=dev --progress --watch"
   },
   "author": "HEJU",
   "license": "ISC"

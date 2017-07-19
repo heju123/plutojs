@@ -46,7 +46,7 @@ let httpUtil = {
             {
                 if (xmlhttp.readyState==4 && xmlhttp.status==200)
                 {
-                    resolve(xmlhttp.responseText);
+                    resolve(xmlhttp.response);
                 }
             }
             xmlhttp.open("GET",purl,true);

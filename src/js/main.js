@@ -3,6 +3,7 @@
  */
 import Fps from "./ui/fps.js";
 import httpUtil from "./util/httpUtil.js";
+import commonUtil from "./util/commonUtil.js";
 
 class Main {
     constructor(eleId){
@@ -10,10 +11,13 @@ class Main {
         this.fps = new Fps(mainBody);
     }
 
-    run(rootPanel){
-        httpUtil.get("/monk-config.json").then((res)=>{
-            this.fps.startLoop();
-        });
+    setMainView(mainView){
+        this.fps.setMainView(mainView);
+        this.fps.startLoop();
+    }
+
+    run(mainView){
+        this.setMainView(mainView);
     }
 }
 

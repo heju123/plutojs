@@ -23,7 +23,7 @@ if (compile_mode == "prod") {
 module.exports = {
   entry: __dirname + '/src/js/main.js',
   output: {
-      path: __dirname + '/build',
+      path: 'F:\\monkTest\\libs\\monk',
       publicPath : "/build/",
       filename: "monk.js",
       chunkFilename: '[name].[chunkhash:5].chunk.js'
