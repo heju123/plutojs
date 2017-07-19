@@ -31,7 +31,8 @@ export default class Fps{
             switch (view.type)
             {
                 case "panel" :
-                    console.log(view.style);
+                    this.ctx.fillStyle = view.style.backgroundColor;
+                    this.ctx.fillRect(view.style.x, view.style.y, view.style.width, view.style.height);
                     break;
                 default : break;
             }
@@ -42,7 +43,7 @@ export default class Fps{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         //背景
-        this.ctx.strokeStyle = "#000";
+        this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.drawView(this.viewState.view);

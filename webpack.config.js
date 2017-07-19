@@ -5,12 +5,12 @@ var uglifyJsPlugin = require('uglify-js-plugin');
 
 var devtool = "source-map";
 var plugins = [];
-plugins.push(new cleanWebpackPlugin(['build/*.{js,map}', 'build/images/*.{png,jpg,jpeg,gif}'],
+plugins.push(new cleanWebpackPlugin(['*.{js,map}', 'images/*.{png,jpg,jpeg,gif}'],
   {
-    root: '',
+    root: 'D:\\nodeProjects\\monkTest\\libs\\monk',
     verbose: true,
     dry: false
-  }));
+  }))
 if (compile_mode == "prod") {
   plugins.push(new uglifyJsPlugin({
     compress: true, //default 'true', you can pass 'false' to disable this plugin
@@ -19,11 +19,11 @@ if (compile_mode == "prod") {
   }));
   devtool = "cheap-module-source-map";
 }
-//'E:\\git\\MediaManagementSuite\\Src\\App\\ContentCenter\\Web\\src\\libs\\mam'
+//'F:\\monkTest\\libs\\monk'
 module.exports = {
   entry: __dirname + '/src/js/main.js',
   output: {
-      path: 'F:\\monkTest\\libs\\monk',
+      path: 'D:\\nodeProjects\\monkTest\\libs\\monk',
       publicPath : "/build/",
       filename: "monk.js",
       chunkFilename: '[name].[chunkhash:5].chunk.js'
