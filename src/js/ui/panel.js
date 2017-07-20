@@ -10,20 +10,21 @@ export default class Panel extends Rect{
         if (cfg.controller)
         {
             this.controller = new cfg.controller();
-            this.controller.doWork();
         }
         if (cfg.children)
         {
             this.children = [];
             let chiCfg;
+            let childCom;
             for (let i = 0, j = cfg.children.length; i < j; i++)
             {
                 chiCfg = cfg.children[i];
                 switch (chiCfg.type)
                 {
                     case "panel" :
-                        let panel = new Panel(chiCfg);
-                        this.children.push(panel);
+                        childCom = new Panel(chiCfg);
+                        childCom.parent = this;
+                        this.children.push(childCom);
                         break;
                     default : break;
                 }
