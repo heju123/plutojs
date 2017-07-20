@@ -11,14 +11,18 @@ class Main {
         this.fps = new Fps(mainBody);
     }
 
-    setMainView(mainView){
-        this.fps.setMainView(mainView);
+    setMainView(viewCfg){
+        this.fps.setMainView(viewCfg);
         this.fps.startLoop();
     }
 
-    run(mainView){
-        this.setMainView(mainView);
+    run(viewCfg){
+        this.setMainView(viewCfg);
     }
 }
 
-window.Monk = Main;
+window.Monk = {
+    Main : Main,
+    commonUtil : commonUtil,
+    httpUtil : httpUtil
+};

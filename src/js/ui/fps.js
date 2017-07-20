@@ -14,8 +14,8 @@ export default class Fps{
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     }
 
-    setMainView(view){
-        this.viewState = new ViewState(view);
+    setMainView(viewCfg){
+        this.viewState = new ViewState(viewCfg);
     }
 
     /** 开始循环绘制 */
@@ -23,18 +23,14 @@ export default class Fps{
         window.requestAnimationFrame(this.draw.bind(this));
     }
 
-    drawView(state){
-        let view;
-        for (let i = 0, j = state.views.length; i < j; i++)
+    drawView(com){
+        com.draw(this.ctx);
+        if (com.children)
         {
-            view = state.views[i];
-            switch (view.type)
-            {
-                case "panel" :
-                    this.ctx.fillStyle = view.style.backgroundColor;
-                    this.ctx.fillRect(view.style.x, view.style.y, view.style.width, view.style.height);
-                    break;
-                default : break;
+            let children;
+            for (let i = 0, j = com.children.length; i < j; i++) {
+                children = com.children[i];
+                this.drawView(children);
             }
         }
     }
@@ -46,7 +42,7 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.drawView(this.viewState.view);
+        this.drawView(this.viewState.rootPanel);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }

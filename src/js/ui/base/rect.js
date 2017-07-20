@@ -11,4 +11,9 @@ export default class Rect{
         this.height = style.height;
         this.backgroundColor = style.backgroundColor;
     }
+
+    draw(ctx){
+        ctx.fillStyle = this.backgroundColor;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
 }
