@@ -11,10 +11,6 @@ export default class Panel extends Rect{
         {
             this.controller = new cfg.controller(this);
         }
-        else if (cfg.getController && typeof(cfg.getController) == "function")
-        {
-            cfg.getController(this.asyncGetController.bind(this));
-        }
         else
         {
             console.error("无法创建controller，controller配置错误！");
@@ -28,27 +24,29 @@ export default class Panel extends Rect{
             for (let i = 0, j = cfg.children.length; i < j; i++)
             {
                 chiCfg = cfg.children[i];
-                switch (chiCfg.type)
+                if (typeof(chiCfg) == "function")//异步加载view
                 {
-                    case "panel" :
-                        childCom = new Panel(chiCfg);
-                        childCom.parent = this;
-                        this.children.push(childCom);
-                        break;
-                    default : break;
+                    chiCfg(this.asyncGetView.bind(this));
+                }
+                else
+                {
+                    switch (chiCfg.type)
+                    {
+                        case "panel" :
+                            childCom = new Panel(chiCfg);
+                            childCom.parent = this;
+                            this.children.push(childCom);
+                            break;
+                        default : break;
+                    }
                 }
             }
         }
     }
 
-    asyncGetController(controller){
-        if (controller && typeof(controller) == "function")
-        {
-            this.controller = new controller(this);
-        }
-        else
-        {
-            console.error("无法创建controller，controller配置错误！");
-        }
+    asyncGetView(viewCfg){
+        let panel = new Panel(viewCfg);
+        panel.parent = this;
+        this.children.push(panel);
     }
 }
