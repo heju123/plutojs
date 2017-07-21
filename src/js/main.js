@@ -4,6 +4,7 @@
 import Fps from "./ui/fps.js";
 import httpUtil from "./util/httpUtil.js";
 import commonUtil from "./util/commonUtil.js";
+import Controller from "./ui/base/controller.js";
 
 class Main {
     constructor(eleId){
@@ -24,5 +25,6 @@ class Main {
 window.Monk = {
     Main : Main,
     commonUtil : commonUtil,
-    httpUtil : httpUtil
+    httpUtil : httpUtil,
+    Controller : Controller
 };

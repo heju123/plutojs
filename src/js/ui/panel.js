@@ -7,10 +7,19 @@ export default class Panel extends Rect{
     constructor(cfg){
         super(cfg.style);
 
-        if (cfg.controller)
+        if (cfg.controller && typeof(cfg.controller) == "function")
         {
-            this.controller = new cfg.controller();
+            this.controller = new cfg.controller(this);
         }
+        else if (cfg.getController && typeof(cfg.getController) == "function")
+        {
+            cfg.getController(this.asyncGetController.bind(this));
+        }
+        else
+        {
+            console.error("无法创建controller，controller配置错误！");
+        }
+
         if (cfg.children)
         {
             this.children = [];
@@ -29,6 +38,17 @@ export default class Panel extends Rect{
                     default : break;
                 }
             }
+        }
+    }
+
+    asyncGetController(controller){
+        if (controller && typeof(controller) == "function")
+        {
+            this.controller = new controller(this);
+        }
+        else
+        {
+            console.error("无法创建controller，controller配置错误！");
         }
     }
 }
