@@ -20,6 +20,8 @@ export default class Rect extends G2d{
                 $this.backgroundImageDom = this;
             };
             img.src = this.backgroundImage;
+            img.style.width = this.width + "px";
+            img.style.height = this.height + "px";
         }
     }
 
@@ -32,7 +34,8 @@ export default class Rect extends G2d{
 
         if (this.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this));
+            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this),
+                parseInt(this.backgroundImageDom.style.width), parseInt(this.backgroundImageDom.style.height));
         }
     }
 }
