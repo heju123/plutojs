@@ -2,7 +2,9 @@
  * Created by heju on 2017/7/20.
  */
 export default class G2d {
-    constructor() {
+    constructor(cfg) {
+        this.x = cfg.style.x;
+        this.y = cfg.style.y;
     }
 
     //获取显示在界面上真实的x坐标，加上父级坐标

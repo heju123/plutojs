@@ -5,7 +5,7 @@ import Rect from "./base/rect.js"
 
 export default class Panel extends Rect{
     constructor(cfg){
-        super(cfg.style);
+        super(cfg);
 
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
@@ -34,6 +34,11 @@ export default class Panel extends Rect{
                     {
                         case "panel" :
                             childCom = new Panel(chiCfg);
+                            childCom.parent = this;
+                            this.children.push(childCom);
+                            break;
+                        case "rect" :
+                            childCom = new Rect(chiCfg);
                             childCom.parent = this;
                             this.children.push(childCom);
                             break;
