@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/20.
  */
-export default class G2d {
+export default class Component {
     constructor(cfg) {
         this.x = cfg.style.x;
         this.y = cfg.style.y;
