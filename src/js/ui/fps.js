@@ -8,14 +8,14 @@ import EventBus from "./event/eventBus.js";
 
 export default class Fps{
     constructor(mainBody){
-        this.canvas = document.createElement("CANVAS");
-        mainBody.appendChild(this.canvas);
-        this.canvas.width = mainBody.offsetWidth;
-        this.canvas.height = mainBody.offsetHeight;
-        this.ctx = this.canvas.getContext('2d');
+        globalUtil.canvas = document.createElement("CANVAS");
+        mainBody.appendChild(globalUtil.canvas);
+        globalUtil.canvas.width = mainBody.offsetWidth;
+        globalUtil.canvas.height = mainBody.offsetHeight;
+        this.ctx = globalUtil.canvas.getContext('2d');
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-        globalUtil.eventBus = new EventBus(this.canvas);
+        globalUtil.eventBus = new EventBus(globalUtil.canvas);
     }
 
     setMainView(viewCfg){
@@ -40,11 +40,17 @@ export default class Fps{
     }
 
     draw(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //通知触发事件
+        globalUtil.eventBus.eventNotifyQueye.forEach((fun)=>{
+            fun();
+        });
+        globalUtil.eventBus.eventNotifyQueye.length = 0;
+
+        this.ctx.clearRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
         //背景
         this.ctx.fillStyle = "#000";
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
         this.drawView(this.viewState.rootPanel);
 

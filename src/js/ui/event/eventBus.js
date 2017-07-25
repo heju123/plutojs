@@ -31,8 +31,8 @@ export default class EventBus{
         e = e || window.event;
         let px = e.pageX;
         let py = e.pageY;
-        this.eventListeners[type].forEach((event)=>{
-            this.eventNotifyQueye.push(()=>{
+        this.eventNotifyQueye.push(()=>{
+            this.eventListeners[type].forEach((event)=>{
                 event.target.eventNotify.px = px;
                 event.target.eventNotify.py = py;
                 event.target.eventNotify.event = event;

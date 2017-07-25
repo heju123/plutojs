@@ -2,6 +2,7 @@
  * Created by heju on 2017/7/14.
  */
 import commonUtil from "../../util/commonUtil.js";
+import globalUtil from "../../util/globalUtil.js";
 import Component from "./component.js";
 
 export default class Rect extends Component{
@@ -77,6 +78,25 @@ export default class Rect extends Component{
             {
                 return 1;
             }
+        }
+    }
+
+    /**
+     * 判断鼠标坐标是否在控件范围内
+     *
+     * @param px 鼠标x
+     * @param py 鼠标y
+     * @return true：在范围内
+     */
+    isPointInComponent(px, py){
+        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.width
+            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.height)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

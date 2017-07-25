@@ -24,7 +24,7 @@ export default class Component {
     draw(ctx){
         if (this.eventNotify.px && this.eventNotify.py)
         {
-            if (ctx.isPointInPath(this.eventNotify.px, this.eventNotify.py))//判断鼠标是否在控件范围内
+            if (this.isPointInComponent(this.eventNotify.px, this.eventNotify.py))//判断鼠标是否在控件范围内
             {
                 if (this.eventNotify.event && this.eventNotify.event.callback)
                 {
