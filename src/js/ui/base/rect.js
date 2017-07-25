@@ -32,7 +32,7 @@ export default class Rect extends Component{
     }
 
     draw(ctx){
-        super.draw(ctx);
+        ctx.beginPath();
         let parentArea = this.inParentArea(this);
         if (parentArea === 0)
         {
@@ -40,7 +40,6 @@ export default class Rect extends Component{
         }
         if (this.parent)//超出parent范围时遮挡
         {
-            ctx.beginPath();
             ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.width, this.parent.height);
             ctx.clip();
         }
@@ -53,6 +52,7 @@ export default class Rect extends Component{
         {
             ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
+        super.draw(ctx);
     }
 
     /**

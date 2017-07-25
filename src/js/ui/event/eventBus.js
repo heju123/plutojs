@@ -10,22 +10,34 @@ export default class EventBus{
         this.eventListeners = {
             "click" : []
         };
+        //事件通知队列
+        this.eventNotifyQueye = [];
 
         if (window.addEventListener)
         {
             this.canvas.addEventListener("click", (e)=>{
-                this.triggerClick(e);
+                this.triggerEvent(e, "click");
             }, false);
         }
         else
         {
             this.canvas.attachEvent("click", (e)=>{
-                this.triggerClick(e);
+                this.triggerEvent(e, "click");
             });
         }
     }
 
-    triggerClick(e){
+    triggerEvent(e, type){
+        e = e || window.event;
+        let px = e.pageX;
+        let py = e.pageY;
+        this.eventListeners[type].forEach((event)=>{
+            this.eventNotifyQueye.push(()=>{
+                event.target.eventNotify.px = px;
+                event.target.eventNotify.py = py;
+                event.target.eventNotify.event = event;
+            });
+        });
     }
 
     /** 注册事件 */
