@@ -3,6 +3,7 @@
  */
 import commonUtil from "../util/commonUtil.js";
 import ViewState from "./viewState.js";
+import EventBus from "./event/eventBus.js";
 
 export default class Fps{
     constructor(mainBody){
@@ -12,6 +13,8 @@ export default class Fps{
         this.canvas.height = mainBody.offsetHeight;
         this.ctx = this.canvas.getContext('2d');
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+        this.eventBus = new EventBus(this.canvas);
     }
 
     setMainView(viewCfg){
