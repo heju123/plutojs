@@ -32,6 +32,7 @@ export default class Rect extends Component{
     }
 
     draw(ctx){
+        super.draw(ctx);
         let parentArea = this.inParentArea(this);
         if (parentArea === 0)
         {

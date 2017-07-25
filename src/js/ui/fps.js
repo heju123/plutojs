@@ -2,6 +2,7 @@
  * Created by heju on 2017/7/13.
  */
 import commonUtil from "../util/commonUtil.js";
+import globalUtil from "../util/globalUtil.js";
 import ViewState from "./viewState.js";
 import EventBus from "./event/eventBus.js";
 
@@ -14,7 +15,7 @@ export default class Fps{
         this.ctx = this.canvas.getContext('2d');
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-        this.eventBus = new EventBus(this.canvas);
+        globalUtil.eventBus = new EventBus(this.canvas);
     }
 
     setMainView(viewCfg){
