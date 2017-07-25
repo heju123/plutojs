@@ -37,36 +37,32 @@ export default class Rect extends Component{
         {
             return;
         }
+        if (this.parent)//超出parent范围时遮挡
+        {
+            ctx.beginPath();
+            ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.width, this.parent.height);
+            ctx.clip();
+        }
         if (this.backgroundColor)
         {
             ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(parentArea.x, parentArea.y, parentArea.width, parentArea.height);
+            ctx.fillRect(this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
-
         if (this.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom,
-                parentArea.x - this.getRealX(this),
-                parentArea.y - this.getRealY(this),
-                parentArea.width,parentArea.height,
-                parentArea.x, parentArea.y, parentArea.width, parentArea.height);
+            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
     }
 
     /**
-     * 在parent区域内
+     * 是否在parent区域内
      *
-     * @return 0：不在范围内；{xx : xx}：在范围内
+     * @return -1：无parent；0：不在范围内；1：在范围内
      */
     inParentArea(com){
         if (!com.parent)
         {
-            return {
-                x : this.getRealX(com),
-                y : this.getRealY(com),
-                width : com.width,
-                height : com.height
-            };
+            return -1;
         }
         else{
             if (this.getRealX(com.parent) + com.parent.width < this.getRealX(com)
@@ -78,55 +74,7 @@ export default class Rect extends Component{
             }
             else
             {
-                let width;
-                let height;
-                if (this.getRealX(com.parent) <= this.getRealX(com)
-                    && this.getRealX(com.parent) + com.parent.width > this.getRealX(com) + com.width)//包含
-                {
-                    width = com.width;
-                }
-                else if (this.getRealX(com.parent) <= this.getRealX(com)
-                    && this.getRealX(com.parent) + com.parent.width <= this.getRealX(com) + com.width)//x包含，width超出
-                {
-                    width = com.width - ((this.getRealX(com) + com.width) - (this.getRealX(com.parent) + com.parent.width));
-                }
-                else if (this.getRealX(com.parent) > this.getRealX(com)
-                    && this.getRealX(com.parent) + com.parent.width > this.getRealX(com) + com.width)//x超出，width包含
-                {
-                    width = com.width - (this.getRealX(com) - this.getRealX(com.parent));
-                }
-                else if (this.getRealX(com.parent) > this.getRealX(com)
-                    && this.getRealX(com.parent) + com.parent.width <= this.getRealX(com) + com.width)//x和width都超出
-                {
-                    width = com.parent.width;
-                }
-
-                if (this.getRealY(com.parent) <= this.getRealY(com)
-                    && this.getRealY(com.parent) + com.parent.height > this.getRealY(com) + com.height)
-                {
-                    height = com.height;
-                }
-                else if (this.getRealY(com.parent) <= this.getRealY(com)
-                    && this.getRealY(com.parent) + com.parent.height <= this.getRealY(com) + com.height)
-                {
-                    height = com.height - ((this.getRealY(com) + com.height) - (this.getRealY(com.parent) + com.parent.height));
-                }
-                else if (this.getRealY(com.parent) > this.getRealY(com)
-                    && this.getRealY(com.parent) + com.parent.height > this.getRealY(com) + com.height)
-                {
-                    height = com.height - (this.getRealY(com) - this.getRealY(com.parent));
-                }
-                else if (this.getRealY(com.parent) > this.getRealY(com)
-                    && this.getRealY(com.parent) + com.parent.height <= this.getRealY(com) + com.height)
-                {
-                    height = com.parent.height;
-                }
-                return {
-                    x : this.getRealX(com.parent) < this.getRealX(com) ? this.getRealX(com) : this.getRealX(com.parent),
-                    y : this.getRealY(com.parent) < this.getRealY(com) ? this.getRealY(com) : this.getRealY(com.parent),
-                    width : width,
-                    height : height
-                };
+                return 1;
             }
         }
     }
