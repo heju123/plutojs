@@ -4,7 +4,7 @@
 import commonUtil from "../util/commonUtil.js";
 import globalUtil from "../util/globalUtil.js";
 import ViewState from "./viewState.js";
-import EventBus from "./event/eventBus.js";
+import EventBus from "../event/eventBus.js";
 
 export default class Fps{
     constructor(mainBody){
@@ -41,10 +41,7 @@ export default class Fps{
 
     draw(){
         //通知触发事件
-        globalUtil.eventBus.eventNotifyQueye.forEach((fun)=>{
-            fun();
-        });
-        globalUtil.eventBus.eventNotifyQueye.length = 0;
+        globalUtil.eventBus.doNotifyEvent();
 
         this.ctx.clearRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
@@ -53,6 +50,8 @@ export default class Fps{
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
         this.drawView(this.viewState.rootPanel);
+
+        globalUtil.eventBus.propagationEvent();
 
         window.requestAnimationFrame(this.draw.bind(this));
     }

@@ -2,40 +2,28 @@
  * Created by heju on 2017/7/20.
  */
 import globalUtil from "../../util/globalUtil.js";
+import EventNotify from "../../event/eventNotify.js";
 
 export default class Component {
     constructor(cfg) {
         this.x = cfg.style.x;
         this.y = cfg.style.y;
-
-        this.eventNotify = {
-            px : undefined,
-            py : undefined,
-            event : undefined
-        };
-    }
-
-    clearEventNotify(){
-        this.eventNotify.px = undefined;
-        this.eventNotify.py = undefined;
-        this.eventNotify.event = undefined;
+        this.eventNotify = new EventNotify();
     }
 
     draw(ctx){
-        if (this.eventNotify.px && this.eventNotify.py)
+        if (this.eventNotify.type)
         {
-            if (this.isPointInComponent(this.eventNotify.px, this.eventNotify.py))//判断鼠标是否在控件范围内
+            if (this.eventNotify.type === 1
+                && this.isPointInComponent(this.eventNotify.px, this.eventNotify.py))//判断鼠标是否在控件范围内
             {
-                if (this.eventNotify.event && this.eventNotify.event.callback)
-                {
-                    this.eventNotify.event.callback.apply(this, [this.eventNotify.event]);
-                    this.clearEventNotify();
-                }
+                globalUtil.eventBus.captureEvent(this.eventNotify);
             }
-            else
+            else if (this.eventNotify.type === 2)//键盘事件
             {
-                this.clearEventNotify();
+                globalUtil.eventBus.captureEvent(this.eventNotify);
             }
+            this.eventNotify.clearEventNotify();
         }
     }
 

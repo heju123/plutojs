@@ -5,9 +5,14 @@ export default class Event {
     constructor(type, callback) {
         this.type = type;
         this.callback = callback;
+        this.sourceEvent = undefined;
     }
 
     setTarget(target) {
         this.target = target;
+    }
+
+    setSourceEvent(sourceEvent){
+        this.sourceEvent = sourceEvent;
     }
 }
