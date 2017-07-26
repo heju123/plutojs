@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/20.
  */
-import Rect from "./base/rect.js"
+import Rect from "./rect.js"
 
 export default class Panel extends Rect{
     constructor(cfg){

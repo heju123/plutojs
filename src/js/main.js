@@ -4,7 +4,7 @@
 import Fps from "./ui/fps.js";
 import httpUtil from "./util/httpUtil.js";
 import commonUtil from "./util/commonUtil.js";
-import Controller from "./ui/base/controller.js";
+import Controller from "./ui/controller.js";
 
 class Main {
     constructor(eleId){
