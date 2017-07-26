@@ -2,28 +2,34 @@
  * Created by heju on 2017/7/20.
  */
 import globalUtil from "../../util/globalUtil.js";
-import EventNotify from "../../event/eventNotify.js";
 
 export default class Component {
     constructor(cfg) {
         this.x = cfg.style.x;
         this.y = cfg.style.y;
-        this.eventNotify = new EventNotify();
+        this.eventNotifys = [];//事件通知队列
     }
 
     draw(ctx){
-        if (this.eventNotify.type)
+        this.eventNotifys.forEach((eventNotify)=>{
+            this.checkEvent(eventNotify);
+        });
+        this.eventNotifys.length = 0;
+    }
+
+    /** 检查事件是否匹配 */
+    checkEvent(eventNotify){
+        if (eventNotify.type)
         {
-            if (this.eventNotify.type === 1
-                && this.isPointInComponent(this.eventNotify.px, this.eventNotify.py))//判断鼠标是否在控件范围内
+            if (eventNotify.type === 1
+                && this.isPointInComponent(eventNotify.px, eventNotify.py))//判断鼠标是否在控件范围内
             {
-                globalUtil.eventBus.captureEvent(this.eventNotify);
+                globalUtil.eventBus.captureEvent(eventNotify);
             }
-            else if (this.eventNotify.type === 2)//键盘事件
+            else if (eventNotify.type === 2)//键盘事件
             {
-                globalUtil.eventBus.captureEvent(this.eventNotify);
+                globalUtil.eventBus.captureEvent(eventNotify);
             }
-            this.eventNotify.clearEventNotify();
         }
     }
 
@@ -50,5 +56,9 @@ export default class Component {
 
     registerEvent(eventType, callback){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
+    }
+
+    addEventNotify(eventNotify){
+        this.eventNotifys.push(eventNotify);
     }
 }

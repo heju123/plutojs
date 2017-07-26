@@ -5,6 +5,7 @@ import ClickEvent from "./type/clickEvent.js";
 import MouseEvent from "./type/mouseEvent.js";
 import KeyEvent from "./type/keyEvent.js";
 import Stack from "../data/structure/stack.js";
+import EventNotify from "./eventNotify.js";
 
 export default class EventBus{
     constructor(canvas){
@@ -12,85 +13,117 @@ export default class EventBus{
         //注册事件列表
         this.eventListeners = {
             "click" : [],
+            "mousedown" : [],
             "mousemove" : [],
-            "keydown" : []
+            "mouseup" : [],
+            "keydown" : [],
+            "keyup" : []
         };
-        //事件通知方法
-        this.eventNotifyFun = undefined;
-        //事件执行堆栈（实现冒泡）
-        this.propagationEventStack = new Stack();
+        //事件通知队列
+        this.eventNotifyQueue = [];
+        //事件冒泡执行队列
+        this.propagationEventQueue = {};
 
         this.initDomEvent();
     }
 
-    initDomEvent(){
+    addEventListener(dom, type, callback){
         if (window.addEventListener)
         {
-            this.canvas.addEventListener("click", (e)=>{
-                this.createEventNotify(e, "click");
-            }, false);
-
-            this.canvas.addEventListener("mousemove", (e)=>{
-                this.createEventNotify(e, "mousemove");
-            }, false);
-
-            window.addEventListener("keydown", (e)=>{
-                this.createKeyEventNotify(e, "keydown");
-            }, false);
+            dom.addEventListener(type, callback, false);
         }
         else
         {
-            this.canvas.attachEvent("onclick", (e)=>{
-                this.createEventNotify(e, "click");
-            });
-
-            this.canvas.attachEvent("onmousemove", (e)=>{
-                this.createEventNotify(e, "mousemove");
-            });
-
-            window.attachEvent("onkeydown", (e)=>{
-                this.createKeyEventNotify(e, "keydown");
-            });
+            dom.attachEvent("on" + type, callback);
         }
+    }
+
+    initDomEvent(){
+        this.addEventListener(this.canvas, "click", (e)=>{
+            this.createEventNotify(e, "click");
+        });
+
+        this.addEventListener(this.canvas, "mousedown", (e)=>{
+            this.createEventNotify(e, "mousedown");
+        });
+
+        this.addEventListener(this.canvas, "mousemove", (e)=>{
+            this.createEventNotify(e, "mousemove");
+        });
+
+        this.addEventListener(this.canvas, "mouseup", (e)=>{
+            this.createEventNotify(e, "mouseup");
+        });
+
+        this.addEventListener(window, "keydown", (e)=>{
+            this.createKeyEventNotify(e, "keydown");
+        });
+
+        this.addEventListener(window, "keyup", (e)=>{
+            this.createKeyEventNotify(e, "keyup");
+        });
+    }
+
+    /**
+     * 创建冒泡执行堆栈，用批次号分类
+     *
+     * @return 批次号（时间戳）
+     */
+    createPropagationStack(){
+        let batchNo = (new Date).getTime();
+        this.propagationEventQueue[batchNo] = new Stack();
+        return batchNo;
     }
 
     createEventNotify(e, type){
         e = e || window.event;
         let px = e.pageX;
         let py = e.pageY;
-        this.eventNotifyFun = ()=>{
+        let batchNo = this.createPropagationStack();
+        let eventNotify;
+        this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                event.target.eventNotify.set({
+                eventNotify = new EventNotify();
+                eventNotify.set({
+                    batchNo : batchNo,
                     type : 1,
                     px : px,
                     py : py,
                     event : event
                 });
                 event.setSourceEvent(e);
+                event.target.addEventNotify(eventNotify);
             });
-        };
+        });
     }
 
     createKeyEventNotify(e, type){
         e = e || window.event;
-        this.eventNotifyFun = ()=>{
+        let batchNo = this.createPropagationStack();
+        let eventNotify;
+        this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                event.target.eventNotify.set({
+                eventNotify = new EventNotify();
+                eventNotify.set({
+                    batchNo : batchNo,
                     type : 2,
                     event : event
                 });
                 event.setSourceEvent(e);
+                event.target.addEventNotify(eventNotify);
             });
-        };
+        });
     }
 
     //通知触发事件
     doNotifyEvent(){
-        if (this.eventNotifyFun && typeof(this.eventNotifyFun) == "function")
-        {
-            this.eventNotifyFun();
-            this.eventNotifyFun = undefined;
-        }
+        this.eventNotifyQueue.forEach((eventFun)=>{
+            if (eventFun && typeof(eventFun) == "function")
+            {
+                eventFun();
+            }
+        });
+        this.eventNotifyQueue.length = 0;
     }
 
     //捕获事件
@@ -106,18 +139,22 @@ export default class EventBus{
             eventNotify.event.setKey(eventNotify.event.sourceEvent.key);
             eventNotify.event.setKeyCode(eventNotify.event.sourceEvent.keyCode);
         }
-        this.propagationEventStack.push(eventNotify.event);
+        this.propagationEventQueue[eventNotify.batchNo].push(eventNotify.event);
     }
 
     //冒泡执行事件
     propagationEvent(){
-        let event;
-        while (event = this.propagationEventStack.pop())
+        for (let key in this.propagationEventQueue)
         {
-            if (event.callback && typeof(event.callback) === "function")
+            let event;
+            while (event = this.propagationEventQueue[key].pop())
             {
-                event.callback.apply(event, [event]);
+                if (event.callback && typeof(event.callback) === "function")
+                {
+                    event.callback.apply(event, [event]);
+                }
             }
+            delete this.propagationEventQueue[key];
         }
     }
 
@@ -131,15 +168,30 @@ export default class EventBus{
                 event.setTarget(com);
                 this.eventListeners.click.push(event);
                 break;
+            case "mousedown" :
+                event = new MouseEvent(type, callback);
+                event.setTarget(com);
+                this.eventListeners.mousedown.push(event);
+                break;
             case "mousemove" :
                 event = new MouseEvent(type, callback);
                 event.setTarget(com);
                 this.eventListeners.mousemove.push(event);
                 break;
+            case "mouseup" :
+                event = new MouseEvent(type, callback);
+                event.setTarget(com);
+                this.eventListeners.mouseup.push(event);
+                break;
             case "keydown" :
                 event = new KeyEvent(type, callback);
                 event.setTarget(com);
                 this.eventListeners.keydown.push(event);
+                break;
+            case "keyup" :
+                event = new KeyEvent(type, callback);
+                event.setTarget(com);
+                this.eventListeners.keyup.push(event);
                 break;
             default : break;
         }
