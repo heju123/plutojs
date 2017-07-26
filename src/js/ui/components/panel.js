@@ -11,10 +11,6 @@ export default class Panel extends Rect{
         {
             this.controller = new cfg.controller(this);
         }
-        else
-        {
-            console.error("无法创建controller，controller配置错误！");
-        }
 
         if (cfg.children)
         {

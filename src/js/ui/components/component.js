@@ -2,12 +2,32 @@
  * Created by heju on 2017/7/20.
  */
 import globalUtil from "../../util/globalUtil.js";
+import Panel from "./panel.js";
 
 export default class Component {
     constructor(cfg) {
         this.x = cfg.style.x;
         this.y = cfg.style.y;
         this.eventNotifys = [];//事件通知队列
+
+        //事件绑定配置
+        if (cfg.events)
+        {
+            setTimeout(()=>{//延迟执行，等待controller初始化完
+                let efunname;
+                let controller;
+                for (let type in cfg.events)
+                {
+                    efunname = cfg.events[type];
+                    controller = this.getController(this);
+                    if (controller && controller[efunname]
+                        && typeof(controller[efunname]) == "function")
+                    {
+                        this.registerEvent(type, controller[efunname]);
+                    }
+                }
+            });
+        }
     }
 
     draw(ctx){
@@ -30,6 +50,21 @@ export default class Component {
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
+        }
+    }
+
+    getController(com){
+        if (!com.parent)
+        {
+            return com.controller;
+        }
+        if (com instanceof Panel && com.controller)
+        {
+            return com.controller;
+        }
+        else
+        {
+            return this.getController(com.parent);
         }
     }
 
