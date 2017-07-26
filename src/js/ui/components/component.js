@@ -14,16 +14,37 @@ export default class Component {
         if (cfg.events)
         {
             setTimeout(()=>{//延迟执行，等待controller初始化完
-                let efunname;
+                let eventInfo;
+                let funName;
+                let param;
                 let controller;
                 for (let type in cfg.events)
                 {
-                    efunname = cfg.events[type];
-                    controller = this.getController(this);
-                    if (controller && controller[efunname]
-                        && typeof(controller[efunname]) == "function")
+                    eventInfo = cfg.events[type];
+                    if (typeof(eventInfo) == "object")
                     {
-                        this.registerEvent(type, controller[efunname]);
+                        funName = eventInfo.callback;
+                        if (eventInfo.param)//有参数
+                        {
+                            param = eventInfo.param.apply(this, [this]);
+                        }
+                    }
+                    else
+                    {
+                        funName = eventInfo;
+                    }
+                    controller = this.getController(this);
+                    if (controller && controller[funName]
+                        && typeof(controller[funName]) == "function")
+                    {
+                        if (param)
+                        {
+                            this.registerEvent(type, controller[funName].bind(this, param));
+                        }
+                        else
+                        {
+                            this.registerEvent(type, controller[funName].bind(this));
+                        }
                     }
                 }
             });

@@ -151,7 +151,7 @@ export default class EventBus{
             {
                 if (event.callback && typeof(event.callback) === "function")
                 {
-                    event.callback.apply(event, [event]);
+                    event.callback(event);
                 }
             }
             delete this.propagationEventQueue[key];
