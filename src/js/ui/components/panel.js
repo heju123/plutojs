@@ -4,9 +4,12 @@
 import Rect from "./rect.js"
 
 export default class Panel extends Rect{
-    constructor(cfg){
-        super(cfg);
+    constructor(parent){
+        super(parent);
+    }
 
+    initCfg(cfg)
+    {
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
             this.controller = new cfg.controller(this);
@@ -29,13 +32,13 @@ export default class Panel extends Rect{
                     switch (chiCfg.type)
                     {
                         case "panel" :
-                            childCom = new Panel(chiCfg);
-                            childCom.parent = this;
+                            childCom = new Panel(this);
+                            childCom.initCfg(chiCfg);
                             this.children.push(childCom);
                             break;
                         case "rect" :
-                            childCom = new Rect(chiCfg);
-                            childCom.parent = this;
+                            childCom = new Rect(this);
+                            childCom.initCfg(chiCfg);
                             this.children.push(childCom);
                             break;
                         default : break;
@@ -43,11 +46,13 @@ export default class Panel extends Rect{
                 }
             }
         }
+
+        super.initCfg(cfg);
     }
 
     asyncGetView(viewCfg){
-        let panel = new Panel(viewCfg);
-        panel.parent = this;
+        let panel = new Panel(this);
+        panel.initCfg(viewCfg);
         this.children.push(panel);
     }
 }

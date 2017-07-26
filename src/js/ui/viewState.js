@@ -6,6 +6,7 @@ import Panel from "./components/panel.js";
 
 export default class ViewState{
     constructor(viewCfg){
-        this.rootPanel = new Panel(viewCfg);
+        this.rootPanel = new Panel();
+        this.rootPanel.initCfg(viewCfg);
     }
 }

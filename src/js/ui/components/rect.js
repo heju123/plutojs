@@ -6,9 +6,13 @@ import globalUtil from "../../util/globalUtil.js";
 import Component from "./component.js";
 
 export default class Rect extends Component{
-    constructor(cfg) {
-        super(cfg);
+    constructor(parent) {
+        super(parent);
+    }
+
+    initCfg(cfg){
         let $this = this;
+
         this.width = cfg.style.width;
         this.height = cfg.style.height;
         this.backgroundColor = cfg.style.backgroundColor;
@@ -30,6 +34,8 @@ export default class Rect extends Component{
             };
             img.src = this.backgroundImage;
         }
+
+        super.initCfg(cfg);
     }
 
     draw(ctx){

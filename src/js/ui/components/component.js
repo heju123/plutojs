@@ -5,49 +5,51 @@ import globalUtil from "../../util/globalUtil.js";
 import Panel from "./panel.js";
 
 export default class Component {
-    constructor(cfg) {
+    constructor(parent) {
+        this.parent = parent;
+        this.eventNotifys = [];//事件通知队列
+    }
+
+    initCfg(cfg){
         this.x = cfg.style.x;
         this.y = cfg.style.y;
-        this.eventNotifys = [];//事件通知队列
 
         //事件绑定配置
         if (cfg.events)
         {
-            setTimeout(()=>{//延迟执行，等待controller初始化完
-                let eventInfo;
-                let funName;
-                let param;
-                let controller;
-                for (let type in cfg.events)
+            let eventInfo;
+            let funName;
+            let param;
+            let controller;
+            for (let type in cfg.events)
+            {
+                eventInfo = cfg.events[type];
+                if (typeof(eventInfo) == "object")
                 {
-                    eventInfo = cfg.events[type];
-                    if (typeof(eventInfo) == "object")
+                    funName = eventInfo.callback;
+                    if (eventInfo.param)//有参数
                     {
-                        funName = eventInfo.callback;
-                        if (eventInfo.param)//有参数
-                        {
-                            param = eventInfo.param.apply(this, [this]);
-                        }
+                        param = eventInfo.param.apply(this, [this]);
+                    }
+                }
+                else
+                {
+                    funName = eventInfo;
+                }
+                controller = this.getController(this);
+                if (controller && controller[funName]
+                    && typeof(controller[funName]) == "function")
+                {
+                    if (param)
+                    {
+                        this.registerEvent(type, controller[funName].bind(this, param));
                     }
                     else
                     {
-                        funName = eventInfo;
-                    }
-                    controller = this.getController(this);
-                    if (controller && controller[funName]
-                        && typeof(controller[funName]) == "function")
-                    {
-                        if (param)
-                        {
-                            this.registerEvent(type, controller[funName].bind(this, param));
-                        }
-                        else
-                        {
-                            this.registerEvent(type, controller[funName].bind(this));
-                        }
+                        this.registerEvent(type, controller[funName].bind(this));
                     }
                 }
-            });
+            }
         }
     }
 
