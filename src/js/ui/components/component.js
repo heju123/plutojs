@@ -3,6 +3,7 @@
  */
 import globalUtil from "../../util/globalUtil.js";
 import Panel from "./panel.js";
+import Rect from "./rect.js";
 
 export default class Component {
     constructor(parent) {
@@ -54,6 +55,43 @@ export default class Component {
                 }
             }
         }
+    }
+
+    initChildrenCfg(childrenCfg){
+        this.children = [];
+        let chiCfg;
+        let childCom;
+        for (let i = 0, j = childrenCfg.length; i < j; i++)
+        {
+            chiCfg = childrenCfg[i];
+            if (typeof(chiCfg) == "function")//异步加载view
+            {
+                chiCfg(this.asyncGetView.bind(this));
+            }
+            else
+            {
+                switch (chiCfg.type)
+                {
+                    case "panel" :
+                        childCom = new Panel(this);
+                        childCom.initCfg(chiCfg);
+                        this.children.push(childCom);
+                        break;
+                    case "rect" :
+                        childCom = new Rect(this);
+                        childCom.initCfg(chiCfg);
+                        this.children.push(childCom);
+                        break;
+                    default : break;
+                }
+            }
+        }
+    }
+
+    asyncGetView(viewCfg){
+        let panel = new Panel(this);
+        panel.initCfg(viewCfg);
+        this.children.push(panel);
     }
 
     draw(ctx){

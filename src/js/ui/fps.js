@@ -19,7 +19,8 @@ export default class Fps{
     }
 
     setMainView(viewCfg){
-        this.viewState = new ViewState(viewCfg);
+        globalUtil.viewState = new ViewState();
+        globalUtil.viewState.init(viewCfg);
     }
 
     /** 开始循环绘制 */
@@ -49,7 +50,7 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
-        this.drawView(this.viewState.rootPanel);
+        this.drawView(globalUtil.viewState.rootPanel);
 
         globalUtil.eventBus.propagationEvent();
 
