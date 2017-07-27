@@ -3,7 +3,6 @@
  */
 import globalUtil from "../../util/globalUtil.js";
 import Panel from "./panel.js";
-import Rect from "./rect.js";
 
 export default class Component {
     constructor(parent) {
@@ -59,31 +58,45 @@ export default class Component {
 
     initChildrenCfg(childrenCfg){
         this.children = [];
-        let chiCfg;
-        let childCom;
-        for (let i = 0, j = childrenCfg.length; i < j; i++)
+        if (typeof(childrenCfg) == "object" && childrenCfg instanceof Array)
         {
-            chiCfg = childrenCfg[i];
-            if (typeof(chiCfg) == "function")//异步加载view
+            let chiCfg;
+            for (let i = 0, j = childrenCfg.length; i < j; i++)
             {
-                chiCfg(this.asyncGetView.bind(this));
+                chiCfg = childrenCfg[i];
+                this.produceChildren(chiCfg);
             }
-            else
+        }
+        else
+        {
+            this.produceChildren(childrenCfg);
+        }
+    }
+
+    produceChildren(chiCfg){
+        let Rect = require("./rect.js").default;
+        let Button = require("./button.js").default;
+
+        let childCom;
+        if (typeof(chiCfg) == "function")//异步加载view
+        {
+            chiCfg(this.asyncGetView.bind(this));
+        }
+        else
+        {
+            switch (chiCfg.type)
             {
-                switch (chiCfg.type)
-                {
-                    case "panel" :
-                        childCom = new Panel(this);
-                        childCom.initCfg(chiCfg);
-                        this.children.push(childCom);
-                        break;
-                    case "rect" :
-                        childCom = new Rect(this);
-                        childCom.initCfg(chiCfg);
-                        this.children.push(childCom);
-                        break;
-                    default : break;
-                }
+                case "panel" :
+                    childCom = new Panel(this);
+                    childCom.initCfg(chiCfg);
+                    this.children.push(childCom);
+                    break;
+                case "rect" :
+                    childCom = new Rect(this);
+                    childCom.initCfg(chiCfg);
+                    this.children.push(childCom);
+                    break;
+                default : break;
             }
         }
     }
