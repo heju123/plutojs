@@ -11,8 +11,11 @@ export default class Component {
     }
 
     initCfg(cfg){
-        this.x = cfg.style.x;
-        this.y = cfg.style.y;
+        if (cfg.style)
+        {
+            this.x = cfg.style.x;
+            this.y = cfg.style.y;
+        }
 
         //事件绑定配置
         if (cfg.events)

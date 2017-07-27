@@ -13,10 +13,13 @@ export default class Rect extends Component{
     initCfg(cfg){
         let $this = this;
 
-        this.width = cfg.style.width;
-        this.height = cfg.style.height;
-        this.backgroundColor = cfg.style.backgroundColor;
-        this.backgroundImage = cfg.style.backgroundImage;
+        if (cfg.style)
+        {
+            this.width = cfg.style.width;
+            this.height = cfg.style.height;
+            this.backgroundColor = cfg.style.backgroundColor;
+            this.backgroundImage = cfg.style.backgroundImage;
+        }
 
         if (this.backgroundImage)
         {
