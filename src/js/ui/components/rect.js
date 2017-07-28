@@ -63,8 +63,8 @@ export default class Rect extends Component{
         {
             ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
-        super.draw(ctx);
         ctx.restore();
+        super.draw(ctx);
     }
 
     /**

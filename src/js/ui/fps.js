@@ -52,8 +52,6 @@ export default class Fps{
         //通知触发事件
         globalUtil.eventBus.doNotifyEvent();
 
-        this.ctx.clearRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
-
         //背景
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
