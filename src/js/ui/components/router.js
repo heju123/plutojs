@@ -17,35 +17,56 @@ export default class Router extends Component{
             this.height = parent.height;
         }
         this.routes = {};
+        this.children = [];
     }
 
     initCfg(cfg)
     {
-        let currentIndex = -1;
         if (cfg.routes)
         {
-            let childrenViews = [];
             let rCfg;
-            let num = 0;
             for (let name in cfg.routes)
             {
                 rCfg = cfg.routes[name];
-                childrenViews.push(rCfg.view);
-                this.routes[name] = num;
+                this.routes[name] = {
+                    loader : rCfg.view
+                };
                 if (rCfg.default)
                 {
+                    this.routes[name].num = 0;
                     this.currentRoute = name;
+                    this.getChildrenView();
                 }
-                num++;
             }
-            this.initChildrenCfg(childrenViews);
         }
 
-        if (this.children && this.children.length > 0)
-        {
-            this.currentChildren = this.currentRoute ? this.children[this.routes[this.currentRoute]] : this.children[0];
-        }
         super.initCfg(cfg);
+    }
+
+    getChildrenView(){
+        if (!this.currentChildren)
+        {
+            if (!this.routes[this.currentRoute].num)
+            {
+                let retChild = this.produceChildren(this.routes[this.currentRoute].loader);
+                if (retChild instanceof Promise)
+                {
+                    retChild.then((child)=>{
+                        this.routes[this.currentRoute].num = this.children.length - 1;
+                        this.currentChildren = child;
+                    });
+                }
+                else
+                {
+                    this.routes[this.currentRoute].num = this.children.length - 1;
+                    this.currentChildren = retChild;
+                }
+            }
+            else
+            {
+                this.currentChildren = this.children[this.routes[this.currentRoute].num];
+            }
+        }
     }
 
     getChildren(){
@@ -54,6 +75,7 @@ export default class Router extends Component{
 
     changeRoute(name){
         this.currentRoute = name;
-        this.currentChildren = this.children[this.routes[this.currentRoute]];
+        this.currentChildren = undefined;
+        this.getChildrenView();
     }
 }

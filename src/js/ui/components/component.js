@@ -82,9 +82,9 @@ export default class Component {
         let Button = require("./button.js").default;
 
         let childCom;
-        if (typeof(chiCfg) == "function")//异步加载view
+        if (typeof(chiCfg) === "function")//异步加载view
         {
-            chiCfg(this.asyncGetView.bind(this));
+            return chiCfg(this.asyncGetView.bind(this));
         }
         else
         {
@@ -102,13 +102,18 @@ export default class Component {
                     break;
                 default : break;
             }
+            return childCom;
         }
     }
 
-    asyncGetView(viewCfg){
+    asyncGetView(viewCfg, resolve, reject){
         let panel = new Panel(this);
         panel.initCfg(viewCfg);
         this.children.push(panel);
+        if (resolve)
+        {
+            resolve(panel);
+        }
     }
 
     draw(ctx){
