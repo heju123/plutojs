@@ -30,11 +30,19 @@ export default class Fps{
 
     drawView(com){
         com.draw(this.ctx);
-        if (com.children)
+        let children = com.getChildren();
+        if (children)
         {
-            let children;
-            for (let i = 0, j = com.children.length; i < j; i++) {
-                children = com.children[i];
+            if (children instanceof Array)
+            {
+                let child;
+                for (let i = 0, j = children.length; i < j; i++) {
+                    child = children[i];
+                    this.drawView(child);
+                }
+            }
+            else
+            {
                 this.drawView(children);
             }
         }

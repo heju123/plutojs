@@ -42,7 +42,7 @@ export default class Rect extends Component{
     }
 
     draw(ctx){
-        ctx.beginPath();
+        ctx.save();
         let parentArea = this.inParentArea(this);
         if (parentArea === 0)
         {
@@ -53,6 +53,7 @@ export default class Rect extends Component{
             ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.width, this.parent.height);
             ctx.clip();
         }
+        ctx.beginPath();
         if (this.backgroundColor)
         {
             ctx.fillStyle = this.backgroundColor;
@@ -63,6 +64,7 @@ export default class Rect extends Component{
             ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
         super.draw(ctx);
+        ctx.restore();
     }
 
     /**

@@ -11,6 +11,10 @@ export default class Component {
     }
 
     initCfg(cfg){
+        if (cfg.id)
+        {
+            this.id = cfg.id;
+        }
         if (cfg.style)
         {
             this.x = cfg.style.x;
@@ -45,11 +49,11 @@ export default class Component {
                 {
                     if (param)
                     {
-                        this.registerEvent(type, controller[funName].bind(this, param));
+                        this.registerEvent(type, controller[funName].bind(controller, param));
                     }
                     else
                     {
-                        this.registerEvent(type, controller[funName].bind(this));
+                        this.registerEvent(type, controller[funName].bind(controller));
                     }
                 }
             }
@@ -164,6 +168,10 @@ export default class Component {
         else{
             return com.y;
         }
+    }
+
+    getChildren(){
+        return this.children;
     }
 
     registerEvent(eventType, callback){

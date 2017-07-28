@@ -16,21 +16,44 @@ export default class Router extends Component{
             this.width = parent.width;
             this.height = parent.height;
         }
+        this.routes = {};
     }
 
     initCfg(cfg)
     {
+        let currentIndex = -1;
         if (cfg.routes)
         {
+            let childrenViews = [];
             let rCfg;
+            let num = 0;
             for (let name in cfg.routes)
             {
                 rCfg = cfg.routes[name];
-                this.initChildrenCfg(rCfg.view);
+                childrenViews.push(rCfg.view);
+                this.routes[name] = num;
+                if (rCfg.default)
+                {
+                    this.currentRoute = name;
+                }
+                num++;
             }
+            this.initChildrenCfg(childrenViews);
         }
+
+        if (this.children && this.children.length > 0)
+        {
+            this.currentChildren = this.currentRoute ? this.children[this.routes[this.currentRoute]] : this.children[0];
+        }
+        super.initCfg(cfg);
     }
 
-    draw(ctx){
+    getChildren(){
+        return this.currentChildren;
+    }
+
+    changeRoute(name){
+        this.currentRoute = name;
+        this.currentChildren = this.children[this.routes[this.currentRoute]];
     }
 }
