@@ -8,6 +8,7 @@ export default class Component {
     constructor(parent) {
         this.parent = parent;
         this.eventNotifys = [];//事件通知队列
+        this.active = true;//为false则不绘制
     }
 
     initCfg(cfg){

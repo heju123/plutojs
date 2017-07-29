@@ -29,6 +29,10 @@ export default class Fps{
     }
 
     drawView(com){
+        if (!com.active)
+        {
+            return;
+        }
         com.draw(this.ctx);
         let children = com.getChildren();
         if (children)

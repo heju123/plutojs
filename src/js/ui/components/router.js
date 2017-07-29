@@ -33,7 +33,6 @@ export default class Router extends Component{
                 };
                 if (rCfg.default)
                 {
-                    this.routes[name].num = 0;
                     this.currentRoute = name;
                     this.getChildrenView();
                 }
@@ -43,10 +42,13 @@ export default class Router extends Component{
         super.initCfg(cfg);
     }
 
+    draw(ctx){
+    }
+
     getChildrenView(){
         if (!this.currentChildren)
         {
-            if (!this.routes[this.currentRoute].num)
+            if (this.routes[this.currentRoute].num === undefined)
             {
                 let retChild = this.produceChildren(this.routes[this.currentRoute].loader);
                 if (retChild instanceof Promise)
@@ -54,17 +56,20 @@ export default class Router extends Component{
                     retChild.then((child)=>{
                         this.routes[this.currentRoute].num = this.children.length - 1;
                         this.currentChildren = child;
+                        this.currentChildren.active = true;
                     });
                 }
                 else
                 {
                     this.routes[this.currentRoute].num = this.children.length - 1;
                     this.currentChildren = retChild;
+                    this.currentChildren.active = true;
                 }
             }
             else
             {
                 this.currentChildren = this.children[this.routes[this.currentRoute].num];
+                this.currentChildren.active = true;
             }
         }
     }
@@ -74,6 +79,10 @@ export default class Router extends Component{
     }
 
     changeRoute(name){
+        if (this.currentChildren)
+        {
+            this.currentChildren.active = false;
+        }
         this.currentRoute = name;
         this.currentChildren = undefined;
         this.getChildrenView();

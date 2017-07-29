@@ -83,16 +83,19 @@ export default class EventBus{
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                eventNotify = new EventNotify();
-                eventNotify.set({
-                    batchNo : batchNo,
-                    type : 1,
-                    px : px,
-                    py : py,
-                    event : event
-                });
-                event.setSourceEvent(e);
-                event.target.addEventNotify(eventNotify);
+                if (event.target.active)
+                {
+                    eventNotify = new EventNotify();
+                    eventNotify.set({
+                        batchNo: batchNo,
+                        type: 1,
+                        px: px,
+                        py: py,
+                        event: event
+                    });
+                    event.setSourceEvent(e);
+                    event.target.addEventNotify(eventNotify);
+                }
             });
         });
     }
@@ -103,14 +106,17 @@ export default class EventBus{
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                eventNotify = new EventNotify();
-                eventNotify.set({
-                    batchNo : batchNo,
-                    type : 2,
-                    event : event
-                });
-                event.setSourceEvent(e);
-                event.target.addEventNotify(eventNotify);
+                if (event.target.active)
+                {
+                    eventNotify = new EventNotify();
+                    eventNotify.set({
+                        batchNo : batchNo,
+                        type : 2,
+                        event : event
+                    });
+                    event.setSourceEvent(e);
+                    event.target.addEventNotify(eventNotify);
+                }
             });
         });
     }
@@ -128,6 +134,10 @@ export default class EventBus{
 
     //捕获事件
     captureEvent(eventNotify){
+        if (!this.propagationEventQueue[eventNotify.batchNo])
+        {
+            return;
+        }
         if (eventNotify.event instanceof MouseEvent)
         {
             eventNotify.event.setPageX(eventNotify.event.sourceEvent.pageX);
