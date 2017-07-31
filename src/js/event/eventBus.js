@@ -6,6 +6,8 @@ import MouseEvent from "./type/mouseEvent.js";
 import KeyEvent from "./type/keyEvent.js";
 import Stack from "../data/structure/stack.js";
 import EventNotify from "./eventNotify.js";
+import globalUtil from "../util/globalUtil";
+import commonUtil from "../util/commonUtil";
 
 export default class EventBus{
     constructor(canvas){
@@ -41,6 +43,8 @@ export default class EventBus{
     initDomEvent(){
         this.addEventListener(this.canvas, "click", (e)=>{
             this.createEventNotify(e, "click");
+
+            globalUtil.inputDom.focus();
         });
 
         this.addEventListener(this.canvas, "mousedown", (e)=>{
@@ -154,14 +158,22 @@ export default class EventBus{
 
     //冒泡执行事件
     propagationEvent(){
+        let parents = [];//记录parent，避免同一个父级下同时点击多个叠加的组件
         for (let key in this.propagationEventQueue)
         {
             let event;
             while (event = this.propagationEventQueue[key].pop())
             {
-                if (event.callback && typeof(event.callback) === "function")
+                if (!event.target.parent || !commonUtil.inArray(parents, event.target.parent))
                 {
-                    event.callback(event);
+                    if (event.callback && typeof(event.callback) === "function")
+                    {
+                        event.callback(event);
+                    }
+                    if (event.target.parent)
+                    {
+                        parents.push(event.target.parent);
+                    }
                 }
             }
             delete this.propagationEventQueue[key];

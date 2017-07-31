@@ -80,6 +80,7 @@ export default class Component {
 
     produceChildren(chiCfg){
         let Rect = require("./rect.js").default;
+        let Input = require("./input.js").default;
         let Button = require("./button.js").default;
 
         let childCom;
@@ -98,6 +99,11 @@ export default class Component {
                     break;
                 case "rect" :
                     childCom = new Rect(this);
+                    childCom.initCfg(chiCfg);
+                    this.children.push(childCom);
+                    break;
+                case "input" :
+                    childCom = new Input(this);
                     childCom.initCfg(chiCfg);
                     this.children.push(childCom);
                     break;

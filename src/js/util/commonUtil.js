@@ -152,6 +152,27 @@ let commonUtil = {
             }
         }
         return undefined;
+    },
+    /**
+     * 判断对象是否在数组中
+     * @param arr
+     * @param object
+     */
+    inArray : (arr, object)=>{
+        if (arr == undefined || object == undefined)
+        {
+            return false;
+        }
+        let item;
+        for (let i = 0,j = arr.length; i < j; i++)
+        {
+            item = arr[i];
+            if (item === object)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 };
 export default commonUtil;
