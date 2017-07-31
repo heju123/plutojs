@@ -39,4 +39,8 @@ export default class Stack{
         this.top = this.top.next;
         return ret;
     }
+
+    getTop(){
+        return this.top;
+    }
 }

@@ -146,6 +146,19 @@ export default class Component {
         }
     }
 
+    /** this是否是com的父亲 */
+    parentOf(com){
+        if (!com.parent)
+        {
+            return false;
+        }
+        if (com.parent === this)
+        {
+            return true;
+        }
+        return this.parentOf(com.parent);
+    }
+
     getController(com){
         if (!com.parent)
         {
