@@ -158,13 +158,14 @@ export default class EventBus{
 
     //冒泡执行事件
     propagationEvent(){
-        let parents = [];//记录parent，避免同一个父级下同时点击多个叠加的组件
+        let parents = {};//记录parent，避免同一个父级下同时点击多个叠加的组件
         for (let key in this.propagationEventQueue)
         {
             let event;
             while (event = this.propagationEventQueue[key].pop())
             {
-                if (!event.target.parent || !commonUtil.inArray(parents, event.target.parent))
+                if (!event.target.parent || !parents[event.target.parent]
+                    || parents[event.target.parent] !== event.target)
                 {
                     if (event.callback && typeof(event.callback) === "function")
                     {
@@ -172,7 +173,7 @@ export default class EventBus{
                     }
                     if (event.target.parent)
                     {
-                        parents.push(event.target.parent);
+                        parents[event.target.parent] = event.target;
                     }
                 }
             }
