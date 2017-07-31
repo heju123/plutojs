@@ -146,7 +146,7 @@ let commonUtil = {
         for (let i = 0, j = arr.length; i < j; i++)
         {
             item = arr[i];
-            if (item[key] == value)
+            if (item[key] === value)
             {
                 return item;
             }
