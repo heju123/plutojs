@@ -33,21 +33,23 @@ export default class Fps{
         {
             return;
         }
-        com.draw(this.ctx);
-        let children = com.getChildren();
-        if (children)
+        if (com.draw(this.ctx))
         {
-            if (children instanceof Array)
+            let children = com.getChildren();
+            if (children)
             {
-                let child;
-                for (let i = 0, j = children.length; i < j; i++) {
-                    child = children[i];
-                    this.drawView(child);
+                if (children instanceof Array)
+                {
+                    let child;
+                    for (let i = 0, j = children.length; i < j; i++) {
+                        child = children[i];
+                        this.drawView(child);
+                    }
                 }
-            }
-            else
-            {
-                this.drawView(children);
+                else
+                {
+                    this.drawView(children);
+                }
             }
         }
     }

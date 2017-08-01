@@ -5,13 +5,18 @@ import globalUtil from "../util/globalUtil.js";
 import commonUtil from "../util/commonUtil.js";
 import Panel from "./components/panel.js";
 import Router from "./components/router.js";
+import Input from "./components/input.js";
 
 export default class ViewState{
     constructor(){
         this.isViewState = true;
 
         globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
-            console.log(e);
+            //点击空白处焦点消失
+            if (!(e.target instanceof Input))
+            {
+                globalUtil.focusComponent = undefined;
+            }
         });
     }
 

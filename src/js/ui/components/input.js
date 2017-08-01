@@ -8,12 +8,29 @@ export default class Input extends Rect {
     constructor(parent) {
         super(parent);
 
-        // this.registerEvent("mousedown", (e)=>{
-        //     globalUtil.focusComponent = this;
-        // });
+        this.registerEvent("mousedown", (e)=>{
+            globalUtil.focusComponent = this;
+        });
     }
 
     draw(ctx){
-        super.draw(ctx);
+        if (!super.draw(ctx))
+        {
+            return false;
+        }
+
+        ctx.save();
+        this.setClip(ctx);
+
+        ctx.beginPath();
+        //focus
+        if (globalUtil.focusComponent === this)
+        {
+            ctx.strokeStyle = "#ff0000";
+            ctx.strokeRect(this.getRealX(this), this.getRealY(this), this.width, this.height);
+        }
+
+        ctx.restore();
+        return true;
     }
 }

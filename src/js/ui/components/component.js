@@ -124,6 +124,13 @@ export default class Component {
     }
 
     draw(ctx){
+        //不在parent范围内，则不需要绘制
+        let parentArea = this.inParentArea(this);
+        if (parentArea === 0)
+        {
+            return false;
+        }
+
         if (this.eventNotifys.length > 0)
         {
             this.eventNotifys.forEach((eventNotify)=>{
@@ -131,6 +138,7 @@ export default class Component {
             });
             this.eventNotifys.length = 0;
         }
+        return true;
     }
 
     /** 检查事件是否匹配 */

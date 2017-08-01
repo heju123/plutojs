@@ -43,6 +43,7 @@ export default class Router extends Component{
     }
 
     draw(ctx){
+        return true;
     }
 
     getChildrenView(){
