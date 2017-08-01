@@ -1,6 +1,7 @@
 /**
  * Created by heju on 2017/7/25.
  */
+import EventListener from "./eventListener.js";
 import ClickEvent from "./type/clickEvent.js";
 import MouseEvent from "./type/mouseEvent.js";
 import KeyEvent from "./type/keyEvent.js";
@@ -86,8 +87,8 @@ export default class EventBus{
         let batchNo = this.createPropagationStack();
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
-            this.eventListeners[type].forEach((event)=>{
-                if (event.target.isViewState || event.target.active)
+            this.eventListeners[type].forEach((listener)=>{
+                if (listener.target.isViewState || listener.target.active)
                 {
                     eventNotify = new EventNotify();
                     eventNotify.set({
@@ -95,10 +96,10 @@ export default class EventBus{
                         type: 1,
                         px: px,
                         py: py,
-                        event: event
+                        listener: listener
                     });
-                    event.setSourceEvent(e);
-                    event.target.addEventNotify(eventNotify);
+                    listener.setSourceEvent(e);
+                    listener.target.addEventNotify(eventNotify);
                 }
             });
         });
@@ -109,17 +110,17 @@ export default class EventBus{
         let batchNo = this.createPropagationStack();
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
-            this.eventListeners[type].forEach((event)=>{
-                if (event.target.isViewState || event.target.active)
+            this.eventListeners[type].forEach((listener)=>{
+                if (listener.target.isViewState || listener.target.active)
                 {
                     eventNotify = new EventNotify();
                     eventNotify.set({
                         batchNo : batchNo,
                         type : 2,
-                        event : event
+                        listener : listener
                     });
-                    event.setSourceEvent(e);
-                    event.target.addEventNotify(eventNotify);
+                    listener.setSourceEvent(e);
+                    listener.target.addEventNotify(eventNotify);
                 }
             });
         });
@@ -142,81 +143,93 @@ export default class EventBus{
         {
             return;
         }
-        this.propagationEventQueue[eventNotify.batchNo].push(eventNotify.event);
+        this.propagationEventQueue[eventNotify.batchNo].push(eventNotify.listener);
     }
 
     /**
      * 冒泡执行事件
      */
     propagationEvent(){
-        let event;
+        let listener;
         let bubble;//上一个冒泡节点
+        let target;
+        let event;
+        let top;
         for (let key in this.propagationEventQueue)
         {
-            while (event = this.propagationEventQueue[key].pop())
+            top = this.propagationEventQueue[key].getTop();
+            if (top)//获取target，第一个冒泡节点的target
             {
-                if (event.target.isViewState || !bubble || bubble === event.target || event.target.parentOf(bubble))
+                target = top.target;
+            }
+            while (listener = this.propagationEventQueue[key].pop())
+            {
+                if (listener.target.isViewState || !bubble || bubble === listener.target || listener.target.parentOf(bubble))
                 {
-                    if (event instanceof MouseEvent)
+                    if (listener.callback && typeof(listener.callback) === "function")
                     {
-                        event.setPageX(event.sourceEvent.pageX);
-                        event.setPageY(event.sourceEvent.pageY);
-                        event.setButton(event.sourceEvent.button);
+                        event = this.getEvent(listener);
+                        event.setTarget(target);
+                        listener.callback(event);
                     }
-                    if (event instanceof KeyEvent)
-                    {
-                        event.setKey(event.sourceEvent.key);
-                        event.setKeyCode(event.sourceEvent.keyCode);
-                    }
-
-                    if (event.callback && typeof(event.callback) === "function")
-                    {
-                        event.callback(event);
-                    }
-                    bubble = event.target;
+                    bubble = listener.target;
                 }
             }
             delete this.propagationEventQueue[key];
         }
     }
 
-    /** 注册事件 */
-    registerEvent(com, type, callback){
+    getEvent(listener){
         let event;
-        switch (type)
+        switch (listener.type)
         {
             case "click" :
-                event = new ClickEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.click.push(event);
+                event = new ClickEvent(listener.type);
+                event.setCurrentTarget(listener.target);
                 break;
             case "mousedown" :
-                event = new MouseEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.mousedown.push(event);
+                event = new MouseEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setButton(listener.sourceEvent.button);
                 break;
             case "mousemove" :
-                event = new MouseEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.mousemove.push(event);
+                event = new MouseEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setPageX(listener.sourceEvent.pageX);
+                event.setPageY(listener.sourceEvent.pageY);
                 break;
             case "mouseup" :
-                event = new MouseEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.mouseup.push(event);
+                event = new MouseEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setButton(listener.sourceEvent.button);
                 break;
             case "keydown" :
-                event = new KeyEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.keydown.push(event);
+                event = new KeyEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setKey(listener.sourceEvent.key);
+                event.setKeyCode(listener.sourceEvent.keyCode);
                 break;
             case "keyup" :
-                event = new KeyEvent(type, callback);
-                event.setTarget(com);
-                this.eventListeners.keyup.push(event);
+                event = new KeyEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setKey(listener.sourceEvent.key);
+                event.setKeyCode(listener.sourceEvent.keyCode);
                 break;
             default : break;
         }
         return event;
+    }
+
+    /** 注册事件 */
+    registerEvent(com, type, callback){
+        let listener = this.getEventListener(com, type, callback);
+        this.eventListeners[type].push(listener);
+        return listener;
+    }
+
+    getEventListener(target, type, callback){
+       let eventListener = new EventListener(type, callback);
+       eventListener.setTarget(target);
+       return eventListener;
     }
 }

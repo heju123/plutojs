@@ -4,8 +4,8 @@
 import Event from "./event.js";
 
 export default class MouseEvent extends Event{
-    constructor(type, callback) {
-        super(type, callback);
+    constructor(type) {
+        super(type);
 
         this.pageX = undefined;
         this.pageY = undefined;

@@ -4,7 +4,7 @@
 import Event from "./event.js";
 
 export default class ClickEvent extends Event{
-    constructor(type, callback) {
-        super(type, callback);
+    constructor(type) {
+        super(type);
     }
 }

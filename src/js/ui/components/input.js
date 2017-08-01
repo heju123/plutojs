@@ -8,9 +8,9 @@ export default class Input extends Rect {
     constructor(parent) {
         super(parent);
 
-        this.registerEvent("mousedown", (e)=>{
-            globalUtil.focusComponent = this;
-        });
+        // this.registerEvent("mousedown", (e)=>{
+        //     globalUtil.focusComponent = this;
+        // });
     }
 
     draw(ctx){

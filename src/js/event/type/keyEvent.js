@@ -4,8 +4,8 @@
 import Event from "./event.js";
 
 export default class KeyEvent extends Event{
-    constructor(type, callback) {
-        super(type, callback);
+    constructor(type) {
+        super(type);
 
         this.key = undefined;
         this.keyCode = undefined;

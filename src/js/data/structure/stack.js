@@ -41,6 +41,6 @@ export default class Stack{
     }
 
     getTop(){
-        return this.top;
+        return this.top ? this.top.value : undefined;
     }
 }

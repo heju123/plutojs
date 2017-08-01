@@ -11,7 +11,7 @@ export default class ViewState{
         this.isViewState = true;
 
         globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
-            console.log(e.button);
+            console.log(e);
         });
     }
 
