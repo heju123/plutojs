@@ -18,8 +18,7 @@ export default class Component {
         }
         if (cfg.style)
         {
-            this.x = cfg.style.x;
-            this.y = cfg.style.y;
+            this.style = cfg.style;
         }
 
         //事件绑定配置
@@ -189,20 +188,20 @@ export default class Component {
     getRealX(com){
         if (com.parent)
         {
-            return com.x + this.getRealX(com.parent);
+            return com.style.x + this.getRealX(com.parent);
         }
         else
         {
-            return com.x;
+            return com.style.x;
         }
     }
     getRealY(com){
         if (com.parent)
         {
-            return com.y + this.getRealY(com.parent);
+            return com.style.y + this.getRealY(com.parent);
         }
         else{
-            return com.y;
+            return com.style.y;
         }
     }
 

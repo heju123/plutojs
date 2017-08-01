@@ -4,24 +4,30 @@ import Component from "./component.js";
 export default class Router extends Component{
     constructor(parent){
         super(parent);
-        this.x = 0;
-        this.y = 0;
+
+        this.routes = {};
+        this.children = [];
+
+        this.style = {
+            x : 0,
+            y : 0
+        };
         if (!parent)//最顶层
         {
-            this.width = globalUtil.canvas.width;
-            this.height = globalUtil.canvas.height;
+            this.style.width = globalUtil.canvas.width;
+            this.style.height = globalUtil.canvas.height;
         }
         else
         {
-            this.width = parent.width;
-            this.height = parent.height;
+            this.style.width = parent.style.width;
+            this.style.height = parent.style.height;
         }
-        this.routes = {};
-        this.children = [];
     }
 
     initCfg(cfg)
     {
+        super.initCfg(cfg);
+
         if (cfg.routes)
         {
             let rCfg;
@@ -38,8 +44,6 @@ export default class Router extends Component{
                 }
             }
         }
-
-        super.initCfg(cfg);
     }
 
     draw(ctx){

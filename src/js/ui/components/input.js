@@ -13,6 +13,10 @@ export default class Input extends Rect {
         });
     }
 
+    initCfg(cfg){
+        super.initCfg(cfg);
+    }
+
     draw(ctx){
         if (!super.draw(ctx))
         {
@@ -20,14 +24,12 @@ export default class Input extends Rect {
         }
 
         ctx.save();
-        this.setClip(ctx);
+        this.setParentClip(ctx);
 
         ctx.beginPath();
         //focus
         if (globalUtil.focusComponent === this)
         {
-            ctx.strokeStyle = "#ff0000";
-            ctx.strokeRect(this.getRealX(this), this.getRealY(this), this.width, this.height);
         }
 
         ctx.restore();

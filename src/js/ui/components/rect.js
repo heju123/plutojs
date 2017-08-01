@@ -11,34 +11,26 @@ export default class Rect extends Component{
     }
 
     initCfg(cfg){
+        super.initCfg(cfg);
+
         let $this = this;
 
-        if (cfg.style)
-        {
-            this.width = cfg.style.width;
-            this.height = cfg.style.height;
-            this.backgroundColor = cfg.style.backgroundColor;
-            this.backgroundImage = cfg.style.backgroundImage;
-        }
-
-        if (this.backgroundImage)
+        if (this.style.backgroundImage)
         {
             let img = new Image();
             img.onload = function(){
                 $this.backgroundImageDom = this;
-                if (!this.width || this.width === "auto")
+                if (!this.style.width || this.style.width === "auto")
                 {
-                    $this.width = $this.backgroundImageDom.width;
+                    $this.style.width = $this.backgroundImageDom.width;
                 }
-                if (!this.height || this.height === "auto")
+                if (!this.style.height || this.style.height === "auto")
                 {
-                    $this.height = $this.backgroundImageDom.height;
+                    $this.style.height = $this.backgroundImageDom.height;
                 }
             };
-            img.src = this.backgroundImage;
+            img.src = this.style.backgroundImage;
         }
-
-        super.initCfg(cfg);
     }
 
     draw(ctx){
@@ -47,26 +39,33 @@ export default class Rect extends Component{
             return false;
         }
         ctx.save();
-        this.setClip(ctx);
+        this.setParentClip(ctx);
         ctx.beginPath();
-        if (this.backgroundColor)
+        if (this.style.backgroundColor)
         {
-            ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(this.getRealX(this), this.getRealY(this), this.width, this.height);
+            ctx.fillStyle = this.style.backgroundColor;
+            ctx.fillRect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
         }
-        if (this.backgroundImage && this.backgroundImageDom)
+        if (this.style.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.width, this.height);
+            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+        }
+        if (this.style.borderWidth)
+        {
+            let bcolor = this.style.borderColor || this.style.backgroundColor;
+            ctx.lineWidth = this.style.borderWidth;
+            ctx.strokeStyle = bcolor;
+            ctx.strokeRect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
         }
         ctx.restore();
         return true;
     }
 
     /** 设置后避免超出parent范围 */
-    setClip(ctx){
+    setParentClip(ctx){
         if (this.parent)
         {
-            ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.width, this.parent.height);
+            ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.style.width, this.parent.style.height);
             ctx.clip();
         }
     }
@@ -82,10 +81,10 @@ export default class Rect extends Component{
             return -1;
         }
         else{
-            if (this.getRealX(com.parent) + com.parent.width < this.getRealX(com)
-                || this.getRealX(com.parent) > this.getRealX(com) + com.width
-                || this.getRealY(com.parent) + com.parent.height < this.getRealY(com)
-                || this.getRealY(com.parent) > this.getRealY(com) + com.height)//不在parent范围内
+            if (this.getRealX(com.parent) + com.parent.style.width < this.getRealX(com)
+                || this.getRealX(com.parent) > this.getRealX(com) + com.style.width
+                || this.getRealY(com.parent) + com.parent.style.height < this.getRealY(com)
+                || this.getRealY(com.parent) > this.getRealY(com) + com.style.height)//不在parent范围内
             {
                 return 0;
             }
@@ -104,8 +103,8 @@ export default class Rect extends Component{
      * @return true：在范围内
      */
     isPointInComponent(px, py){
-        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.width
-            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.height)
+        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.style.width
+            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.style.height)
         {
             return true;
         }
