@@ -43,8 +43,6 @@ export default class EventBus{
     initDomEvent(){
         this.addEventListener(this.canvas, "click", (e)=>{
             this.createEventNotify(e, "click");
-
-            globalUtil.inputDom.focus();
         });
 
         this.addEventListener(this.canvas, "mousedown", (e)=>{
@@ -57,6 +55,8 @@ export default class EventBus{
 
         this.addEventListener(this.canvas, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
+
+            globalUtil.inputDom.focus();
         });
 
         this.addEventListener(window, "keydown", (e)=>{
@@ -87,7 +87,7 @@ export default class EventBus{
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                if (event.target.active)
+                if (event.target.isViewState || event.target.active)
                 {
                     eventNotify = new EventNotify();
                     eventNotify.set({
@@ -110,7 +110,7 @@ export default class EventBus{
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
             this.eventListeners[type].forEach((event)=>{
-                if (event.target.active)
+                if (event.target.isViewState || event.target.active)
                 {
                     eventNotify = new EventNotify();
                     eventNotify.set({
@@ -142,21 +142,12 @@ export default class EventBus{
         {
             return;
         }
-        if (eventNotify.event instanceof MouseEvent)
-        {
-            eventNotify.event.setPageX(eventNotify.event.sourceEvent.pageX);
-            eventNotify.event.setPageY(eventNotify.event.sourceEvent.pageY);
-            eventNotify.event.setButton(eventNotify.event.sourceEvent.button);
-        }
-        if (eventNotify.event instanceof KeyEvent)
-        {
-            eventNotify.event.setKey(eventNotify.event.sourceEvent.key);
-            eventNotify.event.setKeyCode(eventNotify.event.sourceEvent.keyCode);
-        }
         this.propagationEventQueue[eventNotify.batchNo].push(eventNotify.event);
     }
 
-    //冒泡执行事件
+    /**
+     * 冒泡执行事件
+     */
     propagationEvent(){
         let event;
         let bubble;//上一个冒泡节点
@@ -164,8 +155,20 @@ export default class EventBus{
         {
             while (event = this.propagationEventQueue[key].pop())
             {
-                if (!bubble || bubble === event.target || event.target.parentOf(bubble))
+                if (event.target.isViewState || !bubble || bubble === event.target || event.target.parentOf(bubble))
                 {
+                    if (event instanceof MouseEvent)
+                    {
+                        event.setPageX(event.sourceEvent.pageX);
+                        event.setPageY(event.sourceEvent.pageY);
+                        event.setButton(event.sourceEvent.button);
+                    }
+                    if (event instanceof KeyEvent)
+                    {
+                        event.setKey(event.sourceEvent.key);
+                        event.setKeyCode(event.sourceEvent.keyCode);
+                    }
+
                     if (event.callback && typeof(event.callback) === "function")
                     {
                         event.callback(event);

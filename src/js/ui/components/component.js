@@ -124,10 +124,13 @@ export default class Component {
     }
 
     draw(ctx){
-        this.eventNotifys.forEach((eventNotify)=>{
-            this.checkEvent(eventNotify);
-        });
-        this.eventNotifys.length = 0;
+        if (this.eventNotifys.length > 0)
+        {
+            this.eventNotifys.forEach((eventNotify)=>{
+                this.checkEvent(eventNotify);
+            });
+            this.eventNotifys.length = 0;
+        }
     }
 
     /** 检查事件是否匹配 */

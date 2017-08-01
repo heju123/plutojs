@@ -8,6 +8,11 @@ import Router from "./components/router.js";
 
 export default class ViewState{
     constructor(){
+        this.isViewState = true;
+
+        globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
+            console.log(e.button);
+        });
     }
 
     init(viewCfg){
@@ -21,6 +26,10 @@ export default class ViewState{
             this.rootPanel = new Router();
             this.rootPanel.initCfg(viewCfg);
         }
+    }
+
+    addEventNotify(eventNotify){
+        globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
     getComponentInChildrenById(id, com) {
