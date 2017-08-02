@@ -87,21 +87,28 @@ export default class EventBus{
         let batchNo = this.createPropagationStack();
         let eventNotify;
         this.eventNotifyQueue.push(()=>{
-            this.eventListeners[type].forEach((listener)=>{
-                if (listener.target.isViewState || listener.target.active)
+            let eventListeners = this.eventListeners[type];
+            if (eventListeners.length > 0)
+            {
+                let listener;
+                for (let i = eventListeners.length - 1; i >=0; i--)
                 {
-                    eventNotify = new EventNotify();
-                    eventNotify.set({
-                        batchNo: batchNo,
-                        type: 1,
-                        px: px,
-                        py: py,
-                        listener: listener
-                    });
-                    listener.setSourceEvent(e);
-                    listener.target.addEventNotify(eventNotify);
+                    listener = eventListeners[i];
+                    if (listener.target.isViewState || listener.target.active)
+                    {
+                        eventNotify = new EventNotify();
+                        eventNotify.set({
+                            batchNo: batchNo,
+                            type: 1,
+                            px: px,
+                            py: py,
+                            listener: listener
+                        });
+                        listener.setSourceEvent(e);
+                        listener.target.addEventNotify(eventNotify);
+                    }
                 }
-            });
+            }
         });
     }
 
@@ -155,8 +162,12 @@ export default class EventBus{
         let target;
         let event;
         let top;
-        for (let key in this.propagationEventQueue)
+        let key;
+        for (key in this.propagationEventQueue)
         {
+            bubble = undefined;
+            target = undefined;
+            event = undefined;
             top = this.propagationEventQueue[key].getTop();
             if (top)//获取target，第一个冒泡节点的target
             {
@@ -164,12 +175,14 @@ export default class EventBus{
             }
             while (listener = this.propagationEventQueue[key].pop())
             {
-                if (listener.target.isViewState || !bubble || bubble === listener.target || listener.target.parentOf(bubble))
+                if (listener.target.isViewState || !bubble//viewstate节点或第一个节点
+                    || (event && event.immediatePropagation && bubble === listener.target)//自己
+                    || (event && event.propagation && listener.target.parentOf(bubble)))//parent
                 {
+                    event = this.getEvent(listener);
+                    event.setTarget(target);
                     if (listener.callback && typeof(listener.callback) === "function")
                     {
-                        event = this.getEvent(listener);
-                        event.setTarget(target);
                         listener.callback(event);
                     }
                     bubble = listener.target;

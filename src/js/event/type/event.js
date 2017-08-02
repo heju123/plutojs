@@ -4,6 +4,8 @@
 export default class Event {
     constructor(type) {
         this.type = type;
+        this.propagation = true;
+        this.immediatePropagation = true;
     }
 
     setTarget(target) {
@@ -12,5 +14,14 @@ export default class Event {
 
     setCurrentTarget(target) {
         this.currentTarget = target;
+    }
+
+    stopPropagation()
+    {
+        this.propagation = false;
+    }
+
+    stopImmediatePropagation(){
+        this.immediatePropagation = false;
     }
 }

@@ -12,6 +12,9 @@ export default class Input extends Rect {
         this.registerEvent("mousedown", (e)=>{
             globalUtil.focusComponent = this;
         });
+        this.registerEvent("mousemove", (e)=>{
+            globalUtil.hoverComponent = this;
+        });
     }
 
     initCfg(cfg){
@@ -19,6 +22,7 @@ export default class Input extends Rect {
     }
 
     draw(ctx){
+        this.focusable();
         if (!super.draw(ctx))
         {
             return false;
@@ -29,17 +33,9 @@ export default class Input extends Rect {
 
         ctx.beginPath();
         //focus
-        if (globalUtil.focusComponent === this && !this.originalStyle)
+        if (globalUtil.focusComponent === this)
         {
-            this.originalStyle = commonUtil.copyObject(this.style);
-            commonUtil.copyObject(this.style.focus, this.style, true);
         }
-        else if (globalUtil.focusComponent !== this && this.originalStyle)
-        {
-            this.style = this.originalStyle;
-            this.originalStyle = undefined;
-        }
-
         ctx.restore();
         return true;
     }

@@ -33,7 +33,7 @@ export default class Fps{
         {
             return;
         }
-        commonUtil.copyObject(com.style, com.originalStyle, true);
+        com.saveStyle();
         if (com.draw(this.ctx))
         {
             let children = com.getChildren();
@@ -53,7 +53,7 @@ export default class Fps{
                 }
             }
         }
-        commonUtil.copyObject(com.originalStyle, com.style, true);
+        com.restoreStyle();
     }
 
     draw(){

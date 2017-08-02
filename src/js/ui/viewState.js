@@ -18,6 +18,13 @@ export default class ViewState{
                 globalUtil.focusComponent = undefined;
             }
         });
+        globalUtil.eventBus.registerEvent(this, "mousemove", (e)=>{
+            //点击空白处焦点消失
+            if (!(e.target instanceof Input))
+            {
+                globalUtil.hoverComponent = undefined;
+            }
+        });
     }
 
     init(viewCfg){

@@ -143,6 +143,21 @@ export default class Component {
         return true;
     }
 
+    saveStyle(){
+        commonUtil.copyObject(this.style, this.originalStyle, true);
+    }
+
+    restoreStyle(){
+        commonUtil.copyObject(this.originalStyle, this.style, true);
+    }
+
+    focusable(){
+        if (globalUtil.focusComponent === this)
+        {
+            commonUtil.copyObject(this.style.focus, this.style, true);
+        }
+    }
+
     /** 检查事件是否匹配 */
     checkEvent(eventNotify){
         if (eventNotify.type)
