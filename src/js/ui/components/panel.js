@@ -14,12 +14,10 @@ export default class Panel extends Rect{
         {
             this.controller = new cfg.controller(this);
         }
-
+        super.initCfg(cfg);
         if (cfg.children)
         {
             this.initChildrenCfg(cfg.children);
         }
-
-        super.initCfg(cfg);
     }
 }

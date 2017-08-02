@@ -2,6 +2,7 @@
  * Created by heju on 2017/7/20.
  */
 import globalUtil from "../../util/globalUtil.js";
+import commonUtil from "../../util/commonUtil.js";
 import Panel from "./panel.js";
 
 export default class Component {
@@ -9,6 +10,8 @@ export default class Component {
         this.parent = parent;
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
+        this.style = {};
+        this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
     }
 
     initCfg(cfg){

@@ -3,6 +3,7 @@
  */
 import Rect from "./rect.js";
 import globalUtil from "../../util/globalUtil";
+import commonUtil from "../../util/commonUtil";
 
 export default class Input extends Rect {
     constructor(parent) {
@@ -28,8 +29,15 @@ export default class Input extends Rect {
 
         ctx.beginPath();
         //focus
-        if (globalUtil.focusComponent === this)
+        if (globalUtil.focusComponent === this && !this.originalStyle)
         {
+            this.originalStyle = commonUtil.copyObject(this.style);
+            commonUtil.copyObject(this.style.focus, this.style, true);
+        }
+        else if (globalUtil.focusComponent !== this && this.originalStyle)
+        {
+            this.style = this.originalStyle;
+            this.originalStyle = undefined;
         }
 
         ctx.restore();
