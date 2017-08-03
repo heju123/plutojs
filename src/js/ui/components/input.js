@@ -8,13 +8,6 @@ import commonUtil from "../../util/commonUtil";
 export default class Input extends Rect {
     constructor(parent) {
         super(parent);
-
-        this.registerEvent("mousedown", (e)=>{
-            globalUtil.focusComponent = this;
-        });
-        this.registerEvent("mousemove", (e)=>{
-            globalUtil.hoverComponent = this;
-        });
     }
 
     initCfg(cfg){
@@ -22,7 +15,6 @@ export default class Input extends Rect {
     }
 
     draw(ctx){
-        this.focusable();
         if (!super.draw(ctx))
         {
             return false;
@@ -33,7 +25,7 @@ export default class Input extends Rect {
 
         ctx.beginPath();
         //focus
-        if (globalUtil.focusComponent === this)
+        if (globalUtil.action.focusComponent === this)
         {
         }
         ctx.restore();

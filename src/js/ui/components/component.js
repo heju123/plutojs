@@ -133,6 +133,18 @@ export default class Component {
             return false;
         }
 
+        this.focusEnable();
+        this.hoverEnable();
+        this.activeEnable();
+
+        //判断鼠标是否在组件范围内
+        if (ctx.mouseAction.mx && ctx.mouseAction.my
+            && this.isPointInComponent(ctx.mouseAction.mx, ctx.mouseAction.my))
+        {
+            ctx.mouseAction.hoverCom = this;
+        }
+
+        //检查事件
         if (this.eventNotifys.length > 0)
         {
             this.eventNotifys.forEach((eventNotify)=>{
@@ -151,10 +163,22 @@ export default class Component {
         commonUtil.copyObject(this.originalStyle, this.style, true);
     }
 
-    focusable(){
-        if (globalUtil.focusComponent === this)
+    hoverEnable(){
+        if (globalUtil.action.hoverComponent === this)
+        {
+            commonUtil.copyObject(this.style.hover, this.style, true);
+        }
+    }
+    focusEnable(){
+        if (globalUtil.action.focusComponent === this)
         {
             commonUtil.copyObject(this.style.focus, this.style, true);
+        }
+    }
+    activeEnable(){
+        if (globalUtil.action.activeComponent === this)
+        {
+            commonUtil.copyObject(this.style.active, this.style, true);
         }
     }
 

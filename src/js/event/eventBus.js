@@ -56,8 +56,6 @@ export default class EventBus{
 
         this.addEventListener(this.canvas, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
-
-            globalUtil.inputDom.focus();
         });
 
         this.addEventListener(window, "keydown", (e)=>{

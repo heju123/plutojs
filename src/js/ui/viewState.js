@@ -8,22 +8,29 @@ import Router from "./components/router.js";
 import Input from "./components/input.js";
 
 export default class ViewState{
-    constructor(){
+    constructor(ctx){
         this.isViewState = true;
 
+        globalUtil.action = {};
+        ctx.mouseAction = {};
+
         globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
-            //点击空白处焦点消失
-            if (!(e.target instanceof Input))
+            if (globalUtil.action.hoverComponent)
             {
-                globalUtil.focusComponent = undefined;
+                globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
+                globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
+            }
+        });
+        globalUtil.eventBus.registerEvent(this, "mouseup", (e)=>{
+            globalUtil.inputDom.focus();
+            if (globalUtil.action.activeComponent)
+            {
+                globalUtil.action.activeComponent = undefined;
             }
         });
         globalUtil.eventBus.registerEvent(this, "mousemove", (e)=>{
-            //点击空白处焦点消失
-            if (!(e.target instanceof Input))
-            {
-                globalUtil.hoverComponent = undefined;
-            }
+            ctx.mouseAction.mx = e.pageX;
+            ctx.mouseAction.my = e.pageY;
         });
     }
 
@@ -37,6 +44,19 @@ export default class ViewState{
         {
             this.rootPanel = new Router();
             this.rootPanel.initCfg(viewCfg);
+        }
+    }
+
+    /** 绘制前初始化hover的组件 */
+    initHoverCom(ctx){
+        ctx.mouseAction.hoverCom = undefined;
+    }
+
+    /** 全部绘制完后检查hover的组件 */
+    checkHoverCom(ctx){
+        if (ctx.mouseAction.hoverCom)
+        {
+            globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
         }
     }
 

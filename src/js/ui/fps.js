@@ -19,7 +19,7 @@ export default class Fps{
     }
 
     setMainView(viewCfg){
-        globalUtil.viewState = new ViewState();
+        globalUtil.viewState = new ViewState(this.ctx);
         globalUtil.viewState.init(viewCfg);
     }
 
@@ -64,7 +64,9 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
+        globalUtil.viewState.initHoverCom(this.ctx);
         this.drawView(globalUtil.viewState.rootPanel);
+        globalUtil.viewState.checkHoverCom(this.ctx);
 
         globalUtil.eventBus.propagationEvent();
 
