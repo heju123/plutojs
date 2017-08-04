@@ -5,7 +5,6 @@ import globalUtil from "../util/globalUtil.js";
 import commonUtil from "../util/commonUtil.js";
 import Panel from "./components/panel.js";
 import Router from "./components/router.js";
-import Input from "./components/input.js";
 
 export default class ViewState{
     constructor(ctx){
@@ -47,14 +46,14 @@ export default class ViewState{
         }
     }
 
-    /** 绘制前初始化hover的组件 */
-    initHoverCom(ctx){
+    /** 绘制前 */
+    beforeDraw(ctx){
         ctx.mouseAction.hoverCom = undefined;
     }
 
-    /** 全部绘制完后检查hover的组件 */
-    checkHoverCom(ctx){
-        if (ctx.mouseAction.hoverCom)
+    /** 绘制后 */
+    afterDraw(ctx){
+        if (ctx.mouseAction.hoverCom)//全部绘制完后检查hover的组件
         {
             globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
         }
@@ -64,7 +63,7 @@ export default class ViewState{
         globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
-    getComponentInChildrenById(id, com) {
+    getComponentInChildrenByKey(key, val, com) {
         let children = com.getChildren();
         if (children)
         {
@@ -75,11 +74,11 @@ export default class ViewState{
                 for (let i = 0, j = children.length; i < j; i++)
                 {
                     child = children[i];
-                    if (child.id && child.id === id)
+                    if (child[key] && child[key] === val)
                     {
                         return child;
                     }
-                    retCom = this.getComponentInChildrenById(id, child);
+                    retCom = this.getComponentInChildrenByKey(key, val, child);
                     if (retCom)
                     {
                         return retCom;
@@ -92,13 +91,13 @@ export default class ViewState{
             }
             else
             {
-                if (children.id && children.id === id)
+                if (children[key] && children[key] === val)
                 {
                     return children;
                 }
                 else
                 {
-                    return this.getComponentInChildrenById(id, children);
+                    return this.getComponentInChildrenByKey(key, val, children);
                 }
             }
         }
@@ -115,7 +114,7 @@ export default class ViewState{
         }
         else
         {
-            return this.getComponentInChildrenById(id, this.rootPanel);
+            return this.getComponentInChildrenByKey("id", id, this.rootPanel);
         }
     }
 }

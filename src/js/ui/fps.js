@@ -64,9 +64,9 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
 
-        globalUtil.viewState.initHoverCom(this.ctx);
+        globalUtil.viewState.beforeDraw(this.ctx);
         this.drawView(globalUtil.viewState.rootPanel);
-        globalUtil.viewState.checkHoverCom(this.ctx);
+        globalUtil.viewState.afterDraw(this.ctx);
 
         globalUtil.eventBus.propagationEvent();
 
