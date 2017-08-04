@@ -10,7 +10,6 @@ export default class ViewState{
     constructor(ctx){
         this.isViewState = true;
 
-        globalUtil.action = {};
         ctx.mouseAction = {};
 
         globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
@@ -21,7 +20,7 @@ export default class ViewState{
             }
         });
         globalUtil.eventBus.registerEvent(this, "mouseup", (e)=>{
-            globalUtil.inputDom.focus();
+            globalUtil.action.inputListenerDom.focus();
             if (globalUtil.action.activeComponent)
             {
                 globalUtil.action.activeComponent = undefined;

@@ -12,12 +12,24 @@ class Main {
         let mainBody = document.getElementById(eleId);
         this.fps = new Fps(mainBody);
 
-        globalUtil.inputDom = document.createElement("TEXTAREA");
-        globalUtil.inputDom.style.position = "fixed";
-        globalUtil.inputDom.style.left = "0px";
-        globalUtil.inputDom.style.top = "0px";
-        globalUtil.inputDom.style["z-index"] = -1;
-        document.body.appendChild(globalUtil.inputDom);
+        globalUtil.action = {};
+
+        //输入框输入监听
+        globalUtil.action.inputListenerDom = document.createElement("TEXTAREA");
+        globalUtil.action.inputListenerDom.style.position = "fixed";
+        globalUtil.action.inputListenerDom.style.left = "0px";
+        globalUtil.action.inputListenerDom.style.top = "0px";
+        globalUtil.action.inputListenerDom.style["z-index"] = -1;
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
+            console.log(globalUtil.action.inputListenerDom.value);
+        });
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
+            console.log(globalUtil.action.inputListenerDom.value);
+        });
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
+            console.log(globalUtil.action.inputListenerDom.value);
+        });
+        document.body.appendChild(globalUtil.action.inputListenerDom);
     }
 
     setMainView(viewCfg){

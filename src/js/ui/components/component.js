@@ -191,7 +191,8 @@ export default class Component {
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
-            else if (eventNotify.type === 2)//键盘事件
+            else if (eventNotify.type === 2
+                && globalUtil.action.focusComponent === this)//键盘事件
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
