@@ -47,12 +47,18 @@ export default class ViewState{
 
     /** 绘制前 */
     beforeDraw(ctx){
+        //通知触发事件
+        globalUtil.eventBus.doNotifyEvent();
+
         ctx.mouseAction.hoverCom = undefined;
     }
 
     /** 绘制后 */
     afterDraw(ctx){
-        if (ctx.mouseAction.hoverCom)//全部绘制完后检查hover的组件
+        globalUtil.eventBus.propagationEvent();
+
+        //全部绘制完后检查hover的组件
+        if (ctx.mouseAction.hoverCom)
         {
             globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
         }

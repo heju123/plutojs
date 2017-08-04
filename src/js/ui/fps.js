@@ -57,9 +57,6 @@ export default class Fps{
     }
 
     draw(){
-        //通知触发事件
-        globalUtil.eventBus.doNotifyEvent();
-
         //背景
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
@@ -67,8 +64,6 @@ export default class Fps{
         globalUtil.viewState.beforeDraw(this.ctx);
         this.drawView(globalUtil.viewState.rootPanel);
         globalUtil.viewState.afterDraw(this.ctx);
-
-        globalUtil.eventBus.propagationEvent();
 
         window.requestAnimationFrame(this.draw.bind(this));
     }
