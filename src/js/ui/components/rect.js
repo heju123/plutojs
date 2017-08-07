@@ -12,25 +12,6 @@ export default class Rect extends Component{
 
     initCfg(cfg){
         super.initCfg(cfg);
-
-        let $this = this;
-
-        if (this.style.backgroundImage)
-        {
-            let img = new Image();
-            img.onload = function(){
-                $this.backgroundImageDom = this;
-                if (!this.style.width || this.style.width === "auto")
-                {
-                    $this.style.width = $this.backgroundImageDom.width;
-                }
-                if (!this.style.height || this.style.height === "auto")
-                {
-                    $this.style.height = $this.backgroundImageDom.height;
-                }
-            };
-            img.src = this.style.backgroundImage;
-        }
     }
 
     draw(ctx){
@@ -56,6 +37,20 @@ export default class Rect extends Component{
             ctx.lineWidth = this.style.borderWidth;
             ctx.strokeStyle = bcolor;
             ctx.strokeRect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+        }
+        ctx.restore();
+
+        ctx.save();
+        this.setClip(ctx);
+        //绘制文字
+        if (this.text && this.text.length > 0)
+        {
+            ctx.font=this.style.fontSize + " " + this.style.fontFamily;
+            ctx.textBaseline="hanging";
+            this.text.forEach((text, index)=>{
+                ctx.fillText(text, this.getRealX(this),
+                    this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+            });
         }
         ctx.restore();
         return true;

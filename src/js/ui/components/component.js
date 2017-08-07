@@ -12,16 +12,39 @@ export default class Component {
         this.active = true;//为false则不绘制
         this.style = {};
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
+
+        this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
+        this.style.fontSize = globalUtil.viewState.defaultFontSize;
+        this.style.lineHeight = parseInt(this.style.fontSize, 10);
     }
 
     initCfg(cfg){
+        let $this = this;
         if (cfg.id)
         {
             this.id = cfg.id;
         }
         if (cfg.style)
         {
-            this.style = cfg.style;
+            commonUtil.copyObject(cfg.style, this.style, true);
+        }
+        this.text = this.getTextForRows(cfg.text);
+
+        if (this.style.backgroundImage)
+        {
+            let img = new Image();
+            img.onload = function(){
+                $this.backgroundImageDom = this;
+                if (!this.style.width || this.style.width === "auto")
+                {
+                    $this.style.width = $this.backgroundImageDom.width;
+                }
+                if (!this.style.height || this.style.height === "auto")
+                {
+                    $this.style.height = $this.backgroundImageDom.height;
+                }
+            };
+            img.src = this.style.backgroundImage;
         }
 
         //事件绑定配置
@@ -246,6 +269,11 @@ export default class Component {
         else{
             return com.style.y;
         }
+    }
+
+    /** 用\n分隔string，实现换行 */
+    getTextForRows(text){
+        return text ? text.split("\n") : undefined;
     }
 
     getChildren(){
