@@ -20,15 +20,12 @@ class Main {
         globalUtil.action.inputListenerDom.style.left = "0px";
         globalUtil.action.inputListenerDom.style.top = "0px";
         globalUtil.action.inputListenerDom.style["z-index"] = -1;
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
-            console.log(globalUtil.action.inputListenerDom.value);
+        /*globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
         });
         globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
-            console.log(globalUtil.action.inputListenerDom.value);
         });
         globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
-            console.log(globalUtil.action.inputListenerDom.value);
-        });
+        });*/
         document.body.appendChild(globalUtil.action.inputListenerDom);
     }
 

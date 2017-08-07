@@ -69,6 +69,11 @@ export default class Rect extends Component{
             ctx.clip();
         }
     }
+    /** 设置后避免超出当前组件范围 */
+    setClip(ctx){
+        ctx.rect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+        ctx.clip();
+    }
 
     /**
      * 是否在parent区域内

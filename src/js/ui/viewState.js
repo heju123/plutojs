@@ -10,6 +10,9 @@ export default class ViewState{
     constructor(ctx){
         this.isViewState = true;
 
+        this.defaultFontFamily = "Microsoft YaHei";
+        this.defaultFontSize = "14px";
+
         ctx.mouseAction = {};
 
         globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
