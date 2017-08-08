@@ -11,7 +11,7 @@ export default class ViewState{
         this.isViewState = true;
 
         this.defaultFontFamily = "Microsoft YaHei";
-        this.defaultFontSize = "14px";
+        this.defaultFontSize = "18px";
 
         ctx.mouseAction = {};
 

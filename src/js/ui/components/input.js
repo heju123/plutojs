@@ -39,20 +39,46 @@ export default class Input extends Rect {
 
     /** 获取文本输入光标位置 */
     getTextCursor(){
+        return globalUtil.action.inputListenerDom.selectionEnd;
+    }
+
+    /** 获取文本输入光标位置 */
+    getTextCursorPos(){
+        if (!this.text || this.text.length === 0)
+        {
+            return;
+        }
         let cursorIndex = globalUtil.action.inputListenerDom.selectionEnd;
         let charNum = 0;
         let textIndex = 0;
-        while (cursorIndex > (charNum += this.text[textIndex].length))
+        for (let j = this.text.length; textIndex < j; textIndex++)
         {
-            textIndex++;
+            charNum += this.text[textIndex].length;
+            if (cursorIndex <= charNum)
+            {
+                break;
+            }
         }
+        this.textCursorX = this.getRealX(this) + cursorIndex * parseInt(this.style.fontSize) + 1;
+        this.textCursorY = this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textIndex;
+        console.log(Math.max(charNum,cursorIndex));
+        console.log(Math.min(charNum,cursorIndex));
     }
 
     drawTextCursor(ctx){
         if (this.showTextCursor)
         {
+            let textWidth;
+            if (this.text && this.text.length > 0)
+            {
+                textWidth = ctx.measureText(this.text[0]).width
+            }
+            else
+            {
+                textWidth = 0;
+            }
             let textCursor = this.getTextCursor();
-            let xOffset = textCursor * parseInt(this.style.fontSize) + 1;
+            let xOffset = textWidth + 1;
             ctx.fillStyle="#000";
             ctx.moveTo(this.getRealX(this) + xOffset, this.getRealY(this) + 2);
             ctx.lineTo(this.getRealX(this) + xOffset, this.getRealY(this) + this.style.lineHeight - 2);
