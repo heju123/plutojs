@@ -29,17 +29,11 @@ export default class Input extends Rect {
         ctx.beginPath();
         //focus
         if (globalUtil.action.focusComponent === this) {
-            this.text = this.getTextForRows(globalUtil.action.inputListenerDom.value);
             //绘制光标
             this.drawTextCursor(ctx);
         }
         ctx.restore();
         return true;
-    }
-
-    /** 获取文本输入光标位置 */
-    getTextCursor(){
-        return globalUtil.action.inputListenerDom.selectionEnd;
     }
 
     /** 获取文本输入光标位置 */
@@ -49,39 +43,29 @@ export default class Input extends Rect {
             return;
         }
         let cursorIndex = globalUtil.action.inputListenerDom.selectionEnd;
-        let charNum = 0;
-        let textIndex = 0;
-        for (let j = this.text.length; textIndex < j; textIndex++)
+        let textRow;
+        for (let i = 0,j = this.text.length; i < j; i++)
         {
-            charNum += this.text[textIndex].length;
-            if (cursorIndex <= charNum)
+            if (cursorIndex <= this.text[i].length)
             {
+                textRow = i;
                 break;
             }
+            cursorIndex -= this.text[i].length;
+            cursorIndex--;//selectionEnd里包含多余的换行符，所以要减一个换行符
         }
+        textRow = textRow === undefined ? this.text.length - 1 : textRow;
         this.textCursorX = this.getRealX(this) + cursorIndex * parseInt(this.style.fontSize) + 1;
-        this.textCursorY = this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textIndex;
-        console.log(Math.max(charNum,cursorIndex));
-        console.log(Math.min(charNum,cursorIndex));
+        this.textCursorY = this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textRow;
     }
 
     drawTextCursor(ctx){
         if (this.showTextCursor)
         {
-            let textWidth;
-            if (this.text && this.text.length > 0)
-            {
-                textWidth = ctx.measureText(this.text[0]).width
-            }
-            else
-            {
-                textWidth = 0;
-            }
-            let textCursor = this.getTextCursor();
-            let xOffset = textWidth + 1;
+            this.getTextCursorPos();
             ctx.fillStyle="#000";
-            ctx.moveTo(this.getRealX(this) + xOffset, this.getRealY(this) + 2);
-            ctx.lineTo(this.getRealX(this) + xOffset, this.getRealY(this) + this.style.lineHeight - 2);
+            ctx.moveTo(this.textCursorX, this.textCursorY + 2);
+            ctx.lineTo(this.textCursorX, this.textCursorY + this.style.lineHeight - 2);
             ctx.stroke();
         }
     }

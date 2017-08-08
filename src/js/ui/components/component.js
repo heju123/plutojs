@@ -273,7 +273,27 @@ export default class Component {
 
     /** 用\n分隔string，实现换行 */
     getTextForRows(text){
-        return text ? text.split("\n") : undefined;
+        let rowsStr = text ? text.split("\n") : undefined;
+        if (rowsStr)
+        {
+            let i;
+            let c;
+            let arr;
+            return rowsStr.map((row)=>{
+                i = 0;
+                arr = [];
+                while (c = row.charAt(i))
+                {
+                    arr.push(c);
+                    i++;
+                }
+                return arr;
+            });
+        }
+        else
+        {
+            return undefined;
+        }
     }
 
     getChildren(){

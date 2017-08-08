@@ -5,13 +5,14 @@ import globalUtil from "../util/globalUtil.js";
 import commonUtil from "../util/commonUtil.js";
 import Panel from "./components/panel.js";
 import Router from "./components/router.js";
+import Input from "./components/input.js";
 
 export default class ViewState{
     constructor(ctx){
         this.isViewState = true;
 
         this.defaultFontFamily = "Microsoft YaHei";
-        this.defaultFontSize = "18px";
+        this.defaultFontSize = "14px";
 
         ctx.mouseAction = {};
 
@@ -32,6 +33,18 @@ export default class ViewState{
         globalUtil.eventBus.registerEvent(this, "mousemove", (e)=>{
             ctx.mouseAction.mx = e.pageX;
             ctx.mouseAction.my = e.pageY;
+        });
+
+        //输入框事件
+        /*globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
+        });
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
+        });*/
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
+            if (globalUtil.action.focusComponent && globalUtil.action.focusComponent instanceof Input)
+            {
+                globalUtil.action.focusComponent.text = globalUtil.action.focusComponent.getTextForRows(globalUtil.action.inputListenerDom.value);
+            }
         });
     }
 

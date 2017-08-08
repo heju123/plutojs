@@ -47,9 +47,11 @@ export default class Rect extends Component{
         {
             ctx.font=this.style.fontSize + " " + this.style.fontFamily;
             ctx.textBaseline="hanging";
-            this.text.forEach((text, index)=>{
-                ctx.fillText(text, this.getRealX(this),
-                    this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+            this.text.forEach((row, index)=>{
+                row.forEach((char, cindex)=>{
+                    ctx.fillText(char, this.getRealX(this) + cindex * parseInt(this.style.fontSize, 10),
+                        this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+                });
             });
         }
         ctx.restore();

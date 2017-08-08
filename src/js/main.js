@@ -20,12 +20,6 @@ class Main {
         globalUtil.action.inputListenerDom.style.left = "0px";
         globalUtil.action.inputListenerDom.style.top = "0px";
         globalUtil.action.inputListenerDom.style["z-index"] = 1;
-        /*globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
-        });
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
-        });
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
-        });*/
         document.body.appendChild(globalUtil.action.inputListenerDom);
     }
 
