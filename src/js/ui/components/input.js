@@ -10,9 +10,8 @@ export default class Input extends Rect {
         super(parent);
 
         this.showTextCursor = true;
-        this.showTextCursorInterval = setInterval(()=>{
-            this.showTextCursor = !this.showTextCursor;
-        }, 500);
+        this.showTextCursorInterval = 0;
+        this.multiLine = false;
     }
 
     initCfg(cfg){
@@ -68,5 +67,17 @@ export default class Input extends Rect {
             ctx.lineTo(this.textCursorX, this.textCursorY + this.style.lineHeight - 2);
             ctx.stroke();
         }
+        this.showTextCursorInterval++;
+        if (this.showTextCursorInterval === 30)
+        {
+            this.showTextCursorInterval = 0;
+            this.showTextCursor = !this.showTextCursor;
+        }
+    }
+
+    onFocus(){
+        this.showTextCursorInterval = 0;
+        this.showTextCursor = true;
+        globalUtil.action.inputListenerDom.value = this.getText() || "";
     }
 }

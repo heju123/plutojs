@@ -21,6 +21,10 @@ export default class ViewState{
             {
                 globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
                 globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
+                if (globalUtil.action.focusComponent.onFocus && typeof(globalUtil.action.focusComponent.onFocus) === "function")
+                {
+                    globalUtil.action.focusComponent.onFocus();
+                }
             }
         });
         globalUtil.eventBus.registerEvent(this, "mouseup", (e)=>{

@@ -16,6 +16,7 @@ export default class Component {
         this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
         this.style.fontSize = globalUtil.viewState.defaultFontSize;
         this.style.lineHeight = parseInt(this.style.fontSize, 10);
+        this.multiLine = true;
     }
 
     initCfg(cfg){
@@ -29,6 +30,7 @@ export default class Component {
             commonUtil.copyObject(cfg.style, this.style, true);
         }
         this.text = this.getTextForRows(cfg.text);
+        this.multiLine = cfg.multiLine || this.multiLine;
 
         if (this.style.backgroundImage)
         {
@@ -273,27 +275,42 @@ export default class Component {
 
     /** 用\n分隔string，实现换行 */
     getTextForRows(text){
-        let rowsStr = text ? text.split("\n") : undefined;
-        if (rowsStr)
-        {
-            let i;
-            let c;
-            let arr;
-            return rowsStr.map((row)=>{
-                i = 0;
-                arr = [];
-                while (c = row.charAt(i))
-                {
-                    arr.push(c);
-                    i++;
-                }
-                return arr;
-            });
-        }
-        else
+        if (!text)
         {
             return undefined;
         }
+        let rowsStr;
+        if (!this.multiLine)//单行
+        {
+            rowsStr = [text];
+        }
+        else
+        {
+            rowsStr = text.split("\n");
+        }
+        let i;
+        let c;
+        let arr;
+        return rowsStr.map((row)=>{
+            i = 0;
+            arr = [];
+            while (c = row.charAt(i))
+            {
+                arr.push(c);
+                i++;
+            }
+            return arr;
+        });
+    }
+
+    getText(){
+        if (!this.text)
+        {
+            return undefined;
+        }
+        return this.text.map((row, index)=>{
+            return row.join("");
+        }).join("\n");
     }
 
     getChildren(){
