@@ -253,24 +253,37 @@ export default class Component {
     }
 
     //获取显示在界面上真实的x坐标，加上父级坐标
-    getRealX(com){
+    getRealXRecursion(com){
         if (com.parent)
         {
-            return com.style.x + this.getRealX(com.parent);
+            return com.style.x + this.getRealXRecursion(com.parent);
         }
         else
         {
             return com.style.x;
         }
     }
-    getRealY(com){
+    getRealX(){
+        return this.getRealXRecursion(this);
+    }
+    getRealYRecursion(com){
         if (com.parent)
         {
-            return com.style.y + this.getRealY(com.parent);
+            return com.style.y + this.getRealYRecursion(com.parent);
         }
         else{
             return com.style.y;
         }
+    }
+    getRealY(){
+        return this.getRealYRecursion(this);
+    }
+    /** 获取文本的坐标 */
+    getTextRealX(){
+        return this.getRealX();
+    }
+    getTextRealY(){
+        return this.getRealY();
     }
 
     /** 用\n分隔string，实现换行 */

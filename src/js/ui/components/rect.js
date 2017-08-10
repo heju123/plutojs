@@ -25,18 +25,18 @@ export default class Rect extends Component{
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
-            ctx.fillRect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+            ctx.fillRect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
         }
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom, this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+            ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.style.width, this.style.height);
         }
         if (this.style.borderWidth)
         {
             let bcolor = this.style.borderColor || this.style.backgroundColor;
             ctx.lineWidth = this.style.borderWidth;
             ctx.strokeStyle = bcolor;
-            ctx.strokeRect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+            ctx.strokeRect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
         }
         ctx.restore();
 
@@ -49,8 +49,8 @@ export default class Rect extends Component{
             ctx.textBaseline="hanging";
             this.text.forEach((row, index)=>{
                 row.forEach((char, cindex)=>{
-                    ctx.fillText(char, this.getRealX(this) + cindex * parseInt(this.style.fontSize, 10),
-                        this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+                    ctx.fillText(char, this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10),
+                        this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
                 });
             });
         }
@@ -62,13 +62,13 @@ export default class Rect extends Component{
     setParentClip(ctx){
         if (this.parent)
         {
-            ctx.rect(this.getRealX(this.parent), this.getRealY(this.parent), this.parent.style.width, this.parent.style.height);
+            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.style.width, this.parent.style.height);
             ctx.clip();
         }
     }
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
-        ctx.rect(this.getRealX(this), this.getRealY(this), this.style.width, this.style.height);
+        ctx.rect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
         ctx.clip();
     }
 
@@ -83,10 +83,10 @@ export default class Rect extends Component{
             return -1;
         }
         else{
-            if (this.getRealX(com.parent) + com.parent.style.width < this.getRealX(com)
-                || this.getRealX(com.parent) > this.getRealX(com) + com.style.width
-                || this.getRealY(com.parent) + com.parent.style.height < this.getRealY(com)
-                || this.getRealY(com.parent) > this.getRealY(com) + com.style.height)//不在parent范围内
+            if (this.getRealXRecursion(com.parent) + com.parent.style.width < this.getRealX()
+                || this.getRealXRecursion(com.parent) > this.getRealX() + com.style.width
+                || this.getRealYRecursion(com.parent) + com.parent.style.height < this.getRealY()
+                || this.getRealYRecursion(com.parent) > this.getRealY() + com.style.height)//不在parent范围内
             {
                 return 0;
             }

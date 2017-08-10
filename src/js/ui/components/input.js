@@ -37,25 +37,24 @@ export default class Input extends Rect {
 
     /** 获取文本输入光标位置 */
     getTextCursorPos(){
-        if (!this.text || this.text.length === 0)
-        {
-            return;
-        }
         let cursorIndex = globalUtil.action.inputListenerDom.selectionEnd;
-        let textRow;
-        for (let i = 0,j = this.text.length; i < j; i++)
+        let textRow = 0;
+        if (this.text && this.text.length > 0)
         {
-            if (cursorIndex <= this.text[i].length)
+            for (let i = 0,j = this.text.length; i < j; i++)
             {
-                textRow = i;
-                break;
+                if (cursorIndex <= this.text[i].length)
+                {
+                    textRow = i;
+                    break;
+                }
+                cursorIndex -= this.text[i].length;
+                cursorIndex--;//selectionEnd里包含多余的换行符，所以要减一个换行符
             }
-            cursorIndex -= this.text[i].length;
-            cursorIndex--;//selectionEnd里包含多余的换行符，所以要减一个换行符
+            textRow = textRow === 0 ? this.text.length - 1 : textRow;
         }
-        textRow = textRow === undefined ? this.text.length - 1 : textRow;
-        this.textCursorX = this.getRealX(this) + cursorIndex * parseInt(this.style.fontSize) + 1;
-        this.textCursorY = this.getRealY(this) + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textRow;
+        this.textCursorX = this.getTextRealX() + cursorIndex * parseInt(this.style.fontSize) + 1;
+        this.textCursorY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textRow;
     }
 
     drawTextCursor(ctx){
@@ -79,5 +78,17 @@ export default class Input extends Rect {
         this.showTextCursorInterval = 0;
         this.showTextCursor = true;
         globalUtil.action.inputListenerDom.value = this.getText() || "";
+    }
+
+    getTextRealY(){
+        let oriY = super.getRealY();
+        if (this.multiLine)
+        {
+            return oriY;
+        }
+        else
+        {
+            return oriY + this.style.height / 2 - this.style.lineHeight / 2;
+        }
     }
 }
