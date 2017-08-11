@@ -38,7 +38,7 @@ export default class Input extends Rect {
     /** 获取文本输入光标位置 */
     getTextCursorPos(){
         let cursorIndex = globalUtil.action.inputListenerDom.selectionEnd;
-        let textRow = 0;
+        let textRow;
         if (this.text && this.text.length > 0)
         {
             for (let i = 0,j = this.text.length; i < j; i++)
@@ -51,10 +51,10 @@ export default class Input extends Rect {
                 cursorIndex -= this.text[i].length;
                 cursorIndex--;//selectionEnd里包含多余的换行符，所以要减一个换行符
             }
-            textRow = textRow === 0 ? this.text.length - 1 : textRow;
+            textRow = textRow === undefined ? this.text.length - 1 : textRow;
         }
         this.textCursorX = this.getTextRealX() + cursorIndex * parseInt(this.style.fontSize) + 1;
-        this.textCursorY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * textRow;
+        this.textCursorY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
     }
 
     drawTextCursor(ctx){
@@ -81,7 +81,7 @@ export default class Input extends Rect {
     }
 
     getTextRealY(){
-        let oriY = super.getRealY();
+        let oriY = super.getTextRealY();
         if (this.multiLine)
         {
             return oriY;

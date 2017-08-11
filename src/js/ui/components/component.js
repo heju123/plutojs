@@ -16,7 +16,8 @@ export default class Component {
         this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
         this.style.fontSize = globalUtil.viewState.defaultFontSize;
         this.style.lineHeight = parseInt(this.style.fontSize, 10);
-        this.multiLine = true;
+        this.multiLine = true;//是否多行文本
+        this.autoLine = true;//是否自动换行
     }
 
     initCfg(cfg){
@@ -300,6 +301,36 @@ export default class Component {
         else
         {
             rowsStr = text.split("\n");
+            if (this.autoLine)//如果自动换行
+            {
+                let index;
+                let charWidth;
+                let flag = true;
+                let newRowsStr = [];
+                for (let i = 0; i < rowsStr.length; i++)
+                {
+                    index = 0;
+                    charWidth = 0;
+                    flag = true;
+                    while (rowsStr[i].charAt(index))
+                    {
+                        charWidth += parseInt(this.style.fontSize, 10);
+                        if (charWidth >= this.style.width)
+                        {
+                            charWidth = 0;
+                            newRowsStr.push(rowsStr[i].substring(0, index));
+                            newRowsStr.push(rowsStr[i].substring(index));
+                            flag = false;
+                        }
+                        index++;
+                    }
+                    if (flag)
+                    {
+                        newRowsStr.push(rowsStr[i]);
+                    }
+                }
+                rowsStr = newRowsStr;
+            }
         }
         let i;
         let c;
