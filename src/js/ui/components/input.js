@@ -60,7 +60,10 @@ export default class Input extends Rect {
     drawTextCursor(ctx){
         if (this.showTextCursor)
         {
-            this.getTextCursorPos();
+            if (!globalUtil.action.inputListenerDom.compositionMode)
+            {
+                this.getTextCursorPos();
+            }
             ctx.fillStyle="#000";
             ctx.moveTo(this.textCursorX, this.textCursorY + 2);
             ctx.lineTo(this.textCursorX, this.textCursorY + this.style.lineHeight - 2);

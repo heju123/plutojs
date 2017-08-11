@@ -305,13 +305,13 @@ export default class Component {
             {
                 let index;
                 let charWidth;
-                let flag = true;
+                let changeLineFlag = false;//当前行是否需要换行
                 let newRowsStr = [];
                 for (let i = 0; i < rowsStr.length; i++)
                 {
                     index = 0;
-                    charWidth = 0;
-                    flag = true;
+                    charWidth = 0;//计算当前行字符宽度
+                    changeLineFlag = false;
                     while (rowsStr[i].charAt(index))
                     {
                         charWidth += parseInt(this.style.fontSize, 10);
@@ -320,11 +320,11 @@ export default class Component {
                             charWidth = 0;
                             newRowsStr.push(rowsStr[i].substring(0, index));
                             newRowsStr.push(rowsStr[i].substring(index));
-                            flag = false;
+                            changeLineFlag = true;
                         }
                         index++;
                     }
-                    if (flag)
+                    if (!changeLineFlag)
                     {
                         newRowsStr.push(rowsStr[i]);
                     }
@@ -345,6 +345,10 @@ export default class Component {
             }
             return arr;
         });
+    }
+
+    setText(text){
+        this.text = this.getTextForRows(text);
     }
 
     getText(){

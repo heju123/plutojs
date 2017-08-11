@@ -40,14 +40,22 @@ export default class ViewState{
         });
 
         //输入框事件
-        /*globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
+        globalUtil.action.inputListenerDom.compositionMode = false;//是否输入法状态
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
+            globalUtil.action.inputListenerDom.compositionMode = true;
         });
         globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
-        });*/
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
+            globalUtil.action.inputListenerDom.compositionMode = false;
             if (globalUtil.action.focusComponent && globalUtil.action.focusComponent instanceof Input)
             {
-                globalUtil.action.focusComponent.text = globalUtil.action.focusComponent.getTextForRows(globalUtil.action.inputListenerDom.value);
+                this.setVal2FocusCom();
+            }
+        });
+        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
+            if (!globalUtil.action.inputListenerDom.compositionMode
+                && globalUtil.action.focusComponent && globalUtil.action.focusComponent instanceof Input)
+            {
+                this.setVal2FocusCom();
             }
         });
     }
@@ -82,6 +90,12 @@ export default class ViewState{
         {
             globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
         }
+    }
+
+    /** 将textarea中的值设置到焦点组件 */
+    setVal2FocusCom(){
+        globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
+        globalUtil.action.inputListenerDom.value = globalUtil.action.focusComponent.getText() || "";
     }
 
     addEventNotify(eventNotify){
