@@ -202,6 +202,8 @@ export default class EventBus{
                 event = new MouseEvent(listener.type);
                 event.setCurrentTarget(listener.target);
                 event.setButton(listener.sourceEvent.button);
+                event.setPageX(listener.sourceEvent.pageX);
+                event.setPageY(listener.sourceEvent.pageY);
                 break;
             case "mousemove" :
                 event = new MouseEvent(listener.type);
@@ -213,6 +215,8 @@ export default class EventBus{
                 event = new MouseEvent(listener.type);
                 event.setCurrentTarget(listener.target);
                 event.setButton(listener.sourceEvent.button);
+                event.setPageX(listener.sourceEvent.pageX);
+                event.setPageY(listener.sourceEvent.pageY);
                 break;
             case "keydown" :
                 event = new KeyEvent(listener.type);

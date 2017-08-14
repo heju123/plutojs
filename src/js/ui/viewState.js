@@ -23,7 +23,7 @@ export default class ViewState{
                 globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
                 if (globalUtil.action.focusComponent.onFocus && typeof(globalUtil.action.focusComponent.onFocus) === "function")
                 {
-                    globalUtil.action.focusComponent.onFocus();
+                    globalUtil.action.focusComponent.onFocus(e.pageX, e.pageY);
                 }
             }
         });

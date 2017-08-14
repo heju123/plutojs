@@ -77,10 +77,37 @@ export default class Input extends Rect {
         }
     }
 
-    onFocus(){
+    onFocus(mx, my){
         this.showTextCursorInterval = 0;
         this.showTextCursor = true;
         globalUtil.action.inputListenerDom.value = this.getText() || "";
+
+        if (this.text)//点击输入框更改光标位置
+        {
+            let textX;
+            let textY;
+            let charCount = 0;
+            this.text.forEach((row, index)=>{
+                row.forEach((char, cindex)=>{
+                    textX = this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10);
+                    textY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index;
+                    if (my >= textY
+                        && my <= textY + parseInt(this.style.fontSize, 10)
+                        && mx >= textX
+                        && mx <= textX + parseInt(this.style.fontSize, 10))
+                    {
+                        globalUtil.action.inputListenerDom.setSelectionRange(charCount + 1, charCount + 1);
+                    }
+                    charCount++;
+                });
+                charCount++;//加上换行符
+            });
+        }
+    }
+
+    getTextReal(){
+        let oriX = super.getTextRealX();
+        return oriX;
     }
 
     getTextRealY(){
