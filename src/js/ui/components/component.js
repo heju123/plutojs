@@ -300,37 +300,26 @@ export default class Component {
         }
         else
         {
-            rowsStr = text.split("\n");
             if (this.autoLine)//如果自动换行
             {
-                let index;
-                let charWidth;
-                let changeLineFlag = false;//当前行是否需要换行
-                let newRowsStr = [];
-                for (let i = 0; i < rowsStr.length; i++)
-                {
-                    index = 0;
-                    charWidth = 0;//计算当前行字符宽度
-                    changeLineFlag = false;
-                    while (rowsStr[i].charAt(index))
-                    {
+                let index = 0;
+                let charWidth = 0;
+                let char;
+                while (char = text.charAt(index)) {
+                    if (char === "\n") {
+                        charWidth = 0;
+                    }
+                    else {
                         charWidth += parseInt(this.style.fontSize, 10);
-                        if (charWidth >= this.style.width)
-                        {
+                        if (charWidth > this.style.width) {//如果当前行宽度大于组件宽度，则添加一个换行符
                             charWidth = 0;
-                            newRowsStr.push(rowsStr[i].substring(0, index));
-                            newRowsStr.push(rowsStr[i].substring(index));
-                            changeLineFlag = true;
+                            text = text.substring(0, index) + "\n" + text.substring(index);
                         }
-                        index++;
                     }
-                    if (!changeLineFlag)
-                    {
-                        newRowsStr.push(rowsStr[i]);
-                    }
+                    index++;
                 }
-                rowsStr = newRowsStr;
             }
+            rowsStr = text.split("\n");
         }
         let i;
         let c;
