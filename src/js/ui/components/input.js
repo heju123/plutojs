@@ -105,7 +105,7 @@ export default class Input extends Rect {
         }
     }
 
-    getTextReal(){
+    getTextRealX(){
         let oriX = super.getTextRealX();
         return oriX;
     }
