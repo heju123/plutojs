@@ -53,8 +53,8 @@ export default class Input extends Rect {
             }
             textRow = textRow === undefined ? this.text.length - 1 : textRow;
         }
-        this.textCursorX = this.getTextRealX() + cursorIndex * parseInt(this.style.fontSize) + 1;
-        this.textCursorY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
+        this.textCursorX = cursorIndex * parseInt(this.style.fontSize) + 1;
+        this.textCursorY = this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
     }
 
     drawTextCursor(ctx){
@@ -65,8 +65,8 @@ export default class Input extends Rect {
                 this.getTextCursorPos();
             }
             ctx.fillStyle="#000";
-            ctx.moveTo(this.textCursorX, this.textCursorY + 2);
-            ctx.lineTo(this.textCursorX, this.textCursorY + this.style.lineHeight - 2);
+            ctx.moveTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY + 2);
+            ctx.lineTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY + this.style.lineHeight - 2);
             ctx.stroke();
         }
         this.showTextCursorInterval++;
