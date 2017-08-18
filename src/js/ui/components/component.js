@@ -135,6 +135,11 @@ export default class Component {
                     childCom.initCfg(chiCfg);
                     this.children.push(childCom);
                     break;
+                case "button" :
+                    childCom = new Button(this);
+                    childCom.initCfg(chiCfg);
+                    this.children.push(childCom);
+                    break;
                 default : break;
             }
             return childCom;
@@ -281,7 +286,17 @@ export default class Component {
     }
     /** 获取文本的坐标 */
     getTextRealX(){
-        return this.getRealX();
+        let oriX = this.getRealX();
+        //文字居中显示
+        if (this.getText() && this.style.textAlign === "center")
+        {
+            let textLength = parseInt(this.style.fontSize) * this.getText().length;
+            if (textLength <= this.style.width)
+            {
+                return oriX + (this.style.width / 2 - textLength / 2);
+            }
+        }
+        return oriX;
     }
     getTextRealY(){
         return this.getRealY();

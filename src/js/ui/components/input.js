@@ -37,23 +37,23 @@ export default class Input extends Rect {
 
     /** 获取文本输入光标位置 */
     getTextCursorPos(){
-        let cursorIndex = globalUtil.action.inputListenerDom.selectionEnd;
+        let selectionEnd = globalUtil.action.inputListenerDom.selectionEnd;
         let textRow;
         if (this.text && this.text.length > 0)
         {
             for (let i = 0,j = this.text.length; i < j; i++)
             {
-                if (cursorIndex <= this.text[i].length)
+                if (selectionEnd <= this.text[i].length)
                 {
                     textRow = i;
                     break;
                 }
-                cursorIndex -= this.text[i].length;
-                cursorIndex--;//selectionEnd里包含多余的换行符，所以要减一个换行符
+                selectionEnd -= this.text[i].length;
+                selectionEnd--;//selectionEnd里包含多余的换行符，所以要减一个换行符
             }
             textRow = textRow === undefined ? this.text.length - 1 : textRow;
         }
-        this.textCursorX = cursorIndex * parseInt(this.style.fontSize) + 1;
+        this.textCursorX = selectionEnd * parseInt(this.style.fontSize) + 1;
         this.textCursorY = this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
     }
 
@@ -107,6 +107,10 @@ export default class Input extends Rect {
 
     getTextRealX(){
         let oriX = super.getTextRealX();
+        if (this.textCursorX > this.style.width)//防止光标超出显示区域
+        {
+            return oriX - (this.textCursorX - this.style.width);
+        }
         return oriX;
     }
 
