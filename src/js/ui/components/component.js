@@ -38,13 +38,13 @@ export default class Component {
             let img = new Image();
             img.onload = function(){
                 $this.backgroundImageDom = this;
-                if (!this.style.width || this.style.width === "auto")
+                if (!this.getWidth() || this.getWidth() === "auto")
                 {
-                    $this.style.width = $this.backgroundImageDom.width;
+                    $this.setWidth($this.backgroundImageDom.width);
                 }
-                if (!this.style.height || this.style.height === "auto")
+                if (!this.getHeight() || this.getHeight() === "auto")
                 {
-                    $this.style.height = $this.backgroundImageDom.height;
+                    $this.setHeight($this.backgroundImageDom.height);
                 }
             };
             img.src = this.style.backgroundImage;
@@ -291,15 +291,29 @@ export default class Component {
         if (this.getText() && this.style.textAlign === "center")
         {
             let textLength = parseInt(this.style.fontSize) * this.getText().length;
-            if (textLength <= this.style.width)
+            if (textLength <= this.getWidth())
             {
-                return oriX + (this.style.width / 2 - textLength / 2);
+                return oriX + (this.getWidth() / 2 - textLength / 2);
             }
         }
         return oriX;
     }
     getTextRealY(){
         return this.getRealY();
+    }
+
+    /** 高宽处理 */
+    setWidth(width){
+        this.style.width = width;
+    }
+    setHeight(height){
+        this.style.height = height;
+    }
+    getWidth(){
+        return this.style.width;
+    }
+    getHeight(){
+        return this.style.height;
     }
 
     /** 用\n分隔string，实现换行 */
@@ -326,7 +340,7 @@ export default class Component {
                     }
                     else {
                         charWidth += parseInt(this.style.fontSize, 10);
-                        if (charWidth > this.style.width) {//如果当前行宽度大于组件宽度，则添加一个换行符
+                        if (charWidth > this.getWidth()) {//如果当前行宽度大于组件宽度，则添加一个换行符
                             charWidth = 0;
                             text = text.substring(0, index) + "\n" + text.substring(index);
                         }

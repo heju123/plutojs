@@ -25,18 +25,18 @@ export default class Rect extends Component{
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
-            ctx.fillRect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
+            ctx.fillRect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
         }
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.style.width, this.style.height);
+            ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
         }
         if (this.style.borderWidth)
         {
             let bcolor = this.style.borderColor || this.style.backgroundColor;
             ctx.lineWidth = this.style.borderWidth;
             ctx.strokeStyle = bcolor;
-            ctx.strokeRect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
+            ctx.strokeRect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
         }
         ctx.restore();
 
@@ -62,13 +62,13 @@ export default class Rect extends Component{
     setParentClip(ctx){
         if (this.parent)
         {
-            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.style.width, this.parent.style.height);
+            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.getWidth(), this.parent.getHeight());
             ctx.clip();
         }
     }
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
-        ctx.rect(this.getRealX(), this.getRealY(), this.style.width, this.style.height);
+        ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
         ctx.clip();
     }
 
@@ -83,10 +83,10 @@ export default class Rect extends Component{
             return -1;
         }
         else{
-            if (this.getRealXRecursion(com.parent) + com.parent.style.width < this.getRealX()
-                || this.getRealXRecursion(com.parent) > this.getRealX() + com.style.width
-                || this.getRealYRecursion(com.parent) + com.parent.style.height < this.getRealY()
-                || this.getRealYRecursion(com.parent) > this.getRealY() + com.style.height)//不在parent范围内
+            if (this.getRealXRecursion(com.parent) + com.parent.getWidth() < this.getRealX()
+                || this.getRealXRecursion(com.parent) > this.getRealX() + com.getWidth()
+                || this.getRealYRecursion(com.parent) + com.parent.getHeight() < this.getRealY()
+                || this.getRealYRecursion(com.parent) > this.getRealY() + com.getHeight())//不在parent范围内
             {
                 return 0;
             }
@@ -105,8 +105,8 @@ export default class Rect extends Component{
      * @return true：在范围内
      */
     isPointInComponent(px, py){
-        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.style.width
-            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.style.height)
+        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.getWidth()
+            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.getHeight())
         {
             return true;
         }

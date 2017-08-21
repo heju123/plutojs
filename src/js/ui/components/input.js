@@ -107,9 +107,9 @@ export default class Input extends Rect {
 
     getTextRealX(){
         let oriX = super.getTextRealX();
-        if (this.textCursorX > this.style.width)//防止光标超出显示区域
+        if (this.textCursorX > this.getWidth())//防止光标超出显示区域
         {
-            return oriX - (this.textCursorX - this.style.width);
+            return oriX - (this.textCursorX - this.getWidth());
         }
         return oriX;
     }
@@ -122,7 +122,7 @@ export default class Input extends Rect {
         }
         else
         {
-            return oriY + this.style.height / 2 - this.style.lineHeight / 2;
+            return oriY + this.getHeight() / 2 - this.style.lineHeight / 2;
         }
     }
 }

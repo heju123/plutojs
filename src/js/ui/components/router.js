@@ -12,13 +12,13 @@ export default class Router extends Component{
         this.style.y = 0;
         if (!parent)//最顶层
         {
-            this.style.width = globalUtil.canvas.width;
-            this.style.height = globalUtil.canvas.height;
+            this.setWidth(globalUtil.canvas.width);
+            this.setHeight(globalUtil.canvas.height);
         }
         else
         {
-            this.style.width = parent.style.width;
-            this.style.height = parent.style.height;
+            this.setWidth(parent.getWidth());
+            this.setHeight(parent.getHeight());
         }
     }
 
