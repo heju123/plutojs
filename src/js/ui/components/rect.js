@@ -22,6 +22,7 @@ export default class Rect extends Component{
         ctx.save();
         this.setParentClip(ctx);
         ctx.beginPath();
+        this.setCommonStyle(ctx);
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
@@ -29,7 +30,16 @@ export default class Rect extends Component{
         }
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
-            ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            if (this.style.backgroundImageClip)
+            {
+                ctx.drawImage(this.backgroundImageDom,
+                    this.style.backgroundImageClip[0], this.style.backgroundImageClip[1], this.style.backgroundImageClip[2], this.style.backgroundImageClip[3],
+                    this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            }
+            else
+            {
+                ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            }
         }
         if (this.style.borderWidth)
         {
@@ -40,9 +50,11 @@ export default class Rect extends Component{
         }
         ctx.restore();
 
+        //绘制文字
         ctx.save();
         this.setClip(ctx);
-        //绘制文字
+        ctx.beginPath();
+        this.setCommonStyle(ctx);
         if (this.text && this.text.length > 0)
         {
             ctx.font=this.style.fontSize + " " + this.style.fontFamily;

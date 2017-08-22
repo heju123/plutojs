@@ -38,11 +38,11 @@ export default class Component {
             let img = new Image();
             img.onload = function(){
                 $this.backgroundImageDom = this;
-                if (!this.getWidth() || this.getWidth() === "auto")
+                if (!$this.getWidth() || $this.getWidth() === "auto")
                 {
                     $this.setWidth($this.backgroundImageDom.width);
                 }
-                if (!this.getHeight() || this.getHeight() === "auto")
+                if (!$this.getHeight() || $this.getHeight() === "auto")
                 {
                     $this.setHeight($this.backgroundImageDom.height);
                 }
@@ -184,6 +184,15 @@ export default class Component {
             this.eventNotifys.length = 0;
         }
         return true;
+    }
+
+    /** 设置通用样式，所有组件在绘制前都应该设置 */
+    setCommonStyle(ctx){
+        //半透明
+        if (this.style.alpha)
+        {
+            ctx.globalAlpha = this.style.alpha;
+        }
     }
 
     saveStyle(){
