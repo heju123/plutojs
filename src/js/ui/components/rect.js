@@ -23,6 +23,7 @@ export default class Rect extends Component{
         this.setParentClip(ctx);
         ctx.beginPath();
         this.setCommonStyle(ctx);
+
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
@@ -67,6 +68,7 @@ export default class Rect extends Component{
             });
         }
         ctx.restore();
+
         return true;
     }
 
@@ -81,6 +83,23 @@ export default class Rect extends Component{
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
         ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+        ctx.clip();
+    }
+    /**
+     * 设置后可以绘出圆角矩形
+     *
+     * @param radius 圆角半径
+     */
+    setRadiusClip(ctx, radius){
+        ctx.moveTo(this.getRealX() + radius, this.getRealY());
+        ctx.lineTo(this.getRealX() + this.getWidth() - radius, this.getRealY());
+        ctx.arcTo(this.getRealX() + this.getWidth(), this.getRealY(),this.getRealX() + this.getWidth(), this.getRealY() + radius, radius);
+        ctx.lineTo(this.getRealX() + this.getWidth(), this.getRealY() + this.getHeight() - radius);
+        ctx.arcTo(this.getRealX() + this.getWidth(), this.getRealY() + this.getHeight(), this.getRealX() + this.getWidth() - radius, this.getRealY() + this.getHeight(), radius);
+        ctx.lineTo(this.getRealX() + radius, this.getRealY() + this.getHeight());
+        ctx.arcTo(this.getRealX(), this.getRealY() + this.getHeight(), this.getRealX(), this.getRealY() + this.getHeight() - radius, radius);
+        ctx.lineTo(this.getRealX(), this.getRealY() + radius);
+        ctx.arcTo(this.getRealX(), this.getRealY(), this.getRealX() + radius, this.getRealY(), radius);
         ctx.clip();
     }
 
