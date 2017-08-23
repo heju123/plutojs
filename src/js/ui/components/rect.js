@@ -20,6 +20,10 @@ export default class Rect extends Component{
             return false;
         }
         ctx.save();
+        if (this.style.borderRadius)
+        {
+            this.setRadiusClip(ctx, this.style.borderRadius);
+        }
         this.setParentClip(ctx);
         ctx.beginPath();
         this.setCommonStyle(ctx);
@@ -44,10 +48,20 @@ export default class Rect extends Component{
         }
         if (this.style.borderWidth)
         {
+            ctx.beginPath();
             let bcolor = this.style.borderColor || this.style.backgroundColor;
             ctx.lineWidth = this.style.borderWidth;
             ctx.strokeStyle = bcolor;
-            ctx.strokeRect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            if (this.style.borderRadius)
+            {
+                this.getRadiusPath(ctx, this.style.borderRadius);
+            }
+            else
+            {
+                ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            }
+            ctx.stroke();
+            ctx.closePath();
         }
         ctx.restore();
 
@@ -86,11 +100,11 @@ export default class Rect extends Component{
         ctx.clip();
     }
     /**
-     * 设置后可以绘出圆角矩形
+     * 获取圆角矩形路径
      *
      * @param radius 圆角半径
      */
-    setRadiusClip(ctx, radius){
+    getRadiusPath(ctx, radius){
         ctx.moveTo(this.getRealX() + radius, this.getRealY());
         ctx.lineTo(this.getRealX() + this.getWidth() - radius, this.getRealY());
         ctx.arcTo(this.getRealX() + this.getWidth(), this.getRealY(),this.getRealX() + this.getWidth(), this.getRealY() + radius, radius);
@@ -100,7 +114,22 @@ export default class Rect extends Component{
         ctx.arcTo(this.getRealX(), this.getRealY() + this.getHeight(), this.getRealX(), this.getRealY() + this.getHeight() - radius, radius);
         ctx.lineTo(this.getRealX(), this.getRealY() + radius);
         ctx.arcTo(this.getRealX(), this.getRealY(), this.getRealX() + radius, this.getRealY(), radius);
-        ctx.clip();
+    }
+    /**
+     * 设置后可以绘出圆角矩形
+     *
+     * @param radius 圆角半径
+     */
+    setRadiusClip(ctx, radius){
+        //必须完全包含在父组件下才能实现圆角，因为不能连续两次执行clip，是目前的一个缺陷
+        if (this.getRealXRecursion(this.parent) + this.parent.getWidth() >= this.getRealX() + this.getWidth()
+            && this.getRealXRecursion(this.parent) <= this.getRealX()
+            && this.getRealYRecursion(this.parent) + this.parent.getHeight() >= this.getRealY() + this.getHeight()
+            && this.getRealYRecursion(this.parent) <= this.getRealY())
+        {
+            this.getRadiusPath(ctx, radius);
+            ctx.clip();
+        }
     }
 
     /**
