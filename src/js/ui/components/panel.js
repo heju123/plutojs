@@ -20,4 +20,63 @@ export default class Panel extends Rect{
             this.initChildrenCfg(cfg.children);
         }
     }
+
+    appendChildren(child){
+        super.appendChildren(child);
+
+        this.doLayout();
+    }
+
+    /** 获取所有的权值 */
+    getAllWeight(){
+        let all = 0;
+        this.children.forEach((child, index)=>{
+            if (child.style.layout && child.style.layout.layoutWeight)
+            {
+                all += child.style.layout.layoutWeight;
+            }
+            else
+            {
+                all += 1;
+            }
+        });
+        return all;
+    }
+
+    doLayout(){
+        if (this.style.layout && this.style.layout.type && this.children.length > 0)
+        {
+            switch(this.style.layout.type)
+            {
+                case "linearLayout" :
+                    let allWeight = this.getAllWeight();//总权值
+                    let allWH = 0;//记录高宽，确定x和y坐标
+                    this.children.forEach((child, index)=>{
+                        let weight = 1;
+                        if (child.style.layout && child.style.layout.layoutWeight)
+                        {
+                            weight = child.style.layout.layoutWeight;
+                        }
+                        if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
+                        {
+                            let width = this.getWidth() * (weight / allWeight);
+                            child.style.x = allWH;
+                            child.style.y = 0;
+                            child.setWidth(width);
+                            allWH += width;
+                        }
+                        else if (this.style.layout.orientation === "vertical")
+                        {
+                            let height = this.getHeight() * (weight / allWeight);
+                            child.style.y = allWH;
+                            child.style.x = 0;
+                            child.setHeight(height);
+                            allWH += height;
+                        }
+                    });
+                    break;
+                default : break;
+            }
+        }
+    }
 }

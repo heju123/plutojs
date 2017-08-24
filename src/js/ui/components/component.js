@@ -123,22 +123,22 @@ export default class Component {
                 case "panel" :
                     childCom = new Panel(this);
                     childCom.initCfg(chiCfg);
-                    this.children.push(childCom);
+                    this.appendChildren(childCom);
                     break;
                 case "rect" :
                     childCom = new Rect(this);
                     childCom.initCfg(chiCfg);
-                    this.children.push(childCom);
+                    this.appendChildren(childCom);
                     break;
                 case "input" :
                     childCom = new Input(this);
                     childCom.initCfg(chiCfg);
-                    this.children.push(childCom);
+                    this.appendChildren(childCom);
                     break;
                 case "button" :
                     childCom = new Button(this);
                     childCom.initCfg(chiCfg);
-                    this.children.push(childCom);
+                    this.appendChildren(childCom);
                     break;
                 default : break;
             }
@@ -149,7 +149,7 @@ export default class Component {
     asyncGetView(viewCfg, resolve, reject){
         let panel = new Panel(this);
         panel.initCfg(viewCfg);
-        this.children.push(panel);
+        this.appendChildren(panel);
         if (resolve)
         {
             resolve(panel);
@@ -184,6 +184,11 @@ export default class Component {
             this.eventNotifys.length = 0;
         }
         return true;
+    }
+
+    /** 添加子节点 */
+    appendChildren(child){
+        this.children.push(child);
     }
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */
@@ -319,9 +324,17 @@ export default class Component {
         this.style.height = height;
     }
     getWidth(){
+        if (this.style.width.toString().indexOf("%") > -1)//百分比
+        {
+            return this.parent.getWidth() * (this.style.width.substring(0, this.style.width.length - 1) / 100);
+        }
         return this.style.width;
     }
     getHeight(){
+        if (this.style.height.toString().indexOf("%") > -1)
+        {
+            return this.parent.getHeight() * (this.style.height.substring(0, this.style.height.length - 1) / 100);
+        }
         return this.style.height;
     }
 
