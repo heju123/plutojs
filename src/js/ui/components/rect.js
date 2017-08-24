@@ -54,7 +54,7 @@ export default class Rect extends Component{
             ctx.strokeStyle = bcolor;
             if (this.style.borderRadius)
             {
-                this.getRadiusPath(ctx, this.style.borderRadius);
+                this.getRectRadiusPath(ctx, this.style.borderRadius);
             }
             else
             {
@@ -103,17 +103,24 @@ export default class Rect extends Component{
      * 获取圆角矩形路径
      *
      * @param radius 圆角半径
+     * @param padding 整体扩大的像素
      */
-    getRadiusPath(ctx, radius){
-        ctx.moveTo(this.getRealX() + radius, this.getRealY());
-        ctx.lineTo(this.getRealX() + this.getWidth() - radius, this.getRealY());
-        ctx.arcTo(this.getRealX() + this.getWidth(), this.getRealY(),this.getRealX() + this.getWidth(), this.getRealY() + radius, radius);
-        ctx.lineTo(this.getRealX() + this.getWidth(), this.getRealY() + this.getHeight() - radius);
-        ctx.arcTo(this.getRealX() + this.getWidth(), this.getRealY() + this.getHeight(), this.getRealX() + this.getWidth() - radius, this.getRealY() + this.getHeight(), radius);
-        ctx.lineTo(this.getRealX() + radius, this.getRealY() + this.getHeight());
-        ctx.arcTo(this.getRealX(), this.getRealY() + this.getHeight(), this.getRealX(), this.getRealY() + this.getHeight() - radius, radius);
-        ctx.lineTo(this.getRealX(), this.getRealY() + radius);
-        ctx.arcTo(this.getRealX(), this.getRealY(), this.getRealX() + radius, this.getRealY(), radius);
+    getRectRadiusPath(ctx, radius, padding){
+        padding = padding || 0;
+        let x = this.getRealX() - padding;
+        let y = this.getRealY() - padding;
+        let width = this.getWidth() + padding * 2;
+        let height = this.getHeight() + padding * 2;
+        radius += padding;
+        ctx.moveTo(x + radius + padding, y);
+        ctx.lineTo(x + width - radius - padding, y);
+        ctx.arcTo(x + width, y,x + width, y + radius + padding, radius);
+        ctx.lineTo(x + width, y + height - radius - padding);
+        ctx.arcTo(x + width, y + height, x + width - radius - padding, y + height, radius);
+        ctx.lineTo(x + radius + padding, y + height);
+        ctx.arcTo(x, y + height, x, y + height - radius - padding, radius);
+        ctx.lineTo(x, y + radius + padding);
+        ctx.arcTo(x, y, x + radius + padding, y, radius);
     }
     /**
      * 设置后可以绘出圆角矩形
@@ -127,7 +134,7 @@ export default class Rect extends Component{
             && this.getRealYRecursion(this.parent) + this.parent.getHeight() >= this.getRealY() + this.getHeight()
             && this.getRealYRecursion(this.parent) <= this.getRealY())
         {
-            this.getRadiusPath(ctx, radius);
+            this.getRectRadiusPath(ctx, radius, 1);
             ctx.clip();
         }
     }
