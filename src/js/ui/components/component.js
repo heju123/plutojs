@@ -276,7 +276,7 @@ export default class Component {
     getRealXRecursion(com){
         if (com.parent)
         {
-            return com.style.x + this.getRealXRecursion(com.parent);
+            return com.style.x + this.getRealXRecursion(com.parent) + (com.parent.style.borderWidth || 0);
         }
         else
         {
@@ -289,7 +289,7 @@ export default class Component {
     getRealYRecursion(com){
         if (com.parent)
         {
-            return com.style.y + this.getRealYRecursion(com.parent);
+            return com.style.y + this.getRealYRecursion(com.parent) + (com.parent.style.borderWidth || 0);
         }
         else{
             return com.style.y;
@@ -300,7 +300,7 @@ export default class Component {
     }
     /** 获取文本的坐标 */
     getTextRealX(){
-        let oriX = this.getRealX();
+        let oriX = this.getRealX() + (this.style.borderWidth || 0);
         //文字居中显示
         if (this.getText() && this.style.textAlign === "center")
         {
@@ -313,7 +313,7 @@ export default class Component {
         return oriX;
     }
     getTextRealY(){
-        return this.getRealY();
+        return this.getRealY() + (this.style.borderWidth || 0);
     }
 
     /** 高宽处理 */
@@ -324,16 +324,26 @@ export default class Component {
         this.style.height = height;
     }
     getWidth(){
+        if (!this.style.width)
+        {
+            return undefined;
+        }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
-            return this.parent.getWidth() * (this.style.width.substring(0, this.style.width.length - 1) / 100);
+            let maxWidth = this.parent.getWidth() - (this.parent ? (this.parent.style.borderWidth || 0) * 2 : 0);
+            return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
         }
         return this.style.width;
     }
     getHeight(){
+        if (!this.style.height)
+        {
+            return undefined;
+        }
         if (this.style.height.toString().indexOf("%") > -1)
         {
-            return this.parent.getHeight() * (this.style.height.substring(0, this.style.height.length - 1) / 100);
+            let maxHeight = this.parent.getHeight() - (this.parent ? (this.parent.style.borderWidth || 0) * 2 : 0);
+            return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
         }
         return this.style.height;
     }
@@ -362,7 +372,7 @@ export default class Component {
                     }
                     else {
                         charWidth += parseInt(this.style.fontSize, 10);
-                        if (charWidth > this.getWidth()) {//如果当前行宽度大于组件宽度，则添加一个换行符
+                        if (charWidth > this.getWidth() - (this.style.borderWidth || 0) * 2) {//如果当前行宽度大于组件宽度，则添加一个换行符
                             charWidth = 0;
                             text = text.substring(0, index) + "\n" + text.substring(index);
                         }

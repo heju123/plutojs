@@ -31,7 +31,8 @@ export default class Rect extends Component{
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
-            ctx.fillRect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            ctx.fill();
         }
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
@@ -54,11 +55,12 @@ export default class Rect extends Component{
             ctx.strokeStyle = bcolor;
             if (this.style.borderRadius)
             {
-                this.getRectRadiusPath(ctx, this.style.borderRadius);
+                this.getRectRadiusPath(ctx, this.style.borderRadius, -this.style.borderWidth / 2);
             }
             else
             {
-                ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+                ctx.rect(this.getRealX() + this.style.borderWidth / 2, this.getRealY() + this.style.borderWidth / 2,
+                    this.getWidth() - this.style.borderWidth, this.getHeight() - this.style.borderWidth);
             }
             ctx.stroke();
             ctx.closePath();
@@ -134,7 +136,7 @@ export default class Rect extends Component{
             && this.getRealYRecursion(this.parent) + this.parent.getHeight() >= this.getRealY() + this.getHeight()
             && this.getRealYRecursion(this.parent) <= this.getRealY())
         {
-            this.getRectRadiusPath(ctx, radius, 1);
+            this.getRectRadiusPath(ctx, radius);
             ctx.clip();
         }
     }
