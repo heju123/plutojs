@@ -10,14 +10,36 @@ export default class Component {
         this.parent = parent;
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
+
         this.style = {};
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
 
         this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
         this.style.fontSize = globalUtil.viewState.defaultFontSize;
         this.style.lineHeight = parseInt(this.style.fontSize, 10);
+
         this.multiLine = true;//是否多行文本
         this.autoLine = true;//是否自动换行
+    }
+
+    /** 配置文件递归初始化样式 */
+    initCfgStyle(cfgStyle, current){
+        for (let key in cfgStyle)
+        {
+            if (typeof(cfgStyle[key]) === "function")
+            {
+                current[key] = cfgStyle[key].apply(this, []);
+            }
+            else if (typeof(cfgStyle[key]) === "object")
+            {
+                current[key] = {};
+                this.initCfgStyle(cfgStyle[key], current[key]);
+            }
+            else
+            {
+                current[key] = cfgStyle[key];
+            }
+        }
     }
 
     initCfg(cfg){
@@ -26,10 +48,9 @@ export default class Component {
         {
             this.id = cfg.id;
         }
-        if (cfg.style)
-        {
-            commonUtil.copyObject(cfg.style, this.style, true);
-        }
+
+        this.initCfgStyle(cfg.style, this.style);
+
         this.text = this.getTextForRows(cfg.text);
         this.multiLine = cfg.multiLine || this.multiLine;
 
