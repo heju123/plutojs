@@ -293,15 +293,28 @@ export default class Component {
         }
     }
 
+    setX(x){
+        this.style.x = x;
+    }
+    setY(y){
+        this.style.y = y;
+    }
+    getX(){
+        return this.style.x;
+    }
+    getY(){
+        return this.style.y;
+    }
+
     //获取显示在界面上真实的x坐标，加上父级坐标
     getRealXRecursion(com){
         if (com.parent)
         {
-            return com.style.x + this.getRealXRecursion(com.parent) + (com.parent.style.borderWidth || 0);
+            return com.getX() + this.getRealXRecursion(com.parent) + (com.parent.style.borderWidth || 0);
         }
         else
         {
-            return com.style.x;
+            return com.getX();
         }
     }
     getRealX(){
@@ -310,15 +323,16 @@ export default class Component {
     getRealYRecursion(com){
         if (com.parent)
         {
-            return com.style.y + this.getRealYRecursion(com.parent) + (com.parent.style.borderWidth || 0);
+            return com.getY() + this.getRealYRecursion(com.parent) + (com.parent.style.borderWidth || 0);
         }
         else{
-            return com.style.y;
+            return com.getY();
         }
     }
     getRealY(){
         return this.getRealYRecursion(this);
     }
+
     /** 获取文本的坐标 */
     getTextRealX(){
         let oriX = this.getRealX() + (this.style.borderWidth || 0);

@@ -8,8 +8,8 @@ export default class Router extends Component{
         this.routes = {};
         this.children = [];
 
-        this.style.x = 0;
-        this.style.y = 0;
+        this.setX(0);
+        this.setY(0);
         if (!parent)//最顶层
         {
             this.setWidth(globalUtil.canvas.width);

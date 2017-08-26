@@ -60,16 +60,16 @@ export default class Panel extends Rect{
                         if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
                         {
                             let width = (this.getWidth() - (this.style.borderWidth || 0) * 2) * (weight / allWeight);
-                            child.style.x = allWH;
-                            child.style.y = 0;
+                            child.setX(allWH);
+                            child.setY(0);
                             child.setWidth(width);
                             allWH += width;
                         }
                         else if (this.style.layout.orientation === "vertical")
                         {
                             let height = (this.getHeight() - (this.style.borderWidth || 0) * 2) * (weight / allWeight);
-                            child.style.y = allWH;
-                            child.style.x = 0;
+                            child.setY(allWH);
+                            child.setX(0);
                             child.setHeight(height);
                             allWH += height;
                         }
