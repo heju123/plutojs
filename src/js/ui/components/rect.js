@@ -92,13 +92,13 @@ export default class Rect extends Component{
     setParentClip(ctx){
         if (this.parent)
         {
-            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.getWidth(), this.parent.getHeight());
+            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.getInnerWidth(), this.parent.getInnerHeight());
             ctx.clip();
         }
     }
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
-        ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+        ctx.rect(this.getRealX(), this.getRealY(), this.getInnerWidth(), this.getInnerHeight());
         ctx.clip();
     }
     /**
@@ -136,7 +136,7 @@ export default class Rect extends Component{
             && this.getRealYRecursion(this.parent) + this.parent.getHeight() >= this.getRealY() + this.getHeight()
             && this.getRealYRecursion(this.parent) <= this.getRealY())
         {
-            this.getRectRadiusPath(ctx, radius);
+            this.getRectRadiusPath(ctx, radius, -(this.style.borderWidth || 0));//边框也要切掉
             ctx.clip();
         }
     }
@@ -152,10 +152,10 @@ export default class Rect extends Component{
             return -1;
         }
         else{
-            if (this.getRealXRecursion(com.parent) + com.parent.getWidth() < this.getRealX()
-                || this.getRealXRecursion(com.parent) > this.getRealX() + com.getWidth()
-                || this.getRealYRecursion(com.parent) + com.parent.getHeight() < this.getRealY()
-                || this.getRealYRecursion(com.parent) > this.getRealY() + com.getHeight())//不在parent范围内
+            if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= com.getRealX()
+                || this.getRealXRecursion(com.parent) >= com.getRealX() + com.getWidth()
+                || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= com.getRealY()
+                || this.getRealYRecursion(com.parent) >= com.getRealY() + com.getHeight())//不在parent范围内
             {
                 return 0;
             }

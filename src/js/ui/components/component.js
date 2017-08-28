@@ -382,6 +382,13 @@ export default class Component {
         }
         return this.style.height;
     }
+    //获取去边框的宽高
+    getInnerWidth(){
+        return this.getWidth() - (this.style.borderWidth || 0) * 2;
+    }
+    getInnerHeight(){
+        return this.getHeight() - (this.style.borderWidth || 0) * 2;
+    }
 
     /** 用\n分隔string，实现换行 */
     getTextForRows(text){

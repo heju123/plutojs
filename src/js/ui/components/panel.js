@@ -49,7 +49,12 @@ export default class Panel extends Rect{
             switch(this.style.layout.type)
             {
                 case "linearLayout" :
-                    let allWeight = this.getAllWeight();//总权值
+                    let fixByWeight = this.style.layout.fixByWeight || false;
+                    let allWeight = 0;
+                    if (fixByWeight)
+                    {
+                        allWeight = this.getAllWeight();//总权值
+                    }
                     let allWH = 0;//记录高宽，确定x和y坐标
                     this.children.forEach((child, index)=>{
                         let weight = 1;
@@ -59,7 +64,15 @@ export default class Panel extends Rect{
                         }
                         if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
                         {
-                            let width = (this.getWidth() - (this.style.borderWidth || 0) * 2) * (weight / allWeight);
+                            let width;
+                            if (fixByWeight)
+                            {
+                                width = this.getInnerWidth() * (weight / allWeight);
+                            }
+                            else
+                            {
+                                width = child.getWidth();
+                            }
                             child.setX(allWH);
                             child.setY(0);
                             child.setWidth(width);
@@ -67,7 +80,15 @@ export default class Panel extends Rect{
                         }
                         else if (this.style.layout.orientation === "vertical")
                         {
-                            let height = (this.getHeight() - (this.style.borderWidth || 0) * 2) * (weight / allWeight);
+                            let height;
+                            if (fixByWeight)
+                            {
+                                height = this.getInnerHeight() * (weight / allWeight);
+                            }
+                            else
+                            {
+                                height = child.getHeight();
+                            }
                             child.setY(allWH);
                             child.setX(0);
                             child.setHeight(height);
