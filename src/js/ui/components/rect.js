@@ -20,10 +20,6 @@ export default class Rect extends Component{
             return false;
         }
         ctx.save();
-        if (this.style.borderRadius)
-        {
-            this.setRadiusClip(ctx, this.style.borderRadius);
-        }
         this.setParentClip(ctx);
         ctx.beginPath();
         this.setCommonStyle(ctx);
@@ -31,7 +27,14 @@ export default class Rect extends Component{
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
-            ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            if (this.style.borderRadius)
+            {
+                this.getRectRadiusPath(this, ctx, this.style.borderRadius);
+            }
+            else
+            {
+                ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+            }
             ctx.fill();
         }
         if (this.style.backgroundImage && this.backgroundImageDom)
@@ -55,7 +58,7 @@ export default class Rect extends Component{
             ctx.strokeStyle = bcolor;
             if (this.style.borderRadius)
             {
-                this.getRectRadiusPath(ctx, this.style.borderRadius, -this.style.borderWidth / 2);
+                this.getRectRadiusPath(this, ctx, this.style.borderRadius, -this.style.borderWidth / 2);
             }
             else
             {
@@ -92,13 +95,31 @@ export default class Rect extends Component{
     setParentClip(ctx){
         if (this.parent)
         {
-            ctx.rect(this.getRealXRecursion(this.parent), this.getRealYRecursion(this.parent), this.parent.getInnerWidth(), this.parent.getInnerHeight());
+            if (this.parent.style.borderRadius)
+            {
+                this.getRectRadiusPath(this.parent, ctx, this.parent.style.borderRadius, -(this.parent.style.borderWidth || 0));//边框也要切掉
+            }
+            else
+            {
+                ctx.rect(this.getRealXRecursion(this.parent) + (this.parent.style.borderWidth || 0),
+                    this.getRealYRecursion(this.parent) + (this.parent.style.borderWidth || 0),
+                    this.parent.getInnerWidth(), this.parent.getInnerHeight());
+            }
             ctx.clip();
         }
     }
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
-        ctx.rect(this.getRealX(), this.getRealY(), this.getInnerWidth(), this.getInnerHeight());
+        if (this.style.borderRadius)
+        {
+            this.getRectRadiusPath(this, ctx, this.style.borderRadius, -(this.style.borderWidth || 0));
+        }
+        else
+        {
+            ctx.rect(this.getRealX() + (this.style.borderWidth || 0),
+                this.getRealY() + (this.style.borderWidth || 0),
+                this.getInnerWidth(), this.getInnerHeight());
+        }
         ctx.clip();
     }
     /**
@@ -107,12 +128,12 @@ export default class Rect extends Component{
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath(ctx, radius, padding){
+    getRectRadiusPath(self, ctx, radius, padding){
         padding = padding || 0;
-        let x = this.getRealX() - padding;
-        let y = this.getRealY() - padding;
-        let width = this.getWidth() + padding * 2;
-        let height = this.getHeight() + padding * 2;
+        let x = self.getRealX() - padding;
+        let y = self.getRealY() - padding;
+        let width = self.getWidth() + padding * 2;
+        let height = self.getHeight() + padding * 2;
         radius += padding;
         ctx.moveTo(x + radius + padding, y);
         ctx.lineTo(x + width - radius - padding, y);
@@ -123,22 +144,6 @@ export default class Rect extends Component{
         ctx.arcTo(x, y + height, x, y + height - radius - padding, radius);
         ctx.lineTo(x, y + radius + padding);
         ctx.arcTo(x, y, x + radius + padding, y, radius);
-    }
-    /**
-     * 设置后可以绘出圆角矩形
-     *
-     * @param radius 圆角半径
-     */
-    setRadiusClip(ctx, radius){
-        //必须完全包含在父组件下才能实现圆角，因为不能连续两次执行clip，是目前的一个缺陷
-        if (this.getRealXRecursion(this.parent) + this.parent.getWidth() >= this.getRealX() + this.getWidth()
-            && this.getRealXRecursion(this.parent) <= this.getRealX()
-            && this.getRealYRecursion(this.parent) + this.parent.getHeight() >= this.getRealY() + this.getHeight()
-            && this.getRealYRecursion(this.parent) <= this.getRealY())
-        {
-            this.getRectRadiusPath(ctx, radius, -(this.style.borderWidth || 0));//边框也要切掉
-            ctx.clip();
-        }
     }
 
     /**

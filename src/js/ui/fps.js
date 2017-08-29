@@ -41,8 +41,10 @@ export default class Fps{
             {
                 if (children instanceof Array)
                 {
+                    children.sort((a, b)=>a.style.zIndex - b.style.zIndex);//zIndex升序排序
                     let child;
-                    for (let i = 0, j = children.length; i < j; i++) {
+                    for (let i = 0, j = children.length; i < j; i++)
+                    {
                         child = children[i];
                         this.drawView(child);
                     }

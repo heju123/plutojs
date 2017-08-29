@@ -17,6 +17,7 @@ export default class Component {
         this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
         this.style.fontSize = globalUtil.viewState.defaultFontSize;
         this.style.lineHeight = parseInt(this.style.fontSize, 10);
+        this.style.zIndex = 1;
 
         this.multiLine = true;//是否多行文本
         this.autoLine = true;//是否自动换行
@@ -107,6 +108,11 @@ export default class Component {
                     }
                 }
             }
+        }
+
+        if (cfg.children)
+        {
+            this.initChildrenCfg(cfg.children);
         }
     }
 
