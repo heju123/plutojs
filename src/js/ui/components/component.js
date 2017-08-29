@@ -273,7 +273,7 @@ export default class Component {
 
     /** this是否是com的父亲 */
     parentOf(com){
-        if (!com.parent)
+        if (!com || !com.parent)
         {
             return false;
         }
