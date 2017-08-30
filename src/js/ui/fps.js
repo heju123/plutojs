@@ -28,6 +28,23 @@ export default class Fps{
         window.requestAnimationFrame(this.draw.bind(this));
     }
 
+    /** 防止children超出 */
+    setClip(com)
+    {
+        if (com.setClip)
+        {
+            this.ctx.save();
+            com.setClip(this.ctx);
+        }
+    }
+    restoreClip(com)
+    {
+        if (com.setClip)
+        {
+            this.ctx.restore();
+        }
+    }
+
     drawView(com){
         if (!com.active)
         {
@@ -45,13 +62,17 @@ export default class Fps{
                     let child;
                     for (let i = 0, j = children.length; i < j; i++)
                     {
+                        this.setClip(com);
                         child = children[i];
                         this.drawView(child);
+                        this.restoreClip(com);
                     }
                 }
                 else
                 {
+                    this.setClip(com);
                     this.drawView(children);
+                    this.restoreClip(com);
                 }
             }
         }

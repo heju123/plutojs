@@ -20,10 +20,8 @@ export default class Rect extends Component{
             return false;
         }
         ctx.save();
-        this.setParentClip(ctx);
         ctx.beginPath();
         this.setCommonStyle(ctx);
-
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
@@ -37,6 +35,8 @@ export default class Rect extends Component{
             }
             ctx.fill();
         }
+        ctx.save();
+        this.setClip(ctx);//绘制图片前需要先剪切，避免图片超出当前组件
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
             if (this.style.backgroundImageClip)
@@ -50,6 +50,7 @@ export default class Rect extends Component{
                 ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
             }
         }
+        ctx.restore();
         ctx.closePath();
         if (this.style.borderWidth)
         {
