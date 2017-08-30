@@ -50,6 +50,7 @@ export default class Rect extends Component{
                 ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
             }
         }
+        ctx.closePath();
         if (this.style.borderWidth)
         {
             ctx.beginPath();
