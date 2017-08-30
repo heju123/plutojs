@@ -137,6 +137,7 @@ export default class Component {
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
+        let Scrollbar = require("./scrollbar.js").default;
 
         let childCom;
         if (typeof(chiCfg) === "function")//异步加载view
@@ -149,26 +150,23 @@ export default class Component {
             {
                 case "panel" :
                     childCom = new Panel(this);
-                    childCom.initCfg(chiCfg);
-                    this.appendChildren(childCom);
                     break;
                 case "rect" :
                     childCom = new Rect(this);
-                    childCom.initCfg(chiCfg);
-                    this.appendChildren(childCom);
                     break;
                 case "input" :
                     childCom = new Input(this);
-                    childCom.initCfg(chiCfg);
-                    this.appendChildren(childCom);
                     break;
                 case "button" :
                     childCom = new Button(this);
-                    childCom.initCfg(chiCfg);
-                    this.appendChildren(childCom);
+                    break;
+                case "scrollbar" :
+                    childCom = new Scrollbar(this);
                     break;
                 default : break;
             }
+            childCom.initCfg(chiCfg);
+            this.appendChildren(childCom);
             return childCom;
         }
     }
