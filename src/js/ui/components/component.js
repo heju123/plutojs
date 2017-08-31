@@ -10,6 +10,7 @@ export default class Component {
         this.parent = parent;
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
+        this.children = [];
 
         this.style = {};
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
@@ -21,6 +22,26 @@ export default class Component {
 
         this.multiLine = true;//是否多行文本
         this.autoLine = true;//是否自动换行
+    }
+
+    init(){
+        let $this = this;
+        if (this.style.backgroundImage)
+        {
+            let img = new Image();
+            img.onload = function(){
+                $this.backgroundImageDom = this;
+                if (!$this.getWidth() || $this.style.autoWidth)
+                {
+                    $this.setWidth($this.backgroundImageDom.width);
+                }
+                if (!$this.getHeight() || $this.style.autoHeight)
+                {
+                    $this.setHeight($this.backgroundImageDom.height);
+                }
+            };
+            img.src = this.style.backgroundImage;
+        }
     }
 
     /** 配置文件递归初始化样式 */
@@ -44,7 +65,6 @@ export default class Component {
     }
 
     initCfg(cfg){
-        let $this = this;
         if (cfg.id)
         {
             this.id = cfg.id;
@@ -54,23 +74,6 @@ export default class Component {
 
         this.text = this.getTextForRows(cfg.text);
         this.multiLine = cfg.multiLine || this.multiLine;
-
-        if (this.style.backgroundImage)
-        {
-            let img = new Image();
-            img.onload = function(){
-                $this.backgroundImageDom = this;
-                if (!$this.getWidth() || $this.style.autoWidth)
-                {
-                    $this.setWidth($this.backgroundImageDom.width);
-                }
-                if (!$this.getHeight() || $this.style.autoHeight)
-                {
-                    $this.setHeight($this.backgroundImageDom.height);
-                }
-            };
-            img.src = this.style.backgroundImage;
-        }
 
         //事件绑定配置
         if (cfg.events)
@@ -109,6 +112,7 @@ export default class Component {
                 }
             }
         }
+        this.init();
 
         if (cfg.children)
         {
@@ -117,23 +121,22 @@ export default class Component {
     }
 
     initChildrenCfg(childrenCfg){
-        this.children = [];
         if (typeof(childrenCfg) == "object" && childrenCfg instanceof Array)
         {
             let chiCfg;
             for (let i = 0, j = childrenCfg.length; i < j; i++)
             {
                 chiCfg = childrenCfg[i];
-                this.produceChildren(chiCfg);
+                this.produceChildrenByCfg(chiCfg);
             }
         }
         else
         {
-            this.produceChildren(childrenCfg);
+            this.produceChildrenByCfg(childrenCfg);
         }
     }
 
-    produceChildren(chiCfg){
+    produceChildrenByCfg(chiCfg){
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;

@@ -53,7 +53,7 @@ export default class Router extends Component{
         {
             if (this.routes[this.currentRoute].num === undefined)
             {
-                let retChild = this.produceChildren(this.routes[this.currentRoute].loader);
+                let retChild = this.produceChildrenByCfg(this.routes[this.currentRoute].loader);
                 if (retChild instanceof Promise)
                 {
                     retChild.then((child)=>{
