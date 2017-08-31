@@ -44,6 +44,10 @@ export default class Scrollbar extends Rect {
 
         this.scrollbarOpeLineV.registerEvent("mousedown", this.doMouseDown.bind(this));
         this.scrollbarOpeLineH.registerEvent("mousedown", this.doMouseDown.bind(this));
+        this.scrollbarOpeLineV.registerEvent("mousemove", this.doMouseMove.bind(this));
+        this.scrollbarOpeLineH.registerEvent("mousemove", this.doMouseMove.bind(this));
+        this.scrollbarOpeLineV.registerEvent("mouseup", this.doMouseUp.bind(this));
+        this.scrollbarOpeLineH.registerEvent("mouseup", this.doMouseUp.bind(this));
     }
 
     initCfg(cfg){
@@ -66,7 +70,12 @@ export default class Scrollbar extends Rect {
     }
 
     doMouseDown(e){
-        console.log(e);
+    }
+
+    doMouseMove(e){
+    }
+
+    doMouseUp(e){
     }
 
     /** 生成滚动条
