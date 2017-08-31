@@ -1,6 +1,6 @@
-import Component from "./component.js";
+import Rect from "./rect.js";
 
-export default class Scrollbar extends Component {
+export default class Scrollbar extends Rect {
     constructor(parent) {
         super(parent);
 
@@ -13,8 +13,8 @@ export default class Scrollbar extends Component {
         }
         else
         {
-            this.setWidth(parent.getWidth());
-            this.setHeight(parent.getHeight());
+            this.setWidth(parent.getInnerWidth());
+            this.setHeight(parent.getInnerHeight());
         }
     }
 
@@ -31,7 +31,33 @@ export default class Scrollbar extends Component {
         ctx.save();
         ctx.beginPath();
 
+        let swidth = this.style.scrollbarWidth || 10;
+        let radius = this.style.scrollbarRadius || 6;
+        let scrollbarX = this.getWidth() - swidth;
+        ctx.fillStyle = this.style.baseLineColor || "#000";
+        ctx.globalAlpha = this.style.baseLineAlpha || 0.25;
+        this.getRectRadiusPath(this.getRealX() + scrollbarX, this.getRealY(), swidth, this.getHeight(), ctx, radius);
+        ctx.fill();
+
         ctx.closePath();
         ctx.restore();
+        return true;
+    }
+
+    appendChildren(child){
+        super.appendChildren(child);
+
+        this.propagationDoLayout(this);
+    }
+
+    doLayout(){
+        let maxWidth = 0;
+        let maxHeight = 0;
+        this.children.forEach((child, index)=>{
+            maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
+            maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
+        });
+        this.style.contentWidth = maxWidth;
+        this.style.contentHeight = maxHeight;
     }
 }

@@ -17,8 +17,8 @@ export default class Router extends Component{
         }
         else
         {
-            this.setWidth(parent.getWidth());
-            this.setHeight(parent.getHeight());
+            this.setWidth(parent.getInnerWidth());
+            this.setHeight(parent.getInnerHeight());
         }
     }
 

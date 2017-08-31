@@ -60,11 +60,11 @@ export default class Component {
             let img = new Image();
             img.onload = function(){
                 $this.backgroundImageDom = this;
-                if (!$this.getWidth() || $this.getWidth() === "auto")
+                if (!$this.getWidth() || $this.style.autoWidth)
                 {
                     $this.setWidth($this.backgroundImageDom.width);
                 }
-                if (!$this.getHeight() || $this.getHeight() === "auto")
+                if (!$this.getHeight() || $this.style.autoHeight)
                 {
                     $this.setHeight($this.backgroundImageDom.height);
                 }
@@ -266,6 +266,18 @@ export default class Component {
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
+        }
+    }
+
+    /** 冒泡执行doLayout方法 */
+    propagationDoLayout(com){
+        if (com.doLayout && typeof(com.doLayout) === "function")
+        {
+            com.doLayout();
+        }
+        if (com.parent)
+        {
+            this.propagationDoLayout(com.parent);
         }
     }
 

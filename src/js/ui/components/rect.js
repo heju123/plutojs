@@ -124,18 +124,43 @@ export default class Rect extends Component{
         }
         ctx.clip();
     }
+
+    getRectRadiusPath(){
+        if (arguments.length <= 4)
+        {
+            this.getRectRadiusPath_self(arguments[0], arguments[1], arguments[2], arguments[3]);
+        }
+        else
+        {
+            this.getRectRadiusPath_xywh(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
+        }
+    }
     /**
      * 获取圆角矩形路径
      *
+     * @param self 当前组件
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath(self, ctx, radius, padding){
+    getRectRadiusPath_self(self, ctx, radius, padding){
+        this.getRectRadiusPath_xywh(self.getRealX(), self.getRealY(), self.getWidth(), self.getHeight(), ctx, radius, padding);
+    }
+    /**
+     * 获取圆角矩形路径
+     *
+     * @param px 绝对x坐标
+     * @param py 绝对y坐标
+     * @param pwidth 矩形宽
+     * @param pheight 矩形高
+     * @param radius 圆角半径
+     * @param padding 整体扩大的像素
+     */
+    getRectRadiusPath_xywh(px, py, pwidth, pheight, ctx, radius, padding){
         padding = padding || 0;
-        let x = self.getRealX() - padding;
-        let y = self.getRealY() - padding;
-        let width = self.getWidth() + padding * 2;
-        let height = self.getHeight() + padding * 2;
+        let x = px - padding;
+        let y = py - padding;
+        let width = pwidth + padding * 2;
+        let height = pheight + padding * 2;
         radius += padding;
         ctx.moveTo(x + radius + padding, y);
         ctx.lineTo(x + width - radius - padding, y);

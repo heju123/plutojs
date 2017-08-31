@@ -20,7 +20,7 @@ export default class Panel extends Rect{
     appendChildren(child){
         super.appendChildren(child);
 
-        this.doLayout();
+        this.propagationDoLayout(this);
     }
 
     /** 获取所有的权值 */
@@ -91,6 +91,17 @@ export default class Panel extends Rect{
                             allWH += height;
                         }
                     });
+                    //自适应高宽
+                    if ((!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
+                        && this.style.autoWidth)
+                    {
+                        this.setWidth(allWH);
+                    }
+                    else if ((this.style.layout.orientation === "vertical")
+                        && this.style.autoHeight)
+                    {
+                        this.setHeight(allWH);
+                    }
                     break;
                 default : break;
             }
