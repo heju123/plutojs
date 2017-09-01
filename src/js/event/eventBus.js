@@ -65,6 +65,13 @@ export default class EventBus{
         this.addEventListener(window, "keyup", (e)=>{
             this.createKeyEventNotify(e, "keyup");
         });
+
+        this.addEventListener(this.canvas, "mousewheel", (e)=>{
+            console.log(e);
+        });
+        this.addEventListener(this.canvas, "DOMMouseScroll", (e)=>{
+            console.log(e);
+        });
     }
 
     /**

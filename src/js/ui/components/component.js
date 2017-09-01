@@ -356,7 +356,7 @@ export default class Component {
     getTextRealX(){
         let oriX = this.getRealX() + (this.style.borderWidth || 0);
         //文字居中显示
-        if (this.getText() && this.style.textAlign === "center")
+        if (this.text && this.style.textAlign === "center")
         {
             let textLength = parseInt(this.style.fontSize) * this.getText().length;
             if (textLength <= this.getWidth())
