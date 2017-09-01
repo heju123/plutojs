@@ -23,9 +23,9 @@ export default class Scrollbar extends Rect {
         //竖向滚动条
         this.scrollbarBaseLineV = this.produceLine(1, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineV.active = false;
-        this.scrollbarOpeLineV = this.produceLine(1, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.5);
+        this.scrollbarOpeLineV = this.produceLine(1, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.4);
         this.scrollbarOpeLineV.style.hover = {
-            alpha : 0.6
+            alpha : 0.5
         };
         this.scrollbarOpeLineV.style.active = {
             alpha : 0.7
@@ -36,9 +36,9 @@ export default class Scrollbar extends Rect {
         //横向滚动条
         this.scrollbarBaseLineH = this.produceLine(2, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineH.active = false;
-        this.scrollbarOpeLineH = this.produceLine(2, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.5);
+        this.scrollbarOpeLineH = this.produceLine(2, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.4);
         this.scrollbarOpeLineH.style.hover = {
-            alpha : 0.6
+            alpha : 0.5
         };
         this.scrollbarOpeLineH.style.active = {
             alpha : 0.7
@@ -51,6 +51,10 @@ export default class Scrollbar extends Rect {
         this.scrollbarOpeLineH.registerEvent("mousedown", this.doMouseDown.bind(this, "H"));
         globalUtil.viewState.registerEvent("mousemove", this.doMouseMove.bind(this));
         globalUtil.viewState.registerEvent("mouseup", this.doMouseUp.bind(this));
+
+        this.registerEvent("mousewheel", (e)=>{
+            console.log(e);
+        })
     }
 
     initCfg(cfg){

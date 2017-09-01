@@ -5,6 +5,7 @@ import EventListener from "./eventListener.js";
 import ClickEvent from "./type/clickEvent.js";
 import MouseEvent from "./type/mouseEvent.js";
 import KeyEvent from "./type/keyEvent.js";
+import WheelEvent from "./type/wheelEvent.js";
 import Stack from "../data/structure/stack.js";
 import EventNotify from "./eventNotify.js";
 import globalUtil from "../util/globalUtil";
@@ -20,7 +21,8 @@ export default class EventBus{
             "mousemove" : [],
             "mouseup" : [],
             "keydown" : [],
-            "keyup" : []
+            "keyup" : [],
+            "mousewheel" : []
         };
         //事件通知队列
         this.eventNotifyQueue = [];
@@ -59,18 +61,18 @@ export default class EventBus{
         });
 
         this.addEventListener(window, "keydown", (e)=>{
-            this.createKeyEventNotify(e, "keydown");
+            this.createOtherEventNotify(e, "keydown", 2);
         });
 
         this.addEventListener(window, "keyup", (e)=>{
-            this.createKeyEventNotify(e, "keyup");
+            this.createOtherEventNotify(e, "keyup", 2);
         });
 
-        this.addEventListener(this.canvas, "mousewheel", (e)=>{
-            console.log(e);
-        });
         this.addEventListener(this.canvas, "DOMMouseScroll", (e)=>{
-            console.log(e);
+            this.createOtherEventNotify(e, "mousewheel", 3);
+        });
+        this.addEventListener(this.canvas, "mousewheel", (e)=>{
+            this.createOtherEventNotify(e, "mousewheel", 3);
         });
     }
 
@@ -117,7 +119,7 @@ export default class EventBus{
         });
     }
 
-    createKeyEventNotify(e, type){
+    createOtherEventNotify(e, type, ntype){
         e = e || window.event;
         let batchNo = this.createPropagationStack();
         let eventNotify;
@@ -128,7 +130,7 @@ export default class EventBus{
                     eventNotify = new EventNotify();
                     eventNotify.set({
                         batchNo : batchNo,
-                        type : 2,
+                        type : ntype,
                         listener : listener
                     });
                     listener.setSourceEvent(e);
@@ -236,6 +238,11 @@ export default class EventBus{
                 event.setCurrentTarget(listener.target);
                 event.setKey(listener.sourceEvent.key);
                 event.setKeyCode(listener.sourceEvent.keyCode);
+                break;
+            case "mousewheel" :
+                event = new WheelEvent(listener.type);
+                event.setCurrentTarget(listener.target);
+                event.setWheelDelta(listener.sourceEvent.wheelDelta || -listener.sourceEvent.detail);
                 break;
             default : break;
         }

@@ -95,7 +95,7 @@ export default class ViewState{
     /** 将textarea中的值设置到焦点组件 */
     setVal2FocusCom(){
         globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
-        globalUtil.action.inputListenerDom.value = globalUtil.action.focusComponent.getText() || "";
+        globalUtil.action.inputListenerDom.text = globalUtil.action.focusComponent.getText() || "";
     }
 
     addEventNotify(eventNotify){

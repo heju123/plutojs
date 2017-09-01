@@ -269,6 +269,12 @@ export default class Component {
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
+            else if (eventNotify.type === 3
+                && (globalUtil.action.focusComponent === this
+                    || this.parentOf(globalUtil.action.focusComponent)))//鼠标滚动事件
+            {
+                globalUtil.eventBus.captureEvent(eventNotify);
+            }
         }
     }
 
