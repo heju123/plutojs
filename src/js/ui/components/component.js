@@ -222,7 +222,7 @@ export default class Component {
     /** 设置通用样式，所有组件在绘制前都应该设置 */
     setCommonStyle(ctx){
         //半透明
-        if (this.style.alpha)
+        if (this.style.alpha !== undefined)
         {
             ctx.globalAlpha = this.style.alpha;
         }
@@ -319,10 +319,10 @@ export default class Component {
         this.style.y = y;
     }
     getX(){
-        return this.style.x;
+        return this.style.x - (this.style.scrollX || 0);//要减去滚动的长度
     }
     getY(){
-        return this.style.y;
+        return this.style.y - (this.style.scrollY || 0);
     }
 
     //获取显示在界面上真实的x坐标，加上父级坐标

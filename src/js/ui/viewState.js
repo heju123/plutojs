@@ -16,7 +16,7 @@ export default class ViewState{
 
         ctx.mouseAction = {};
 
-        globalUtil.eventBus.registerEvent(this, "mousedown", (e)=>{
+        this.registerEvent("mousedown", (e)=>{
             if (globalUtil.action.hoverComponent)
             {
                 globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
@@ -27,14 +27,14 @@ export default class ViewState{
                 }
             }
         });
-        globalUtil.eventBus.registerEvent(this, "mouseup", (e)=>{
+        this.registerEvent("mouseup", (e)=>{
             globalUtil.action.inputListenerDom.focus();
             if (globalUtil.action.activeComponent)
             {
                 globalUtil.action.activeComponent = undefined;
             }
         });
-        globalUtil.eventBus.registerEvent(this, "mousemove", (e)=>{
+        this.registerEvent("mousemove", (e)=>{
             ctx.mouseAction.mx = e.pageX;
             ctx.mouseAction.my = e.pageY;
         });
@@ -155,5 +155,9 @@ export default class ViewState{
         {
             return this.getComponentInChildrenByKey("id", id, this.rootPanel);
         }
+    }
+
+    registerEvent(eventType, callback){
+        globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 }
