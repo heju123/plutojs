@@ -197,8 +197,11 @@ export default class Component {
         this.activeEnable();
 
         //判断鼠标是否在组件范围内
+        //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
         if (ctx.mouseAction.mx && ctx.mouseAction.my
-            && this.isPointInComponent(ctx.mouseAction.mx, ctx.mouseAction.my))
+            && this.isPointInComponent(ctx.mouseAction.mx, ctx.mouseAction.my)
+            && (!this.parent || this.parent === ctx.mouseAction.hoverCom
+                || this.parent === ctx.mouseAction.hoverCom.parent))
         {
             ctx.mouseAction.hoverCom = this;
         }

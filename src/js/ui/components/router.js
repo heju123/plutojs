@@ -1,7 +1,7 @@
 import globalUtil from "../../util/globalUtil.js";
-import Component from "./component.js";
+import Rect from "./rect.js";
 
-export default class Router extends Component{
+export default class Router extends Rect{
     constructor(parent){
         super(parent);
 
@@ -45,6 +45,10 @@ export default class Router extends Component{
     }
 
     draw(ctx){
+        if (!super.draw(ctx)) {
+            return false;
+        }
+
         return true;
     }
 

@@ -68,7 +68,8 @@ export default class Scrollbar extends Rect {
         {
             return false;
         }
-        if (globalUtil.action.hoverComponent === this || this.parentOf(globalUtil.action.hoverComponent))
+        if (globalUtil.action.hoverComponent === this
+            || this.parentOf(globalUtil.action.hoverComponent) || this.onScrollObj)
         {
             this.scrollbarBaseLineH.active = true;
             this.scrollbarBaseLineV.active = true;
