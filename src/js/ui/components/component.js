@@ -18,9 +18,9 @@ export default class Component {
         this.setStyle({
             fontFamily : globalUtil.viewState.defaultFontFamily,
             fontSize : globalUtil.viewState.defaultFontSize,
-            lineHeight : parseInt(this.style.fontSize, 10),
             zIndex : 1
         });
+        this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
 
         this.multiLine = true;//是否多行文本
         this.autoLine = true;//是否自动换行
