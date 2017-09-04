@@ -9,8 +9,8 @@ export default class Scrollbar extends Rect {
         this.setY(0);
         if (!parent)//最顶层
         {
-            this.setWidth(globalUtil.canvas.width);
-            this.setHeight(globalUtil.canvas.height);
+            this.setWidth(globalUtil.viewState.getWidth());
+            this.setHeight(globalUtil.viewState.getHeight());
         }
         else
         {
@@ -24,12 +24,14 @@ export default class Scrollbar extends Rect {
         this.scrollbarBaseLineV = this.produceLine(1, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineV.active = false;
         this.scrollbarOpeLineV = this.produceLine(1, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.4);
-        this.scrollbarOpeLineV.style.hover = {
-            alpha : 0.5
-        };
-        this.scrollbarOpeLineV.style.active = {
-            alpha : 0.7
-        };
+        this.scrollbarOpeLineV.setStyle({
+            hover : {
+                alpha : 0.5
+            },
+            active : {
+                alpha : 0.7
+            }
+        });
         this.scrollbarOpeLineV.type = "V";
         this.scrollbarBaseLineV.appendChildren(this.scrollbarOpeLineV);
         this.appendChildren(this.scrollbarBaseLineV);
@@ -37,20 +39,24 @@ export default class Scrollbar extends Rect {
         this.scrollbarBaseLineH = this.produceLine(2, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineH.active = false;
         this.scrollbarOpeLineH = this.produceLine(2, this.style.opeLineColor || "#000", this.style.opeLineAlpha || 0.4);
-        this.scrollbarOpeLineH.style.hover = {
-            alpha : 0.5
-        };
-        this.scrollbarOpeLineH.style.active = {
-            alpha : 0.7
-        };
+        this.scrollbarOpeLineH.setStyle({
+            hover : {
+                alpha : 0.5
+            },
+            active : {
+                alpha : 0.7
+            }
+        });
         this.scrollbarOpeLineH.type = "H";
         this.scrollbarBaseLineH.appendChildren(this.scrollbarOpeLineH);
         this.appendChildren(this.scrollbarBaseLineH);
 
         this.scrollbarOpeLineV.registerEvent("mousedown", this.doMouseDown.bind(this, "V"));
         this.scrollbarOpeLineH.registerEvent("mousedown", this.doMouseDown.bind(this, "H"));
-        globalUtil.viewState.registerEvent("mousemove", this.doMouseMove.bind(this));
-        globalUtil.viewState.registerEvent("mouseup", this.doMouseUp.bind(this));
+        this.doMouseMoveBind = this.doMouseMove.bind(this);
+        this.doMouseUpBind = this.doMouseUp.bind(this);
+        globalUtil.viewState.registerEvent("mousemove", this.doMouseMoveBind);
+        globalUtil.viewState.registerEvent("mouseup", this.doMouseUpBind);
 
         this.registerEvent("mousewheel", (e)=>{
             console.log(e);
@@ -129,7 +135,9 @@ export default class Scrollbar extends Rect {
         this.children.forEach((child)=>{
             if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
             {
-                child.style.scrollX = this.style.contentScrollX;
+                child.setStyle({
+                    scrollX : this.style.contentScrollX
+                });
             }
         });
     }
@@ -137,7 +145,9 @@ export default class Scrollbar extends Rect {
         this.children.forEach((child)=>{
             if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
             {
-                child.style.scrollY = this.style.contentScrollY
+                child.setStyle({
+                    scrollY : this.style.contentScrollY
+                });
             }
         });
     }
@@ -168,9 +178,11 @@ export default class Scrollbar extends Rect {
             line.setHeight(swidth);
             line.setWidth(this.getWidth() - padding * 2);
         }
-        line.style.backgroundColor = lineColor;
-        line.style.alpha = alpha;
-        line.style.borderRadius = radius;
+        line.setStyle({
+            backgroundColor : lineColor,
+            alpha : alpha,
+            borderRadius : radius
+        });
         line.init();
         return line;
     }
@@ -188,8 +200,10 @@ export default class Scrollbar extends Rect {
             maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
             maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
         });
-        this.style.contentWidth = maxWidth;
-        this.style.contentHeight = maxHeight;
+        this.setStyle({
+            contentWidth : maxWidth,
+            contentHeight : maxHeight
+        });
 
         //是否显示滚动条
         if (this.scrollbarBaseLineH)
@@ -214,5 +228,12 @@ export default class Scrollbar extends Rect {
                 this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getHeight() / this.style.contentHeight));
             }
         }
+    }
+
+    destroy() {
+        super.destroy();
+
+        this.globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
+        this.globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
     }
 }

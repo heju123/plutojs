@@ -12,8 +12,8 @@ export default class Router extends Rect{
         this.setY(0);
         if (!parent)//最顶层
         {
-            this.setWidth(globalUtil.canvas.width);
-            this.setHeight(globalUtil.canvas.height);
+            this.setWidth(globalUtil.viewState.getWidth());
+            this.setHeight(globalUtil.viewState.getHeight());
         }
         else
         {

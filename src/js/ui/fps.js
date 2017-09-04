@@ -8,14 +8,14 @@ import EventBus from "../event/eventBus.js";
 
 export default class Fps{
     constructor(mainBody){
-        globalUtil.canvas = document.createElement("CANVAS");
-        mainBody.appendChild(globalUtil.canvas);
-        globalUtil.canvas.width = mainBody.offsetWidth;
-        globalUtil.canvas.height = mainBody.offsetHeight;
-        this.ctx = globalUtil.canvas.getContext('2d');
+        this.canvas = document.createElement("CANVAS");
+        mainBody.appendChild(this.canvas);
+        this.canvas.width = mainBody.offsetWidth;
+        this.canvas.height = mainBody.offsetHeight;
+        this.ctx = this.canvas.getContext('2d');
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-        globalUtil.eventBus = new EventBus(globalUtil.canvas);
+        globalUtil.eventBus = new EventBus(this.canvas);
     }
 
     setMainView(viewCfg){
@@ -82,7 +82,7 @@ export default class Fps{
     draw(){
         //背景
         this.ctx.fillStyle = "#000";
-        this.ctx.fillRect(0, 0, globalUtil.canvas.width, globalUtil.canvas.height);
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         globalUtil.viewState.beforeDraw(this.ctx);
         this.drawView(globalUtil.viewState.rootPanel);

@@ -256,6 +256,35 @@ export default class EventBus{
         return listener;
     }
 
+    /**
+     * 移除事件
+     *
+     * @param callback 如果callback不传，则删除所有type类型的事件
+     */
+    removeEvent(com, type, callback){
+        if (!com || !type)
+        {
+            return;
+        }
+        let listener;
+        for (let i = 0; i < this.eventListeners[type].length; i++)
+        {
+            listener = this.eventListeners[type][i];
+            if (listener.target === com && (!callback || listener.callback === callback))
+            {
+                this.eventListeners[type].splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+    removeAllEvent(com){
+        for (let type in this.eventListeners)
+        {
+            this.removeEvent(com, type);
+        }
+    }
+
     getEventListener(target, type, callback){
        let eventListener = new EventListener(type, callback);
        eventListener.setTarget(target);

@@ -3,11 +3,11 @@ import Rect from "./rect.js";
 export default class Button extends Rect {
     constructor(parent) {
         super(parent);
-        this.style.textAlign = "center";
+        this.setStyle("textAlign", "center");
     }
 
     initCfg(cfg){
         super.initCfg(cfg);
-        this.style.lineHeight = this.getHeight();
+        this.setStyle("lineHeight", this.getHeight());
     }
 }

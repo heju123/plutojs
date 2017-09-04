@@ -9,12 +9,14 @@ import Input from "./components/input.js";
 
 export default class ViewState{
     constructor(ctx){
+        this.ctx = ctx;
+
         this.isViewState = true;
 
         this.defaultFontFamily = "Microsoft YaHei";
         this.defaultFontSize = "14px";
 
-        ctx.mouseAction = {};
+        this.ctx.mouseAction = {};
 
         this.registerEvent("mousedown", (e)=>{
             if (globalUtil.action.hoverComponent)
@@ -35,8 +37,8 @@ export default class ViewState{
             }
         });
         this.registerEvent("mousemove", (e)=>{
-            ctx.mouseAction.mx = e.pageX;
-            ctx.mouseAction.my = e.pageY;
+            this.ctx.mouseAction.mx = e.pageX;
+            this.ctx.mouseAction.my = e.pageY;
         });
 
         //输入框事件
@@ -157,7 +159,24 @@ export default class ViewState{
         }
     }
 
+    getWidth(){
+        return this.ctx.canvas.width;
+    }
+
+    getHeight(){
+        return this.ctx.canvas.height;
+    }
+
     registerEvent(eventType, callback){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
+    }
+
+    removeEvent(eventType, callback){
+        globalUtil.eventBus.removeEvent(this, eventType, callback);
+    }
+
+    removeAllEvent()
+    {
+        globalUtil.eventBus.removeAllEvent(this);
     }
 }

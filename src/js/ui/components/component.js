@@ -15,10 +15,12 @@ export default class Component {
         this.style = {};
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
 
-        this.style.fontFamily = globalUtil.viewState.defaultFontFamily;
-        this.style.fontSize = globalUtil.viewState.defaultFontSize;
-        this.style.lineHeight = parseInt(this.style.fontSize, 10);
-        this.style.zIndex = 1;
+        this.setStyle({
+            fontFamily : globalUtil.viewState.defaultFontFamily,
+            fontSize : globalUtil.viewState.defaultFontSize,
+            lineHeight : parseInt(this.style.fontSize, 10),
+            zIndex : 1
+        });
 
         this.multiLine = true;//是否多行文本
         this.autoLine = true;//是否自动换行
@@ -236,25 +238,25 @@ export default class Component {
     }
 
     restoreStyle(){
-        commonUtil.copyObject(this.originalStyle, this.style, true);
+        this.setStyle(this.originalStyle);
     }
 
     hoverEnable(){
         if (globalUtil.action.hoverComponent === this)
         {
-            commonUtil.copyObject(this.style.hover, this.style, true);
+            this.setStyle(this.style.hover);
         }
     }
     focusEnable(){
         if (globalUtil.action.focusComponent === this)
         {
-            commonUtil.copyObject(this.style.focus, this.style, true);
+            this.setStyle(this.style.focus);
         }
     }
     activeEnable(){
         if (globalUtil.action.activeComponent === this)
         {
-            commonUtil.copyObject(this.style.active, this.style, true);
+            this.setStyle(this.style.active);
         }
     }
 
@@ -306,6 +308,29 @@ export default class Component {
         return this.parentOf(com.parent);
     }
 
+    /** 设置组件样式 */
+    setStyle(){
+        if (arguments.length === 0)
+        {
+            return;
+        }
+        if (arguments.length === 1 && typeof(arguments[0]) === "object")
+        {
+            this.setStyle_obj(arguments[0]);
+        }
+        else if (arguments.length === 2 && typeof(arguments[0]) === "string")
+        {
+            this.setStyle_kv(arguments[0], arguments[1]);
+        }
+    }
+    setStyle_kv(key, value){
+        this.style[key] = value;
+    }
+    setStyle_obj(style){
+        commonUtil.copyObject(style, this.style, true);
+    }
+
+
     getController(com){
         if (!com.parent)
         {
@@ -322,10 +347,10 @@ export default class Component {
     }
 
     setX(x){
-        this.style.x = x;
+        this.setStyle("x", x);
     }
     setY(y){
-        this.style.y = y;
+        this.setStyle("y", y);
     }
     getX(){
         return this.style.x - (this.style.scrollX || 0);//要减去滚动的长度
@@ -381,10 +406,10 @@ export default class Component {
 
     /** 高宽处理 */
     setWidth(width){
-        this.style.width = width;
+        this.setStyle("width", width);
     }
     setHeight(height){
-        this.style.height = height;
+        this.setStyle("height", height);
     }
     getWidth(){
         if (!this.style.width)
@@ -489,7 +514,24 @@ export default class Component {
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
+    removeEvent(eventType, callback){
+        globalUtil.eventBus.removeEvent(this, eventType, callback);
+    }
+
+    removeAllEvent()
+    {
+        globalUtil.eventBus.removeAllEvent(this);
+    }
+
     addEventNotify(eventNotify){
         this.eventNotifys.push(eventNotify);
+    }
+
+    destroy(){
+        this.removeAllEvent();
+
+        this.getChildren().forEach((child)=>{
+            child.destroy();
+        });
     }
 }
