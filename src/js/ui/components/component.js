@@ -3,7 +3,6 @@
  */
 import globalUtil from "../../util/globalUtil.js";
 import commonUtil from "../../util/commonUtil.js";
-import Panel from "./panel.js";
 
 export default class Component {
     constructor(parent) {
@@ -143,6 +142,7 @@ export default class Component {
     }
 
     produceChildrenByCfg(chiCfg){
+        let Panel = require("./panel.js").default;
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
@@ -181,6 +181,7 @@ export default class Component {
     }
 
     asyncGetView(viewCfg, resolve, reject){
+        let Panel = require("./panel.js").default;
         let panel = new Panel(this);
         panel.initCfg(viewCfg);
         this.appendChildren(panel);
@@ -336,6 +337,7 @@ export default class Component {
 
 
     getController(com){
+        let Panel = require("./panel.js").default;
         if (!com.parent)
         {
             return com.controller;
@@ -402,10 +404,10 @@ export default class Component {
                 return oriX + (this.getWidth() / 2 - textLength / 2);
             }
         }
-        return oriX;
+        return oriX - (this.style.textScrollX || 0);
     }
     getTextRealY(){
-        return this.getRealY() + (this.style.borderWidth || 0);
+        return this.getRealY() + (this.style.borderWidth || 0) - (this.style.textScrollY || 0);
     }
 
     /** 高宽处理 */

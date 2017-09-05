@@ -5,20 +5,28 @@ export default class Scrollbar extends Rect {
     constructor(parent) {
         super(parent);
 
-        this.setX(0);
-        this.setY(0);
-        this.setStyle("contentScrollX", 0);//内容整体滚动的x轴距离
-        this.setStyle("contentScrollY", 0);//内容整体滚动的y轴距离
-        if (!parent)//最顶层
+        let Input = require("./input.js").default;
+        if (!(this instanceof Input))
         {
-            this.setWidth(globalUtil.viewState.getWidth());
-            this.setHeight(globalUtil.viewState.getHeight());
+            this.setX(0);
+            this.setY(0);
+            if (!parent)//最顶层
+            {
+                this.setWidth(globalUtil.viewState.getWidth());
+                this.setHeight(globalUtil.viewState.getHeight());
+            }
+            else {
+                this.setWidth(parent.getInnerWidth());
+                this.setHeight(parent.getInnerHeight());
+            }
         }
-        else
-        {
-            this.setWidth(parent.getInnerWidth());
-            this.setHeight(parent.getInnerHeight());
-        }
+
+        this.setStyle({
+            contentScrollX : 0, //内容整体滚动的x轴距离
+            contentScrollY : 0, //内容整体滚动的y轴距离
+            showHScroll : false,//是否显示水平滚动条
+            showVScroll : false //是否显示垂直滚动条
+        });
     }
 
     initScrollbar(){
@@ -74,16 +82,19 @@ export default class Scrollbar extends Rect {
         {
             return false;
         }
-        if (globalUtil.action.hoverComponent === this
-            || this.parentOf(globalUtil.action.hoverComponent) || this.onScrollObj)
+        if (this.scrollbarBaseLineH && this.scrollbarBaseLineV)
         {
-            this.scrollbarBaseLineH.active = true;
-            this.scrollbarBaseLineV.active = true;
-        }
-        else
-        {
-            this.scrollbarBaseLineH.active = false;
-            this.scrollbarBaseLineV.active = false;
+            if (globalUtil.action.hoverComponent === this
+                || this.parentOf(globalUtil.action.hoverComponent) || this.onScrollObj)
+            {
+                this.scrollbarBaseLineH.active = this.style.showHScroll;
+                this.scrollbarBaseLineV.active = this.style.showVScroll;
+            }
+            else
+            {
+                this.scrollbarBaseLineH.active = false;
+                this.scrollbarBaseLineV.active = false;
+            }
         }
         return true;
     }
@@ -111,7 +122,7 @@ export default class Scrollbar extends Rect {
                 setVal = Math.max(setVal, 0);
                 setVal = Math.min(setVal, maxVal);
                 this.onScrollObj.setY(setVal);
-                this.setStyle("contentScrollY", (this.style.contentHeight - this.getHeight()) * (setVal / maxVal));
+                this.setStyle("contentScrollY", (this.style.contentHeight - this.getInnerHeight()) * (setVal / maxVal));
                 this.setScrollY();
             }
             else
@@ -121,7 +132,7 @@ export default class Scrollbar extends Rect {
                 setVal = Math.max(setVal, 0);
                 setVal = Math.min(setVal, maxVal);
                 this.onScrollObj.setX(setVal);
-                this.setStyle("contentScrollX", (this.style.contentWidth - this.getWidth()) * (setVal / maxVal));
+                this.setStyle("contentScrollX", (this.style.contentWidth - this.getInnerWidth()) * (setVal / maxVal));
                 this.setScrollX();
             }
         }
@@ -132,7 +143,7 @@ export default class Scrollbar extends Rect {
     }
 
     doMouseWheel(e){
-        if (this.style.contentHeight <= this.getHeight())
+        if (this.style.contentHeight <= this.getInnerHeight())
         {
             return;
         }
@@ -146,35 +157,55 @@ export default class Scrollbar extends Rect {
         {
             wheelVal = this.style.contentScrollY - 30;
         }
-        wheelVal = Math.min(wheelVal, this.style.contentHeight - this.getHeight());
+        wheelVal = Math.min(wheelVal, this.style.contentHeight - this.getInnerHeight());
         wheelVal = Math.max(wheelVal, 0);
         this.setStyle("contentScrollY", wheelVal);
         this.setScrollY();
         let scrollObjY = (this.scrollbarBaseLineV.getHeight() - this.scrollbarOpeLineV.getHeight())
-            * (wheelVal / (this.style.contentHeight - this.getHeight()));
+            * (wheelVal / (this.style.contentHeight - this.getInnerHeight()));
         this.scrollbarOpeLineV.setY(scrollObjY);
     }
 
     //设置所有子节点的滚动值
     setScrollX(){
-        this.children.forEach((child)=>{
-            if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
-            {
-                child.setStyle({
-                    scrollX : this.style.contentScrollX
-                });
-            }
-        });
+        let Input = require("./input.js").default;
+        if (this instanceof Input)
+        {
+            this.setStyle({
+                textScrollX : this.style.contentScrollX
+            });
+        }
+        else
+        {
+            this.children.forEach((child)=>{
+                if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
+                {
+                    child.setStyle({
+                        scrollX : this.style.contentScrollX
+                    });
+                }
+            });
+        }
     }
     setScrollY(){
-        this.children.forEach((child)=>{
-            if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
-            {
-                child.setStyle({
-                    scrollY : this.style.contentScrollY
-                });
-            }
-        });
+        let Input = require("./input.js").default;
+        if (this instanceof Input)
+        {
+            this.setStyle({
+                textScrollY : this.style.contentScrollY
+            });
+        }
+        else
+        {
+            this.children.forEach((child)=>{
+                if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
+                {
+                    child.setStyle({
+                        scrollY : this.style.contentScrollY
+                    });
+                }
+            });
+        }
     }
 
     /** 生成滚动条
@@ -183,12 +214,13 @@ export default class Scrollbar extends Rect {
      */
     produceLine(oritation, lineColor, alpha)
     {
+        let Rect = require("./rect.js").default;
         oritation = oritation || 1;
         let padding = 0;
         let swidth = this.style.scrollbarWidth || 10;
         let radius = this.style.scrollbarRadius || 6;
-        let scrollbarX = oritation === 1 ? this.getWidth() - swidth : padding;
-        let scrollbarY = oritation === 2 ? this.getHeight() - swidth : padding;
+        let scrollbarX = oritation === 1 ? this.getInnerWidth() - swidth : padding;
+        let scrollbarY = oritation === 2 ? this.getInnerHeight() - swidth : padding;
 
         let line = new Rect(this);
         line.setX(scrollbarX);
@@ -196,12 +228,12 @@ export default class Scrollbar extends Rect {
         if (oritation === 1)
         {
             line.setWidth(swidth);
-            line.setHeight(this.getHeight() - padding * 2);
+            line.setHeight(this.getInnerHeight() - padding * 2);
         }
         else
         {
             line.setHeight(swidth);
-            line.setWidth(this.getWidth() - padding * 2);
+            line.setWidth(this.getInnerWidth() - padding * 2);
         }
         line.setStyle({
             backgroundColor : lineColor,
@@ -219,12 +251,23 @@ export default class Scrollbar extends Rect {
     }
 
     doLayout(){
+        let Input = require("./input.js").default;
         let maxWidth = 0;
         let maxHeight = 0;
-        this.children.forEach((child, index)=>{
-            maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
-            maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
-        });
+        if (this instanceof Input && this.text)
+        {
+            maxHeight = this.text.length * parseInt(this.style.fontSize, 10);
+        }
+        else
+        {
+            this.children.forEach((child, index)=>{
+                if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
+                {
+                    maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
+                    maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
+                }
+            });
+        }
         this.setStyle({
             contentWidth : maxWidth,
             contentHeight : maxHeight
@@ -233,13 +276,15 @@ export default class Scrollbar extends Rect {
         //是否显示滚动条
         if (this.scrollbarBaseLineH)
         {
-            if (this.style.contentWidth <= this.getWidth())
+            if (this.style.contentWidth <= this.getInnerWidth())
             {
                 this.scrollbarBaseLineH.active = false;
+                this.setStyle("showHScroll", false);
             }
             else
             {
-                this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getWidth() / this.style.contentWidth));
+                this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getInnerWidth() / this.style.contentWidth));
+                this.setStyle("showHScroll", true);
             }
         }
         if (this.scrollbarBaseLineV)
@@ -247,10 +292,12 @@ export default class Scrollbar extends Rect {
             if (this.style.contentHeight <= this.getHeight())
             {
                 this.scrollbarBaseLineV.active = false;
+                this.setStyle("showVScroll", false);
             }
             else
             {
-                this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getHeight() / this.style.contentHeight));
+                this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getInnerHeight() / this.style.contentHeight));
+                this.setStyle("showVScroll", true);
             }
         }
     }

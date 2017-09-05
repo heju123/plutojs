@@ -1,11 +1,11 @@
 /**
  * Created by heju on 2017/7/30.
  */
-import Rect from "./rect.js";
+import Scrollbar from "./scrollbar.js";
 import globalUtil from "../../util/globalUtil";
 import commonUtil from "../../util/commonUtil";
 
-export default class Input extends Rect {
+export default class Input extends Scrollbar {
     constructor(parent) {
         super(parent);
 
@@ -124,5 +124,10 @@ export default class Input extends Rect {
         {
             return oriY + this.getHeight() / 2 - this.style.lineHeight / 2;
         }
+    }
+
+    setText(text){
+        super.setText(text);
+        this.doLayout();
     }
 }
