@@ -5,7 +5,7 @@ export default class Router extends Rect{
     constructor(parent){
         super(parent);
 
-        //routes对象结构：每个name下面包含num：标识子节点在children数组中的位置；loader：子节点的配置文件
+        //routes对象结构：每个name下面包含loader：子节点的配置文件；isLoaded：当前路由资源是否加载
         this.routes = {};
         this.children = [];
 
@@ -34,7 +34,8 @@ export default class Router extends Rect{
             {
                 rCfg = cfg.routes[name];
                 this.routes[name] = {
-                    loader : rCfg.view
+                    loader : rCfg.view,
+                    isLoaded : false
                 };
                 if (rCfg.default)
                 {
@@ -56,27 +57,34 @@ export default class Router extends Rect{
     getChildrenView(){
         if (!this.currentChildren)
         {
-            if (this.routes[this.currentRoute].num === undefined)
+            if (this.routes[this.currentRoute].isLoaded === false)//未加载资源
             {
                 let retChild = this.produceChildrenByCfg(this.routes[this.currentRoute].loader);
                 if (retChild instanceof Promise)
                 {
                     retChild.then((child)=>{
-                        this.routes[this.currentRoute].num = this.children.length - 1;
                         this.currentChildren = child;
+                        this.currentChildren.name = this.currentRoute;
                         this.currentChildren.active = true;
+                        this.routes[this.currentRoute].isLoaded = true;
                     });
                 }
                 else
                 {
-                    this.routes[this.currentRoute].num = this.children.length - 1;
                     this.currentChildren = retChild;
+                    this.currentChildren.name = this.currentRoute;
                     this.currentChildren.active = true;
+                    this.routes[this.currentRoute].isLoaded = true;
                 }
             }
             else
             {
-                this.currentChildren = this.children[this.routes[this.currentRoute].num];
+                this.children.forEach((child)=>{
+                    if (child.name === this.currentRoute)
+                    {
+                        this.currentChildren = child;
+                    }
+                });
                 this.currentChildren.active = true;
             }
         }
@@ -107,7 +115,17 @@ export default class Router extends Rect{
 
     destroyRoute(name){
         this.currentChildren.destroy();
-        this.children.splice(this.routes[name].num, 1);
-        this.routes[name].num = undefined;
+        let cindex = -1;
+        this.children.forEach((child, index)=>{
+            if (child.name === name)
+            {
+                cindex = index;
+            }
+        });
+        if (cindex > -1)
+        {
+            this.children.splice(cindex, 1);
+            this.routes[name].isLoaded = false;
+        }
     }
 }

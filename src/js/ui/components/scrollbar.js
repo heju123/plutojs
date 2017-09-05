@@ -7,6 +7,8 @@ export default class Scrollbar extends Rect {
 
         this.setX(0);
         this.setY(0);
+        this.setStyle("contentScrollX", 0);//内容整体滚动的x轴距离
+        this.setStyle("contentScrollY", 0);//内容整体滚动的y轴距离
         if (!parent)//最顶层
         {
             this.setWidth(globalUtil.viewState.getWidth());
@@ -58,9 +60,7 @@ export default class Scrollbar extends Rect {
         globalUtil.viewState.registerEvent("mousemove", this.doMouseMoveBind);
         globalUtil.viewState.registerEvent("mouseup", this.doMouseUpBind);
 
-        this.registerEvent("mousewheel", (e)=>{
-            console.log(e);
-        })
+        this.registerEvent("mousewheel", this.doMouseWheel.bind(this));
     }
 
     initCfg(cfg){
@@ -111,7 +111,7 @@ export default class Scrollbar extends Rect {
                 setVal = Math.max(setVal, 0);
                 setVal = Math.min(setVal, maxVal);
                 this.onScrollObj.setY(setVal);
-                this.style.contentScrollY = (this.style.contentHeight - this.getHeight()) * (setVal / maxVal);
+                this.setStyle("contentScrollY", (this.style.contentHeight - this.getHeight()) * (setVal / maxVal));
                 this.setScrollY();
             }
             else
@@ -121,7 +121,7 @@ export default class Scrollbar extends Rect {
                 setVal = Math.max(setVal, 0);
                 setVal = Math.min(setVal, maxVal);
                 this.onScrollObj.setX(setVal);
-                this.style.contentScrollX = (this.style.contentWidth - this.getWidth()) * (setVal / maxVal);
+                this.setStyle("contentScrollX", (this.style.contentWidth - this.getWidth()) * (setVal / maxVal));
                 this.setScrollX();
             }
         }
@@ -131,6 +131,31 @@ export default class Scrollbar extends Rect {
         this.onScrollObj = undefined;
     }
 
+    doMouseWheel(e){
+        if (this.style.contentHeight <= this.getHeight())
+        {
+            return;
+        }
+        let wheelDelta = e.wheelDelta;
+        let wheelVal;
+        if (wheelDelta < 0)
+        {
+            wheelVal = this.style.contentScrollY + 30;
+        }
+        else
+        {
+            wheelVal = this.style.contentScrollY - 30;
+        }
+        wheelVal = Math.min(wheelVal, this.style.contentHeight - this.getHeight());
+        wheelVal = Math.max(wheelVal, 0);
+        this.setStyle("contentScrollY", wheelVal);
+        this.setScrollY();
+        let scrollObjY = (this.scrollbarBaseLineV.getHeight() - this.scrollbarOpeLineV.getHeight())
+            * (wheelVal / (this.style.contentHeight - this.getHeight()));
+        this.scrollbarOpeLineV.setY(scrollObjY);
+    }
+
+    //设置所有子节点的滚动值
     setScrollX(){
         this.children.forEach((child)=>{
             if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
