@@ -233,7 +233,7 @@ export default class Scrollbar extends Rect {
     destroy() {
         super.destroy();
 
-        this.globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
-        this.globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
+        globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
+        globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
     }
 }

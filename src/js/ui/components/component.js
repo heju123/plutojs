@@ -71,6 +71,10 @@ export default class Component {
         {
             this.id = cfg.id;
         }
+        if (cfg.name)
+        {
+            this.name = cfg.name;
+        }
 
         this.initCfgStyle(cfg.style, this.style);
 

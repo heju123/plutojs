@@ -5,6 +5,7 @@ export default class Router extends Rect{
     constructor(parent){
         super(parent);
 
+        //routes对象结构：每个name下面包含num：标识子节点在children数组中的位置；loader：子节点的配置文件
         this.routes = {};
         this.children = [];
 
@@ -85,13 +86,28 @@ export default class Router extends Rect{
         return this.currentChildren;
     }
 
-    changeRoute(name){
+    /** 切换route
+     *
+     * @param name 要切换route的name
+     * @param destory 是否销毁之前的route
+     */
+    changeRoute(name, destory){
         if (this.currentChildren)
         {
             this.currentChildren.active = false;
         }
+        if (destory)
+        {
+            this.destroyRoute(this.currentRoute);
+        }
         this.currentRoute = name;
         this.currentChildren = undefined;
         this.getChildrenView();
+    }
+
+    destroyRoute(name){
+        this.currentChildren.destroy();
+        this.children.splice(this.routes[name].num, 1);
+        this.routes[name].num = undefined;
     }
 }
