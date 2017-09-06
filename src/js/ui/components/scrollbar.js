@@ -5,8 +5,7 @@ export default class Scrollbar extends Rect {
     constructor(parent) {
         super(parent);
 
-        let Input = require("./input.js").default;
-        if (!(this instanceof Input))
+        if (!this.scrollText)
         {
             this.setX(0);
             this.setY(0);
@@ -168,8 +167,7 @@ export default class Scrollbar extends Rect {
 
     //设置所有子节点的滚动值
     setScrollX(){
-        let Input = require("./input.js").default;
-        if (this instanceof Input)
+        if (this.scrollText)
         {
             this.setStyle("textScrollX", this.style.contentScrollX);
         }
@@ -184,8 +182,7 @@ export default class Scrollbar extends Rect {
         }
     }
     setScrollY(){
-        let Input = require("./input.js").default;
-        if (this instanceof Input)
+        if (this.scrollText)
         {
             this.setStyle("textScrollY", this.style.contentScrollY);
         }
@@ -243,10 +240,9 @@ export default class Scrollbar extends Rect {
     }
 
     doLayout(){
-        let Input = require("./input.js").default;
         let maxWidth = 0;
         let maxHeight = 0;
-        if (this instanceof Input && this.text)
+        if (this.scrollText && this.text)
         {
             maxHeight = this.getTextHeight();
             maxWidth = this.getTextWidth();

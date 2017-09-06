@@ -12,6 +12,7 @@ export default class Input extends Scrollbar {
         this.showTextCursor = true;
         this.showTextCursorInterval = 0;
         this.multiLine = false;
+        this.scrollText = true;
     }
 
     initCfg(cfg){

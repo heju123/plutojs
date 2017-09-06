@@ -80,6 +80,8 @@ export default class Component {
         this.text = this.getTextForRows(cfg.text);
         this.multiLine = cfg.multiLine || this.multiLine;
 
+        this.scrollText = cfg.scrollText || this.scrollText;//是否文字滚动
+
         //事件绑定配置
         if (cfg.events)
         {
