@@ -512,6 +512,26 @@ export default class Component {
         }).join("\n");
     }
 
+    /** 获取文本占的总高度 */
+    getTextHeight(){
+        if (!this.text)
+        {
+            return 0;
+        }
+        return this.text.length * parseInt(this.style.fontSize, 10);
+    }
+    getTextWidth(){
+        if (!this.text)
+        {
+            return 0;
+        }
+        let allWidth = 0;
+        this.text.forEach((row, index)=> {
+            allWidth = Math.max(allWidth, row.length * parseInt(this.style.fontSize, 10));
+        });
+        return allWidth;
+    }
+
     getChildren(){
         return this.children;
     }

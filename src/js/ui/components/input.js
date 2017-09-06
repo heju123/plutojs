@@ -106,12 +106,7 @@ export default class Input extends Scrollbar {
     }
 
     getTextRealX(){
-        let oriX = super.getTextRealX();
-        if (this.textCursorX > this.getWidth())//防止光标超出显示区域
-        {
-            return oriX - (this.textCursorX - this.getWidth());
-        }
-        return oriX;
+        return super.getTextRealX();
     }
 
     getTextRealY(){

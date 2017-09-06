@@ -171,18 +171,14 @@ export default class Scrollbar extends Rect {
         let Input = require("./input.js").default;
         if (this instanceof Input)
         {
-            this.setStyle({
-                textScrollX : this.style.contentScrollX
-            });
+            this.setStyle("textScrollX", this.style.contentScrollX);
         }
         else
         {
             this.children.forEach((child)=>{
                 if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
                 {
-                    child.setStyle({
-                        scrollX : this.style.contentScrollX
-                    });
+                    child.setStyle("scrollX", this.style.contentScrollX);
                 }
             });
         }
@@ -191,18 +187,14 @@ export default class Scrollbar extends Rect {
         let Input = require("./input.js").default;
         if (this instanceof Input)
         {
-            this.setStyle({
-                textScrollY : this.style.contentScrollY
-            });
+            this.setStyle("textScrollY", this.style.contentScrollY);
         }
         else
         {
             this.children.forEach((child)=>{
                 if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
                 {
-                    child.setStyle({
-                        scrollY : this.style.contentScrollY
-                    });
+                    child.setStyle("scrollY", this.style.contentScrollY);
                 }
             });
         }
@@ -256,7 +248,8 @@ export default class Scrollbar extends Rect {
         let maxHeight = 0;
         if (this instanceof Input && this.text)
         {
-            maxHeight = this.text.length * parseInt(this.style.fontSize, 10);
+            maxHeight = this.getTextHeight();
+            maxWidth = this.getTextWidth();
         }
         else
         {
