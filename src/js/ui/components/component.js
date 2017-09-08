@@ -149,6 +149,7 @@ export default class Component {
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
         let Scrollbar = require("./scrollbar.js").default;
+        let Sprite = require("./game/sprite.js").default;
 
         let childCom;
         if (typeof(chiCfg) === "function")//异步加载view
@@ -174,6 +175,8 @@ export default class Component {
                 case "scrollbar" :
                     childCom = new Scrollbar(this);
                     break;
+                case "sprite" :
+                    childCom = new Sprite(this);
                 default : break;
             }
             childCom.initCfg(chiCfg);
