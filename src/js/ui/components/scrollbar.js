@@ -5,7 +5,7 @@ export default class Scrollbar extends Rect {
     constructor(parent) {
         super(parent);
 
-        if (!this.scrollText)
+        if (!this.style.scrollText)
         {
             this.setX(0);
             this.setY(0);
@@ -167,7 +167,7 @@ export default class Scrollbar extends Rect {
 
     //设置所有子节点的滚动值
     setScrollX(){
-        if (this.scrollText)
+        if (this.style.scrollText)
         {
             this.setStyle("textScrollX", this.style.contentScrollX);
         }
@@ -182,7 +182,7 @@ export default class Scrollbar extends Rect {
         }
     }
     setScrollY(){
-        if (this.scrollText)
+        if (this.style.scrollText)
         {
             this.setStyle("textScrollY", this.style.contentScrollY);
         }
@@ -242,7 +242,7 @@ export default class Scrollbar extends Rect {
     doLayout(){
         let maxWidth = 0;
         let maxHeight = 0;
-        if (this.scrollText && this.text)
+        if (this.style.scrollText && this.text)
         {
             maxHeight = this.getTextHeight();
             maxWidth = this.getTextWidth();

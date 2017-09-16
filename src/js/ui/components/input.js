@@ -11,8 +11,11 @@ export default class Input extends Scrollbar {
 
         this.showTextCursor = true;
         this.showTextCursorInterval = 0;
-        this.multiLine = false;
-        this.scrollText = true;
+
+        this.setStyle({
+            multiLine : false,
+            scrollText : true
+        });
     }
 
     initCfg(cfg){
@@ -112,7 +115,7 @@ export default class Input extends Scrollbar {
 
     getTextRealY(){
         let oriY = super.getTextRealY();
-        if (this.multiLine)
+        if (this.style.multiLine)
         {
             return oriY;
         }

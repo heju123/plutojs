@@ -20,12 +20,21 @@ export default class ViewState{
 
         this.registerEvent("mousedown", (e)=>{
             if (globalUtil.action.hoverComponent)
-            {
+            {console.log(globalUtil.action.hoverComponent);
                 globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
-                globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
                 if (globalUtil.action.focusComponent.onFocus && typeof(globalUtil.action.focusComponent.onFocus) === "function")
                 {
                     globalUtil.action.focusComponent.onFocus(e.pageX, e.pageY);
+                }
+                globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
+                //是否支持拖动
+                globalUtil.action.dragComponent = globalUtil.action.hoverComponent.getDragComponent(globalUtil.action.hoverComponent);
+                if (globalUtil.action.dragComponent)
+                {
+                    globalUtil.action.dragOffset = {
+                        x : e.pageX - globalUtil.action.dragComponent.getRealX(),
+                        y : e.pageY - globalUtil.action.dragComponent.getRealY()
+                    };
                 }
             }
         });
@@ -35,10 +44,21 @@ export default class ViewState{
             {
                 globalUtil.action.activeComponent = undefined;
             }
+            if (globalUtil.action.dragComponent)
+            {
+                globalUtil.action.dragComponent = undefined;
+                globalUtil.action.dragOffset = undefined;
+            }
         });
         this.registerEvent("mousemove", (e)=>{
             this.ctx.mouseAction.mx = e.pageX;
             this.ctx.mouseAction.my = e.pageY;
+
+            if (globalUtil.action.dragComponent)//拖动
+            {
+                globalUtil.action.dragComponent.setRealX(e.pageX - globalUtil.action.dragOffset.x);
+                globalUtil.action.dragComponent.setRealY(e.pageY - globalUtil.action.dragOffset.y);
+            }
         });
 
         //输入框事件

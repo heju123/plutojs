@@ -17,12 +17,11 @@ export default class Component {
         this.setStyle({
             fontFamily : globalUtil.viewState.defaultFontFamily,
             fontSize : globalUtil.viewState.defaultFontSize,
-            zIndex : 1
+            zIndex : 1,
+            multiLine : true,//是否多行文本
+            autoLine : true//是否自动换行
         });
         this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
-
-        this.multiLine = true;//是否多行文本
-        this.autoLine = true;//是否自动换行
     }
 
     init(){
@@ -78,9 +77,6 @@ export default class Component {
         this.initCfgStyle(cfg.style, this.style);
 
         this.text = this.getTextForRows(cfg.text);
-        this.multiLine = cfg.multiLine || this.multiLine;
-
-        this.scrollText = cfg.scrollText || this.scrollText;//是否文字滚动
 
         //事件绑定配置
         if (cfg.events)
@@ -213,7 +209,8 @@ export default class Component {
         if (ctx.mouseAction.mx && ctx.mouseAction.my
             && this.isPointInComponent(ctx.mouseAction.mx, ctx.mouseAction.my)
             && (!this.parent || this.parent === ctx.mouseAction.hoverCom
-                || this.parent === ctx.mouseAction.hoverCom.parent))
+                || this.parent === ctx.mouseAction.hoverCom.parent
+                || this.parent.parentOf(ctx.mouseAction.hoverCom)))
         {
             ctx.mouseAction.hoverCom = this;
         }
@@ -370,6 +367,28 @@ export default class Component {
         return this.style.y - (this.style.scrollY || 0);
     }
 
+    //设置真实坐标，传入真实坐标,会转换成x或y
+    setRealX(rx){
+        if (this.parent)
+        {
+            this.setX(rx - this.getRealXRecursion(this.parent));
+        }
+        else
+        {
+            this.setX(rx);
+        }
+    }
+    setRealY(ry){
+        if (this.parent)
+        {
+            this.setY(ry - this.getRealYRecursion(this.parent));
+        }
+        else
+        {
+            this.setY(ry);
+        }
+    }
+
     //获取显示在界面上真实的x坐标，加上父级坐标
     getRealXRecursion(com){
         if (com.parent)
@@ -461,13 +480,13 @@ export default class Component {
             return undefined;
         }
         let rowsStr;
-        if (!this.multiLine)//单行
+        if (!this.style.multiLine)//单行
         {
             rowsStr = [text];
         }
         else
         {
-            if (this.autoLine)//如果自动换行
+            if (this.style.autoLine)//如果自动换行
             {
                 let index = 0;
                 let charWidth = 0;
@@ -558,11 +577,27 @@ export default class Component {
         this.eventNotifys.push(eventNotify);
     }
 
+    //是否支持拖动
+    getDragComponent(com){
+        if (com.style.draggable)
+        {
+            return com;
+        }
+        else if (!com.parent)
+        {
+            return undefined;
+        }
+        else
+        {
+            return com.getDragComponent(com.parent);
+        }
+    }
+
     destroy(){
         this.removeAllEvent();
 
         this.getChildren().forEach((child)=>{
-            child.destroy();
+                child.destroy();
         });
     }
 }
