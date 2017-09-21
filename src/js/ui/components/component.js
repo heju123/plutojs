@@ -78,6 +78,8 @@ export default class Component {
 
         this.text = this.getTextForRows(cfg.text);
 
+        this.active = cfg.active === undefined ? true : false;
+
         //事件绑定配置
         if (cfg.events)
         {
@@ -139,14 +141,39 @@ export default class Component {
         }
     }
 
-    produceChildrenByCfg(chiCfg){
+    newComByType(type){
         let Panel = require("./panel.js").default;
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
         let Scrollbar = require("./scrollbar.js").default;
         let Sprite = require("./game/sprite.js").default;
+        let com;
+        switch (type)
+        {
+            case "panel" :
+                com = new Panel(this);
+                break;
+            case "rect" :
+                com = new Rect(this);
+                break;
+            case "input" :
+                com = new Input(this);
+                break;
+            case "button" :
+                com = new Button(this);
+                break;
+            case "scrollbar" :
+                com = new Scrollbar(this);
+                break;
+            case "sprite" :
+                com = new Sprite(this);
+            default : break;
+        }
+        return com;
+    }
 
+    produceChildrenByCfg(chiCfg){
         let childCom;
         if (typeof(chiCfg) === "function")//异步加载view
         {
@@ -154,27 +181,7 @@ export default class Component {
         }
         else
         {
-            switch (chiCfg.type)
-            {
-                case "panel" :
-                    childCom = new Panel(this);
-                    break;
-                case "rect" :
-                    childCom = new Rect(this);
-                    break;
-                case "input" :
-                    childCom = new Input(this);
-                    break;
-                case "button" :
-                    childCom = new Button(this);
-                    break;
-                case "scrollbar" :
-                    childCom = new Scrollbar(this);
-                    break;
-                case "sprite" :
-                    childCom = new Sprite(this);
-                default : break;
-            }
+            childCom = this.newComByType(chiCfg.type);
             childCom.initCfg(chiCfg);
             this.appendChildren(childCom);
             return childCom;
@@ -182,13 +189,12 @@ export default class Component {
     }
 
     asyncGetView(viewCfg, resolve, reject){
-        let Panel = require("./panel.js").default;
-        let panel = new Panel(this);
-        panel.initCfg(viewCfg);
-        this.appendChildren(panel);
+        let childCom = this.newComByType(viewCfg.type);
+        childCom.initCfg(viewCfg);
+        this.appendChildren(childCom);
         if (resolve)
         {
-            resolve(panel);
+            resolve(childCom);
         }
     }
 
@@ -681,6 +687,12 @@ export default class Component {
 
     destroy(){
         this.removeAllEvent();
+
+        if (this.controller && this.controller.destroy
+            && typeof(this.controller.destroy) === "function")
+        {
+            this.controller.destroy();
+        }
 
         this.getChildren().forEach((child)=>{
                 child.destroy();

@@ -67,7 +67,7 @@ export default class Rect extends Component{
                 ctx.rect(this.getRealX() + this.style.borderWidth / 2, this.getRealY() + this.style.borderWidth / 2,
                     this.getWidth() - this.style.borderWidth, this.getHeight() - this.style.borderWidth);
             }
-            ctx.stroke();
+            ctx.stroke();//调用stroke后得到的图形宽高会增大lineWidth个像素，fill则不会
             ctx.closePath();
         }
         ctx.restore();
