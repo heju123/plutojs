@@ -229,6 +229,8 @@ export default class Component {
     /** 添加子节点 */
     appendChildren(child){
         this.children.push(child);
+
+        this.propagationDoLayout(this);
     }
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */
@@ -299,6 +301,90 @@ export default class Component {
         if (com.parent)
         {
             this.propagationDoLayout(com.parent);
+        }
+    }
+
+    /** 获取所有的权值 */
+    getAllWeight(){
+        let allWeight = 0;
+        this.children.forEach((child, index)=>{
+            if (child.style.layout && child.style.layout.layoutWeight)
+            {
+                allWeight += child.style.layout.layoutWeight;
+            }
+            else
+            {
+                allWeight += 1;
+            }
+        });
+        return allWeight;
+    }
+    doLayout(){
+        if (this.style.layout && this.style.layout.type && this.children.length > 0)
+        {
+            switch(this.style.layout.type)
+            {
+                case "linearLayout" :
+                    let fixByWeight = this.style.layout.fixByWeight || false;
+                    let allWeight = 0;
+                    if (fixByWeight)
+                    {
+                        allWeight = this.getAllWeight();//总权值
+                    }
+                    let allWH = 0;//记录高宽，确定x和y坐标
+                    this.children.forEach((child, index)=>{
+                        let weight = 1;
+                        if (child.style.layout && child.style.layout.layoutWeight)
+                        {
+                            weight = child.style.layout.layoutWeight;
+                        }
+                        if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
+                        {
+                            let width;
+                            if (fixByWeight)
+                            {
+                                width = this.getInnerWidth() * (weight / allWeight);
+                            }
+                            else
+                            {
+                                width = child.getWidth();
+                            }
+                            child.setX(allWH);
+                            child.setY(0);
+                            child.setWidth(width);
+                            allWH += width;
+                        }
+                        else if (this.style.layout.orientation === "vertical")
+                        {
+                            let height;
+                            if (fixByWeight)
+                            {
+                                height = this.getInnerHeight() * (weight / allWeight);
+                            }
+                            else
+                            {
+                                height = child.getHeight();
+                            }
+                            child.setY(allWH);
+                            child.setX(0);
+                            child.setHeight(height);
+                            allWH += height;
+                        }
+                    });
+                    //自适应高宽
+                    if ((!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
+                        && this.style.autoWidth)
+                    {
+                        this.setWidth(allWH);
+                    }
+                    else if ((this.style.layout.orientation === "vertical")
+                        && this.style.autoHeight)
+                    {
+                        this.setHeight(allWH);
+                    }
+                    break;
+                default : break;
+            }
         }
     }
 
@@ -448,7 +534,7 @@ export default class Component {
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
-            let maxWidth = this.parent.getWidth() - (this.parent ? (this.parent.style.borderWidth || 0) * 2 : 0);
+            let maxWidth = this.parent.getInnerWidth();
             return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
         }
         return this.style.width;
@@ -460,7 +546,7 @@ export default class Component {
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
-            let maxHeight = this.parent.getHeight() - (this.parent ? (this.parent.style.borderWidth || 0) * 2 : 0);
+            let maxHeight = this.parent.getInnerHeight();
             return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
         }
         return this.style.height;

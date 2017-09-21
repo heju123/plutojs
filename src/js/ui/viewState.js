@@ -20,7 +20,7 @@ export default class ViewState{
 
         this.registerEvent("mousedown", (e)=>{
             if (globalUtil.action.hoverComponent)
-            {console.log(globalUtil.action.hoverComponent);
+            {
                 globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
                 if (globalUtil.action.focusComponent.onFocus && typeof(globalUtil.action.focusComponent.onFocus) === "function")
                 {

@@ -93,23 +93,6 @@ export default class Rect extends Component{
         return true;
     }
 
-    /** 设置后避免超出parent范围 */
-    setParentClip(ctx){
-        if (this.parent)
-        {
-            if (this.parent.style.borderRadius)
-            {
-                this.getRectRadiusPath(this.parent, ctx, this.parent.style.borderRadius, -(this.parent.style.borderWidth || 0));//边框也要切掉
-            }
-            else
-            {
-                ctx.rect(this.getRealXRecursion(this.parent) + (this.parent.style.borderWidth || 0),
-                    this.getRealYRecursion(this.parent) + (this.parent.style.borderWidth || 0),
-                    this.parent.getInnerWidth(), this.parent.getInnerHeight());
-            }
-            ctx.clip();
-        }
-    }
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
         if (this.style.borderRadius)
@@ -118,9 +101,9 @@ export default class Rect extends Component{
         }
         else
         {
-            ctx.rect(this.getRealX() + (this.style.borderWidth || 0),
-                this.getRealY() + (this.style.borderWidth || 0),
-                this.getInnerWidth(), this.getInnerHeight());
+            ctx.rect(this.getRealX() + (this.style.borderWidth || 0) - 0.5,
+                this.getRealY() + (this.style.borderWidth || 0) - 0.5,
+                this.getInnerWidth() + 1, this.getInnerHeight() + 1);//clip后矩形会整体缩小1个像素
         }
         ctx.clip();
     }
