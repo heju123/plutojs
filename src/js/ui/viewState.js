@@ -93,6 +93,8 @@ export default class ViewState{
             this.rootPanel = new Router();
             this.rootPanel.initCfg(viewCfg);
         }
+
+        globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件
     }
 
     /** 绘制前 */

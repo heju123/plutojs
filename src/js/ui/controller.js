@@ -8,4 +8,22 @@ export default class Controller{
         this.panel = panel;
         this.viewState = globalUtil.viewState;
     }
+
+    registerEvent(eventType, callback){
+        globalUtil.eventBus.registerEvent(this, eventType, callback);
+    }
+
+    removeEvent(eventType, callback){
+        globalUtil.eventBus.removeEvent(this, eventType, callback);
+    }
+
+    removeAllEvent()
+    {
+        globalUtil.eventBus.removeAllEvent(this);
+    }
+
+    destroy()
+    {
+        this.removeAllEvent();
+    }
 }

@@ -15,15 +15,7 @@ export default class EventBus{
     constructor(canvas){
         this.canvas = canvas;
         //注册事件列表
-        this.eventListeners = {
-            "click" : [],
-            "mousedown" : [],
-            "mousemove" : [],
-            "mouseup" : [],
-            "keydown" : [],
-            "keyup" : [],
-            "mousewheel" : []
-        };
+        this.eventListeners = {};
         //事件通知队列
         this.eventNotifyQueue = [];
         //事件冒泡执行队列
@@ -88,6 +80,10 @@ export default class EventBus{
     }
 
     createEventNotify(e, type){
+        if (!this.eventListeners[type])
+        {
+            return;
+        }
         e = e || window.event;
         let px = e.pageX;
         let py = e.pageY;
@@ -120,6 +116,10 @@ export default class EventBus{
     }
 
     createOtherEventNotify(e, type, ntype){
+        if (!this.eventListeners[type])
+        {
+            return;
+        }
         e = e || window.event;
         let batchNo = this.createPropagationStack();
         let eventNotify;
@@ -249,9 +249,27 @@ export default class EventBus{
         return event;
     }
 
+    /** 广播事件 */
+    broadcastEvent(type, event){
+        if (!this.eventListeners[type])
+        {
+            return;
+        }
+        this.eventListeners[type].forEach((listener)=>{
+            if (listener.callback && typeof(listener.callback) === "function")
+            {
+                listener.callback(event);
+            }
+        });
+    }
+
     /** 注册事件 */
     registerEvent(com, type, callback){
         let listener = this.getEventListener(com, type, callback);
+        if (!this.eventListeners[type])
+        {
+            this.eventListeners[type] = [];
+        }
         this.eventListeners[type].push(listener);
         return listener;
     }
@@ -262,7 +280,7 @@ export default class EventBus{
      * @param callback 如果callback不传，则删除所有type类型的事件
      */
     removeEvent(com, type, callback){
-        if (!com || !type)
+        if (!com || !type || !this.eventListeners[type])
         {
             return;
         }
@@ -275,6 +293,10 @@ export default class EventBus{
                 this.eventListeners[type].splice(i, 1);
                 i--;
             }
+        }
+        if (this.eventListeners[type].length === 0)//监听列表为空，则清掉避免浪费空间
+        {
+            delete this.eventListeners[type];
         }
     }
 
