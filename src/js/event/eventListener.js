@@ -9,8 +9,4 @@ export default class EventListener {
     {
         this.target = target;
     }
-
-    setSourceEvent(sourceEvent){
-        this.sourceEvent = sourceEvent;
-    }
 }

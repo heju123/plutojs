@@ -109,9 +109,9 @@ export default class EventBus{
                             type: 1,
                             px: px,
                             py: py,
+                            sourceEvent : e,
                             listener: listener
                         });
-                        listener.setSourceEvent(e);
                         listener.target.addEventNotify(eventNotify);
                     }
                 }
@@ -131,9 +131,9 @@ export default class EventBus{
                     eventNotify.set({
                         batchNo : batchNo,
                         type : ntype,
+                        sourceEvent : e,
                         listener : listener
                     });
-                    listener.setSourceEvent(e);
                     listener.target.addEventNotify(eventNotify);
                 }
             });
@@ -157,14 +157,14 @@ export default class EventBus{
         {
             return;
         }
-        this.propagationEventQueue[eventNotify.batchNo].push(eventNotify.listener);
+        this.propagationEventQueue[eventNotify.batchNo].push(eventNotify);
     }
 
     /**
      * 冒泡执行事件
      */
     propagationEvent(){
-        let listener;
+        let eventNotify;
         let bubble;//上一个冒泡节点
         let target;
         let event;
@@ -178,71 +178,71 @@ export default class EventBus{
             top = this.propagationEventQueue[key].getTop();
             if (top)//获取target，第一个冒泡节点的target
             {
-                target = top.target;
+                target = top.listener.target;
             }
-            while (listener = this.propagationEventQueue[key].pop())
+            while (eventNotify = this.propagationEventQueue[key].pop())
             {
-                if (listener.target.isViewState || !bubble//viewstate节点或第一个节点
-                    || (event && event.immediatePropagation && bubble === listener.target)//自己
-                    || (event && event.propagation && listener.target.parentOf(bubble)))//parent
+                if (eventNotify.listener.target.isViewState || !bubble//viewstate节点或第一个节点
+                    || (event && event.immediatePropagation && bubble === eventNotify.listener.target)//自己
+                    || (event && event.propagation && eventNotify.listener.target.parentOf(bubble)))//parent
                 {
-                    event = this.getEvent(listener);
+                    event = this.getEvent(eventNotify);
                     event.setTarget(target);
-                    if (listener.callback && typeof(listener.callback) === "function")
+                    if (eventNotify.listener.callback && typeof(eventNotify.listener.callback) === "function")
                     {
-                        listener.callback(event);
+                        eventNotify.listener.callback(event);
                     }
-                    bubble = listener.target;
+                    bubble = eventNotify.listener.target;
                 }
             }
             delete this.propagationEventQueue[key];
         }
     }
 
-    getEvent(listener){
+    getEvent(eventNotify){
         let event;
-        switch (listener.type)
+        switch (eventNotify.listener.type)
         {
             case "click" :
-                event = new ClickEvent(listener.type);
-                event.setCurrentTarget(listener.target);
+                event = new ClickEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
                 break;
             case "mousedown" :
-                event = new MouseEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setButton(listener.sourceEvent.button);
-                event.setPageX(listener.sourceEvent.pageX);
-                event.setPageY(listener.sourceEvent.pageY);
+                event = new MouseEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setButton(eventNotify.sourceEvent.button);
+                event.setPageX(eventNotify.sourceEvent.pageX);
+                event.setPageY(eventNotify.sourceEvent.pageY);
                 break;
             case "mousemove" :
-                event = new MouseEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setPageX(listener.sourceEvent.pageX);
-                event.setPageY(listener.sourceEvent.pageY);
+                event = new MouseEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setPageX(eventNotify.sourceEvent.pageX);
+                event.setPageY(eventNotify.sourceEvent.pageY);
                 break;
             case "mouseup" :
-                event = new MouseEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setButton(listener.sourceEvent.button);
-                event.setPageX(listener.sourceEvent.pageX);
-                event.setPageY(listener.sourceEvent.pageY);
+                event = new MouseEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setButton(eventNotify.sourceEvent.button);
+                event.setPageX(eventNotify.sourceEvent.pageX);
+                event.setPageY(eventNotify.sourceEvent.pageY);
                 break;
             case "keydown" :
-                event = new KeyEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setKey(listener.sourceEvent.key);
-                event.setKeyCode(listener.sourceEvent.keyCode);
+                event = new KeyEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setKey(eventNotify.sourceEvent.key);
+                event.setKeyCode(eventNotify.sourceEvent.keyCode);
                 break;
             case "keyup" :
-                event = new KeyEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setKey(listener.sourceEvent.key);
-                event.setKeyCode(listener.sourceEvent.keyCode);
+                event = new KeyEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setKey(eventNotify.sourceEvent.key);
+                event.setKeyCode(eventNotify.sourceEvent.keyCode);
                 break;
             case "mousewheel" :
-                event = new WheelEvent(listener.type);
-                event.setCurrentTarget(listener.target);
-                event.setWheelDelta(listener.sourceEvent.wheelDelta || -listener.sourceEvent.detail);
+                event = new WheelEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                event.setWheelDelta(eventNotify.sourceEvent.wheelDelta || -eventNotify.sourceEvent.detail);
                 break;
             default : break;
         }

@@ -14,6 +14,7 @@ export default class EventNotify {
         this.type = obj.type;//1：鼠标相关事件；2：键盘事件
         this.px = obj.px;
         this.py = obj.py;
+        this.sourceEvent = obj.sourceEvent;
         this.listener = obj.listener;
     }
 }
