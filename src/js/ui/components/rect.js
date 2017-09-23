@@ -79,7 +79,8 @@ export default class Rect extends Component{
         this.setCommonStyle(ctx);
         if (this.text && this.text.length > 0)
         {
-            ctx.font=this.style.fontSize + " " + this.style.fontFamily;
+            ctx.font = this.style.fontSize + " " + this.style.fontFamily;
+            ctx.fillStyle = this.style.fontColor;
             ctx.textBaseline="hanging";
             this.text.forEach((row, index)=>{
                 row.forEach((char, cindex)=>{

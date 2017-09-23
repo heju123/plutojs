@@ -3,6 +3,7 @@
  */
 import globalUtil from "../../util/globalUtil.js";
 import commonUtil from "../../util/commonUtil.js";
+import animationUtil from "../../util/animationUtil.js";
 
 export default class Component {
     constructor(parent) {
@@ -17,6 +18,7 @@ export default class Component {
         this.setStyle({
             fontFamily : globalUtil.viewState.defaultFontFamily,
             fontSize : globalUtil.viewState.defaultFontSize,
+            fontColor : globalUtil.viewState.defaultFontColor,
             zIndex : 1,
             multiLine : true,//是否多行文本
             autoLine : true//是否自动换行
@@ -79,6 +81,8 @@ export default class Component {
         this.text = this.getTextForRows(cfg.text);
 
         this.active = cfg.active === undefined ? true : false;
+
+        this.animation = cfg.animation;
 
         //事件绑定配置
         if (cfg.events)
@@ -253,7 +257,7 @@ export default class Component {
     }
 
     restoreStyle(){
-        this.setStyle(this.originalStyle);
+        commonUtil.copyObject(this.originalStyle, this.style, true);
     }
 
     hoverEnable(){
@@ -407,6 +411,16 @@ export default class Component {
         return this.parentOf(com.parent);
     }
 
+    /** 执行样式改变动画 */
+    doStyleAnimation(styleKey, toVal){
+        if (!this.animation || !this.animation[styleKey])
+        {
+            return;
+        }
+        let second = commonUtil.getTimeSecForSuffix(this.animation[styleKey]);
+        animationUtil.executeStyleChange(this, styleKey, toVal, second);
+    }
+
     /** 设置组件样式 */
     setStyle(){
         if (arguments.length === 0)
@@ -423,10 +437,20 @@ export default class Component {
         }
     }
     setStyle_kv(key, value){
-        this.style[key] = value;
+        if (this.animation && this.animation[key])
+        {
+            this.doStyleAnimation(key, value);
+        }
+        else
+        {
+            this.style[key] = value;
+        }
     }
     setStyle_obj(style){
-        commonUtil.copyObject(style, this.style, true);
+        for (let key in style)
+        {
+            this.setStyle_kv(key, style[key]);
+        }
     }
 
 
