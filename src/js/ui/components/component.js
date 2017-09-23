@@ -249,7 +249,16 @@ export default class Component {
         }
     }
 
+    /**
+     * @param type 1：focus；2：hover；3：active
+     */
     restoreStyle(type){
+        switch (type)
+        {
+            case 3 :
+                break;
+            default : break;
+        }
         for (let key in this.style[type])
         {
             this.style[key] = this.originalStyle[key];
@@ -260,21 +269,21 @@ export default class Component {
         commonUtil.copyObject(this.style.focus, this.style, true);
     }
     onFocusout(){
-        this.restoreStyle("focus");
+        this.restoreStyle(1);
     }
 
     onHover(){
         commonUtil.copyObject(this.style.hover, this.style, true);
     }
     onHoverout(){
-        this.restoreStyle("hover");
+        this.restoreStyle(2);
     }
 
     onActive(mx, my){
         commonUtil.copyObject(this.style.active, this.style, true);
     }
     onActiveout(){
-        this.restoreStyle("active");
+        this.restoreStyle(3);
     }
 
     /** 检查事件是否匹配 */
