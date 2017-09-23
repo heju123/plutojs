@@ -22,12 +22,19 @@ export default class ViewState{
         this.registerEvent("mousedown", (e)=>{
             if (globalUtil.action.hoverComponent)
             {
+                if (globalUtil.action.focusComponent)
+                {
+                    globalUtil.action.focusComponent.onFocusout();
+                }
                 globalUtil.action.focusComponent = globalUtil.action.hoverComponent;
                 if (globalUtil.action.focusComponent.onFocus && typeof(globalUtil.action.focusComponent.onFocus) === "function")
                 {
                     globalUtil.action.focusComponent.onFocus(e.pageX, e.pageY);
                 }
+
                 globalUtil.action.activeComponent = globalUtil.action.hoverComponent;
+                globalUtil.action.activeComponent.onActive(e.pageX, e.pageY);
+
                 //是否支持拖动
                 globalUtil.action.dragComponent = globalUtil.action.hoverComponent.getDragComponent(globalUtil.action.hoverComponent);
                 if (globalUtil.action.dragComponent)
@@ -43,6 +50,7 @@ export default class ViewState{
             globalUtil.action.inputListenerDom.focus();
             if (globalUtil.action.activeComponent)
             {
+                globalUtil.action.activeComponent.onActiveout();
                 globalUtil.action.activeComponent = undefined;
             }
             if (globalUtil.action.dragComponent)
@@ -110,10 +118,18 @@ export default class ViewState{
     afterDraw(ctx){
         globalUtil.eventBus.propagationEvent();
 
-        //全部绘制完后检查hover的组件
+        //全部绘制完后检查hover的组件，并且上一次hover的组件和这一次的不能相同
         if (ctx.mouseAction.hoverCom)
         {
-            globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
+            if (globalUtil.action.hoverComponent !== ctx.mouseAction.hoverCom)
+            {
+                if (globalUtil.action.hoverComponent)
+                {
+                    globalUtil.action.hoverComponent.onHoverout();
+                }
+                globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
+                globalUtil.action.hoverComponent.onHover();
+            }
         }
     }
 

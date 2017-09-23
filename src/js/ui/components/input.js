@@ -82,6 +82,8 @@ export default class Input extends Scrollbar {
     }
 
     onFocus(mx, my){
+        super.onFocus(mx, my);
+
         this.showTextCursorInterval = 0;
         this.showTextCursor = true;
         globalUtil.action.inputListenerDom.value = this.getText() || "";

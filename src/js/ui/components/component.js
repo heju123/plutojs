@@ -211,10 +211,6 @@ export default class Component {
             return false;
         }
 
-        this.focusEnable();
-        this.hoverEnable();
-        this.activeEnable();
-
         //判断鼠标是否在组件范围内
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
         if (ctx.mouseAction.mx && ctx.mouseAction.my
@@ -253,27 +249,32 @@ export default class Component {
         }
     }
 
-    restoreStyle(){
-        commonUtil.copyObject(this.originalStyle, this.style, true);
+    restoreStyle(type){
+        for (let key in this.style[type])
+        {
+            this.style[key] = this.originalStyle[key];
+        }
     }
 
-    hoverEnable(){
-        if (globalUtil.action.hoverComponent === this)
-        {
-            commonUtil.copyObject(this.style.hover, this.style, true);
-        }
+    onFocus(mx, my){
+        commonUtil.copyObject(this.style.focus, this.style, true);
     }
-    focusEnable(){
-        if (globalUtil.action.focusComponent === this)
-        {
-            commonUtil.copyObject(this.style.focus, this.style, true);
-        }
+    onFocusout(){
+        this.restoreStyle("focus");
     }
-    activeEnable(){
-        if (globalUtil.action.activeComponent === this)
-        {
-            commonUtil.copyObject(this.style.active, this.style, true);
-        }
+
+    onHover(){
+        commonUtil.copyObject(this.style.hover, this.style, true);
+    }
+    onHoverout(){
+        this.restoreStyle("hover");
+    }
+
+    onActive(mx, my){
+        commonUtil.copyObject(this.style.active, this.style, true);
+    }
+    onActiveout(){
+        this.restoreStyle("active");
     }
 
     /** 检查事件是否匹配 */
