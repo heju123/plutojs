@@ -77,6 +77,7 @@ export default class Component {
         }
 
         this.initCfgStyle(cfg.style, this.style);
+        commonUtil.copyObject(this.style, this.originalStyle, true);
 
         this.text = this.getTextForRows(cfg.text);
 
@@ -252,10 +253,6 @@ export default class Component {
         }
     }
 
-    saveStyle(){
-        commonUtil.copyObject(this.style, this.originalStyle, true);
-    }
-
     restoreStyle(){
         commonUtil.copyObject(this.originalStyle, this.style, true);
     }
@@ -263,19 +260,19 @@ export default class Component {
     hoverEnable(){
         if (globalUtil.action.hoverComponent === this)
         {
-            this.setStyle(this.style.hover);
+            commonUtil.copyObject(this.style.hover, this.style, true);
         }
     }
     focusEnable(){
         if (globalUtil.action.focusComponent === this)
         {
-            this.setStyle(this.style.focus);
+            commonUtil.copyObject(this.style.focus, this.style, true);
         }
     }
     activeEnable(){
         if (globalUtil.action.activeComponent === this)
         {
-            this.setStyle(this.style.active);
+            commonUtil.copyObject(this.style.active, this.style, true);
         }
     }
 
@@ -445,6 +442,7 @@ export default class Component {
         {
             this.style[key] = value;
         }
+        this.originalStyle[key] = value;
     }
     setStyle_obj(style){
         for (let key in style)

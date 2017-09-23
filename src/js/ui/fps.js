@@ -50,7 +50,6 @@ export default class Fps{
         {
             return;
         }
-        com.saveStyle();
         if (com.draw(this.ctx))
         {
             let children = com.getChildren();
