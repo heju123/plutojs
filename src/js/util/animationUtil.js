@@ -1,6 +1,7 @@
 import commonUtil from "./commonUtil.js";
 import TweenLite from "../../libs/TweenLite/TweenLite.min.js";
 import EasePack from "../../libs/TweenLite/easing/EasePack.min.js";
+import ColorPropsPlugin from "../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
 
 let animationUtil = {
     /**
@@ -8,16 +9,19 @@ let animationUtil = {
      *
      * @param styleKey 样式key
      * @param toVal 修改后的值
-     * @param animation
+     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）}
      */
     executeStyleChange : (com, styleKey, toVal, animation)=>{
-        let to = {};
-        to[styleKey] = toVal;
-        to.ease = EasePack[animation.easeType][animation.easing];
-        to.onComplete = function() {
-        };
-        animation.duration = commonUtil.getTimeSecForSuffix(animation.duration)
-        TweenLite.to(com.style, animation.duration, to);//duration(单位：秒)
+        new Promise((resolve, reject)=>{
+            let to = {};
+            to[styleKey] = toVal;
+            to.ease = EasePack[animation.easeType][animation.easing];
+            to.onComplete = function() {
+                resolve();
+            };
+            animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
+            TweenLite.to(com.style, animation.duration, to);
+        });
     }
 };
 export default animationUtil;
