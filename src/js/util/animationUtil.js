@@ -9,7 +9,7 @@ let animationUtil = {
      *
      * @param styleKey 样式key
      * @param toVal 修改后的值
-     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）}
+     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
     executeStyleChange : (com, styleKey, toVal, animation)=>{
         new Promise((resolve, reject)=>{
