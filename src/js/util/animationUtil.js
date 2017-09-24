@@ -1,5 +1,5 @@
 import commonUtil from "./commonUtil.js";
-import TweenLite from "../../libs/TweenLite/TweenLite.min.js";
+import TweenMax from "../../libs/TweenLite/TweenMax.min.js";
 import EasePack from "../../libs/TweenLite/easing/EasePack.min.js";
 import ColorPropsPlugin from "../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
 
@@ -19,8 +19,12 @@ let animationUtil = {
             to.onComplete = function() {
                 resolve();
             };
+            if (animation.repeat)
+            {
+                to.repeat = animation.repeat;
+            }
             animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
-            TweenLite.to(com.style, animation.duration, to);
+            TweenMax.to(com.style, animation.duration, to);
         });
     }
 };
