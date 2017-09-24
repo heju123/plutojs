@@ -249,41 +249,50 @@ export default class Component {
         }
     }
 
-    /**
-     * @param type 1：focus；2：hover；3：active
-     */
-    restoreStyle(type){
-        switch (type)
+    restoreStyle(){
+        if (this.isActive && this.style.active)
         {
-            case 3 :
-                break;
-            default : break;
+            commonUtil.copyObject(this.style.active, this.style, true);
         }
-        for (let key in this.style[type])
+        else if (this.isHover && this.style.hover)
         {
-            this.style[key] = this.originalStyle[key];
+            commonUtil.copyObject(this.style.hover, this.style, true);
+        }
+        else if (this.isFocus && this.style.focus)
+        {
+            commonUtil.copyObject(this.style.focus, this.style, true);
+        }
+        else
+        {
+            commonUtil.copyObject(this.originalStyle, this.style, true);
         }
     }
 
     onFocus(mx, my){
+        this.isFocus = true;
         commonUtil.copyObject(this.style.focus, this.style, true);
     }
     onFocusout(){
-        this.restoreStyle(1);
+        this.isFocus = false;
+        this.restoreStyle();
     }
 
     onHover(){
+        this.isHover = true;
         commonUtil.copyObject(this.style.hover, this.style, true);
     }
     onHoverout(){
-        this.restoreStyle(2);
+        this.isHover = false;
+        this.restoreStyle();
     }
 
     onActive(mx, my){
+        this.isActive = true;
         commonUtil.copyObject(this.style.active, this.style, true);
     }
     onActiveout(){
-        this.restoreStyle(3);
+        this.isActive = false;
+        this.restoreStyle();
     }
 
     /** 检查事件是否匹配 */
