@@ -176,12 +176,12 @@ let commonUtil = {
     },
     /** 根据后缀获取时间(单位：秒) */
     getTimeSecForSuffix : (time)=>{
-        if (time.lastIndexOf("ms") > -1)
+        if (time.toString().lastIndexOf("ms") > -1)
         {
             time = time.substring(0, time.lastIndexOf("ms"));
             time = parseFloat(time) / 1000;
         }
-        else if (time.lastIndexOf("s") > -1)
+        else if (time.toString().lastIndexOf("s") > -1)
         {
             time = time.substring(0, time.lastIndexOf("s"));
             time = parseFloat(time);

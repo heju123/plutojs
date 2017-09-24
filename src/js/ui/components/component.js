@@ -252,25 +252,25 @@ export default class Component {
     restoreStyle(){
         if (this.isActive && this.style.active)
         {
-            commonUtil.copyObject(this.style.active, this.style, true);
+            this.copyStyle(this.style.active);
         }
         else if (this.isHover && this.style.hover)
         {
-            commonUtil.copyObject(this.style.hover, this.style, true);
+            this.copyStyle(this.style.hover);
         }
         else if (this.isFocus && this.style.focus)
         {
-            commonUtil.copyObject(this.style.focus, this.style, true);
+            this.copyStyle(this.style.focus);
         }
         else
         {
-            commonUtil.copyObject(this.originalStyle, this.style, true);
+            this.copyStyle(this.originalStyle);
         }
     }
 
     onFocus(mx, my){
         this.isFocus = true;
-        commonUtil.copyObject(this.style.focus, this.style, true);
+        this.copyStyle(this.style.focus);
     }
     onFocusout(){
         this.isFocus = false;
@@ -279,7 +279,7 @@ export default class Component {
 
     onHover(){
         this.isHover = true;
-        commonUtil.copyObject(this.style.hover, this.style, true);
+        this.copyStyle(this.style.hover);
     }
     onHoverout(){
         this.isHover = false;
@@ -288,7 +288,7 @@ export default class Component {
 
     onActive(mx, my){
         this.isActive = true;
-        commonUtil.copyObject(this.style.active, this.style, true);
+        this.copyStyle(this.style.active);
     }
     onActiveout(){
         this.isActive = false;
@@ -433,8 +433,22 @@ export default class Component {
         {
             return;
         }
-        let second = commonUtil.getTimeSecForSuffix(this.animation[styleKey]);
-        animationUtil.executeStyleChange(this, styleKey, toVal, second);
+        animationUtil.executeStyleChange(this, styleKey, toVal, this.animation[styleKey]);
+    }
+
+    /** 防止改变originalStyle，所以这里要专门写一个方法，而不使用setStyle方法 */
+    copyStyle(source){
+        for (let key in source)
+        {
+            if (this.animation && this.animation[key])
+            {
+                this.doStyleAnimation(key, source[key]);
+            }
+            else
+            {
+                this.style[key] = source[key];
+            }
+        }
     }
 
     /** 设置组件样式 */
