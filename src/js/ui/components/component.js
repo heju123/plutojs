@@ -247,6 +247,16 @@ export default class Component {
         {
             ctx.globalAlpha = this.style.alpha;
         }
+        //缩放
+        if (this.style.scale !== undefined)
+        {
+            let scaleArr = this.style.scale.split(",");
+            ctx.scale(scaleArr[0], scaleArr[1]);
+            //要实现以组件中心来缩放，必须将ctx坐标原点平移
+            let scaleWidth = this.getWidth() * scaleArr[0];
+            let scaleHeight = this.getHeight() * scaleArr[1];
+            ctx.translate(-(scaleWidth - this.getWidth()) / 2, -(scaleHeight - this.getHeight()) / 2);
+        }
     }
 
     restoreStyle(){

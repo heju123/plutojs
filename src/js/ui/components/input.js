@@ -30,6 +30,7 @@ export default class Input extends Scrollbar {
         ctx.save();
         this.setClip(ctx);
         ctx.beginPath();
+        this.setCommonStyle(ctx);
         //focus
         if (globalUtil.action.focusComponent === this) {
             //绘制光标
