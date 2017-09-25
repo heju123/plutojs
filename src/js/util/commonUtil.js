@@ -187,6 +187,26 @@ let commonUtil = {
             time = parseFloat(time);
         }
         return time;
+    },
+    /**
+     * 删除多余属性
+     *
+     * @param obj 要删除属性的对象
+     * @param compareObj 比较的对象，如果obj中的某属性在compareObj对象中不存在，则删除
+     * @param ignoreAttrs 这些属性除外，传入字符串，逗号分割
+     */
+    removeExtraAttr : (obj, compareObj, ignoreAttrs)=>{
+        for (let key in obj)
+        {
+            if (ignoreAttrs.indexOf(key) > -1)
+            {
+                continue;
+            }
+            if (!compareObj.hasOwnProperty(key))
+            {
+                delete obj[key];
+            }
+        }
     }
 };
 export default commonUtil;

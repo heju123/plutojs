@@ -15,14 +15,7 @@ export default class Component {
         this.style = {};
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
 
-        this.setStyle({
-            fontFamily : globalUtil.viewState.defaultFontFamily,
-            fontSize : globalUtil.viewState.defaultFontSize,
-            fontColor : globalUtil.viewState.defaultFontColor,
-            zIndex : 1,
-            multiLine : true,//是否多行文本
-            autoLine : true//是否自动换行
-        });
+        this.setDefaultStyle();
         this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
     }
 
@@ -203,6 +196,34 @@ export default class Component {
         }
     }
 
+    /** 设置默认样式 */
+    setDefaultStyle(){
+        if (!this.style.fontFamily)
+        {
+            this.setStyle("fontFamily", globalUtil.viewState.defaultFontFamily);
+        }
+        if (!this.style.fontSize)
+        {
+            this.setStyle("fontSize", globalUtil.viewState.defaultFontSize);
+        }
+        if (!this.style.fontColor)
+        {
+            this.setStyle("fontColor", globalUtil.viewState.defaultFontColor);
+        }
+        if (!this.style.zIndex)
+        {
+            this.setStyle("zIndex", 1);
+        }
+        if (!this.style.multiLine)//是否多行文本
+        {
+            this.setStyle("multiLine", true);
+        }
+        if (!this.style.autoLine)//是否自动换行
+        {
+            this.setStyle("autoLine", true);
+        }
+    }
+
     draw(ctx){
         //不在parent范围内，则不需要绘制
         let parentArea = this.inParentArea(this);
@@ -242,6 +263,7 @@ export default class Component {
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */
     setCommonStyle(ctx){
+        this.setDefaultStyle();//如果样式丢失，则使用默认样式
         //半透明
         if (this.style.alpha !== undefined)
         {
@@ -259,22 +281,33 @@ export default class Component {
         }
     }
 
+    /** 将样式恢复成original */
+    restoreStyle2Original(){
+        this.copyStyle(this.originalStyle);
+        //删掉多余样式
+        commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,active,focus");
+    }
+
+    /** 将样式恢复成active或hover或focus或original */
     restoreStyle(){
         if (this.isActive && this.style.active)
         {
+            this.restoreStyle2Original();
             this.copyStyle(this.style.active);
         }
         else if (this.isHover && this.style.hover)
         {
+            this.restoreStyle2Original();
             this.copyStyle(this.style.hover);
         }
         else if (this.isFocus && this.style.focus)
         {
+            this.restoreStyle2Original();
             this.copyStyle(this.style.focus);
         }
         else
         {
-            this.copyStyle(this.originalStyle);
+            this.restoreStyle2Original();
         }
     }
 
