@@ -78,6 +78,12 @@ export default class Component {
 
         this.animation = cfg.animation;
 
+        //自适应宽度
+        if (!this.style.width && this.style.autoWidth)
+        {
+            this.setStyle("width", this.getTextWidth());
+        }
+
         //事件绑定配置
         if (cfg.events)
         {
