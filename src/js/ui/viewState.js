@@ -112,7 +112,6 @@ export default class ViewState{
         globalUtil.eventBus.doNotifyEvent();
 
         ctx.mouseAction.hoverCom = undefined;
-        ctx.lastAlphaCom = undefined;//设置alpha会影响到子组件，所以需要此变量
     }
 
     /** 绘制后 */
