@@ -79,6 +79,7 @@ export default class EventBus{
         return batchNo;
     }
 
+    /** 创建鼠标事件通知 */
     createEventNotify(e, type){
         if (!this.eventListeners[type])
         {
@@ -115,6 +116,7 @@ export default class EventBus{
         });
     }
 
+    /** 创建非鼠标事件通知 */
     createOtherEventNotify(e, type, ntype){
         if (!this.eventListeners[type])
         {

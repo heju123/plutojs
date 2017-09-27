@@ -273,6 +273,15 @@ export default class Component {
         if (this.style.alpha !== undefined)
         {
             ctx.globalAlpha = this.style.alpha;
+            //lastAlphaCom只将alpha值传给自己的子组件
+            if (ctx.lastAlphaCom === undefined || !ctx.lastAlphaCom.parentOf(this))
+            {
+                ctx.lastAlphaCom = this;//记录当前有alpha值的组件
+            }
+        }
+        else if (ctx.lastAlphaCom !== undefined && ctx.lastAlphaCom.parentOf(this))
+        {
+            ctx.globalAlpha = ctx.lastAlphaCom.style.alpha;
         }
         //缩放
         if (this.style.scale !== undefined)
@@ -348,7 +357,7 @@ export default class Component {
         if (eventNotify.type)
         {
             if (eventNotify.type === 1
-                && this.isPointInComponent(eventNotify.px, eventNotify.py))//判断鼠标是否在控件范围内
+                && (globalUtil.action.hoverComponent === this || this.parentOf(globalUtil.action.hoverComponent)))//判断鼠标是否在控件范围内,type等于1表示鼠标事件
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
@@ -531,7 +540,6 @@ export default class Component {
             this.setStyle_kv(key, style[key]);
         }
     }
-
 
     getController(com){
         let Panel = require("./panel.js").default;

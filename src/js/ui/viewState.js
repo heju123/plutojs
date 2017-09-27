@@ -112,6 +112,7 @@ export default class ViewState{
         globalUtil.eventBus.doNotifyEvent();
 
         ctx.mouseAction.hoverCom = undefined;
+        ctx.lastAlphaCom = undefined;//设置alpha会影响到子组件，所以需要此变量
     }
 
     /** 绘制后 */
@@ -121,6 +122,7 @@ export default class ViewState{
         //全部绘制完后检查hover的组件，并且上一次hover的组件和这一次的不能相同
         if (ctx.mouseAction.hoverCom)
         {
+            //这一次hover的组件不等于上一次hover的组件，则表示上一次hover的组件hoverout了
             if (globalUtil.action.hoverComponent !== ctx.mouseAction.hoverCom)
             {
                 if (globalUtil.action.hoverComponent)
