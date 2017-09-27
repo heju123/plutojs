@@ -556,9 +556,19 @@ export default class Component {
         this.setStyle("y", y);
     }
     getX(){
+        if (this.style.x && this.style.x.toString().indexOf("%") > -1)//百分比
+        {
+            let maxX = this.parent.getInnerWidth();
+            return maxX * (this.style.x.substring(0, this.style.x.length - 1) / 100);
+        }
         return this.style.x - (this.style.scrollX || 0);//要减去滚动的长度
     }
     getY(){
+        if (this.style.y && this.style.y.toString().indexOf("%") > -1)//百分比
+        {
+            let maxY = this.parent.getInnerHeight();
+            return maxY * (this.style.y.substring(0, this.style.y.length - 1) / 100);
+        }
         return this.style.y - (this.style.scrollY || 0);
     }
 
