@@ -819,6 +819,17 @@ export default class Component {
         }
     }
 
+    getComponentById(id){
+        if (this.id && this.id === id)
+        {
+            return this;
+        }
+        else
+        {
+            return globalUtil.viewState.getComponentInChildrenByKey("id", id, this);
+        }
+    }
+
     destroy(){
         this.removeAllEvent();
 
