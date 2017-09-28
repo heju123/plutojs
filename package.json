@@ -12,8 +12,8 @@
     "webpack": "*"
   },
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack --progress --watch"
+    "build": "webpack --env=prod",
+    "dev": "webpack --env=dev --progress --watch"
   },
   "author": "HEJU",
   "license": "ISC"
