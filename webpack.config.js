@@ -19,6 +19,7 @@ module.exports = function(env){
             debug: true, //default 'false', it will display some information in console
             sourceMap: true
         }));
+        devtool = "cheap-module-source-map";
     }
 
     return {
@@ -44,4 +45,4 @@ module.exports = function(env){
         },
         plugins: plugins
     };
-}
+};
