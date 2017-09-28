@@ -516,6 +516,15 @@ export default class Component {
         }
     }
     setStyle_kv(key, value){
+        //以下值不允许出现小数
+        if (key === "x" || key === "y" || key === "width" || key === "height")
+        {
+            if (value && value.toString().indexOf("%") === -1)//非百分比
+            {
+                value = Math.round(value);
+            }
+        }
+
         if (this.animation && this.animation[key])
         {
             this.doStyleAnimation(key, value);
