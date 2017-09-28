@@ -74,6 +74,10 @@ export default class Component {
         {
             this.name = cfg.name;
         }
+        if (cfg.controller && typeof(cfg.controller) == "function")
+        {
+            this.controller = new cfg.controller(this);
+        }
 
         this.initCfgStyle(cfg.style);
 
@@ -145,7 +149,6 @@ export default class Component {
     }
 
     newComByType(type){
-        let Panel = require("./panel.js").default;
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
@@ -154,9 +157,6 @@ export default class Component {
         let com;
         switch (type)
         {
-            case "panel" :
-                com = new Panel(this);
-                break;
             case "rect" :
                 com = new Rect(this);
                 break;
@@ -543,12 +543,11 @@ export default class Component {
     }
 
     getController(com){
-        let Panel = require("./panel.js").default;
         if (!com.parent)
         {
             return com.controller;
         }
-        if (com instanceof Panel && com.controller)
+        if (com.controller)
         {
             return com.controller;
         }

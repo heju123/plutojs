@@ -83,7 +83,7 @@ export default class Fps{
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         globalUtil.viewState.beforeDraw(this.ctx);
-        this.drawView(globalUtil.viewState.rootPanel);
+        this.drawView(globalUtil.viewState.rootComponent);
         globalUtil.viewState.afterDraw(this.ctx);
 
         window.requestAnimationFrame(this.draw.bind(this));

@@ -4,8 +4,8 @@
 import globalUtil from "../util/globalUtil";
 
 export default class Controller{
-    constructor(panel) {
-        this.panel = panel;
+    constructor(component) {
+        this.component = component;
         this.viewState = globalUtil.viewState;
     }
 

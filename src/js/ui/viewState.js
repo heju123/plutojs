@@ -3,7 +3,7 @@
  */
 import globalUtil from "../util/globalUtil.js";
 import commonUtil from "../util/commonUtil.js";
-import Panel from "./components/panel.js";
+import Rect from "./components/rect.js";
 import Router from "./components/router.js";
 import Input from "./components/input.js";
 
@@ -92,15 +92,15 @@ export default class ViewState{
     }
 
     init(viewCfg){
-        if (viewCfg.type == "panel")
+        if (viewCfg.type == "rect")
         {
-            this.rootPanel = new Panel();
-            this.rootPanel.initCfg(viewCfg);
+            this.rootComponent = new Rect();
+            this.rootComponent.initCfg(viewCfg);
         }
         else if (viewCfg.type == "route")
         {
-            this.rootPanel = new Router();
-            this.rootPanel.initCfg(viewCfg);
+            this.rootComponent = new Router();
+            this.rootComponent.initCfg(viewCfg);
         }
 
         globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件
@@ -189,13 +189,13 @@ export default class ViewState{
     }
 
     getComponentById(id){
-        if (this.rootPanel.id && this.rootPanel.id === id)
+        if (this.rootComponent.id && this.rootComponent.id === id)
         {
-            return this.rootPanel;
+            return this.rootComponent;
         }
         else
         {
-            return this.getComponentInChildrenByKey("id", id, this.rootPanel);
+            return this.getComponentInChildrenByKey("id", id, this.rootComponent);
         }
     }
 
