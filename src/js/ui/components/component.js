@@ -447,19 +447,19 @@ export default class Component {
                         }
                     });
 
-                    let offset = 0;
                     //自适应高宽
+                    let centerOffset = 0;//内容居中时子组件偏移量
                     if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
                     {
-                        if (this.style.autoWidth)
+                        if (this.style.autoWidth)//自适应宽度内容居中无意义
                         {
                             this.setWidth(allWH);
                         }
                         else if (this.style.layout.contentAlign === "center")//内容居中
                         {
-                            offset = this.getInnerWidth() / 2 - allWH / 2;
+                            centerOffset = this.getInnerWidth() / 2 - allWH / 2;
                             this.children.forEach((child, index)=>{
-                                child.setX(child.getX() + offset);
+                                child.setX(child.getX() + centerOffset);
                             });
                         }
                     }
@@ -471,9 +471,9 @@ export default class Component {
                         }
                         else if (this.style.layout.contentAlign === "center")//内容居中
                         {
-                            offset = this.getInnerHeight() / 2 - allWH / 2;
+                            centerOffset = this.getInnerHeight() / 2 - allWH / 2;
                             this.children.forEach((child, index)=>{
-                                child.setY(child.getY() + offset);
+                                child.setY(child.getY() + centerOffset);
                             });
                         }
                     }
