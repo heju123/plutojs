@@ -545,13 +545,13 @@ export default class Component {
             return;
         }
         let allAniPromise;
-        if (arguments.length === 1 && typeof(arguments[0]) === "object")
+        if (typeof(arguments[0]) === "object")
         {
-            allAniPromise = this.setStyle_obj(arguments[0]);
+            allAniPromise = this.setStyle_obj(arguments[0], arguments[1]);
         }
-        else if (arguments.length === 2 && typeof(arguments[0]) === "string")
+        else if (typeof(arguments[0]) === "string")
         {
-            allAniPromise = this.setStyle_kv(arguments[0], arguments[1]);
+            allAniPromise = this.setStyle_kv(arguments[0], arguments[1], arguments[2]);
         }
         if (allAniPromise)
         {
@@ -566,7 +566,8 @@ export default class Component {
             return undefined;
         }
     }
-    setStyle_kv(key, value){
+    setStyle_kv(key, value, doAni){
+        doAni = doAni === undefined || doAni === true ? true : false;
         //以下值不允许出现小数
         if (key === "x" || key === "y" || key === "width" || key === "height")
         {
@@ -577,7 +578,7 @@ export default class Component {
         }
 
         let aniPromise;
-        if (this.animation && this.animation[key])
+        if (doAni && this.animation && this.animation[key])
         {
             aniPromise = this.doStyleAnimation(key, value);
         }
@@ -588,12 +589,12 @@ export default class Component {
         this.originalStyle[key] = value;
         return aniPromise;
     }
-    setStyle_obj(style){
+    setStyle_obj(style, doAni){
         let aniPromiseArr = [];
         let aniPromise;
         for (let key in style)
         {
-            aniPromise = this.setStyle_kv(key, style[key]);
+            aniPromise = this.setStyle_kv(key, style[key], doAni);
             if (aniPromise)
             {
                 aniPromiseArr.push(aniPromise);
