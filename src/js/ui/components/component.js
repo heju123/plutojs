@@ -319,29 +319,47 @@ export default class Component {
 
     onFocus(mx, my){
         this.isFocus = true;
-        this.copyStyle(this.style.focus);
+        if (this.style.focus)
+        {
+            this.copyStyle(this.style.focus);
+        }
     }
     onFocusout(){
         this.isFocus = false;
-        this.restoreStyle();
+        if (this.style.focus)
+        {
+            this.restoreStyle();
+        }
     }
 
     onHover(){
         this.isHover = true;
-        this.copyStyle(this.style.hover);
+        if (this.style.hover)
+        {
+            this.copyStyle(this.style.hover);
+        }
     }
     onHoverout(){
         this.isHover = false;
-        this.restoreStyle();
+        if (this.style.hover)
+        {
+            this.restoreStyle();
+        }
     }
 
     onActive(mx, my){
         this.isActive = true;
-        this.copyStyle(this.style.active);
+        if (this.style.active)
+        {
+            this.copyStyle(this.style.active);
+        }
     }
     onActiveout(){
         this.isActive = false;
-        this.restoreStyle();
+        if (this.style.active)
+        {
+            this.restoreStyle();
+        }
     }
 
     /** 检查事件是否匹配 */
