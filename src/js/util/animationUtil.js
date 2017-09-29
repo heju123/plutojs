@@ -12,7 +12,7 @@ let animationUtil = {
      * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
     executeStyleChange : (com, styleKey, toVal, animation)=>{
-        new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject)=>{
             let to = {};
             to[styleKey] = toVal;
             to.ease = EasePack[animation.easeType][animation.easing];

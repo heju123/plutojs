@@ -502,7 +502,7 @@ export default class Component {
         {
             return;
         }
-        animationUtil.executeStyleChange(this, styleKey, toVal, this.animation[styleKey]);
+        return animationUtil.executeStyleChange(this, styleKey, toVal, this.animation[styleKey]);
     }
 
     /** 防止改变originalStyle，所以这里要专门写一个方法，而不使用setStyle方法 */
@@ -526,13 +526,26 @@ export default class Component {
         {
             return;
         }
+        let allAniPromise;
         if (arguments.length === 1 && typeof(arguments[0]) === "object")
         {
-            this.setStyle_obj(arguments[0]);
+            allAniPromise = this.setStyle_obj(arguments[0]);
         }
         else if (arguments.length === 2 && typeof(arguments[0]) === "string")
         {
-            this.setStyle_kv(arguments[0], arguments[1]);
+            allAniPromise = this.setStyle_kv(arguments[0], arguments[1]);
+        }
+        if (allAniPromise)
+        {
+            if (!(allAniPromise instanceof Array))
+            {
+                allAniPromise = [allAniPromise];
+            }
+            return Promise.all(allAniPromise);
+        }
+        else
+        {
+            return undefined;
         }
     }
     setStyle_kv(key, value){
@@ -545,21 +558,30 @@ export default class Component {
             }
         }
 
+        let aniPromise;
         if (this.animation && this.animation[key])
         {
-            this.doStyleAnimation(key, value);
+            aniPromise = this.doStyleAnimation(key, value);
         }
         else
         {
             this.style[key] = value;
         }
         this.originalStyle[key] = value;
+        return aniPromise;
     }
     setStyle_obj(style){
+        let aniPromiseArr = [];
+        let aniPromise;
         for (let key in style)
         {
-            this.setStyle_kv(key, style[key]);
+            aniPromise = this.setStyle_kv(key, style[key]);
+            if (aniPromise)
+            {
+                aniPromiseArr.push(aniPromise);
+            }
         }
+        return aniPromiseArr;
     }
 
     getController(com){
