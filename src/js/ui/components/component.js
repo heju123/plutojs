@@ -446,16 +446,36 @@ export default class Component {
                             allWH += height;
                         }
                     });
+
+                    let offset = 0;
                     //自适应高宽
-                    if ((!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
-                        && this.style.autoWidth)
+                    if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
                     {
-                        this.setWidth(allWH);
+                        if (this.style.autoWidth)
+                        {
+                            this.setWidth(allWH);
+                        }
+                        else if (this.style.layout.contentAlign === "center")//内容居中
+                        {
+                            offset = this.getInnerWidth() / 2 - allWH / 2;
+                            this.children.forEach((child, index)=>{
+                                child.setX(child.getX() + offset);
+                            });
+                        }
                     }
-                    else if ((this.style.layout.orientation === "vertical")
-                        && this.style.autoHeight)
+                    else if (this.style.layout.orientation === "vertical")
                     {
-                        this.setHeight(allWH);
+                        if (this.style.autoHeight)
+                        {
+                            this.setHeight(allWH);
+                        }
+                        else if (this.style.layout.contentAlign === "center")//内容居中
+                        {
+                            offset = this.getInnerHeight() / 2 - allWH / 2;
+                            this.children.forEach((child, index)=>{
+                                child.setY(child.getY() + offset);
+                            });
+                        }
                     }
                     break;
                 default : break;
