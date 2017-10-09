@@ -65,6 +65,11 @@ export default class Component {
         }
     }
 
+    /**
+     * 用配置json初始化
+     *
+     * @param cfg
+     */
     initCfg(cfg){
         if (cfg.id)
         {
@@ -76,7 +81,7 @@ export default class Component {
         }
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
-            this.controller = new cfg.controller(this);
+            this.controller = new cfg.controller(this, cfg.controllerParam);
         }
 
         this.initCfgStyle(cfg.style);
