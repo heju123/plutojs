@@ -74,6 +74,12 @@ export default class Fps{
                     this.restoreClip(com);
                 }
             }
+
+            //自定义绘制
+            if (this.controller && this.controller.draw && typeof(this.controller.draw) === "function")
+            {
+                this.controller.draw(this.ctx);
+            }
         }
     }
 

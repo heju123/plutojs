@@ -7,6 +7,12 @@ import commonUtil from "./util/commonUtil.js";
 import globalUtil from "./util/globalUtil.js";
 import Controller from "./ui/controller.js";
 
+import Sprite from "./ui/components/game/sprite.js";
+import Button from "./ui/components/button.js";
+import Input from "./ui/components/input.js";
+import Rect from "./ui/components/rect.js";
+import Scrollbar from "./ui/components/scrollbar.js";
+
 class Main {
     constructor(eleId){
         let mainBody = document.getElementById(eleId);
@@ -37,5 +43,12 @@ window.Monk = {
     Main : Main,
     commonUtil : commonUtil,
     httpUtil : httpUtil,
-    Controller : Controller
+    Controller : Controller,
+    components : {
+        Sprite : Sprite,
+        Button : Button,
+        Input : Input,
+        Rect : Rect,
+        Scrollbar : Scrollbar
+    }
 };
