@@ -79,10 +79,6 @@ export default class Component {
         {
             this.name = cfg.name;
         }
-        if (cfg.controller && typeof(cfg.controller) == "function")
-        {
-            this.controller = new cfg.controller(this, cfg.controllerParam);
-        }
 
         this.initCfgStyle(cfg.style);
 
@@ -131,6 +127,10 @@ export default class Component {
         }
         this.init();
 
+        if (cfg.controller && typeof(cfg.controller) == "function")
+        {
+            this.controller = new cfg.controller(this, cfg.controllerParam);
+        }
         if (cfg.children)
         {
             this.initChildrenCfg(cfg.children);
