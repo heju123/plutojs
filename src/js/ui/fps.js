@@ -78,7 +78,9 @@ export default class Fps{
             //自定义绘制
             if (com.controller && com.controller.draw && typeof(com.controller.draw) === "function")
             {
+                this.ctx.save();
                 com.controller.draw.apply(com.controller, [this.ctx]);
+                this.ctx.restore();
             }
         }
     }

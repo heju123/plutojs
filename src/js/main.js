@@ -27,6 +27,11 @@ class Main {
         globalUtil.action.inputListenerDom.style.top = "0px";
         globalUtil.action.inputListenerDom.style["z-index"] = -1;
         document.body.appendChild(globalUtil.action.inputListenerDom);
+
+        //屏蔽鼠标右键菜单
+        mainBody.oncontextmenu = function(e){
+            e.preventDefault();
+        };
     }
 
     setMainView(viewCfg){

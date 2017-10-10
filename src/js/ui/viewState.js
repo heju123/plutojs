@@ -36,13 +36,16 @@ export default class ViewState{
                 globalUtil.action.activeComponent.onActive(e.pageX, e.pageY);
 
                 //是否支持拖动
-                globalUtil.action.dragComponent = globalUtil.action.hoverComponent.getDragComponent(globalUtil.action.hoverComponent);
-                if (globalUtil.action.dragComponent)
+                if (e.button === 0)//只能左键拖动
                 {
-                    globalUtil.action.dragOffset = {
-                        x : e.pageX - globalUtil.action.dragComponent.getRealX(),
-                        y : e.pageY - globalUtil.action.dragComponent.getRealY()
-                    };
+                    globalUtil.action.dragComponent = globalUtil.action.hoverComponent.getDragComponent(globalUtil.action.hoverComponent);
+                    if (globalUtil.action.dragComponent)
+                    {
+                        globalUtil.action.dragOffset = {
+                            x : e.pageX - globalUtil.action.dragComponent.getRealX(),
+                            y : e.pageY - globalUtil.action.dragComponent.getRealY()
+                        };
+                    }
                 }
             }
         });
