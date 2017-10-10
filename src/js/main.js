@@ -44,7 +44,7 @@ class Main {
     }
 }
 
-window.Monk = {
+window.monk = {
     Main : Main,
     commonUtil : commonUtil,
     httpUtil : httpUtil,
