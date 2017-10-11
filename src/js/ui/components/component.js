@@ -816,6 +816,11 @@ export default class Component {
 
     setText(text){
         this.text = this.getTextForRows(text);
+        //自适应宽度
+        if (this.style.autoWidth)
+        {
+            this.setStyle("width", this.getTextWidth());
+        }
     }
 
     getText(){
