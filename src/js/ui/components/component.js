@@ -122,7 +122,11 @@ export default class Component {
                     funName = eventInfo;
                 }
                 controller = this.getController(this);
-                if (controller && controller[funName]
+                if (typeof(funName) === "function")//如果funName是function，则直接绑定
+                {
+                    this.registerEvent(type, funName.bind(this));//funName是写在配置文件里的function，所以要绑定this为component
+                }
+                else if (controller && controller[funName]
                     && typeof(controller[funName]) == "function")
                 {
                     if (param)
