@@ -88,6 +88,8 @@ export default class Component {
 
         this.animation = cfg.animation;
 
+        this.type = cfg.type;
+
         this.init();
 
         if (cfg.controller && typeof(cfg.controller) == "function")
