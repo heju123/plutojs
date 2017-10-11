@@ -158,6 +158,7 @@ export default class Component {
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
+        let Checkbox = require("./checkbox.js").default;
         let Scrollbar = require("./scrollbar.js").default;
         let Sprite = require("./game/sprite.js").default;
         let com;
@@ -171,6 +172,9 @@ export default class Component {
                 break;
             case "button" :
                 com = new Button(this);
+                break;
+            case "checkbox" :
+                com = new Checkbox(this);
                 break;
             case "scrollbar" :
                 com = new Scrollbar(this);

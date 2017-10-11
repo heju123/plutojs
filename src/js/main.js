@@ -9,6 +9,7 @@ import Controller from "./ui/controller.js";
 
 import Sprite from "./ui/components/game/sprite.js";
 import Button from "./ui/components/button.js";
+import Checkbox from "./ui/components/checkbox.js";
 import Input from "./ui/components/input.js";
 import Rect from "./ui/components/rect.js";
 import Scrollbar from "./ui/components/scrollbar.js";
@@ -52,6 +53,7 @@ window.monk = {
     components : {
         Sprite : Sprite,
         Button : Button,
+        Checkbox : Checkbox,
         Input : Input,
         Rect : Rect,
         Scrollbar : Scrollbar
