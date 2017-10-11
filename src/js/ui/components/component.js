@@ -88,6 +88,17 @@ export default class Component {
 
         this.animation = cfg.animation;
 
+        this.init();
+
+        if (cfg.controller && typeof(cfg.controller) == "function")
+        {
+            this.controller = new cfg.controller(this, cfg.controllerParam);
+        }
+        if (cfg.children)
+        {
+            this.initChildrenCfg(cfg.children);
+        }
+
         //事件绑定配置
         if (cfg.events)
         {
@@ -124,16 +135,6 @@ export default class Component {
                     }
                 }
             }
-        }
-        this.init();
-
-        if (cfg.controller && typeof(cfg.controller) == "function")
-        {
-            this.controller = new cfg.controller(this, cfg.controllerParam);
-        }
-        if (cfg.children)
-        {
-            this.initChildrenCfg(cfg.children);
         }
     }
 
@@ -892,6 +893,29 @@ export default class Component {
         else
         {
             return globalUtil.viewState.getComponentInChildrenByKey("id", id, this);
+        }
+    }
+
+    getComponentByName(name){
+        if (this.name && this.name === name)
+        {
+            return this;
+        }
+        else
+        {
+            return globalUtil.viewState.getComponentInChildrenByKey("name", name, this);
+        }
+    }
+
+    /** 用name获取组件集合 */
+    getComponentsByName(name){
+        if (this.name && this.name === name)
+        {
+            return [this];
+        }
+        else
+        {
+            return globalUtil.viewState.getComponentsInChildrenByKey("name", name, this);
         }
     }
 

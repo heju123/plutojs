@@ -191,6 +191,43 @@ export default class ViewState{
         }
     }
 
+    _getComponentsInChildrenByKey(retArr, key, val, com) {
+        let children = com.getChildren();
+        if (children)
+        {
+            if (children instanceof Array)
+            {
+                let child;
+                for (let i = 0, j = children.length; i < j; i++)
+                {
+                    child = children[i];
+                    if (child[key] && child[key] === val)
+                    {
+                        retArr.push(child);
+                    }
+                    this._getComponentsInChildrenByKey(retArr, key, val, child);
+                }
+            }
+            else
+            {
+                if (children[key] && children[key] === val)
+                {
+                    retArr.push([children]);
+                }
+                else
+                {
+                    this._getComponentsInChildrenByKey(retArr, key, val, children);
+                }
+            }
+        }
+    }
+    /** 用key获取组件列表 */
+    getComponentsInChildrenByKey(key, val, com) {
+        let retArr = [];
+        this._getComponentsInChildrenByKey(retArr, key, val, com);
+        return retArr;
+    }
+
     getComponentById(id){
         if (this.rootComponent.id && this.rootComponent.id === id)
         {
@@ -199,6 +236,29 @@ export default class ViewState{
         else
         {
             return this.getComponentInChildrenByKey("id", id, this.rootComponent);
+        }
+    }
+
+    getComponentByName(name){
+        if (this.rootComponent.name && this.rootComponent.name === name)
+        {
+            return this.rootComponent;
+        }
+        else
+        {
+            return globalUtil.viewState.getComponentInChildrenByKey("name", name, this.rootComponent);
+        }
+    }
+
+    /** 用name获取组件集合 */
+    getComponentsByName(name){
+        if (this.rootComponent.name && this.rootComponent.name === name)
+        {
+            return [this.rootComponent];
+        }
+        else
+        {
+            return this.getComponentsInChildrenByKey("name", name, this.rootComponent);
         }
     }
 
