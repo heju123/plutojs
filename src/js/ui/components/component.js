@@ -934,6 +934,18 @@ export default class Component {
         }
     }
 
+    /** 用type获取组件集合 */
+    getComponentsByType(type){
+        if (this.type && this.type === type)
+        {
+            return [this];
+        }
+        else
+        {
+            return globalUtil.viewState.getComponentsInChildrenByKey("type", type, this);
+        }
+    }
+
     destroy(){
         this.removeAllEvent();
 

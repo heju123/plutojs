@@ -262,6 +262,18 @@ export default class ViewState{
         }
     }
 
+    /** 用type获取组件集合 */
+    getComponentsByType(type){
+        if (this.rootComponent.type && this.rootComponent.type === type)
+        {
+            return [this.rootComponent];
+        }
+        else
+        {
+            return this.getComponentsInChildrenByKey("type", type, this.rootComponent);
+        }
+    }
+
     getWidth(){
         return this.ctx.canvas.width;
     }
