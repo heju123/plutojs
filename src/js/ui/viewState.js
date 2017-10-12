@@ -139,8 +139,11 @@ export default class ViewState{
 
     /** 将textarea中的值设置到焦点组件 */
     setVal2FocusCom(){
-        globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
-        globalUtil.action.inputListenerDom.text = globalUtil.action.focusComponent.getText() || "";
+        if (!globalUtil.action.focusComponent.style.readOnly)//readOnly时禁止输入
+        {
+            globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
+            globalUtil.action.inputListenerDom.text = globalUtil.action.focusComponent.getText() || "";
+        }
     }
 
     addEventNotify(eventNotify){

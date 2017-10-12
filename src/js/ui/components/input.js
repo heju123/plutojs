@@ -32,7 +32,7 @@ export default class Input extends Scrollbar {
         ctx.beginPath();
         this.setCommonStyle(ctx);
         //focus
-        if (globalUtil.action.focusComponent === this) {
+        if (globalUtil.action.focusComponent === this && !this.style.readOnly) {
             //绘制光标
             this.drawTextCursor(ctx);
         }
