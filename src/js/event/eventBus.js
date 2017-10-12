@@ -212,39 +212,57 @@ export default class EventBus{
             case "mousedown" :
                 event = new MouseEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setButton(eventNotify.sourceEvent.button);
-                event.setPageX(eventNotify.sourceEvent.pageX);
-                event.setPageY(eventNotify.sourceEvent.pageY);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setButton(eventNotify.sourceEvent.button);
+                    event.setPageX(eventNotify.sourceEvent.pageX);
+                    event.setPageY(eventNotify.sourceEvent.pageY);
+                }
                 break;
             case "mousemove" :
                 event = new MouseEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setPageX(eventNotify.sourceEvent.pageX);
-                event.setPageY(eventNotify.sourceEvent.pageY);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setPageX(eventNotify.sourceEvent.pageX);
+                    event.setPageY(eventNotify.sourceEvent.pageY);
+                }
                 break;
             case "mouseup" :
                 event = new MouseEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setButton(eventNotify.sourceEvent.button);
-                event.setPageX(eventNotify.sourceEvent.pageX);
-                event.setPageY(eventNotify.sourceEvent.pageY);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setButton(eventNotify.sourceEvent.button);
+                    event.setPageX(eventNotify.sourceEvent.pageX);
+                    event.setPageY(eventNotify.sourceEvent.pageY);
+                }
                 break;
             case "keydown" :
                 event = new KeyEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setKey(eventNotify.sourceEvent.key);
-                event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setKey(eventNotify.sourceEvent.key);
+                    event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                }
                 break;
             case "keyup" :
                 event = new KeyEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setKey(eventNotify.sourceEvent.key);
-                event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setKey(eventNotify.sourceEvent.key);
+                    event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                }
                 break;
             case "mousewheel" :
                 event = new WheelEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
-                event.setWheelDelta(eventNotify.sourceEvent.wheelDelta || -eventNotify.sourceEvent.detail);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setWheelDelta(eventNotify.sourceEvent.wheelDelta || -eventNotify.sourceEvent.detail);
+                }
                 break;
             default : break;
         }
@@ -260,9 +278,33 @@ export default class EventBus{
         this.eventListeners[type].forEach((listener)=>{
             if (listener.callback && typeof(listener.callback) === "function")
             {
-                listener.callback(event);
+                if (!event || !event.currentTarget)
+                {
+                    listener.callback(event);
+                }
+                else
+                {
+                    if (event.currentTarget === listener.target)
+                    {
+                        listener.callback(event);
+                    }
+                }
             }
         });
+    }
+
+    /** 触发事件 */
+    triggerEvent(type, com){
+        let eventNotify = new EventNotify();
+        eventNotify.set({
+            type : type,
+            listener : {
+                type : type,
+                target : com
+            }
+        });
+        let event = this.getEvent(eventNotify);
+        this.broadcastEvent(type, event);
     }
 
     /** 注册事件 */

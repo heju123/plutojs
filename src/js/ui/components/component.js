@@ -946,6 +946,11 @@ export default class Component {
         }
     }
 
+    /** 触发事件 */
+    triggerEvent(type){
+        globalUtil.eventBus.triggerEvent(type, this);
+    }
+
     destroy(){
         this.removeAllEvent();
 
