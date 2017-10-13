@@ -9,7 +9,7 @@ module.exports = function(env){
     var plugins = [];
     plugins.push(new cleanWebpackPlugin(['*.{js,map}', 'images/*.{png,jpg,jpeg,gif}'],
         {
-            root: 'F:\\monkTest\\libs\\monk',
+            root: 'F:\\projects\\monkTest\\libs\\monk',
             verbose: true,
             dry: false
         }))
@@ -25,7 +25,7 @@ module.exports = function(env){
     return {
         entry: __dirname + '/src/js/main.js',
         output: {
-            path: 'F:\\monkTest\\libs\\monk',
+            path: 'F:\\projects\\monkTest\\libs\\monk',
             publicPath : "/build/",
             filename: "monk.js",
             chunkFilename: '[name].[chunkhash:5].chunk.js'
