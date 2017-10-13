@@ -207,6 +207,14 @@ let commonUtil = {
                 delete obj[key];
             }
         }
+    },
+    /**
+     * 弹出提示框
+     *
+     * @param msg
+     */
+    popMessageTooltip : (msg, opts)=>{
+        alert(msg);
     }
 };
 export default commonUtil;
