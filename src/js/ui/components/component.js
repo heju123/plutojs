@@ -211,6 +211,13 @@ export default class Component {
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg);
         this.appendChildren(childCom);
+
+        //广播视图加载完毕事件，针对异步加载的视图
+        let event = {
+            currentTarget : childCom
+        };
+        globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
+
         if (resolve)
         {
             resolve(childCom);

@@ -106,7 +106,7 @@ export default class ViewState{
             this.rootComponent.initCfg(viewCfg);
         }
 
-        globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件
+        globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件（所有同步加载的视图加载完毕）
     }
 
     /** 绘制前 */

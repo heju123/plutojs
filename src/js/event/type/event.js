@@ -9,11 +9,11 @@ export default class Event {
     }
 
     setTarget(target) {
-        this.target = target;
+        this.target = target;//触发事件对象
     }
 
     setCurrentTarget(target) {
-        this.currentTarget = target;
+        this.currentTarget = target;//绑定事件对象
     }
 
     stopPropagation()

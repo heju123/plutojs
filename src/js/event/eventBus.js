@@ -10,6 +10,8 @@ import Stack from "../data/structure/stack.js";
 import EventNotify from "./eventNotify.js";
 import globalUtil from "../util/globalUtil";
 import commonUtil from "../util/commonUtil";
+import Component from "../ui/components/component.js";
+import Controller from "../ui/controller.js";
 
 export default class EventBus{
     constructor(canvas){
@@ -269,8 +271,14 @@ export default class EventBus{
         return event;
     }
 
-    /** 广播事件 */
-    broadcastEvent(type, event){
+    /**
+     * 广播事件
+     *
+     * @param type
+     * @param event 发送的事件，里面的currentTarget对象会拿来和listener.target作比较，满足条件则执行事件
+     * @param toChildren 是否发送给子组件，如果listener.target是currentTarget的children也满足条件
+     */
+    broadcastEvent(type, event, toChildren){
         if (!this.eventListeners[type])
         {
             return;
@@ -278,22 +286,56 @@ export default class EventBus{
         this.eventListeners[type].forEach((listener)=>{
             if (listener.callback && typeof(listener.callback) === "function")
             {
+                //event不包含currentTarget则不需要做对象比较，直接触发事件
                 if (!event || !event.currentTarget)
                 {
                     listener.callback(event);
                 }
                 else
                 {
-                    if (event.currentTarget === listener.target)
+                    //event.currentTarget和listener.target都有可能是controller，所以需要转换成component再比较
+                    let currentTargetCom = this.getComponentByTarget(event.currentTarget);
+                    let targetCom = this.getComponentByTarget(listener.target);
+                    if (targetCom && currentTargetCom)
                     {
-                        listener.callback(event);
+                        if (!toChildren && currentTargetCom === targetCom)
+                        {
+                            listener.callback(event);
+                        }
+                        else if (toChildren && (currentTargetCom === targetCom ||
+                                currentTargetCom.parentOf(targetCom)))
+                        {
+                            listener.callback(event);
+                        }
                     }
                 }
             }
         });
     }
 
-    /** 触发事件 */
+    /** 获取component
+     *
+     * @param target target有可能是controller，也有可能是component
+     */
+    getComponentByTarget(target){
+        let targetCom;
+        if (target instanceof Component)
+        {
+            targetCom = target;
+        }
+        else if (target instanceof Controller)
+        {
+            targetCom = target.component;
+        }
+        return targetCom;
+    }
+
+    /**
+     * 触发事件
+     *
+     * @param type
+     * @param com 绑定事件的组件
+     */
     triggerEvent(type, com){
         let eventNotify = new EventNotify();
         eventNotify.set({
