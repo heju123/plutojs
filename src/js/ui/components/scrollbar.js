@@ -9,22 +9,13 @@ export default class Scrollbar extends Rect {
         {
             this.setX(0);
             this.setY(0);
-            if (!parent)//最顶层
-            {
-                this.setWidth(globalUtil.viewState.getWidth());
-                this.setHeight(globalUtil.viewState.getHeight());
-            }
-            else {
-                this.setWidth(parent.getInnerWidth());
-                this.setHeight(parent.getInnerHeight());
-            }
+            this.setWidth("100%");
+            this.setHeight("100%");
         }
 
         this.setStyle({
             contentScrollX : 0, //内容整体滚动的x轴距离
-            contentScrollY : 0, //内容整体滚动的y轴距离
-            showHScroll : false,//是否显示水平滚动条
-            showVScroll : false //是否显示垂直滚动条
+            contentScrollY : 0 //内容整体滚动的y轴距离
         });
     }
 
@@ -86,8 +77,32 @@ export default class Scrollbar extends Rect {
             if (globalUtil.action.hoverComponent === this
                 || this.parentOf(globalUtil.action.hoverComponent) || this.onScrollObj)
             {
-                this.scrollbarBaseLineH.active = this.style.showHScroll;
-                this.scrollbarBaseLineV.active = this.style.showVScroll;
+                //是否显示滚动条
+                this.getContentWH();
+                if (this.scrollbarBaseLineH)
+                {
+                    if (this.style.contentWidth <= this.getInnerWidth())
+                    {
+                        this.scrollbarBaseLineH.active = false;
+                    }
+                    else
+                    {
+                        this.scrollbarBaseLineH.active = true;
+                        this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getInnerWidth() / this.style.contentWidth));
+                    }
+                }
+                if (this.scrollbarBaseLineV)
+                {
+                    if (this.style.contentHeight <= this.getInnerHeight())
+                    {
+                        this.scrollbarBaseLineV.active = false;
+                    }
+                    else
+                    {
+                        this.scrollbarBaseLineV.active = true;
+                        this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getInnerHeight() / this.style.contentHeight));
+                    }
+                }
             }
             else
             {
@@ -96,6 +111,31 @@ export default class Scrollbar extends Rect {
             }
         }
         return true;
+    }
+
+    /** 获取滚动条内容占用的高宽 */
+    getContentWH(){
+        let maxWidth = 0;
+        let maxHeight = 0;
+        if (this.style.scrollText && this.text)
+        {
+            maxHeight = this.getTextHeight();
+            maxWidth = this.getTextWidth();
+        }
+        else
+        {
+            this.children.forEach((child, index)=>{
+                if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
+                {
+                    maxWidth = Math.max(maxWidth, child.style.x + child.getWidth());
+                    maxHeight = Math.max(maxHeight, child.style.y + child.getHeight());
+                }
+            });
+        }
+        this.setStyle({
+            contentWidth : maxWidth,
+            contentHeight : maxHeight
+        });
     }
 
     doMouseDown(type, e){
@@ -208,21 +248,23 @@ export default class Scrollbar extends Rect {
         let padding = 0;
         let swidth = this.style.scrollbarWidth || 10;
         let radius = this.style.scrollbarRadius || 6;
-        let scrollbarX = oritation === 1 ? this.getInnerWidth() - swidth : padding;
-        let scrollbarY = oritation === 2 ? this.getInnerHeight() - swidth : padding;
 
         let line = new Rect(this);
-        line.setX(scrollbarX);
-        line.setY(scrollbarY);
+        line.setX(()=>{
+            return oritation === 1 ? this.getInnerWidth() - swidth : padding;
+        });
+        line.setY(()=>{
+            return oritation === 2 ? this.getInnerHeight() - swidth : padding;
+        });
         if (oritation === 1)
         {
             line.setWidth(swidth);
-            line.setHeight(this.getInnerHeight() - padding * 2);
+            line.setHeight("100%");
         }
         else
         {
             line.setHeight(swidth);
-            line.setWidth(this.getInnerWidth() - padding * 2);
+            line.setWidth("100%");
         }
         line.setStyle({
             backgroundColor : lineColor,
@@ -240,55 +282,6 @@ export default class Scrollbar extends Rect {
     }
 
     doLayout(){
-        let maxWidth = 0;
-        let maxHeight = 0;
-        if (this.style.scrollText && this.text)
-        {
-            maxHeight = this.getTextHeight();
-            maxWidth = this.getTextWidth();
-        }
-        else
-        {
-            this.children.forEach((child, index)=>{
-                if (child !== this.scrollbarBaseLineV && child !== this.scrollbarBaseLineH)
-                {
-                    maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
-                    maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
-                }
-            });
-        }
-        this.setStyle({
-            contentWidth : maxWidth,
-            contentHeight : maxHeight
-        });
-
-        //是否显示滚动条
-        if (this.scrollbarBaseLineH)
-        {
-            if (this.style.contentWidth <= this.getInnerWidth())
-            {
-                this.scrollbarBaseLineH.active = false;
-                this.setStyle("showHScroll", false);
-            }
-            else
-            {
-                this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getInnerWidth() / this.style.contentWidth));
-                this.setStyle("showHScroll", true);
-            }
-        }
-        if (this.scrollbarBaseLineV)
-        {
-            if (this.style.contentHeight <= this.getHeight())
-            {
-                this.scrollbarBaseLineV.active = false;
-                this.setStyle("showVScroll", false);
-            }
-            else
-            {
-                this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getInnerHeight() / this.style.contentHeight));
-                this.setStyle("showVScroll", true);
-            }
-        }
     }
 
     destroy() {

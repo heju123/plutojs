@@ -361,12 +361,20 @@ export default class Component {
         {
             this.copyStyle(this.style.hover);
         }
+        if (this.parent)
+        {
+            this.parent.onHover();
+        }
     }
     onHoverout(){
         this.isHover = false;
         if (this.style.hover)
         {
             this.restoreStyle();
+        }
+        if (this.parent)
+        {
+            this.parent.onHoverout();
         }
     }
 
@@ -594,7 +602,7 @@ export default class Component {
         //以下值不允许出现小数
         if (key === "x" || key === "y" || key === "width" || key === "height")
         {
-            if (value && value.toString().indexOf("%") === -1)//非百分比
+            if (value && typeof(value) !== "function" && value.toString().indexOf("%") === -1)//非百分比
             {
                 value = Math.round(value);
             }
@@ -648,6 +656,10 @@ export default class Component {
         this.setStyle("y", y);
     }
     getX(){
+        if (this.style.x && typeof(this.style.x) === "function")
+        {
+            return this.style.x.apply(this, []);
+        }
         if (this.style.x && this.style.x.toString().indexOf("%") > -1)//百分比
         {
             let maxX = this.parent.getInnerWidth();
@@ -656,6 +668,10 @@ export default class Component {
         return this.style.x - (this.style.scrollX || 0);//要减去滚动的长度
     }
     getY(){
+        if (this.style.y && typeof(this.style.y) === "function")
+        {
+            return this.style.y.apply(this, []);
+        }
         if (this.style.y && this.style.y.toString().indexOf("%") > -1)//百分比
         {
             let maxY = this.parent.getInnerHeight();
@@ -743,6 +759,10 @@ export default class Component {
         {
             return undefined;
         }
+        if (typeof(this.style.width) === "function")
+        {
+            return this.style.width.apply(this, []);
+        }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
             let maxWidth = this.parent.getInnerWidth();
@@ -754,6 +774,10 @@ export default class Component {
         if (!this.style.height)
         {
             return undefined;
+        }
+        if (typeof(this.style.height) === "function")
+        {
+            return this.style.height.apply(this, []);
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
