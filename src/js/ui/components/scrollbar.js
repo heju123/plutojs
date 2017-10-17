@@ -15,7 +15,9 @@ export default class Scrollbar extends Rect {
 
         this.setStyle({
             contentScrollX : 0, //内容整体滚动的x轴距离
-            contentScrollY : 0 //内容整体滚动的y轴距离
+            contentScrollY : 0, //内容整体滚动的y轴距离
+            showHScroll : false,//是否显示水平滚动条
+            showVScroll : false //是否显示垂直滚动条
         });
     }
 
@@ -51,14 +53,23 @@ export default class Scrollbar extends Rect {
         this.scrollbarBaseLineH.appendChildren(this.scrollbarOpeLineH);
         this.appendChildren(this.scrollbarBaseLineH);
 
+        //注册事件
         this.scrollbarOpeLineV.registerEvent("mousedown", this.doMouseDown.bind(this, "V"));
         this.scrollbarOpeLineH.registerEvent("mousedown", this.doMouseDown.bind(this, "H"));
         this.doMouseMoveBind = this.doMouseMove.bind(this);
         this.doMouseUpBind = this.doMouseUp.bind(this);
         globalUtil.viewState.registerEvent("mousemove", this.doMouseMoveBind);
         globalUtil.viewState.registerEvent("mouseup", this.doMouseUpBind);
-
         this.registerEvent("mousewheel", this.doMouseWheel.bind(this));
+
+        if (this.intervalID)
+        {
+            clearInterval(this.intervalID);
+        }
+        this.intervalID = setInterval(()=>{
+            this.getContentWH();
+            this.showScrollbar();
+        }, 1000);
     }
 
     initCfg(cfg){
@@ -77,32 +88,8 @@ export default class Scrollbar extends Rect {
             if (globalUtil.action.hoverComponent === this
                 || this.parentOf(globalUtil.action.hoverComponent) || this.onScrollObj)
             {
-                //是否显示滚动条
-                this.getContentWH();
-                if (this.scrollbarBaseLineH)
-                {
-                    if (this.style.contentWidth <= this.getInnerWidth())
-                    {
-                        this.scrollbarBaseLineH.active = false;
-                    }
-                    else
-                    {
-                        this.scrollbarBaseLineH.active = true;
-                        this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getInnerWidth() / this.style.contentWidth));
-                    }
-                }
-                if (this.scrollbarBaseLineV)
-                {
-                    if (this.style.contentHeight <= this.getInnerHeight())
-                    {
-                        this.scrollbarBaseLineV.active = false;
-                    }
-                    else
-                    {
-                        this.scrollbarBaseLineV.active = true;
-                        this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getInnerHeight() / this.style.contentHeight));
-                    }
-                }
+                this.scrollbarBaseLineH.active = this.style.showHScroll;
+                this.scrollbarBaseLineV.active = this.style.showVScroll;
             }
             else
             {
@@ -136,6 +123,34 @@ export default class Scrollbar extends Rect {
             contentWidth : maxWidth,
             contentHeight : maxHeight
         });
+    }
+
+    /** 判断是否显示滚动条 */
+    showScrollbar(){
+        if (this.scrollbarBaseLineH)
+        {
+            if (this.style.contentWidth <= this.getInnerWidth())
+            {
+                this.setStyle("showHScroll", false);
+            }
+            else
+            {
+                this.setStyle("showHScroll", true);
+                this.scrollbarOpeLineH.setWidth(this.scrollbarBaseLineH.getWidth() * (this.getInnerWidth() / this.style.contentWidth));
+            }
+        }
+        if (this.scrollbarBaseLineV)
+        {
+            if (this.style.contentHeight <= this.getInnerHeight())
+            {
+                this.setStyle("showVScroll", false);
+            }
+            else
+            {
+                this.setStyle("showVScroll", true);
+                this.scrollbarOpeLineV.setHeight(this.scrollbarBaseLineV.getHeight() * (this.getInnerHeight() / this.style.contentHeight));
+            }
+        }
     }
 
     doMouseDown(type, e){
@@ -289,5 +304,9 @@ export default class Scrollbar extends Rect {
 
         globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
         globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
+        if (this.intervalID)
+        {
+            clearInterval(this.intervalID);
+        }
     }
 }
