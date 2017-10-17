@@ -456,6 +456,8 @@ export default class Component {
                         allWeight = this.getAllWeight();//总权值
                     }
                     let allWH = 0;//记录高宽，确定x和y坐标
+                    let hY = 0;//horizontal模式下的y坐标
+                    let maxHeight = 0;//记录子组件最大高度值，自动换行时有用
                     this.children.forEach((child, index)=>{
                         let weight = 1;
                         if (child.style.layout && child.style.layout.layoutWeight)
@@ -473,9 +475,22 @@ export default class Component {
                             {
                                 width = child.getWidth();
                             }
+
+                            //自动换行（autoWidth时不能自动换行，第一个组件不能执行自动换行）
+                            if (!this.style.autoWidth && index > 0)
+                            {
+                                if (allWH + width > this.getInnerWidth())
+                                {
+                                    allWH = 0;
+                                    hY += maxHeight;
+                                    maxHeight = 0;
+                                }
+                            }
+
                             child.setX(allWH);
-                            child.setY(0);
+                            child.setY(hY);
                             child.setWidth(width);
+                            maxHeight = Math.max(maxHeight, child.getHeight());
                             allWH += width;
                         }
                         else if (this.style.layout.orientation === "vertical")
