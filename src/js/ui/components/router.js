@@ -18,8 +18,8 @@ export default class Router extends Rect{
         }
         else
         {
-            this.setWidth(parent.getInnerWidth());
-            this.setHeight(parent.getInnerHeight());
+            this.setWidth("100%");
+            this.setHeight("100%");
         }
     }
 
