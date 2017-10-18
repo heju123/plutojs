@@ -477,7 +477,8 @@ export default class Component {
                             }
 
                             //自动换行（autoWidth时不能自动换行，第一个组件不能执行自动换行）
-                            if (!this.style.autoWidth && index > 0)
+                            if ((this.style.layout.autoLine === undefined || this.style.layout.autoLine === true)
+                                && !this.style.autoWidth && index > 0)
                             {
                                 if (allWH + width > this.getInnerWidth())
                                 {
