@@ -308,7 +308,11 @@ export default class Component {
             //要实现以组件中心来缩放，必须将ctx坐标原点平移
             let scaleWidth = this.getWidth() * scaleArr[0];
             let scaleHeight = this.getHeight() * scaleArr[1];
-            ctx.translate(-(scaleWidth - this.getWidth()) / 2, -(scaleHeight - this.getHeight()) / 2);
+
+            let transX = -(this.getRealX() * scaleArr[0] - this.getRealX()); //- (scaleWidth - this.getWidth()) / 2;
+            let transY = -(this.getRealY() * scaleArr[1] - this.getRealY()); //- (scaleHeight - this.getHeight()) / 2;
+
+            ctx.translate(transX, transY);
         }
     }
 
@@ -618,6 +622,11 @@ export default class Component {
     copyStyle(source){
         for (let key in source)
         {
+            if (key === "backgroundImage" && this.backgroundImageDom)//更换图片
+            {
+                this.backgroundImageDom.src = source[key];
+            }
+
             if (this.animation && this.animation[key])
             {
                 this.doStyleAnimation(key, source[key]);
@@ -666,6 +675,11 @@ export default class Component {
             {
                 value = Math.round(value);
             }
+        }
+
+        if (key === "backgroundImage" && this.backgroundImageDom)//更换图片
+        {
+            this.backgroundImageDom.src = value;
         }
 
         let aniPromise;
