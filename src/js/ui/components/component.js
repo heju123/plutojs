@@ -50,7 +50,9 @@ export default class Component {
     initCfgStyle(cfgStyle){
         for (let key in cfgStyle)
         {
-            if (key === "hover" || key === "active" || key === "focus")
+            if (key === "hover" || key === "hoverout"
+                || key === "active" || key === "activeout"
+                || key === "focus" || key === "focusout")
             {
                 this.style[key] = cfgStyle[key];
             }
@@ -314,7 +316,7 @@ export default class Component {
     restoreStyle2Original(){
         this.copyStyle(this.originalStyle);
         //删掉多余样式
-        commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,active,focus");
+        commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,hoverout,active,activeout,focus,focusout");
     }
 
     /** 将样式恢复成active或hover或focus或original */
@@ -344,14 +346,28 @@ export default class Component {
         this.isFocus = true;
         if (this.style.focus)
         {
-            this.copyStyle(this.style.focus);
+            if (typeof(this.style.focus) === "function")
+            {
+                this.style.focus.apply(this, []);
+            }
+            else
+            {
+                this.copyStyle(this.style.focus);
+            }
         }
     }
     onFocusout(){
         this.isFocus = false;
         if (this.style.focus)
         {
-            this.restoreStyle();
+            if (typeof(this.style.focusout) === "function")
+            {
+                this.style.focusout.apply(this, []);
+            }
+            else
+            {
+                this.restoreStyle();
+            }
         }
     }
 
@@ -359,7 +375,14 @@ export default class Component {
         this.isHover = true;
         if (this.style.hover)
         {
-            this.copyStyle(this.style.hover);
+            if (typeof(this.style.hover) === "function")
+            {
+                this.style.hover.apply(this, []);
+            }
+            else
+            {
+                this.copyStyle(this.style.hover);
+            }
         }
         if (this.parent)
         {
@@ -370,7 +393,14 @@ export default class Component {
         this.isHover = false;
         if (this.style.hover)
         {
-            this.restoreStyle();
+            if (typeof(this.style.hoverout) === "function")
+            {
+                this.style.hoverout.apply(this, []);
+            }
+            else
+            {
+                this.restoreStyle();
+            }
         }
         if (this.parent)
         {
@@ -382,14 +412,28 @@ export default class Component {
         this.isActive = true;
         if (this.style.active)
         {
-            this.copyStyle(this.style.active);
+            if (typeof(this.style.active) === "function")
+            {
+                this.style.active.apply(this, []);
+            }
+            else
+            {
+                this.copyStyle(this.style.active);
+            }
         }
     }
     onActiveout(){
         this.isActive = false;
         if (this.style.active)
         {
-            this.restoreStyle();
+            if (typeof(this.style.activeout) === "function")
+            {
+                this.style.activeout.apply(this, []);
+            }
+            else
+            {
+                this.restoreStyle();
+            }
         }
     }
 
