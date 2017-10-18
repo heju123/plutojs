@@ -1,6 +1,7 @@
 import Rect from "./rect.js";
 import globalUtil from "../../util/globalUtil";
 
+const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
 export default class Scrollbar extends Rect {
     constructor(parent) {
         super(parent);
@@ -61,15 +62,6 @@ export default class Scrollbar extends Rect {
         globalUtil.viewState.registerEvent("mousemove", this.doMouseMoveBind);
         globalUtil.viewState.registerEvent("mouseup", this.doMouseUpBind);
         this.registerEvent("mousewheel", this.doMouseWheel.bind(this));
-
-        if (this.intervalID)
-        {
-            clearInterval(this.intervalID);
-        }
-        this.intervalID = setInterval(()=>{
-            this.getContentWH();
-            this.showScrollbar();
-        }, 1000);
     }
 
     initCfg(cfg){
@@ -98,6 +90,30 @@ export default class Scrollbar extends Rect {
             }
         }
         return true;
+    }
+
+    /** 组件被Hover时执行的定时函数 */
+    doHoverTimeout(){
+        this.doTimeoutLock = true;
+        this.getContentWH();
+        this.showScrollbar();
+
+        if (this.isHover)
+        {
+            setTimeout(this.doHoverTimeout.bind(this), HOVER_TIME_OUT);
+        }
+        else
+        {
+            this.doTimeoutLock = false;
+        }
+    }
+
+    onHover(){
+        super.onHover();
+        if (!this.doTimeoutLock)
+        {
+            setTimeout(this.doHoverTimeout.bind(this), HOVER_TIME_OUT);
+        }
     }
 
     /** 获取滚动条内容占用的高宽 */
@@ -290,23 +306,10 @@ export default class Scrollbar extends Rect {
         return line;
     }
 
-    appendChildren(child){
-        super.appendChildren(child);
-
-        this.propagationDoLayout(this);
-    }
-
-    doLayout(){
-    }
-
     destroy() {
         super.destroy();
 
         globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
         globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
-        if (this.intervalID)
-        {
-            clearInterval(this.intervalID);
-        }
     }
 }
