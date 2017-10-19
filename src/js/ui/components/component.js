@@ -318,6 +318,17 @@ export default class Component {
             ctx.scale(scaleArr[0], scaleArr[1]);
         }
     }
+    /** 恢复setScaleEnable方法的设置 */
+    restoreScaleEnable(ctx){
+        let scale = this.getScale();
+        if (scale !== undefined && scale !== "1,1")
+        {
+            let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
+            let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
+            ctx.translate(-transX, -transY);
+            ctx.scale(1, 1);
+        }
+    }
 
     /** 将样式恢复成original */
     restoreStyle2Original(){

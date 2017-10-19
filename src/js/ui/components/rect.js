@@ -96,21 +96,27 @@ export default class Rect extends Component{
 
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
+        if (this.isDoingParentClip)
+        {
+            this.setScaleEnable(ctx);//需要设置scale后再clip，避免clip的结果和组件scale后大小不一致的情况
+        }
         if (this.style.borderRadius)
         {
             this.getRectRadiusPath(this, ctx, this.style.borderRadius, -(this.style.borderWidth || 0));
         }
         else
         {
-            //如果isDoingParentClip等于true，表示当前组件是作为父组件来执行clip的，
-            // 不能调用getRealX，防止坐标原点不在0,0
-            let realX = this.isDoingParentClip ? this.getRealXRecursion(this) : this.getRealX();
-            let realY = this.isDoingParentClip ? this.getRealYRecursion(this) : this.getRealY();
+            let realX = this.getRealX();
+            let realY = this.getRealY();
             ctx.rect(realX + (this.style.borderWidth || 0) - 0.5,
                 realY + (this.style.borderWidth || 0) - 0.5,
                 this.getInnerWidth() + 1, this.getInnerHeight() + 1);//clip后矩形会整体缩小1个像素
         }
         ctx.clip();
+        if (this.isDoingParentClip)
+        {
+            this.restoreScaleEnable(ctx);//clip完毕需要还原translate和scale
+        }
     }
 
     getRectRadiusPath(){
