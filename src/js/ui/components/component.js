@@ -301,6 +301,11 @@ export default class Component {
             ctx.globalAlpha = alpha;
         }
         //缩放
+        this.setScaleEnable(ctx);
+    }
+
+    /** 设置ctx的scale，并且将坐标原点移动到组件中心 */
+    setScaleEnable(ctx){
         let scale = this.getScale();
         if (scale !== undefined && scale !== "1,1")
         {
