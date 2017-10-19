@@ -300,20 +300,6 @@ export default class Component {
         {
             ctx.globalAlpha = alpha;
         }
-        //缩放
-        if (this.style.scale !== undefined)
-        {
-            let scaleArr = this.style.scale.split(",");
-            ctx.scale(scaleArr[0], scaleArr[1]);
-            //要实现以组件中心来缩放，必须将ctx坐标原点平移
-            let scaleWidth = this.getWidth() * scaleArr[0];
-            let scaleHeight = this.getHeight() * scaleArr[1];
-
-            let transX = -(this.getRealX() * scaleArr[0] - this.getRealX()); //- (scaleWidth - this.getWidth()) / 2;
-            let transY = -(this.getRealY() * scaleArr[1] - this.getRealY()); //- (scaleHeight - this.getHeight()) / 2;
-
-            ctx.translate(transX, transY);
-        }
     }
 
     /** 将样式恢复成original */
@@ -788,7 +774,18 @@ export default class Component {
         }
     }
     getRealX(){
-        return this.getRealXRecursion(this);
+        //缩放
+        let scale = this.getScale();
+        let transX = 0;
+        if (scale !== undefined)
+        {
+            let scaleArr = scale.split(",");
+            //要实现以组件中心来缩放，必须将ctx坐标原点平移
+            let scaleWidth = this.getWidth() * scaleArr[0];
+            transX = -(scaleWidth - this.getWidth()) / 2;
+        }
+
+        return this.getRealXRecursion(this) + transX;
     }
     getRealYRecursion(com){
         if (com.parent)
@@ -800,7 +797,18 @@ export default class Component {
         }
     }
     getRealY(){
-        return this.getRealYRecursion(this);
+        //缩放
+        let scale = this.getScale();
+        let transY = 0;
+        if (scale !== undefined)
+        {
+            let scaleArr = scale.split(",");
+            //要实现以组件中心来缩放，必须将ctx坐标原点平移
+            let scaleHeight = this.getHeight() * scaleArr[1];
+            transY = -(scaleHeight - this.getHeight()) / 2;
+        }
+
+        return this.getRealYRecursion(this) + transY;
     }
 
     /** 获取文本的坐标 */
@@ -833,32 +841,52 @@ export default class Component {
         {
             return undefined;
         }
+
+        //缩放
+        let scaleWidth = 1;
+        let scale = this.getScale();
+        if (scale !== undefined)
+        {
+            let scaleArr = scale.split(",");
+            scaleWidth = scaleArr[0];
+        }
+
         if (typeof(this.style.width) === "function")
         {
-            return this.style.width.apply(this, []);
+            return this.style.width.apply(this, []) * scaleWidth;
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
             let maxWidth = this.parent.getInnerWidth();
-            return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
+            return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100) * scaleWidth;
         }
-        return this.style.width;
+        return this.style.width * scaleWidth;
     }
     getHeight(){
         if (!this.style.height)
         {
             return undefined;
         }
+
+        //缩放
+        let scaleHeight = 1;
+        let scale = this.getScale();
+        if (scale !== undefined)
+        {
+            let scaleArr = scale.split(",");
+            scaleHeight = scaleArr[1];
+        }
+
         if (typeof(this.style.height) === "function")
         {
-            return this.style.height.apply(this, []);
+            return this.style.height.apply(this, []) * scaleHeight;
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
             let maxHeight = this.parent.getInnerHeight();
-            return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
+            return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100) * scaleHeight;
         }
-        return this.style.height;
+        return this.style.height * scaleHeight;
     }
     //获取去边框的宽高
     getInnerWidth(){
@@ -870,13 +898,33 @@ export default class Component {
 
     /** 获取alpha值，如果当前组件无alpha，则取父节点的 */
     getAlpha(){
-        if (this.style.alpha === undefined && this.parent)
+        if (this.style.alpha)
+        {
+            return this.style.alpha;
+        }
+        else if (this.style.alpha === undefined && this.parent)
         {
             return this.parent.getAlpha();
         }
         else
         {
-            return this.style.alpha;
+            return undefined;
+        }
+    }
+
+    /** 获取缩放比例，如果当前组件无，则取父节点的 */
+    getScale(){
+        if (this.style.scale)
+        {
+            return this.style.scale;
+        }
+        else if (this.style.scale === undefined && this.parent)
+        {
+            return this.parent.getScale();
+        }
+        else
+        {
+            return undefined;
         }
     }
 
