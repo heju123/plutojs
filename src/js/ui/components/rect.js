@@ -102,8 +102,12 @@ export default class Rect extends Component{
         }
         else
         {
-            ctx.rect(this.getRealX() + (this.style.borderWidth || 0) - 0.5,
-                this.getRealY() + (this.style.borderWidth || 0) - 0.5,
+            //如果isDoingParentClip等于true，表示当前组件是作为父组件来执行clip的，
+            // 不能调用getRealX，防止坐标原点不在0,0
+            let realX = this.isDoingParentClip ? this.getRealXRecursion(this) : this.getRealX();
+            let realY = this.isDoingParentClip ? this.getRealYRecursion(this) : this.getRealY();
+            ctx.rect(realX + (this.style.borderWidth || 0) - 0.5,
+                realY + (this.style.borderWidth || 0) - 0.5,
                 this.getInnerWidth() + 1, this.getInnerHeight() + 1);//clip后矩形会整体缩小1个像素
         }
         ctx.clip();
@@ -127,7 +131,9 @@ export default class Rect extends Component{
      * @param padding 整体扩大的像素
      */
     getRectRadiusPath_self(self, ctx, radius, padding){
-        this.getRectRadiusPath_xywh(self.getRealX(), self.getRealY(), self.getWidth(), self.getHeight(), ctx, radius, padding);
+        let realX = this.isDoingParentClip ? self.getRealXRecursion(self) : self.getRealX();
+        let realY = this.isDoingParentClip ? self.getRealYRecursion(self) : self.getRealY();
+        this.getRectRadiusPath_xywh(realX, realY, self.getWidth(), self.getHeight(), ctx, radius, padding);
     }
     /**
      * 获取圆角矩形路径
@@ -169,9 +175,9 @@ export default class Rect extends Component{
         }
         else{
             if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= com.getRealX()
-                || this.getRealXRecursion(com.parent) >= com.getRealX() + com.getWidth()
+                || this.getRealXRecursion(com.parent) >= this.getRealXRecursion(com) + com.getWidth()
                 || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= com.getRealY()
-                || this.getRealYRecursion(com.parent) >= com.getRealY() + com.getHeight())//不在parent范围内
+                || this.getRealYRecursion(com.parent) >= this.getRealYRecursion(com) + com.getHeight())//不在parent范围内
             {
                 return 0;
             }
@@ -190,8 +196,8 @@ export default class Rect extends Component{
      * @return true：在范围内
      */
     isPointInComponent(px, py){
-        if (px >= this.getRealX(this) && px <= this.getRealX(this) + this.getWidth()
-            && py >= this.getRealY(this) && py <= this.getRealY(this) + this.getHeight())
+        if (px >= this.getRealXRecursion(this) && px <= this.getRealXRecursion(this) + this.getWidth()
+            && py >= this.getRealYRecursion(this) && py <= this.getRealYRecursion(this) + this.getHeight())
         {
             return true;
         }

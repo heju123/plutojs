@@ -300,6 +300,18 @@ export default class Component {
         {
             ctx.globalAlpha = alpha;
         }
+        //缩放
+        let scale = this.getScale();
+        if (scale !== undefined && scale !== "1,1")
+        {
+            let scaleArr = scale.split(",");
+
+            //getRealX方法返回的值已被修改，所以要用getRealXRecursion
+            let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
+            let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
+            ctx.translate(transX, transY);//将坐标原点设置到组件中心，避免缩放引起的坐标偏移
+            ctx.scale(scaleArr[0], scaleArr[1]);
+        }
     }
 
     /** 将样式恢复成original */
@@ -773,19 +785,14 @@ export default class Component {
             return com.getX();
         }
     }
+    //getRealX方法获取的坐标值有可能因坐标原点在组件中心，不在0,0而受影响。
+    //如果要获取真实坐标，需调用getRealXRecursion方法
     getRealX(){
-        //缩放
-        let scale = this.getScale();
-        let transX = 0;
-        if (scale !== undefined)
+        if (!this.isOriginOfCoorZero())
         {
-            let scaleArr = scale.split(",");
-            //要实现以组件中心来缩放，必须将ctx坐标原点平移
-            let scaleWidth = this.getWidth() * scaleArr[0];
-            transX = -(scaleWidth - this.getWidth()) / 2;
+            return -this.getWidth() / 2;
         }
-
-        return this.getRealXRecursion(this) + transX;
+        return this.getRealXRecursion(this);
     }
     getRealYRecursion(com){
         if (com.parent)
@@ -797,18 +804,11 @@ export default class Component {
         }
     }
     getRealY(){
-        //缩放
-        let scale = this.getScale();
-        let transY = 0;
-        if (scale !== undefined)
+        if (!this.isOriginOfCoorZero())
         {
-            let scaleArr = scale.split(",");
-            //要实现以组件中心来缩放，必须将ctx坐标原点平移
-            let scaleHeight = this.getHeight() * scaleArr[1];
-            transY = -(scaleHeight - this.getHeight()) / 2;
+            return -this.getHeight() / 2;
         }
-
-        return this.getRealYRecursion(this) + transY;
+        return this.getRealYRecursion(this);
     }
 
     /** 获取文本的坐标 */
@@ -841,52 +841,32 @@ export default class Component {
         {
             return undefined;
         }
-
-        //缩放
-        let scaleWidth = 1;
-        let scale = this.getScale();
-        if (scale !== undefined)
-        {
-            let scaleArr = scale.split(",");
-            scaleWidth = scaleArr[0];
-        }
-
         if (typeof(this.style.width) === "function")
         {
-            return this.style.width.apply(this, []) * scaleWidth;
+            return this.style.width.apply(this, []);
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
             let maxWidth = this.parent.getInnerWidth();
-            return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100) * scaleWidth;
+            return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
         }
-        return this.style.width * scaleWidth;
+        return this.style.width;
     }
     getHeight(){
         if (!this.style.height)
         {
             return undefined;
         }
-
-        //缩放
-        let scaleHeight = 1;
-        let scale = this.getScale();
-        if (scale !== undefined)
-        {
-            let scaleArr = scale.split(",");
-            scaleHeight = scaleArr[1];
-        }
-
         if (typeof(this.style.height) === "function")
         {
-            return this.style.height.apply(this, []) * scaleHeight;
+            return this.style.height.apply(this, []);
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
             let maxHeight = this.parent.getInnerHeight();
-            return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100) * scaleHeight;
+            return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
         }
-        return this.style.height * scaleHeight;
+        return this.style.height;
     }
     //获取去边框的宽高
     getInnerWidth(){
@@ -926,6 +906,20 @@ export default class Component {
         {
             return undefined;
         }
+    }
+
+    /**
+     * 判断坐标原点是否为0,0
+     *
+     * @return true 是0,0
+     */
+    isOriginOfCoorZero(){
+        let scale = this.getScale();
+        if (scale !== undefined && scale !== "1,1")//scale不为1,1，则表示坐标原点在组件中心点，不在0,0
+        {
+            return false;
+        }
+        return true;
     }
 
     /** 用\n分隔string，实现换行 */
@@ -1114,7 +1108,7 @@ export default class Component {
         }
 
         this.getChildren().forEach((child)=>{
-                child.destroy();
+            child.destroy();
         });
     }
 }

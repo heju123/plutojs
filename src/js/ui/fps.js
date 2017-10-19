@@ -33,6 +33,7 @@ export default class Fps{
     {
         if (com.setClip)
         {
+            com.isDoingParentClip = true;//是否作为parent执行clip
             this.ctx.save();
             com.setClip(this.ctx);
         }
@@ -41,6 +42,7 @@ export default class Fps{
     {
         if (com.setClip)
         {
+            com.isDoingParentClip = false;
             this.ctx.restore();
         }
     }
