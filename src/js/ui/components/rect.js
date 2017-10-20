@@ -35,10 +35,10 @@ export default class Rect extends Component{
             }
             ctx.fill();
         }
-        ctx.save();
-        this.setClip(ctx);//绘制图片前需要先剪切，避免图片超出当前组件
         if (this.style.backgroundImage && this.backgroundImageDom)
         {
+            ctx.save();
+            this.setClip(ctx);//绘制图片前需要先剪切，避免图片超出当前组件
             if (this.style.backgroundImageClip)
             {
                 ctx.drawImage(this.backgroundImageDom,
@@ -49,8 +49,8 @@ export default class Rect extends Component{
             {
                 ctx.drawImage(this.backgroundImageDom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
             }
+            ctx.restore();
         }
-        ctx.restore();
         ctx.closePath();
         if (this.style.borderWidth)
         {
@@ -73,12 +73,13 @@ export default class Rect extends Component{
         ctx.restore();
 
         //绘制文字
-        ctx.save();
-        this.setClip(ctx);
-        ctx.beginPath();
-        this.setCommonStyle(ctx);
         if (this.text && this.text.length > 0)
         {
+            ctx.save();
+            this.setClip(ctx);
+            ctx.beginPath();
+            this.setCommonStyle(ctx);
+
             ctx.font = this.style.fontSize + " " + this.style.fontFamily;
             ctx.fillStyle = this.style.fontColor;
             ctx.textBaseline="hanging";
@@ -88,8 +89,8 @@ export default class Rect extends Component{
                         this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
                 });
             });
+            ctx.restore();
         }
-        ctx.restore();
 
         return true;
     }
