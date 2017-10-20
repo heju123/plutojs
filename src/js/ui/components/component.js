@@ -300,6 +300,11 @@ export default class Component {
         {
             ctx.globalAlpha = alpha;
         }
+        //将坐标原点设置到组件中心，组件的所有绘制坐标原点都在组件中心
+        if (!this.isOriginOfCoorZero())
+        {
+            this.setOriginalCoor2Center(ctx);
+        }
         //缩放
         this.setScaleEnable(ctx);
     }
@@ -310,11 +315,6 @@ export default class Component {
         if (scale !== undefined && scale !== "1,1")
         {
             let scaleArr = scale.split(",");
-
-            //getRealX方法返回的值已被修改，所以要用getRealXRecursion
-            let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
-            let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
-            ctx.translate(transX, transY);//将坐标原点设置到组件中心，避免缩放引起的坐标偏移
             ctx.scale(scaleArr[0], scaleArr[1]);
         }
     }
@@ -323,11 +323,21 @@ export default class Component {
         let scale = this.getScale();
         if (scale !== undefined && scale !== "1,1")
         {
-            let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
-            let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
-            ctx.translate(-transX, -transY);
             ctx.scale(1, 1);
         }
+    }
+
+    /** 将坐标原点设置到组件中心 */
+    setOriginalCoor2Center(ctx){
+        let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
+        let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
+        ctx.translate(transX, transY);
+    }
+    /** 将坐标原点从组件中心还原到0,0 */
+    restoreOriginalCoor2Zero(ctx){
+        let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
+        let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
+        ctx.translate(-transX, -transY);
     }
 
     /** 将样式恢复成original */
@@ -925,7 +935,7 @@ export default class Component {
     }
 
     /**
-     * 判断坐标原点是否为0,0
+     * 判断坐标原点是否应该为0,0，如果发生缩放或旋转等，则坐标原点应该在组件中心
      *
      * @return true 是0,0
      */

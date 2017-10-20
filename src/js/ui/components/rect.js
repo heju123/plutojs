@@ -98,6 +98,10 @@ export default class Rect extends Component{
     setClip(ctx){
         if (this.isDoingParentClip)
         {
+            if (!this.isOriginOfCoorZero())
+            {
+                this.setOriginalCoor2Center(ctx);
+            }
             this.setScaleEnable(ctx);//需要设置scale后再clip，避免clip的结果和组件scale后大小不一致的情况
         }
         if (this.style.borderRadius)
@@ -115,6 +119,10 @@ export default class Rect extends Component{
         ctx.clip();
         if (this.isDoingParentClip)
         {
+            if (!this.isOriginOfCoorZero())
+            {
+                this.restoreOriginalCoor2Zero(ctx);
+            }
             this.restoreScaleEnable(ctx);//clip完毕需要还原translate和scale
         }
     }
