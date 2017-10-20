@@ -104,6 +104,7 @@ export default class Rect extends Component{
                 this.setOriginalCoor2Center(ctx);
             }
             this.setScaleEnable(ctx);//需要设置scale后再clip，避免clip的结果和组件scale后大小不一致的情况
+            //设置scale后可以将scale效果传递给子节点
         }
         if (this.style.borderRadius)
         {
@@ -122,7 +123,6 @@ export default class Rect extends Component{
             {
                 this.restoreOriginalCoor2Zero(ctx);
             }
-            this.restoreScaleEnable(ctx);//clip完毕需要还原translate和scale
         }
     }
 
@@ -206,15 +206,25 @@ export default class Rect extends Component{
      * @param py 鼠标y
      * @return true：在范围内
      */
-    isPointInComponent(px, py){
-        if (px >= this.getRealXRecursion(this) && px <= this.getRealXRecursion(this) + this.getWidth()
-            && py >= this.getRealYRecursion(this) && py <= this.getRealYRecursion(this) + this.getHeight())
+    isPointInComponent(ctx, px, py){
+        ctx.save();
+        ctx.beginPath();
+        if (!this.isOriginOfCoorZero())
         {
-            return true;
+            this.setOriginalCoor2Center(ctx);
+        }
+        this.setScaleEnable(ctx);
+        if (this.style.borderRadius)
+        {
+            this.getRectRadiusPath(this, ctx, this.style.borderRadius);
         }
         else
         {
-            return false;
+            ctx.rect(this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
         }
+        let ret = ctx.isPointInPath(px, py);
+        ctx.closePath();
+        ctx.restore();
+        return ret;
     }
 }

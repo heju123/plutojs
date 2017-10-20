@@ -265,7 +265,7 @@ export default class Component {
         //判断鼠标是否在组件范围内
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
         if (ctx.mouseAction.mx && ctx.mouseAction.my
-            && this.isPointInComponent(ctx.mouseAction.mx, ctx.mouseAction.my)
+            && this.isPointInComponent(ctx, ctx.mouseAction.mx, ctx.mouseAction.my)
             && (!this.parent || this.parent === ctx.mouseAction.hoverCom
                 || this.parent === ctx.mouseAction.hoverCom.parent
                 || this.parent.parentOf(ctx.mouseAction.hoverCom)))
@@ -311,19 +311,11 @@ export default class Component {
 
     /** 设置ctx的scale，并且将坐标原点移动到组件中心 */
     setScaleEnable(ctx){
-        let scale = this.getScale();
+        let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")
         {
             let scaleArr = scale.split(",");
             ctx.scale(scaleArr[0], scaleArr[1]);
-        }
-    }
-    /** 恢复setScaleEnable方法的设置 */
-    restoreScaleEnable(ctx){
-        let scale = this.getScale();
-        if (scale !== undefined && scale !== "1,1")
-        {
-            ctx.scale(1, 1);
         }
     }
 
@@ -918,29 +910,13 @@ export default class Component {
         }
     }
 
-    /** 获取缩放比例，如果当前组件无，则取父节点的 */
-    getScale(){
-        if (this.style.scale)
-        {
-            return this.style.scale;
-        }
-        else if (this.style.scale === undefined && this.parent)
-        {
-            return this.parent.getScale();
-        }
-        else
-        {
-            return undefined;
-        }
-    }
-
     /**
      * 判断坐标原点是否应该为0,0，如果发生缩放或旋转等，则坐标原点应该在组件中心
      *
      * @return true 是0,0
      */
     isOriginOfCoorZero(){
-        let scale = this.getScale();
+        let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")//scale不为1,1，则表示坐标原点在组件中心点，不在0,0
         {
             return false;

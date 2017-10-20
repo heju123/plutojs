@@ -28,14 +28,14 @@ export default class Fps{
         window.requestAnimationFrame(this.draw.bind(this));
     }
 
-    /** 绘制每个子组件之前调用 */
+    /** 绘制子组件之前调用 */
     beforeDrawChildren(com)
     {
+        this.ctx.save();
         /** 防止children超出 */
         if (com.setClip)
         {
             com.isDoingParentClip = true;//是否作为parent执行clip
-            this.ctx.save();
             com.setClip(this.ctx);
         }
     }
@@ -44,8 +44,8 @@ export default class Fps{
         if (com.setClip)
         {
             com.isDoingParentClip = false;
-            this.ctx.restore();
         }
+        this.ctx.restore();
     }
 
     drawView(com){
@@ -58,24 +58,22 @@ export default class Fps{
             let children = com.getChildren();
             if (children)
             {
+                this.beforeDrawChildren(com);
                 if (children instanceof Array)
                 {
                     children.sort((a, b)=>a.style.zIndex - b.style.zIndex);//zIndex升序排序
                     let child;
                     for (let i = 0, j = children.length; i < j; i++)
                     {
-                        this.beforeDrawChildren(com);
                         child = children[i];
                         this.drawView(child);
-                        this.afterDrawChildren(com);
                     }
                 }
                 else
                 {
-                    this.beforeDrawChildren(com);
                     this.drawView(children);
-                    this.afterDrawChildren(com);
                 }
+                this.afterDrawChildren(com);
             }
 
             //自定义绘制
