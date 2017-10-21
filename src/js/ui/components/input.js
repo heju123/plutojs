@@ -28,9 +28,9 @@ export default class Input extends Scrollbar {
         }
 
         ctx.save();
-        this.setClip(ctx);
-        ctx.beginPath();
         this.setCommonStyle(ctx);
+        ctx.beginPath();
+        this.setClip(ctx);
         //focus
         if (globalUtil.action.focusComponent === this && !this.style.readOnly) {
             //绘制光标

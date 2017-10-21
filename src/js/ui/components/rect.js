@@ -20,8 +20,8 @@ export default class Rect extends Component{
             return false;
         }
         ctx.save();
-        ctx.beginPath();
         this.setCommonStyle(ctx);
+        ctx.beginPath();
         if (this.style.backgroundColor)
         {
             ctx.fillStyle = this.style.backgroundColor;
@@ -70,7 +70,6 @@ export default class Rect extends Component{
             ctx.stroke();//调用stroke后得到的图形宽高会增大lineWidth个像素，fill则不会
             ctx.closePath();
         }
-        ctx.restore();
 
         //绘制文字
         if (this.text && this.text.length > 0)
@@ -78,7 +77,6 @@ export default class Rect extends Component{
             ctx.save();
             this.setClip(ctx);
             ctx.beginPath();
-            this.setCommonStyle(ctx);
 
             ctx.font = this.style.fontSize + " " + this.style.fontFamily;
             ctx.fillStyle = this.style.fontColor;
@@ -89,14 +87,17 @@ export default class Rect extends Component{
                         this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
                 });
             });
+            ctx.closePath();
             ctx.restore();
         }
+        ctx.restore();
 
         return true;
     }
 
     /** 设置后避免超出当前组件范围 */
     setClip(ctx){
+        ctx.beginPath();
         if (this.isDoingParentClip)
         {
             if (this.needTranslateOriginOfCoor2Center())
@@ -106,6 +107,10 @@ export default class Rect extends Component{
             //设置scale或rotate后可以将效果传递给子节点
             this.setScaleEnable(ctx);//缩放
             this.setRotateEnable(ctx);//旋转
+            if (this.needTranslateOriginOfCoor2Center())
+            {
+                this.restoreOriginalCoor2Zero(ctx);
+            }
         }
         if (this.style.borderRadius)
         {
@@ -113,18 +118,12 @@ export default class Rect extends Component{
         }
         else
         {
-            ctx.rect(this.getRealX() + (this.style.borderWidth || 0) - 0.5,
-                this.getRealY() + (this.style.borderWidth || 0) - 0.5,
-                this.getInnerWidth() + 1, this.getInnerHeight() + 1);//clip后矩形会整体缩小1个像素
+            ctx.rect(this.getRealX() + (this.style.borderWidth || 0),
+                this.getRealY() + (this.style.borderWidth || 0),
+                this.getInnerWidth(), this.getInnerHeight());
         }
         ctx.clip();
-        if (this.isDoingParentClip)
-        {
-            if (this.needTranslateOriginOfCoor2Center())
-            {
-                this.restoreOriginalCoor2Zero(ctx);
-            }
-        }
+        ctx.closePath();
     }
 
     getRectRadiusPath(){
