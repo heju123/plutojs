@@ -300,22 +300,37 @@ export default class Component {
         {
             ctx.globalAlpha = alpha;
         }
-        //将坐标原点设置到组件中心，组件的所有绘制坐标原点都在组件中心
-        if (!this.isOriginOfCoorZero())
+        //将坐标原点设置到组件中心
+        if (this.needTranslateOriginOfCoor2Center())
         {
             this.setOriginalCoor2Center(ctx);
         }
         //缩放
         this.setScaleEnable(ctx);
+        //旋转
+        this.setRotateEnable(ctx);
+        if (this.needTranslateOriginOfCoor2Center())
+        {
+            this.restoreOriginalCoor2Zero(ctx);
+        }
     }
 
-    /** 设置ctx的scale，并且将坐标原点移动到组件中心 */
+    /** 设置ctx的scale */
     setScaleEnable(ctx){
         let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")
         {
             let scaleArr = scale.split(",");
             ctx.scale(scaleArr[0], scaleArr[1]);
+        }
+    }
+
+    /** 设置ctx的rotate */
+    setRotateEnable(ctx){
+        let rotate = this.style.rotate;
+        if (rotate !== undefined && rotate !== 0)
+        {
+            ctx.rotate(rotate * Math.PI/180);
         }
     }
 
@@ -803,13 +818,7 @@ export default class Component {
             return com.getX();
         }
     }
-    //getRealX方法获取的坐标值有可能因坐标原点在组件中心，不在0,0而受影响。
-    //如果要获取真实坐标，需调用getRealXRecursion方法
     getRealX(){
-        if (!this.isOriginOfCoorZero())
-        {
-            return -this.getWidth() / 2;
-        }
         return this.getRealXRecursion(this);
     }
     getRealYRecursion(com){
@@ -822,10 +831,6 @@ export default class Component {
         }
     }
     getRealY(){
-        if (!this.isOriginOfCoorZero())
-        {
-            return -this.getHeight() / 2;
-        }
         return this.getRealYRecursion(this);
     }
 
@@ -911,17 +916,19 @@ export default class Component {
     }
 
     /**
-     * 判断坐标原点是否应该为0,0，如果发生缩放或旋转等，则坐标原点应该在组件中心
+     * 是否需要移动坐标原点到组件中心（比如scale和rotate等情况）
      *
      * @return true 是0,0
      */
-    isOriginOfCoorZero(){
+    needTranslateOriginOfCoor2Center(){
         let scale = this.style.scale;
-        if (scale !== undefined && scale !== "1,1")//scale不为1,1，则表示坐标原点在组件中心点，不在0,0
+        let rotate = this.style.rotate;
+        if ((scale !== undefined && scale !== "1,1")
+            || (rotate !== undefined && rotate !== 0))
         {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /** 用\n分隔string，实现换行 */

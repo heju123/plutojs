@@ -99,12 +99,13 @@ export default class Rect extends Component{
     setClip(ctx){
         if (this.isDoingParentClip)
         {
-            if (!this.isOriginOfCoorZero())
+            if (this.needTranslateOriginOfCoor2Center())
             {
                 this.setOriginalCoor2Center(ctx);
             }
-            this.setScaleEnable(ctx);//需要设置scale后再clip，避免clip的结果和组件scale后大小不一致的情况
-            //设置scale后可以将scale效果传递给子节点
+            //设置scale或rotate后可以将效果传递给子节点
+            this.setScaleEnable(ctx);//缩放
+            this.setRotateEnable(ctx);//旋转
         }
         if (this.style.borderRadius)
         {
@@ -119,7 +120,7 @@ export default class Rect extends Component{
         ctx.clip();
         if (this.isDoingParentClip)
         {
-            if (!this.isOriginOfCoorZero())
+            if (this.needTranslateOriginOfCoor2Center())
             {
                 this.restoreOriginalCoor2Zero(ctx);
             }
@@ -209,11 +210,16 @@ export default class Rect extends Component{
     isPointInComponent(ctx, px, py){
         ctx.save();
         ctx.beginPath();
-        if (!this.isOriginOfCoorZero())
+        if (this.needTranslateOriginOfCoor2Center())
         {
             this.setOriginalCoor2Center(ctx);
         }
         this.setScaleEnable(ctx);
+        this.setRotateEnable(ctx);//旋转
+        if (this.needTranslateOriginOfCoor2Center())
+        {
+            this.restoreOriginalCoor2Zero(ctx);
+        }
         if (this.style.borderRadius)
         {
             this.getRectRadiusPath(this, ctx, this.style.borderRadius);
