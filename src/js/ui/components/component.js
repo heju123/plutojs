@@ -252,6 +252,14 @@ export default class Component {
         {
             this.setStyle("autoLine", true);
         }
+        if (this.style.scale === undefined)//缩放
+        {
+            this.style.scale = "1,1";
+        }
+        if (this.style.rotate === undefined)//旋转
+        {
+            this.style.rotate = 0;
+        }
     }
 
     draw(ctx){
