@@ -1031,6 +1031,10 @@ export default class Component {
         return this.children;
     }
 
+    removeAllChildren(){
+        this.children.length = 0;
+    }
+
     registerEvent(eventType, callback){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
