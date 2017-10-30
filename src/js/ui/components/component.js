@@ -747,6 +747,12 @@ export default class Component {
         return aniPromiseArr;
     }
 
+    /** 移除样式 */
+    removeStyle(key){
+        delete this.style[key];
+        delete this.originalStyle[key];
+    }
+
     getController(com){
         if (!com.parent)
         {

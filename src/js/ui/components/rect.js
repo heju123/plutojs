@@ -52,7 +52,7 @@ export default class Rect extends Component{
             ctx.restore();
         }
         ctx.closePath();
-        if (this.style.borderWidth)
+        if (this.style.borderWidth && this.style.borderColor)
         {
             ctx.beginPath();
             let bcolor = this.style.borderColor || this.style.backgroundColor;
