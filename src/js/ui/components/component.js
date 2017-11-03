@@ -168,6 +168,7 @@ export default class Component {
         let Button = require("./button.js").default;
         let Checkbox = require("./checkbox.js").default;
         let Scrollbar = require("./scrollbar.js").default;
+        let Map = require("./game/map.js").default;
         let Sprite = require("./game/sprite.js").default;
         let com;
         switch (type)
@@ -186,6 +187,9 @@ export default class Component {
                 break;
             case "scrollbar" :
                 com = new Scrollbar(this);
+                break;
+            case "map" :
+                com = new Map(this);
                 break;
             case "sprite" :
                 com = new Sprite(this);
