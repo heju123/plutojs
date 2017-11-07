@@ -28,8 +28,15 @@ export default class Map extends Rect {
                 this.mapWidth = data.width;
                 this.mapHeight = data.height;
                 this.mapSize = data.size;
-                console.log(data);
-                this.initMapData();
+                this.mapData = data.mapData;
+                if (!this.mapData)
+                {
+                    this.initMapData();
+                }
+                else
+                {
+                    this.initWH();
+                }
             });
         }
     }
@@ -48,8 +55,34 @@ export default class Map extends Rect {
                 };
             }
         }
+        this.initWH();
+    }
 
+    /** 初始化地图高宽 */
+    initWH(){
         this.setStyle("width", this.mapWidth * this.mapSize);
         this.setStyle("height", this.mapHeight * this.mapSize);
+    }
+
+    draw(ctx) {
+        if (!super.draw(ctx)) {
+            return false;
+        }
+
+        ctx.save();
+        this.setCommonStyle(ctx);
+        this.setClip(ctx);
+        ctx.beginPath();
+
+        for (let i = 0; i < this.mapData.length; i++)
+        {
+            for (let j = 0; j < this.mapData[i].length; j++)
+            {
+            }
+        }
+
+        ctx.closePath();
+        ctx.restore();
+        return true;
     }
 }

@@ -29,13 +29,14 @@ export default class Input extends Scrollbar {
 
         ctx.save();
         this.setCommonStyle(ctx);
-        ctx.beginPath();
         this.setClip(ctx);
+        ctx.beginPath();
         //focus
         if (globalUtil.action.focusComponent === this && !this.style.readOnly) {
             //绘制光标
             this.drawTextCursor(ctx);
         }
+        ctx.closePath();
         ctx.restore();
         return true;
     }
