@@ -1041,8 +1041,17 @@ export default class Component {
         return this.children;
     }
 
-    removeAllChildren(){
-        this.children.length = 0;
+    removeAllChildren(name){
+        if (!name)
+        {
+            this.children.length = 0;
+        }
+        else
+        {
+            this.children = this.children.filter((child)=>{
+                return child.name !== name;
+            });
+        }
     }
 
     registerEvent(eventType, callback){

@@ -1,6 +1,7 @@
 import Rect from "../rect.js";
 import globalUtil from "../../../util/globalUtil";
 import httpUtil from "../../../util/httpUtil.js";
+import commonUtil from "../../../util/commonUtil";
 
 export default class Map extends Rect {
     constructor(parent) {
@@ -29,16 +30,18 @@ export default class Map extends Rect {
                 this.mapHeight = data.height;
                 this.mapSize = data.size;
                 this.mapData = data.mapData;
-                if (!this.mapData)
+                if (!this.mapData)//cfg无mapData信息，则初始化默认地图数据
                 {
                     this.initMapData();
                 }
                 else
                 {
                     this.initWH();
+                    this.onMapDataChanged();
                 }
             });
         }
+        this.terrainPolicy = cfg.terrainPolicy;
     }
 
     //初始化地图数据
@@ -64,25 +67,39 @@ export default class Map extends Rect {
         this.setStyle("height", this.mapHeight * this.mapSize);
     }
 
-    draw(ctx) {
-        if (!super.draw(ctx)) {
-            return false;
-        }
-
-        ctx.save();
-        this.setCommonStyle(ctx);
-        this.setClip(ctx);
-        ctx.beginPath();
-
-        for (let i = 0; i < this.mapData.length; i++)
+    onMapDataChanged(){
+        if (this.terrainPolicy && this.mapData)
         {
-            for (let j = 0; j < this.mapData[i].length; j++)
+            this.removeAllChildren("map_data");
+            let rect;
+            let style;
+            for (let x = 0; x < this.mapData.length; x++)
             {
+                for (let y = 0; y < this.mapData[x].length; y++)
+                {
+                    if (this.mapData[x][y].block || this.mapData[x][y].terrain !== 0)
+                    {
+                        rect = new Rect(this);
+                        rect.name = "map_data";
+                        style = {
+                            x: x * this.mapSize,
+                            y: y * this.mapSize,
+                            width: this.mapSize,
+                            height: this.mapSize
+                        };
+                        if (this.mapData[x][y].block && this.terrainPolicy.block)
+                        {
+                            commonUtil.copyObject(this.terrainPolicy.block, style, true);
+                        }
+                        if (this.mapData[x][y].terrain !== 0)
+                        {
+                            commonUtil.copyObject(this.terrainPolicy[this.mapData[x][y].terrain], style, true);
+                        }
+                        rect.setStyle(style);
+                        this.appendChildren(rect);
+                    }
+                }
             }
         }
-
-        ctx.closePath();
-        ctx.restore();
-        return true;
     }
 }
