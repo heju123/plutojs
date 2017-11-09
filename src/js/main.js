@@ -5,6 +5,7 @@ import Fps from "./ui/fps.js";
 import httpUtil from "./util/httpUtil.js";
 import commonUtil from "./util/commonUtil.js";
 import globalUtil from "./util/globalUtil.js";
+import Thread from "./util/thread.js";
 import Controller from "./ui/controller.js";
 
 import Sprite from "./ui/components/game/sprite.js";
@@ -49,6 +50,7 @@ window.monk = {
     Main : Main,
     commonUtil : commonUtil,
     httpUtil : httpUtil,
+    Thread : Thread,
     Controller : Controller,
     components : {
         Sprite : Sprite,
