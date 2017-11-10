@@ -6,6 +6,8 @@ export default class Sprite extends Rect {
 
         this.xSpeed = 0;//大约一毫秒移动的x距离
         this.ySpeed = 0;//大约一毫秒移动的y距离
+
+        this.setStyle("zIndex", 1000);
     }
 
     initCfg(cfg){
@@ -25,7 +27,7 @@ export default class Sprite extends Rect {
             }
             else
             {
-                if (currentTime - this.lastTime >= 1000)
+                if (currentTime - this.lastTime >= 1)
                 {
                     this.setStyle("x", this.getX() + this.xSpeed);
                     this.setStyle("y", this.getY() + this.ySpeed);

@@ -486,6 +486,8 @@ export default class Component {
 
     /** 检查事件是否匹配 */
     checkEvent(eventNotify){
+        let Map = require("./game/map.js").default;
+
         if (eventNotify.type)
         {
             if (eventNotify.type === 1
@@ -494,7 +496,7 @@ export default class Component {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
             else if (eventNotify.type === 2
-                && globalUtil.action.focusComponent === this)//键盘事件
+                && (globalUtil.action.focusComponent === this || this instanceof Map))//键盘事件(地图无条件接收键盘事件)
             {
                 globalUtil.eventBus.captureEvent(eventNotify);
             }
@@ -712,13 +714,13 @@ export default class Component {
     setStyle_kv(key, value, doAni){
         doAni = doAni === undefined || doAni === true ? true : false;
         //以下值不允许出现小数
-        if (key === "x" || key === "y" || key === "width" || key === "height")
-        {
-            if (value && typeof(value) !== "function" && value.toString().indexOf("%") === -1)//非百分比
-            {
-                value = Math.round(value);
-            }
-        }
+        // if (key === "x" || key === "y" || key === "width" || key === "height")
+        // {
+        //     if (value && typeof(value) !== "function" && value.toString().indexOf("%") === -1)//非百分比
+        //     {
+        //         value = Math.round(value);
+        //     }
+        // }
 
         if (key === "backgroundImage" && this.backgroundImageDom)//更换图片
         {
