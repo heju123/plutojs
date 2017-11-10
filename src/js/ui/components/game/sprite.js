@@ -27,8 +27,8 @@ export default class Sprite extends Rect {
             {
                 if (currentTime - this.lastTime >= 1000)
                 {
-                    this.setStyle("x", this.style.x + this.xSpeed);
-                    this.setStyle("y", this.style.y + this.ySpeed);
+                    this.setStyle("x", this.getX() + this.xSpeed);
+                    this.setStyle("y", this.getY() + this.ySpeed);
 
                     this.lastTime = currentTime;
                 }
