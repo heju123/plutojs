@@ -73,9 +73,9 @@ export default class Map extends Rect {
             this.removeAllChildren("map_data");
             let rect;
             let style;
-            for (let x = 0; x < this.mapData.length; x++)
+            for (let y = 0; y < this.mapData.length; y++)
             {
-                for (let y = 0; y < this.mapData[x].length; y++)
+                for (let x = 0; x < this.mapData[y].length; x++)
                 {
                     if (this.mapData[x][y].block || this.mapData[x][y].terrain !== 0)
                     {

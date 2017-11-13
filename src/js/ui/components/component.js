@@ -208,6 +208,7 @@ export default class Component {
         {
             childCom = this.newComByType(chiCfg.type);
             childCom.initCfg(chiCfg);
+            childCom.parent = this;
             this.appendChildren(childCom);
             return childCom;
         }
@@ -216,6 +217,7 @@ export default class Component {
     asyncGetView(viewCfg, resolve, reject){
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg);
+        childCom.parent = this;
         this.appendChildren(childCom);
 
         //广播视图加载完毕事件，针对异步加载的视图
