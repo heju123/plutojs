@@ -24,8 +24,14 @@ export default class Sprite extends Rect {
      * @param sy 要设置的y值
      * @return true：发生碰撞；false:未发生碰撞
      */
-    detectCollision(sx, sy){
+    detectCollision(sx, sy)
+    {
         if (!(this.parent instanceof Map))
+        {
+            return false;
+        }
+        if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
+            || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
         {
             return false;
         }
@@ -45,9 +51,6 @@ export default class Sprite extends Rect {
     }
 
     draw(ctx) {
-        if (!super.draw(ctx)) {
-            return false;
-        }
         let currentTime = (new Date()).getTime();
         if (!this.lastTime)
         {
@@ -55,7 +58,7 @@ export default class Sprite extends Rect {
         }
         else
         {
-            if (currentTime - this.lastTime >= 1)
+            if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
             {
                 if (this.xAcceleration !== 0)
                 {
@@ -73,7 +76,7 @@ export default class Sprite extends Rect {
                         this.setStyle("x", this.getX() + this.xSpeed);
                         this.setStyle("y", this.getY() + this.ySpeed);
                     }
-                    else
+                    else//x或y方向发生碰撞，则只移动x或y
                     {
                         if (!this.detectCollision(this.getX() + this.xSpeed, this.getY()))
                         {
@@ -96,6 +99,9 @@ export default class Sprite extends Rect {
 
                 this.lastTime = currentTime;
             }
+        }
+        if (!super.draw(ctx)) {
+            return false;
         }
         return true;
     }
