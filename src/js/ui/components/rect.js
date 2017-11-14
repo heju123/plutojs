@@ -83,17 +83,23 @@ export default class Rect extends Component{
             ctx.font = this.style.fontSize + " " + this.style.fontFamily;
             ctx.fillStyle = this.style.fontColor;
             ctx.textBaseline="hanging";
+            let char;
+            let cindex;
             this.text.forEach((row, index)=>{
                 if (this instanceof Input)
                 {
-                    row.forEach((char, cindex)=>{
+                    char = undefined;
+                    cindex = 0;
+                    while (char = row.charAt(cindex))
+                    {
                         ctx.fillText(char, this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10),
                             this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
-                    });
+                        cindex++;
+                    }
                 }
                 else
                 {
-                    ctx.fillText(row.join(""), this.getTextRealX(),
+                    ctx.fillText(row, this.getTextRealX(),
                         this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
                 }
             });

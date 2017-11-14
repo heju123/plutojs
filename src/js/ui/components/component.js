@@ -1063,19 +1063,7 @@ export default class Component {
             }
             rowsStr = text.split("\n");
         }
-        let i;
-        let c;
-        let arr;
-        return rowsStr.map((row)=>{
-            i = 0;
-            arr = [];
-            while (c = row.charAt(i))
-            {
-                arr.push(c);
-                i++;
-            }
-            return arr;
-        });
+        return rowsStr;
     }
 
     /** 获取字符宽度，中文占1个fontSize */
@@ -1104,9 +1092,7 @@ export default class Component {
         {
             return undefined;
         }
-        return this.text.map((row, index)=>{
-            return row.join("");
-        }).join("\n");
+        return this.text.join("\n");
     }
 
     /** 获取文本占的总高度 */
@@ -1131,7 +1117,7 @@ export default class Component {
             }
             else
             {
-                allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row.join("")).width);
+                allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width);
             }
         });
         return allWidth;
