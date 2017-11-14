@@ -8,7 +8,7 @@ export default class Sprite extends Rect {
         this.xSpeed = 0;//大约一毫秒移动的x距离
         this.ySpeed = 0;//大约一毫秒移动的y距离
         this.xAcceleration = 0;//x加速度，大约一毫秒增加或减小的速度值
-        this.yAcceleration = 0.05;//y加速度
+        this.yAcceleration = 0;//y加速度
 
         this.setStyle("zIndex", 1000);
     }
