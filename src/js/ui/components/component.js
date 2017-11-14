@@ -30,20 +30,48 @@ export default class Component {
 
         if (this.style.backgroundImage)
         {
+            this.style.currentBackgroundImage = {
+                url : this.style.backgroundImage
+            };
+            if (this.style.backgroundImageClip)
+            {
+                this.style.currentBackgroundImage.clip = this.style.backgroundImageClip;
+            }
             let img = new Image();
             img.onload = function(){
-                $this.backgroundImageDom = this;
+                $this.style.currentBackgroundImage.dom = this;
                 if (!$this.getWidth() || $this.style.autoWidth)
                 {
-                    $this.setWidth($this.backgroundImageDom.width);
+                    $this.setWidth($this.style.currentBackgroundImage.dom.width);
                 }
                 if (!$this.getHeight() || $this.style.autoHeight)
                 {
-                    $this.setHeight($this.backgroundImageDom.height);
+                    $this.setHeight($this.style.currentBackgroundImage.dom.height);
                 }
             };
-            img.src = this.style.backgroundImage;
+            img.src = this.style.currentBackgroundImage.url;
         }
+        // else if (this.style.backgroundImages)
+        // {
+        //     let $this = this;
+        //     this.backgroundImageDoms = [];
+        //     let img;
+        //     this.style.backgroundImages.forEach((bgi)=>{
+        //         img = new Image();
+        //         img.onload = function(){
+        //             $this.backgroundImageDoms.push(this);
+        //             if (!$this.getWidth() || $this.style.autoWidth)
+        //             {
+        //                 $this.setWidth(this.width);
+        //             }
+        //             if (!$this.getHeight() || $this.style.autoHeight)
+        //             {
+        //                 $this.setHeight(this.height);
+        //             }
+        //         };
+        //         img.src = bgi.url;
+        //     });
+        // }
     }
 
     /** 配置文件递归初始化样式 */
@@ -365,7 +393,7 @@ export default class Component {
     restoreStyle2Original(){
         this.copyStyle(this.originalStyle);
         //删掉多余样式
-        commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,hoverout,active,activeout,focus,focusout");
+        commonUtil.removeExtraAttr(this.style, this.originalStyle, "currentBackgroundImage,hover,hoverout,active,activeout,focus,focusout");
     }
 
     /** 将样式恢复成active或hover或focus或original */
@@ -669,9 +697,9 @@ export default class Component {
     copyStyle(source){
         for (let key in source)
         {
-            if (key === "backgroundImage" && this.backgroundImageDom)//更换图片
+            if (key === "backgroundImage" && this.style.currentBackgroundImage && this.style.currentBackgroundImage.dom)//更换图片
             {
-                this.backgroundImageDom.src = source[key];
+                this.style.currentBackgroundImage.dom.src = source[key];
             }
 
             if (this.animation && this.animation[key])
@@ -724,9 +752,9 @@ export default class Component {
         //     }
         // }
 
-        if (key === "backgroundImage" && this.backgroundImageDom)//更换图片
+        if (key === "backgroundImage" && this.style.currentBackgroundImage && this.style.currentBackgroundImage.dom)//更换图片
         {
-            this.backgroundImageDom.src = value;
+            this.style.currentBackgroundImage.dom.src = value;
         }
 
         let aniPromise;
