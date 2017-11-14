@@ -35,20 +35,20 @@ export default class Rect extends Component{
             }
             ctx.fill();
         }
-        if (this.style.currentBackgroundImage && this.style.currentBackgroundImage.dom)
+        if (this.currentBackgroundImage && this.currentBackgroundImage.dom)
         {
             ctx.save();
             this.setClip(ctx);//绘制图片前需要先剪切，避免图片超出当前组件
-            if (this.style.currentBackgroundImage.clip)
+            if (this.currentBackgroundImage.clip)
             {
-                ctx.drawImage(this.style.currentBackgroundImage.dom,
-                    this.style.currentBackgroundImage.clip[0], this.style.currentBackgroundImage.clip[1],
-                    this.style.currentBackgroundImage.clip[2], this.style.currentBackgroundImage.clip[3],
+                ctx.drawImage(this.currentBackgroundImage.dom,
+                    this.currentBackgroundImage.clip[0], this.currentBackgroundImage.clip[1],
+                    this.currentBackgroundImage.clip[2], this.currentBackgroundImage.clip[3],
                     this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
             }
             else
             {
-                ctx.drawImage(this.style.currentBackgroundImage.dom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
+                ctx.drawImage(this.currentBackgroundImage.dom, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight());
             }
             ctx.restore();
         }

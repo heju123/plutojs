@@ -20,58 +20,79 @@ export default class Component {
     }
 
     init(){
-        let $this = this;
-
         //自适应宽度
         if (this.style.autoWidth)
         {
             this.setStyle("width", this.getTextWidth());
         }
 
-        if (this.style.backgroundImage)
+        if (this.style.backgroundImages && this.style.backgroundImages.length > 0)//多背景图片轮询播放
         {
-            this.style.currentBackgroundImage = {
+            this.style.backgroundImages.forEach((bgi)=>{
+                this.initBackgroundImage(bgi.url).then((imgDom)=>{
+                    bgi.dom = imgDom;
+                });
+            });
+            this.currentBackgroundImage = this.style.backgroundImages[0];
+            this.currentBackgroundImageIndex = 0;
+            //轮询播放
+            if (this.style.backgroundImagesInterval && this.style.backgroundImagesInterval > 0)
+            {
+                this.createBackgroundImagesIntervalObj(this.style.backgroundImagesInterval);
+            }
+        }
+        else if (this.style.backgroundImage)
+        {
+            this.currentBackgroundImage = {
                 url : this.style.backgroundImage
             };
             if (this.style.backgroundImageClip)
             {
-                this.style.currentBackgroundImage.clip = this.style.backgroundImageClip;
+                this.currentBackgroundImage.clip = this.style.backgroundImageClip;
             }
+            this.initBackgroundImage(this.currentBackgroundImage.url).then((imgDom)=>{
+                this.currentBackgroundImage.dom = imgDom;
+            });
+        }
+    }
+
+    initBackgroundImage(url){
+        let $this = this;
+        return new Promise((resolve, reject)=>{
             let img = new Image();
             img.onload = function(){
-                $this.style.currentBackgroundImage.dom = this;
                 if (!$this.getWidth() || $this.style.autoWidth)
                 {
-                    $this.setWidth($this.style.currentBackgroundImage.dom.width);
+                    $this.setWidth(this.width);
                 }
                 if (!$this.getHeight() || $this.style.autoHeight)
                 {
-                    $this.setHeight($this.style.currentBackgroundImage.dom.height);
+                    $this.setHeight(this.height);
                 }
+                resolve(this);
             };
-            img.src = this.style.currentBackgroundImage.url;
+            img.src = url;
+        });
+    }
+
+    //背景图片轮询播放
+    onChangeBgImageInterval(){
+        this.currentBackgroundImageIndex++;
+        if (this.currentBackgroundImageIndex > this.style.backgroundImages.length - 1)
+        {
+            this.currentBackgroundImageIndex = 0;
         }
-        // else if (this.style.backgroundImages)
-        // {
-        //     let $this = this;
-        //     this.backgroundImageDoms = [];
-        //     let img;
-        //     this.style.backgroundImages.forEach((bgi)=>{
-        //         img = new Image();
-        //         img.onload = function(){
-        //             $this.backgroundImageDoms.push(this);
-        //             if (!$this.getWidth() || $this.style.autoWidth)
-        //             {
-        //                 $this.setWidth(this.width);
-        //             }
-        //             if (!$this.getHeight() || $this.style.autoHeight)
-        //             {
-        //                 $this.setHeight(this.height);
-        //             }
-        //         };
-        //         img.src = bgi.url;
-        //     });
-        // }
+        this.currentBackgroundImage = this.style.backgroundImages[this.currentBackgroundImageIndex];
+    }
+    createBackgroundImagesIntervalObj(interval){
+        this.removeBackgroundImagesIntervalObj();
+        this.backgroundImagesIntervalObj = window.setInterval(this.onChangeBgImageInterval.bind(this), interval);
+    }
+    removeBackgroundImagesIntervalObj(){
+        if (this.backgroundImagesIntervalObj)
+        {
+            window.clearInterval(this.backgroundImagesIntervalObj);
+        }
     }
 
     /** 配置文件递归初始化样式 */
@@ -393,7 +414,7 @@ export default class Component {
     restoreStyle2Original(){
         this.copyStyle(this.originalStyle);
         //删掉多余样式
-        commonUtil.removeExtraAttr(this.style, this.originalStyle, "currentBackgroundImage,hover,hoverout,active,activeout,focus,focusout");
+        commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,hoverout,active,activeout,focus,focusout");
     }
 
     /** 将样式恢复成active或hover或focus或original */
@@ -697,9 +718,14 @@ export default class Component {
     copyStyle(source){
         for (let key in source)
         {
-            if (key === "backgroundImage" && this.style.currentBackgroundImage && this.style.currentBackgroundImage.dom)//更换图片
+            if (key === "backgroundImage" && this.currentBackgroundImage && this.currentBackgroundImage.dom)//更换图片
             {
-                this.style.currentBackgroundImage.dom.src = source[key];
+                this.currentBackgroundImage.dom.src = source[key];
+            }
+
+            if (key === "backgroundImagesInterval")
+            {
+                this.createBackgroundImagesIntervalObj(source[key]);
             }
 
             if (this.animation && this.animation[key])
@@ -752,9 +778,14 @@ export default class Component {
         //     }
         // }
 
-        if (key === "backgroundImage" && this.style.currentBackgroundImage && this.style.currentBackgroundImage.dom)//更换图片
+        if (key === "backgroundImage" && this.currentBackgroundImage && this.currentBackgroundImage.dom)//更换图片
         {
-            this.style.currentBackgroundImage.dom.src = value;
+            this.currentBackgroundImage.dom.src = value;
+        }
+
+        if (key === "backgroundImagesInterval")
+        {
+            this.createBackgroundImagesIntervalObj(value);
         }
 
         let aniPromise;
@@ -1172,6 +1203,8 @@ export default class Component {
 
     destroy(){
         this.removeAllEvent();
+
+        this.removeBackgroundImagesIntervalObj();
 
         if (this.controller && this.controller.destroy
             && typeof(this.controller.destroy) === "function")
