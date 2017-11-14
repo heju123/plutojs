@@ -921,7 +921,16 @@ export default class Component {
         //文字居中显示
         if (this.text && this.style.textAlign === "center")
         {
-            let textLength = parseInt(this.style.fontSize) * this.getText().length;
+            let Input = require("./input.js").default;
+            let textLength;
+            if (this instanceof Input)
+            {
+                textLength = parseInt(this.style.fontSize) * this.getText().length;
+            }
+            else
+            {
+                textLength = globalUtil.viewState.ctx.measureText(this.getText()).width;
+            }
             if (textLength <= this.getWidth())
             {
                 return oriX + (this.getWidth() / 2 - textLength / 2);
@@ -1025,6 +1034,7 @@ export default class Component {
         }
         else
         {
+            let Input = require("./input.js").default;
             if (this.style.autoLine)//如果自动换行
             {
                 let index = 0;
@@ -1035,7 +1045,14 @@ export default class Component {
                         charWidth = 0;
                     }
                     else {
-                        charWidth += parseInt(this.style.fontSize, 10);
+                        if (this instanceof Input)
+                        {
+                            charWidth += parseInt(this.style.fontSize, 10);
+                        }
+                        else
+                        {
+                            charWidth += this.getCharWidth(char);
+                        }
                         if (charWidth > this.getWidth() - (this.style.borderWidth || 0) * 2) {//如果当前行宽度大于组件宽度，则添加一个换行符
                             charWidth = 0;
                             text = text.substring(0, index) + "\n" + text.substring(index);
@@ -1059,6 +1076,18 @@ export default class Component {
             }
             return arr;
         });
+    }
+
+    /** 获取字符宽度，中文占1个fontSize */
+    getCharWidth(char){
+        if(char.charCodeAt(0) > 128)
+        {
+            return parseInt(this.style.fontSize, 10);
+        }
+        else
+        {
+            return parseInt(this.style.fontSize, 10) / 2;
+        }
     }
 
     setText(text){
@@ -1093,9 +1122,17 @@ export default class Component {
         {
             return 0;
         }
+        let Input = require("./input.js").default;
         let allWidth = 0;
         this.text.forEach((row, index)=> {
-            allWidth = Math.max(allWidth, row.length * parseInt(this.style.fontSize, 10));
+            if (this instanceof Input)
+            {
+                allWidth = Math.max(allWidth, row.length * parseInt(this.style.fontSize, 10));
+            }
+            else
+            {
+                allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row.join("")).width);
+            }
         });
         return allWidth;
     }

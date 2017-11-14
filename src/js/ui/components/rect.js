@@ -75,6 +75,7 @@ export default class Rect extends Component{
         //绘制文字
         if (this.text && this.text.length > 0)
         {
+            let Input = require("./input.js").default;
             ctx.save();
             this.setClip(ctx);
             ctx.beginPath();
@@ -83,10 +84,18 @@ export default class Rect extends Component{
             ctx.fillStyle = this.style.fontColor;
             ctx.textBaseline="hanging";
             this.text.forEach((row, index)=>{
-                row.forEach((char, cindex)=>{
-                    ctx.fillText(char, this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10),
+                if (this instanceof Input)
+                {
+                    row.forEach((char, cindex)=>{
+                        ctx.fillText(char, this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10),
+                            this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+                    });
+                }
+                else
+                {
+                    ctx.fillText(row.join(""), this.getTextRealX(),
                         this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
-                });
+                }
             });
             ctx.closePath();
             ctx.restore();
