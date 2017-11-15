@@ -388,6 +388,8 @@ export default class Component {
         this.setScaleEnable(ctx);
         //旋转
         this.setRotateEnable(ctx);
+        //镜像
+        this.setMirrorEnable(ctx);
         if (this.needTranslateOriginOfCoor2Center())
         {
             this.restoreOriginalCoor2Zero(ctx);
@@ -399,6 +401,11 @@ export default class Component {
         let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")
         {
+            let mirror = this.style.mirror;
+            if (mirror !== undefined)//如果同时设置了scale和mirror，则一起交给setMirrorEnable处理
+            {
+                return;
+            }
             let scaleArr = scale.split(",");
             ctx.scale(scaleArr[0], scaleArr[1]);
         }
@@ -410,6 +417,28 @@ export default class Component {
         if (rotate !== undefined && rotate !== 0)
         {
             ctx.rotate(rotate * Math.PI/180);
+        }
+    }
+
+    /** 设置镜像 */
+    setMirrorEnable(ctx){
+        let mirror = this.style.mirror;
+        if (mirror !== undefined)
+        {
+            let scale = this.style.scale;
+            let scaleArr = [1,1];
+            if (scale !== undefined && scale !== "1,1")//如果设置了scale，则一起处理
+            {
+                scaleArr = scale.split(",");
+            }
+            if (mirror === "horizontal")
+            {
+                ctx.scale(-scaleArr[0], scaleArr[1]);
+            }
+            else if (mirror === "vertical")
+            {
+                ctx.scale(scaleArr[0], -scaleArr[1]);
+            }
         }
     }
 
@@ -1060,8 +1089,10 @@ export default class Component {
     needTranslateOriginOfCoor2Center(){
         let scale = this.style.scale;
         let rotate = this.style.rotate;
+        let mirror = this.style.mirror;
         if ((scale !== undefined && scale !== "1,1")
-            || (rotate !== undefined && rotate !== 0))
+            || (rotate !== undefined && rotate !== 0)
+            || mirror !== undefined)
         {
             return true;
         }
