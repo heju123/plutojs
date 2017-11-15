@@ -28,13 +28,7 @@ export default class Component {
 
         if (this.style.backgroundImages && this.style.backgroundImages.length > 0)//多背景图片轮询播放
         {
-            this.style.backgroundImages.forEach((bgi)=>{
-                this.initBackgroundImage(bgi.url).then((imgDom)=>{
-                    bgi.dom = imgDom;
-                });
-            });
-            this.currentBackgroundImage = this.style.backgroundImages[0];
-            this.currentBackgroundImageIndex = 0;
+            this.initBackgroundImages();
             //轮询播放
             if (this.style.backgroundImagesInterval && this.style.backgroundImagesInterval > 0)
             {
@@ -50,13 +44,13 @@ export default class Component {
             {
                 this.currentBackgroundImage.clip = this.style.backgroundImageClip;
             }
-            this.initBackgroundImage(this.currentBackgroundImage.url).then((imgDom)=>{
+            this.initBackgroundImageDom(this.currentBackgroundImage.url).then((imgDom)=>{
                 this.currentBackgroundImage.dom = imgDom;
             });
         }
     }
 
-    initBackgroundImage(url){
+    initBackgroundImageDom(url){
         let $this = this;
         return new Promise((resolve, reject)=>{
             let img = new Image();
@@ -73,6 +67,28 @@ export default class Component {
             };
             img.src = url;
         });
+    }
+
+    initBackgroundImages(backgroundImages){
+        let bgImages = backgroundImages || this.style.backgroundImages;
+        if (this.style.backgroundImage)//如果设置backgroundImages的情况下又有backgroundImage，则所有背景图片url都等于backgroundImage
+        {
+            this.initBackgroundImageDom(this.style.backgroundImage).then((imgDom)=>{
+                bgImages.forEach((bgi)=>{
+                    bgi.dom = imgDom;
+                });
+            });
+        }
+        else
+        {
+            bgImages.forEach((bgi)=>{
+                this.initBackgroundImageDom(bgi.url).then((imgDom)=>{
+                    bgi.dom = imgDom;
+                });
+            });
+        }
+        this.currentBackgroundImage = bgImages[0];
+        this.currentBackgroundImageIndex = 0;
     }
 
     //背景图片轮询播放
@@ -718,11 +734,24 @@ export default class Component {
     copyStyle(source){
         for (let key in source)
         {
-            if (key === "backgroundImage" && this.currentBackgroundImage && this.currentBackgroundImage.dom)//更换图片
+            if (key === "backgroundImage")//更换图片
             {
-                this.currentBackgroundImage.dom.src = source[key];
+                if (this.style.backgroundImages && this.style.backgroundImages.length > 0)
+                {
+                    this.style.backgroundImages.forEach((bgi)=>{
+                        bgi.dom.src = source[key];
+                    });
+                }
+                else if (this.currentBackgroundImage && this.currentBackgroundImage.dom)
+                {
+                    this.currentBackgroundImage.dom.src = source[key];
+                }
             }
 
+            if (key === "backgroundImages" && source[key] && source[key].length > 0)
+            {
+                this.initBackgroundImages(source[key]);
+            }
             if (key === "backgroundImagesInterval")
             {
                 this.createBackgroundImagesIntervalObj(source[key]);
@@ -768,6 +797,11 @@ export default class Component {
         }
     }
     setStyle_kv(key, value, doAni){
+        if (this.originalStyle[key] === value)//如果设置的值相同，则不需要耗费性能
+        {
+            return;
+        }
+
         doAni = doAni === undefined || doAni === true ? true : false;
         //以下值不允许出现小数
         // if (key === "x" || key === "y" || key === "width" || key === "height")
@@ -778,11 +812,24 @@ export default class Component {
         //     }
         // }
 
-        if (key === "backgroundImage" && this.currentBackgroundImage && this.currentBackgroundImage.dom)//更换图片
+        if (key === "backgroundImage")//更换图片
         {
-            this.currentBackgroundImage.dom.src = value;
+            if (this.style.backgroundImages && this.style.backgroundImages.length > 0)
+            {
+                this.style.backgroundImages.forEach((bgi)=>{
+                    bgi.dom.src = value;
+                });
+            }
+            else if (this.currentBackgroundImage && this.currentBackgroundImage.dom)
+            {
+                this.currentBackgroundImage.dom.src = value;
+            }
         }
 
+        if (key === "backgroundImages" && value && value.length > 0)
+        {
+            this.initBackgroundImages(value);
+        }
         if (key === "backgroundImagesInterval")
         {
             this.createBackgroundImagesIntervalObj(value);
