@@ -19,7 +19,8 @@ export default class Input extends Scrollbar {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
+        return promise;
     }
 
     draw(ctx) {

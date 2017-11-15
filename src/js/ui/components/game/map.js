@@ -13,7 +13,7 @@ export default class Map extends Rect {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
 
         if (cfg.mapDataUrl)
         {
@@ -42,6 +42,7 @@ export default class Map extends Rect {
             });
         }
         this.terrainPolicy = cfg.terrainPolicy;
+        return promise;
     }
 
     //初始化地图数据

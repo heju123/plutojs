@@ -11,7 +11,8 @@ export default class Rect extends Component{
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
+        return promise;
     }
 
     draw(ctx){

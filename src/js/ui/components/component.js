@@ -20,6 +20,7 @@ export default class Component {
     }
 
     init(){
+        let allPromise = [];
         //自适应宽度
         if (this.style.autoWidth)
         {
@@ -28,7 +29,7 @@ export default class Component {
 
         if (this.style.backgroundImages && this.style.backgroundImages.length > 0)//多背景图片轮询播放
         {
-            this.initBackgroundImages();
+            allPromise.push(this.initBackgroundImages());
             //轮询播放
             if (this.style.backgroundImagesInterval && this.style.backgroundImagesInterval > 0)
             {
@@ -44,8 +45,21 @@ export default class Component {
             {
                 this.currentBackgroundImage.clip = this.style.backgroundImageClip;
             }
-            this.initBackgroundImageDom(this.currentBackgroundImage.url).then((imgDom)=>{
-                this.currentBackgroundImage.dom = imgDom;
+            allPromise.push(new Promise((resolve)=> {
+                this.initBackgroundImageDom(this.currentBackgroundImage.url).then((imgDom) => {
+                    this.currentBackgroundImage.dom = imgDom;
+                    resolve();
+                });
+            }));
+        }
+        if (allPromise.length > 0)
+        {
+            return Promise.all(allPromise);
+        }
+        else
+        {
+            return new Promise((resolve)=>{
+                resolve();
             });
         }
     }
@@ -71,24 +85,32 @@ export default class Component {
 
     initBackgroundImages(backgroundImages){
         let bgImages = backgroundImages || this.style.backgroundImages;
+        let allPromise = [];
         if (this.style.backgroundImage)//如果设置backgroundImages的情况下又有backgroundImage，则所有背景图片url都等于backgroundImage
         {
-            this.initBackgroundImageDom(this.style.backgroundImage).then((imgDom)=>{
-                bgImages.forEach((bgi)=>{
-                    bgi.dom = imgDom;
+            allPromise.push(new Promise((resolve)=>{
+                this.initBackgroundImageDom(this.style.backgroundImage).then((imgDom)=>{
+                    bgImages.forEach((bgi)=>{
+                        bgi.dom = imgDom;
+                    });
+                    resolve();
                 });
-            });
+            }));
         }
         else
         {
             bgImages.forEach((bgi)=>{
-                this.initBackgroundImageDom(bgi.url).then((imgDom)=>{
-                    bgi.dom = imgDom;
-                });
+                allPromise.push(new Promise((resolve)=>{
+                    this.initBackgroundImageDom(bgi.url).then((imgDom)=>{
+                        bgi.dom = imgDom;
+                        resolve();
+                    });
+                }));
             });
         }
         this.currentBackgroundImage = bgImages[0];
         this.currentBackgroundImageIndex = 0;
+        return Promise.all(allPromise);
     }
 
     //背景图片轮询播放
@@ -138,6 +160,7 @@ export default class Component {
      * @param cfg
      */
     initCfg(cfg){
+        let allPromise = [];
         if (cfg.id)
         {
             this.id = cfg.id;
@@ -157,7 +180,7 @@ export default class Component {
 
         this.type = cfg.type;
 
-        this.init();
+        allPromise.push(this.init());
 
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
@@ -209,6 +232,7 @@ export default class Component {
                 }
             }
         }
+        return Promise.all(allPromise);
     }
 
     initChildrenCfg(childrenCfg){
@@ -272,18 +296,20 @@ export default class Component {
         else
         {
             childCom = this.newComByType(chiCfg.type);
-            childCom.initCfg(chiCfg);
+            childCom.initCfg(chiCfg).then(()=>{
+                this.appendChildren(childCom);
+            });
             childCom.parent = this;
-            this.appendChildren(childCom);
             return childCom;
         }
     }
 
     asyncGetView(viewCfg, resolve, reject){
         let childCom = this.newComByType(viewCfg.type);
-        childCom.initCfg(viewCfg);
+        childCom.initCfg(viewCfg).then(()=>{
+            this.appendChildren(childCom);
+        });
         childCom.parent = this;
-        this.appendChildren(childCom);
 
         //广播视图加载完毕事件，针对异步加载的视图
         let event = {

@@ -25,7 +25,7 @@ export default class Router extends Rect{
 
     initCfg(cfg)
     {
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
 
         if (cfg.routes)
         {
@@ -44,6 +44,7 @@ export default class Router extends Rect{
                 }
             }
         }
+        return promise;
     }
 
     draw(ctx){

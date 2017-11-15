@@ -7,7 +7,7 @@ export default class Button extends Rect {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
         this.setStyle("lineHeight", this.getHeight());
 
         //自适应宽度
@@ -15,5 +15,6 @@ export default class Button extends Rect {
         {
             this.setStyle("width", this.getTextWidth() + 20);
         }
+        return promise;
     }
 }

@@ -18,9 +18,10 @@ export default class Checkbox extends Rect {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
 
         this.checked = cfg.checked;
+        return promise;
     }
 
     draw(ctx) {

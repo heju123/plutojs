@@ -65,8 +65,9 @@ export default class Scrollbar extends Rect {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
         this.initScrollbar();
+        return promise;
     }
 
     draw(ctx)

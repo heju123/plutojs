@@ -14,7 +14,8 @@ export default class Sprite extends Rect {
     }
 
     initCfg(cfg){
-        super.initCfg(cfg);
+        let promise = super.initCfg(cfg);
+        return promise;
     }
 
     /**
