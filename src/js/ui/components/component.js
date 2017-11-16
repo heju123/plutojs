@@ -1062,7 +1062,7 @@ export default class Component {
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
-            let maxWidth = this.parent.getInnerWidth();
+            let maxWidth = this.parent ? this.parent.getInnerWidth() : globalUtil.viewState.getWidth();
             return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
         }
         return this.style.width;
@@ -1078,7 +1078,7 @@ export default class Component {
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
-            let maxHeight = this.parent.getInnerHeight();
+            let maxHeight = this.parent ? this.parent.getInnerHeight() : globalUtil.viewState.getHeight();
             return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
         }
         return this.style.height;
