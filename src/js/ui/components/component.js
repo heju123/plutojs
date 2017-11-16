@@ -188,7 +188,7 @@ export default class Component {
         }
         if (cfg.children)
         {
-            this.initChildrenCfg(cfg.children);
+            allPromise.push(this.initChildrenCfg(cfg.children));
         }
 
         //事件绑定配置
@@ -236,18 +236,29 @@ export default class Component {
     }
 
     initChildrenCfg(childrenCfg){
+        let allPromise = [];
         if (typeof(childrenCfg) == "object" && childrenCfg instanceof Array)
         {
             let chiCfg;
             for (let i = 0, j = childrenCfg.length; i < j; i++)
             {
                 chiCfg = childrenCfg[i];
-                this.produceChildrenByCfg(chiCfg);
+                allPromise.push(this.produceChildrenByCfg(chiCfg));
             }
         }
         else
         {
-            this.produceChildrenByCfg(childrenCfg);
+            allPromise.push(this.produceChildrenByCfg(childrenCfg));
+        }
+        if (allPromise.length > 0)
+        {
+            return Promise.all(allPromise);
+        }
+        else
+        {
+            return new Promise((resolve)=>{
+                resolve();
+            });
         }
     }
 
@@ -302,9 +313,9 @@ export default class Component {
             return new Promise((resolve)=>{
                 childCom = this.newComByType(chiCfg.type);
                 childCom.initCfg(chiCfg).then(()=>{
-                    this.appendChildren(childCom);
                     resolve(childCom);
                 });
+                this.appendChildren(childCom);
                 childCom.parent = this;
             });
         }
@@ -313,14 +324,13 @@ export default class Component {
     asyncGetView(viewCfg, resolve, reject){
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
-            this.appendChildren(childCom);
-
             //广播视图加载完毕事件，针对异步加载的视图
             let event = {
                 currentTarget : childCom
             };
             globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
         });
+        this.appendChildren(childCom);
         childCom.parent = this;
 
         if (resolve)
