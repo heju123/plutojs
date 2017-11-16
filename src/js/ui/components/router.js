@@ -25,7 +25,12 @@ export default class Router extends Rect{
 
     initCfg(cfg)
     {
+        let allPromise = [];
         let promise = super.initCfg(cfg);
+        if (promise)
+        {
+            allPromise.push(promise);
+        }
 
         if (cfg.routes)
         {
@@ -40,11 +45,11 @@ export default class Router extends Rect{
                 if (rCfg.default)
                 {
                     this.currentRoute = name;
-                    this.getChildrenView();
+                    allPromise.push(this.getChildrenView());
                 }
             }
         }
-        return promise;
+        return Promise.all(allPromise);
     }
 
     draw(ctx){
@@ -56,39 +61,37 @@ export default class Router extends Rect{
     }
 
     getChildrenView(){
-        if (!this.currentChildren)
-        {
-            if (this.routes[this.currentRoute].isLoaded === false)//未加载资源
+        return new Promise((resolve)=>{
+            if (!this.currentChildren)
             {
-                let retChild = this.produceChildrenByCfg(this.routes[this.currentRoute].loader);
-                if (retChild instanceof Promise)
+                if (this.routes[this.currentRoute].isLoaded === false)//未加载资源
                 {
-                    retChild.then((child)=>{
+                    let retPromise = this.produceChildrenByCfg(this.routes[this.currentRoute].loader);
+                    retPromise.then((child)=>{
                         this.currentChildren = child;
                         this.currentChildren.name = this.currentRoute;
                         this.currentChildren.active = true;
                         this.routes[this.currentRoute].isLoaded = true;
+                        resolve();
                     });
                 }
                 else
                 {
-                    this.currentChildren = retChild;
-                    this.currentChildren.name = this.currentRoute;
+                    this.children.forEach((child)=>{
+                        if (child.name === this.currentRoute)
+                        {
+                            this.currentChildren = child;
+                        }
+                    });
                     this.currentChildren.active = true;
-                    this.routes[this.currentRoute].isLoaded = true;
+                    resolve();
                 }
             }
             else
             {
-                this.children.forEach((child)=>{
-                    if (child.name === this.currentRoute)
-                    {
-                        this.currentChildren = child;
-                    }
-                });
-                this.currentChildren.active = true;
+                resolve();
             }
-        }
+        });
     }
 
     getChildren(){

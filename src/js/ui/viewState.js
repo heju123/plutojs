@@ -98,15 +98,14 @@ export default class ViewState{
         if (viewCfg.type == "rect")
         {
             this.rootComponent = new Rect();
-            this.rootComponent.initCfg(viewCfg);
         }
         else if (viewCfg.type == "route")
         {
             this.rootComponent = new Router();
-            this.rootComponent.initCfg(viewCfg);
         }
-
-        globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件（所有同步加载的视图加载完毕）
+        this.rootComponent.initCfg(viewCfg).then(()=>{
+            globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件（所有同步加载的视图加载完毕）
+        });
     }
 
     /** 绘制前 */

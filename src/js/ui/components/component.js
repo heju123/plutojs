@@ -299,12 +299,14 @@ export default class Component {
         }
         else
         {
-            childCom = this.newComByType(chiCfg.type);
-            childCom.initCfg(chiCfg).then(()=>{
-                this.appendChildren(childCom);
+            return new Promise((resolve)=>{
+                childCom = this.newComByType(chiCfg.type);
+                childCom.initCfg(chiCfg).then(()=>{
+                    this.appendChildren(childCom);
+                    resolve(childCom);
+                });
+                childCom.parent = this;
             });
-            childCom.parent = this;
-            return childCom;
         }
     }
 
@@ -312,14 +314,14 @@ export default class Component {
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
             this.appendChildren(childCom);
+
+            //广播视图加载完毕事件，针对异步加载的视图
+            let event = {
+                currentTarget : childCom
+            };
+            globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
         });
         childCom.parent = this;
-
-        //广播视图加载完毕事件，针对异步加载的视图
-        let event = {
-            currentTarget : childCom
-        };
-        globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
 
         if (resolve)
         {

@@ -96,8 +96,13 @@ export default class Input extends Scrollbar {
             let textX;
             let textY;
             let charCount = 0;
+            let char;
+            let cindex;
             this.text.forEach((row, index)=>{
-                row.forEach((char, cindex)=>{
+                char = undefined;
+                cindex = 0;
+                while (char = row.charAt(cindex))
+                {
                     textX = this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10);
                     textY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index;
                     if (my >= textY
@@ -108,7 +113,8 @@ export default class Input extends Scrollbar {
                         globalUtil.action.inputListenerDom.setSelectionRange(charCount + 1, charCount + 1);
                     }
                     charCount++;
-                });
+                    cindex++;
+                }
                 charCount++;//加上换行符
             });
         }
