@@ -252,6 +252,7 @@ export default class Component {
     }
 
     newComByType(type){
+        let Router = require("./router.js").default;
         let Rect = require("./rect.js").default;
         let Input = require("./input.js").default;
         let Button = require("./button.js").default;
@@ -262,6 +263,9 @@ export default class Component {
         let com;
         switch (type)
         {
+            case "route" :
+                com = new Router(this);
+                break;
             case "rect" :
                 com = new Rect(this);
                 break;
