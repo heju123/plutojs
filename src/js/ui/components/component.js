@@ -8,6 +8,7 @@ import animationUtil from "../../util/animationUtil.js";
 export default class Component {
     constructor(parent) {
         this.parent = parent;
+        this.isInit = false;
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
         this.children = [];
@@ -52,16 +53,20 @@ export default class Component {
                 });
             }));
         }
-        if (allPromise.length > 0)
-        {
-            return Promise.all(allPromise);
-        }
-        else
-        {
-            return new Promise((resolve)=>{
+        return new Promise((resolve)=>{
+            if (allPromise.length > 0)
+            {
+                Promise.all(allPromise).then(()=>{
+                    this.isInit = true;
+                    resolve();
+                });
+            }
+            else
+            {
+                this.isInit = true;
                 resolve();
-            });
-        }
+            }
+        });
     }
 
     initBackgroundImageDom(url){
