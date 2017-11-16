@@ -143,10 +143,10 @@ export default class Component {
             {
                 this.style[key] = cfgStyle[key];
             }
-            else if (typeof(cfgStyle[key]) === "function")
-            {
-                this.setStyle(key, cfgStyle[key].apply(this, []));
-            }
+            // else if (typeof(cfgStyle[key]) === "function")
+            // {
+            //     this.setStyle(key, cfgStyle[key].apply(this, []));
+            // }
             else
             {
                 this.setStyle(key, cfgStyle[key]);
