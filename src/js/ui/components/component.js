@@ -53,7 +53,7 @@ export default class Component {
                 });
             }));
         }
-        return new Promise((resolve)=>{
+        this.afterInitPromise = new Promise((resolve)=>{
             if (allPromise.length > 0)
             {
                 Promise.all(allPromise).then(()=>{
@@ -67,6 +67,7 @@ export default class Component {
                 resolve();
             }
         });
+        return this.afterInitPromise;
     }
 
     initBackgroundImageDom(url){
