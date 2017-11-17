@@ -415,7 +415,9 @@ export default class Component {
     appendChildren(child){
         this.children.push(child);
 
-        this.propagationDoLayout(this);
+        child.afterInitPromise.then(()=>{
+            this.propagationDoLayout(this);
+        });
     }
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */

@@ -82,6 +82,7 @@ export default class Map extends Rect {
                     {
                         rect = new Rect(this);
                         rect.name = "map_data";
+                        rect.init();
                         style = {
                             x: x * this.mapSize,
                             y: y * this.mapSize,
