@@ -23,32 +23,42 @@ export default class Sprite extends Rect {
      *
      * @param sx 要设置的x值
      * @param sy 要设置的y值
-     * @return true：发生碰撞；false:未发生碰撞
+     * @return reject：发生碰撞；resolve:未发生碰撞
      */
     detectCollision(sx, sy)
     {
-        if (!(this.parent instanceof Map))
-        {
-            return false;
-        }
-        if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
-            || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
-        {
-            return false;
-        }
-        let mapXMin = Math.floor(sx / this.parent.mapSize);
-        let mapXMax = Math.floor((sx + this.getWidth()) / this.parent.mapSize);
-        let mapYMin = Math.floor(sy / this.parent.mapSize);
-        let mapYMax = Math.floor((sy + this.getHeight()) / this.parent.mapSize);
-        let collision = false;
-        for (let x = mapXMin; x <= mapXMax; x++) {
-            for (let y = mapYMin; y <= mapYMax; y++) {
-                if (this.parent.mapData[x] && this.parent.mapData[x][y] && this.parent.mapData[x][y].block) {
-                    collision = true;
+        return new Promise((resolve, reject)=>{
+            if (!(this.parent instanceof Map))
+            {
+                resolve();
+            }
+            if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
+                || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
+            {
+                resolve();
+            }
+            let mapXMin = Math.floor(sx / this.parent.mapSize);
+            let mapXMax = Math.floor((sx + this.getWidth()) / this.parent.mapSize);
+            let mapYMin = Math.floor(sy / this.parent.mapSize);
+            let mapYMax = Math.floor((sy + this.getHeight()) / this.parent.mapSize);
+            let collision = false;
+            for (let x = mapXMin; x <= mapXMax; x++) {
+                for (let y = mapYMin; y <= mapYMax; y++) {
+                    if (this.parent.mapData[x] && this.parent.mapData[x][y] && this.parent.mapData[x][y].block) {
+                        collision = true;
+                    }
                 }
             }
-        }
-        return collision;
+
+            if (collision)
+            {
+                reject();
+            }
+            else
+            {
+                resolve();
+            }
+        });
     }
 
     draw(ctx) {
@@ -72,30 +82,22 @@ export default class Sprite extends Rect {
 
                 if (this.xSpeed !== 0 || this.ySpeed !== 0)
                 {
-                    if (!this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed))
-                    {
+                    this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed).then(()=>{
                         this.setStyle("x", this.getX() + this.xSpeed);
                         this.setStyle("y", this.getY() + this.ySpeed);
-                    }
-                    else//x或y方向发生碰撞，则只移动x或y
-                    {
-                        if (!this.detectCollision(this.getX() + this.xSpeed, this.getY()))
-                        {
+                    }, ()=>{
+                        //x或y方向发生碰撞，则只移动x或y
+                        this.detectCollision(this.getX() + this.xSpeed, this.getY()).then(()=>{
                             this.setStyle("x", this.getX() + this.xSpeed);
-                        }
-                        else
-                        {
+                        }, ()=>{
                             this.xSpeed = 0;
-                        }
-                        if (!this.detectCollision(this.getX(), this.getY() + this.ySpeed))
-                        {
+                        });
+                        this.detectCollision(this.getX(), this.getY() + this.ySpeed).then(()=>{
                             this.setStyle("y", this.getY() + this.ySpeed);
-                        }
-                        else
-                        {
+                        }, ()=>{
                             this.ySpeed = 0;
-                        }
-                    }
+                        });
+                    });
                 }
 
                 this.lastTime = currentTime;
