@@ -1,5 +1,7 @@
 import Rect from "../rect.js";
 import Map from "../game/map.js";
+import Thread from "../../../util/thread.js";
+import MPromise from "../../../util/promise.js";
 
 export default class Sprite extends Rect {
     constructor(parent) {
@@ -11,11 +13,45 @@ export default class Sprite extends Rect {
         this.yAcceleration = 0;//y加速度
 
         this.setStyle("zIndex", 1000);
+
+        this.detectCollisionThread = new Thread(this.detectCollisionByThread);
     }
 
     initCfg(cfg){
         let promise = super.initCfg(cfg);
         return promise;
+    }
+
+    detectCollisionByThread(e){
+        let data = JSON.parse(e.data);
+        let sx = data.sx;
+        let sy = data.sy;
+        let sWidth = data.sWidth;
+        let sHeight = data.sHeight;
+        let mapSize = data.mapSize;
+        let mapData = data.mapData;
+
+        let mapXMin = Math.floor(sx / mapSize);
+        let mapXMax = Math.floor((sx + sWidth) / mapSize);
+        let mapYMin = Math.floor(sy / mapSize);
+        let mapYMax = Math.floor((sy + sHeight) / mapSize);
+        let collision = false;
+        for (let x = mapXMin; x <= mapXMax; x++) {
+            for (let y = mapYMin; y <= mapYMax; y++) {
+                if (mapData[x] && mapData[x][y] && mapData[x][y].block) {
+                    collision = true;
+                }
+            }
+        }
+
+        if (collision)
+        {
+            self.postMessage("0");
+        }
+        else
+        {
+            self.postMessage("1");
+        }
     }
 
     /**
@@ -27,38 +63,35 @@ export default class Sprite extends Rect {
      */
     detectCollision(sx, sy)
     {
-        return new Promise((resolve, reject)=>{
-            if (!(this.parent instanceof Map))
-            {
-                resolve();
-            }
-            if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
-                || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
-            {
-                resolve();
-            }
-            let mapXMin = Math.floor(sx / this.parent.mapSize);
-            let mapXMax = Math.floor((sx + this.getWidth()) / this.parent.mapSize);
-            let mapYMin = Math.floor(sy / this.parent.mapSize);
-            let mapYMax = Math.floor((sy + this.getHeight()) / this.parent.mapSize);
-            let collision = false;
-            for (let x = mapXMin; x <= mapXMax; x++) {
-                for (let y = mapYMin; y <= mapYMax; y++) {
-                    if (this.parent.mapData[x] && this.parent.mapData[x][y] && this.parent.mapData[x][y].block) {
-                        collision = true;
-                    }
-                }
-            }
+        let promise = new MPromise();
+        if (!(this.parent instanceof Map))
+        {
+            promise.resolve();
+        }
+        if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
+            || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
+        {
+            promise.resolve();
+        }
 
-            if (collision)
+        this.detectCollisionThread.postMessage({
+            sx : sx,
+            sy : sy,
+            sWidth : this.getWidth(),
+            sHeight : this.getHeight(),
+            mapSize : this.parent.mapSize,
+            mapData : this.parent.mapData
+        }).then((data)=>{
+            if (data === "1")//无碰撞
             {
-                reject();
+                promise.resolve();
             }
             else
             {
-                resolve();
+                promise.reject();
             }
         });
+        return promise;
     }
 
     draw(ctx) {
@@ -69,7 +102,7 @@ export default class Sprite extends Rect {
         }
         else
         {
-            if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
+            if (currentTime - this.lastTime >= 1 && !this.detectCollisionLock)//大约1毫秒执行一次
             {
                 if (this.xAcceleration !== 0)
                 {
@@ -85,21 +118,30 @@ export default class Sprite extends Rect {
                     this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed).then(()=>{
                         this.setStyle("x", this.getX() + this.xSpeed);
                         this.setStyle("y", this.getY() + this.ySpeed);
+                        this.detectCollisionLock = false;
                     }, ()=>{
                         //x或y方向发生碰撞，则只移动x或y
                         this.detectCollision(this.getX() + this.xSpeed, this.getY()).then(()=>{
                             this.setStyle("x", this.getX() + this.xSpeed);
+                            console.log("x speed");
                         }, ()=>{
                             this.xSpeed = 0;
+                            console.log("x error");
+                        }).finally(()=>{
+                            this.detectCollisionLock = false;
                         });
                         this.detectCollision(this.getX(), this.getY() + this.ySpeed).then(()=>{
                             this.setStyle("y", this.getY() + this.ySpeed);
+                            console.log("y speed");
                         }, ()=>{
                             this.ySpeed = 0;
+                            console.log("y error");
+                        }).finally(()=>{
+                            this.detectCollisionLock = false;
                         });
                     });
                 }
-
+                this.detectCollisionLock = true;
                 this.lastTime = currentTime;
             }
         }
@@ -107,5 +149,14 @@ export default class Sprite extends Rect {
             return false;
         }
         return true;
+    }
+
+    destroy(){
+        super.destroy();
+
+        if (this.detectCollisionThread)
+        {
+            this.detectCollisionThread.terminate();
+        }
     }
 }

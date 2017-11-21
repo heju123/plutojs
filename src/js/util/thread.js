@@ -1,7 +1,10 @@
+import MPromise from "./promise.js";
+
 export default class Thread {
-    constructor(fun, callback) {
+    constructor(fun) {
         if(typeof(Worker)!=="undefined")
         {
+            this.callbackPromises = [];
             let scriptDom = document.createElement("SCRIPT");
             scriptDom.setAttribute("type", "javascript/worker");
             let textDom = document.createTextNode("self.onmessage=" + fun.toString());
@@ -10,10 +13,7 @@ export default class Thread {
             this.worker = new Worker(window.URL.createObjectURL(blob));
 
             this.worker.onmessage = (e)=> {
-                if (callback && typeof(callback) == "function")
-                {
-                    callback.apply(this, [e.data]);
-                }
+                this.doCallbacks(e);
             };
         }
     }
@@ -34,7 +34,20 @@ export default class Thread {
         {
             sendData = data;
         }
+        let callbackPromise = new MPromise();
+        this.callbackPromises.push(callbackPromise);
         this.worker.postMessage(sendData);
+        return callbackPromise;
+    }
+
+    doCallbacks(e){
+        if (this.callbackPromises.length > 0)
+        {
+            this.callbackPromises.forEach((promise)=>{
+                promise.resolve(e.data);
+            });
+            this.callbackPromises.length = 0;
+        }
     }
 
     terminate(){

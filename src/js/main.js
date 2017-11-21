@@ -7,6 +7,7 @@ import commonUtil from "./util/commonUtil.js";
 import globalUtil from "./util/globalUtil.js";
 import Thread from "./util/thread.js";
 import Controller from "./ui/controller.js";
+import MPromise from "./util/promise.js";
 
 import Sprite from "./ui/components/game/sprite.js";
 import Button from "./ui/components/button.js";
@@ -53,6 +54,7 @@ window.monk = {
     httpUtil : httpUtil,
     Thread : Thread,
     Controller : Controller,
+    MPromise : MPromise,
     components : {
         Sprite : Sprite,
         Button : Button,
