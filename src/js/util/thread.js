@@ -1,5 +1,5 @@
 export default class Thread {
-    constructor(fun) {
+    constructor(fun, callback) {
         if(typeof(Worker)!=="undefined")
         {
             let scriptDom = document.createElement("SCRIPT");
@@ -8,23 +8,23 @@ export default class Thread {
             scriptDom.appendChild(textDom);
             let blob = new Blob([scriptDom.text], { type: "text/plain" });
             this.worker = new Worker(window.URL.createObjectURL(blob));
+
+            this.worker.onmessage = (e)=> {
+                if (callback && typeof(callback) == "function")
+                {
+                    callback.apply(this, [e.data]);
+                }
+            };
         }
     }
 
     /**
-     * 启动线程
+     * 发送数据到线程处理
      *
      * @param data 发送的数据
      * @param replacer function对象，作为JSON.stringify的过滤器
-     * @param callback 执行结果回调，参数：data
      */
-    run(data, replacer, callback){
-        this.worker.onmessage = (e)=> {
-            if (callback && typeof(callback) == "function")
-            {
-                callback.apply(this, [e.data]);
-            }
-        };
+    postMessage(data, replacer){
         let sendData;
         if (typeof(data) == "object")
         {
