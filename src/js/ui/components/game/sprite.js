@@ -15,6 +15,8 @@ export default class Sprite extends Rect {
         this.setStyle("zIndex", 1000);
 
         this.detectCollisionThread = new Thread(this.detectCollisionByThread);
+        this.detectXCollisionThread = new Thread(this.detectCollisionByThread);
+        this.detectYCollisionThread = new Thread(this.detectCollisionByThread);
     }
 
     initCfg(cfg){
@@ -59,22 +61,25 @@ export default class Sprite extends Rect {
      *
      * @param sx 要设置的x值
      * @param sy 要设置的y值
+     * @param thread 碰撞处理使用的线程
      * @return reject：发生碰撞；resolve:未发生碰撞
      */
-    detectCollision(sx, sy)
+    detectCollision(sx, sy, thread)
     {
         let promise = new MPromise();
-        if (!(this.parent instanceof Map))
+        if (!(this.parent instanceof Map)
+            || this.parent.mapSize == 0 || !this.parent.mapData || this.parent.mapData.length === 0)
         {
             promise.resolve();
+            return promise;
         }
         if (sx > this.parent.getWidth() || sy > this.parent.getHeight()
             || sx + this.getWidth() < 0 || sy + this.getHeight() < 0)//超出map范围不考虑碰撞
         {
             promise.resolve();
+            return promise;
         }
-
-        this.detectCollisionThread.postMessage({
+        thread.postMessage({
             sx : sx,
             sy : sy,
             sWidth : this.getWidth(),
@@ -115,27 +120,23 @@ export default class Sprite extends Rect {
 
                 if (this.xSpeed !== 0 || this.ySpeed !== 0)
                 {
-                    this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed).then(()=>{
+                    this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed, this.detectCollisionThread).then(()=>{
                         this.setStyle("x", this.getX() + this.xSpeed);
                         this.setStyle("y", this.getY() + this.ySpeed);
                         this.detectCollisionLock = false;
                     }, ()=>{
                         //x或y方向发生碰撞，则只移动x或y
-                        this.detectCollision(this.getX() + this.xSpeed, this.getY()).then(()=>{
+                        this.detectCollision(this.getX() + this.xSpeed, this.getY(), this.detectXCollisionThread).then(()=>{
                             this.setStyle("x", this.getX() + this.xSpeed);
-                            console.log("x speed");
                         }, ()=>{
                             this.xSpeed = 0;
-                            console.log("x error");
                         }).finally(()=>{
                             this.detectCollisionLock = false;
                         });
-                        this.detectCollision(this.getX(), this.getY() + this.ySpeed).then(()=>{
+                        this.detectCollision(this.getX(), this.getY() + this.ySpeed, this.detectYCollisionThread).then(()=>{
                             this.setStyle("y", this.getY() + this.ySpeed);
-                            console.log("y speed");
                         }, ()=>{
                             this.ySpeed = 0;
-                            console.log("y error");
                         }).finally(()=>{
                             this.detectCollisionLock = false;
                         });
@@ -157,6 +158,14 @@ export default class Sprite extends Rect {
         if (this.detectCollisionThread)
         {
             this.detectCollisionThread.terminate();
+        }
+        if (this.detectXCollisionThread)
+        {
+            this.detectXCollisionThread.terminate();
+        }
+        if (this.detectYCollisionThread)
+        {
+            this.detectYCollisionThread.terminate();
         }
     }
 }
