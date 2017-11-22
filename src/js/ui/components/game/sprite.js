@@ -79,7 +79,7 @@ export default class Sprite extends Rect {
             promise.resolve();
             return promise;
         }
-        thread.postMessage({
+        thread.run({
             sx : sx,
             sy : sy,
             sWidth : this.getWidth(),

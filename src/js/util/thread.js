@@ -21,12 +21,12 @@ export default class Thread {
     }
 
     /**
-     * 发送数据到线程处理
+     * 开始线程
      *
      * @param data 发送的数据
      * @param replacer function对象，作为JSON.stringify的过滤器
      */
-    postMessage(data, replacer){
+    run(data, replacer){
         let sendData;
         if (typeof(data) == "object")
         {
