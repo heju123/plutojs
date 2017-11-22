@@ -14,9 +14,9 @@ export default class Sprite extends Rect {
 
         this.setStyle("zIndex", 1000);
 
-        this.detectCollisionThread = new Thread(this.detectCollisionByThread);
-        this.detectXCollisionThread = new Thread(this.detectCollisionByThread);
-        this.detectYCollisionThread = new Thread(this.detectCollisionByThread);
+        this.detectCollisionThread = new Thread(this.thread_detectCollision);
+        this.detectXCollisionThread = new Thread(this.thread_detectCollision);
+        this.detectYCollisionThread = new Thread(this.thread_detectCollision);
     }
 
     initCfg(cfg){
@@ -24,35 +24,30 @@ export default class Sprite extends Rect {
         return promise;
     }
 
-    detectCollisionByThread(e){
+    thread_detectCollision(e){
         let data = JSON.parse(e.data);
-        let sx = data.sx;
-        let sy = data.sy;
-        let sWidth = data.sWidth;
-        let sHeight = data.sHeight;
-        let mapSize = data.mapCom.mapSize;
         let mapData = data.mapCom.mapData;
-
-        let mapXMin = Math.floor(sx / mapSize);
-        let mapXMax = Math.floor((sx + sWidth) / mapSize);
-        let mapYMin = Math.floor(sy / mapSize);
-        let mapYMax = Math.floor((sy + sHeight) / mapSize);
-        let collision = false;
-        for (let x = mapXMin; x <= mapXMax; x++) {
-            for (let y = mapYMin; y <= mapYMax; y++) {
-                if (mapData[x] && mapData[x][y] && mapData[x][y].block) {
-                    collision = true;
+        let mapColMin = data.mapColMin;
+        let mapColMax = data.mapColMax;
+        let mapRowMin = data.mapRowMin;
+        let mapRowMax = data.mapRowMax;
+        let collision = [];//记录所有碰撞的坐标点
+        for (let row = mapRowMin; row <= mapRowMax; row++) {
+            for (let col = mapColMin; col <= mapColMax; col++) {
+                if (mapData[row] && mapData[row][col] && mapData[row][col].block) {
+                    collision.push(row);
+                    collision.push(col);
                 }
             }
         }
 
-        if (collision)
+        if (collision.length > 0)
         {
-            self.postMessage("0");
+            self.postMessage(JSON.stringify(collision));
         }
         else
         {
-            self.postMessage("1");
+            self.postMessage(0);
         }
     }
 
@@ -62,13 +57,13 @@ export default class Sprite extends Rect {
      * @param sx 要设置的x值
      * @param sy 要设置的y值
      * @param thread 碰撞处理使用的线程
+     * @param fixCoor 发生碰撞时是否修复坐标，防止一直卡在障碍内
      * @return reject：发生碰撞；resolve:未发生碰撞
      */
-    detectCollision(sx, sy, thread)
+    detectCollision(sx, sy, thread, fixCoor)
     {
         let promise = new MPromise();
-        if (!(this.parent instanceof Map)
-            || this.parent.mapSize == 0 || !this.parent.mapData || this.parent.mapData.length === 0)
+        if (!(this.parent instanceof Map))
         {
             promise.resolve();
             return promise;
@@ -79,11 +74,30 @@ export default class Sprite extends Rect {
             promise.resolve();
             return promise;
         }
+        //关键地图数据不存在，可能是地图还没初始化完成
+        if (this.parent.mapSize == 0 || !this.parent.mapData || this.parent.mapData.length === 0)
+        {
+            promise.reject();
+            return promise;
+        }
+
+        let mapColMin = Math.floor(sx / this.parent.mapSize);
+        let mapColMax = Math.floor((sx + this.getWidth()) / this.parent.mapSize);
+        if ((sx + this.getWidth()) % this.parent.mapSize === 0)
+        {
+            mapColMax--;
+        }
+        let mapRowMin = Math.floor(sy / this.parent.mapSize);
+        let mapRowMax = Math.floor((sy + this.getHeight()) / this.parent.mapSize);
+        if ((sy + this.getHeight()) % this.parent.mapSize === 0)
+        {
+            mapRowMax--;
+        }
         thread.run({
-            sx : sx,
-            sy : sy,
-            sWidth : this.getWidth(),
-            sHeight : this.getHeight(),
+            mapColMin : mapColMin,
+            mapColMax : mapColMax,
+            mapRowMin : mapRowMin,
+            mapRowMax : mapRowMax,
             mapCom : this.parent
         },function(key, value) {
             if (key === 'parent' || key === 'controller') {
@@ -91,12 +105,42 @@ export default class Sprite extends Rect {
             }
             return value;
         }).then((data)=>{
-            if (data === "1")//无碰撞
+            if (typeof(data) === "number" && data === 0)//无碰撞
             {
                 promise.resolve();
             }
             else
             {
+                //修复坐标
+                if (fixCoor)
+                {
+                    let collisionsArr = JSON.parse(data);
+                    let minRow;
+                    let minCol;
+                    let maxRow;
+                    let maxCol;
+                    for (let i = 0, j = collisionsArr.length; i < j; i += 2)
+                    {
+                        minRow = !minRow ? collisionsArr[i] : Math.min(collisionsArr[i], minRow);
+                        minCol = !minCol ? collisionsArr[i + 1] : Math.min(collisionsArr[i + 1], minCol);
+                        maxRow = !maxRow ? collisionsArr[i] : Math.max(collisionsArr[i], maxRow);
+                        maxCol = !maxCol ? collisionsArr[i + 1] : Math.max(collisionsArr[i + 1], maxCol);
+                    }
+                    if (maxRow - minRow > maxCol - minCol)//垂直的碰撞面积更大，应该做横向移动修复坐标
+                    {
+                        if (mapColMax - minCol > minCol - mapColMin)//碰撞处在左边，应该向右移动
+                        {
+                            this.setX(maxCol * this.parent.mapSize + this.parent.mapSize);
+                        }
+                        else
+                        {
+                            this.setX(minCol * this.parent.mapSize - this.getWidth());
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
                 promise.reject();
             }
         });
@@ -124,25 +168,30 @@ export default class Sprite extends Rect {
 
                 if (this.xSpeed !== 0 || this.ySpeed !== 0)
                 {
-                    this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed, this.detectCollisionThread).then(()=>{
-                        this.setStyle("x", this.getX() + this.xSpeed);
-                        this.setStyle("y", this.getY() + this.ySpeed);
-                        this.detectCollisionLock = false;
+                    //先判断当前是否在障碍中
+                    this.detectCollision(this.getX(), this.getY(), this.detectCollisionThread, true).then(()=>{
                     }, ()=>{
-                        //x或y方向发生碰撞，则只移动x或y
-                        this.detectCollision(this.getX() + this.xSpeed, this.getY(), this.detectXCollisionThread).then(()=>{
+                    }).finally(()=>{
+                        this.detectCollision(this.getX() + this.xSpeed, this.getY() + this.ySpeed, this.detectCollisionThread).then(()=>{
                             this.setStyle("x", this.getX() + this.xSpeed);
-                        }, ()=>{
-                            this.xSpeed = 0;
-                        }).finally(()=>{
-                            this.detectCollisionLock = false;
-                        });
-                        this.detectCollision(this.getX(), this.getY() + this.ySpeed, this.detectYCollisionThread).then(()=>{
                             this.setStyle("y", this.getY() + this.ySpeed);
-                        }, ()=>{
-                            this.ySpeed = 0;
-                        }).finally(()=>{
                             this.detectCollisionLock = false;
+                        }, ()=>{
+                            //x或y方向发生碰撞，则只移动x或y
+                            this.detectCollision(this.getX() + this.xSpeed, this.getY(), this.detectXCollisionThread).then(()=>{
+                                this.setStyle("x", this.getX() + this.xSpeed);
+                            }, ()=>{
+                                this.xSpeed = 0;
+                            }).finally(()=>{
+                                this.detectCollisionLock = false;
+                            });
+                            this.detectCollision(this.getX(), this.getY() + this.ySpeed, this.detectYCollisionThread).then(()=>{
+                                this.setStyle("y", this.getY() + this.ySpeed);
+                            }, ()=>{
+                                this.ySpeed = 0;
+                            }).finally(()=>{
+                                this.detectCollisionLock = false;
+                            });
                         });
                     });
                 }

@@ -48,12 +48,12 @@ export default class Map extends Rect {
     //初始化地图数据
     initMapData(){
         this.mapData = [];
-        for (let i = 0; i < this.mapWidth; i++)
+        for (let row = 0; row < this.mapHeight; row++)
         {
-            this.mapData[i] = [];
-            for (let j = 0; j < this.mapHeight; j++)
+            this.mapData[row] = [];
+            for (let col = 0; col < this.mapWidth; col++)
             {
-                this.mapData[i][j] = {
+                this.mapData[row][col] = {
                     block : false,//是否障碍物
                     terrain : 0//地形：无
                 };
@@ -74,28 +74,28 @@ export default class Map extends Rect {
             this.removeAllChildren("map_data");
             let rect;
             let style;
-            for (let y = 0; y < this.mapData.length; y++)
+            for (let row = 0; row < this.mapData.length; row++)
             {
-                for (let x = 0; x < this.mapData[y].length; x++)
+                for (let col = 0; col < this.mapData[row].length; col++)
                 {
-                    if (this.mapData[x][y].block || this.mapData[x][y].terrain !== 0)
+                    if (this.mapData[row][col].block || this.mapData[row][col].terrain !== 0)
                     {
                         rect = new Rect(this);
                         rect.name = "map_data";
                         rect.init();
                         style = {
-                            x: x * this.mapSize,
-                            y: y * this.mapSize,
+                            x: col * this.mapSize,
+                            y: row * this.mapSize,
                             width: this.mapSize,
                             height: this.mapSize
                         };
-                        if (this.mapData[x][y].block && this.terrainPolicy.block)
+                        if (this.mapData[row][col].block && this.terrainPolicy.block)
                         {
                             commonUtil.copyObject(this.terrainPolicy.block, style, true);
                         }
-                        if (this.mapData[x][y].terrain !== 0)
+                        if (this.mapData[row][col].terrain !== 0)
                         {
-                            commonUtil.copyObject(this.terrainPolicy[this.mapData[x][y].terrain], style, true);
+                            commonUtil.copyObject(this.terrainPolicy[this.mapData[row][col].terrain], style, true);
                         }
                         rect.setStyle(style);
                         this.appendChildren(rect);
