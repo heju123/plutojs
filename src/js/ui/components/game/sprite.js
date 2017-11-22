@@ -30,8 +30,8 @@ export default class Sprite extends Rect {
         let sy = data.sy;
         let sWidth = data.sWidth;
         let sHeight = data.sHeight;
-        let mapSize = data.mapSize;
-        let mapData = data.mapData;
+        let mapSize = data.mapCom.mapSize;
+        let mapData = data.mapCom.mapData;
 
         let mapXMin = Math.floor(sx / mapSize);
         let mapXMax = Math.floor((sx + sWidth) / mapSize);
@@ -84,8 +84,12 @@ export default class Sprite extends Rect {
             sy : sy,
             sWidth : this.getWidth(),
             sHeight : this.getHeight(),
-            mapSize : this.parent.mapSize,
-            mapData : this.parent.mapData
+            mapCom : this.parent
+        },function(key, value) {
+            if (key === 'parent' || key === 'controller') {
+                return undefined;
+            }
+            return value;
         }).then((data)=>{
             if (data === "1")//无碰撞
             {
