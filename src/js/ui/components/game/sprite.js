@@ -137,8 +137,16 @@ export default class Sprite extends Rect {
                             this.setX(minCol * this.parent.mapSize - this.getWidth());
                         }
                     }
-                    else
+                    else//竖向运动
                     {
+                        if (mapRowMax - minRow < minRow - mapRowMin)//碰撞处在下面，应该向上移动
+                        {
+                            this.setY(minRow * this.parent.mapSize - this.getHeight());
+                        }
+                        else
+                        {
+                            this.setY(maxRow * this.parent.mapSize + this.parent.mapSize);
+                        }
                     }
                 }
                 promise.reject();
@@ -155,7 +163,7 @@ export default class Sprite extends Rect {
         }
         else
         {
-            if (currentTime - this.lastTime >= 1 && !this.detectCollisionLock)//大约1毫秒执行一次
+            if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
             {
                 if (this.xAcceleration !== 0)
                 {
@@ -166,9 +174,10 @@ export default class Sprite extends Rect {
                     this.ySpeed = this.ySpeed + this.yAcceleration;
                 }
 
-                if (this.xSpeed !== 0 || this.ySpeed !== 0)
+                if ((this.xSpeed !== 0 || this.ySpeed !== 0) && !this.detectCollisionLock)
                 {
                     //先判断当前是否在障碍中
+                    this.detectCollisionLock = true;
                     this.detectCollision(this.getX(), this.getY(), this.detectCollisionThread, true).then(()=>{
                     }, ()=>{
                     }).finally(()=>{
@@ -177,25 +186,30 @@ export default class Sprite extends Rect {
                             this.setStyle("y", this.getY() + this.ySpeed);
                             this.detectCollisionLock = false;
                         }, ()=>{
+                            let promise = new MPromise();
+
                             //x或y方向发生碰撞，则只移动x或y
                             this.detectCollision(this.getX() + this.xSpeed, this.getY(), this.detectXCollisionThread).then(()=>{
                                 this.setStyle("x", this.getX() + this.xSpeed);
                             }, ()=>{
                                 this.xSpeed = 0;
                             }).finally(()=>{
-                                this.detectCollisionLock = false;
+                                promise.resolve();
                             });
                             this.detectCollision(this.getX(), this.getY() + this.ySpeed, this.detectYCollisionThread).then(()=>{
                                 this.setStyle("y", this.getY() + this.ySpeed);
                             }, ()=>{
                                 this.ySpeed = 0;
                             }).finally(()=>{
+                                promise.resolve();
+                            });
+
+                            promise.then(()=>{
                                 this.detectCollisionLock = false;
                             });
                         });
                     });
                 }
-                this.detectCollisionLock = true;
                 this.lastTime = currentTime;
             }
         }
