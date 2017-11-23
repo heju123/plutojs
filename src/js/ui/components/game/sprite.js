@@ -24,21 +24,40 @@ export default class Sprite extends Rect {
         return promise;
     }
 
+    /**
+     * 碰撞检测线程方法
+     *
+     * @return 0：无碰撞；[]：返回发生碰撞的最小和最大行列数
+     */
     thread_detectCollision(e){
         let data = JSON.parse(e.data);
-        let mapData = data.mapCom.mapData;
+        let mapData = data.mapData;
         let mapColMin = data.mapColMin;
         let mapColMax = data.mapColMax;
         let mapRowMin = data.mapRowMin;
         let mapRowMax = data.mapRowMax;
         let collision = [];//记录所有碰撞的坐标点
+
+        let minRow;//最小碰撞行数
+        let minCol;//最小碰撞列数
+        let maxRow;//最大碰撞行数
+        let maxCol;//最大碰撞列数
         for (let row = mapRowMin; row <= mapRowMax; row++) {
             for (let col = mapColMin; col <= mapColMax; col++) {
                 if (mapData[row] && mapData[row][col] && mapData[row][col].block) {
-                    collision.push(row);
-                    collision.push(col);
+                    minRow = !minRow ? row : Math.min(row, minRow);
+                    minCol = !minCol ? col : Math.min(col, minCol);
+                    maxRow = !maxRow ? row : Math.max(row, maxRow);
+                    maxCol = !maxCol ? col : Math.max(col, maxCol);
                 }
             }
+        }
+        if (minRow && maxRow && minCol && maxCol)
+        {
+            collision.push(minRow);
+            collision.push(maxRow);
+            collision.push(minCol);
+            collision.push(maxCol);
         }
 
         if (collision.length > 0)
@@ -98,7 +117,7 @@ export default class Sprite extends Rect {
             mapColMax : mapColMax,
             mapRowMin : mapRowMin,
             mapRowMax : mapRowMax,
-            mapCom : this.parent
+            mapData : this.parent.mapData
         },function(key, value) {
             if (key === 'parent' || key === 'controller') {
                 return undefined;
@@ -115,17 +134,10 @@ export default class Sprite extends Rect {
                 if (fixCoor)
                 {
                     let collisionsArr = JSON.parse(data);
-                    let minRow;
-                    let minCol;
-                    let maxRow;
-                    let maxCol;
-                    for (let i = 0, j = collisionsArr.length; i < j; i += 2)
-                    {
-                        minRow = !minRow ? collisionsArr[i] : Math.min(collisionsArr[i], minRow);
-                        minCol = !minCol ? collisionsArr[i + 1] : Math.min(collisionsArr[i + 1], minCol);
-                        maxRow = !maxRow ? collisionsArr[i] : Math.max(collisionsArr[i], maxRow);
-                        maxCol = !maxCol ? collisionsArr[i + 1] : Math.max(collisionsArr[i + 1], maxCol);
-                    }
+                    let minRow = collisionsArr[0];
+                    let maxRow = collisionsArr[1];
+                    let minCol = collisionsArr[2];
+                    let maxCol = collisionsArr[3];
                     if (maxRow - minRow > maxCol - minCol)//垂直的碰撞面积更大，应该做横向移动修复坐标
                     {
                         if (mapColMax - minCol > minCol - mapColMin)//碰撞处在左边，应该向右移动
