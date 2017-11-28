@@ -215,6 +215,18 @@ let commonUtil = {
      */
     popMessageTooltip : (msg, opts)=>{
         alert(msg);
+    },
+    /**
+     * 创建图片dom
+     */
+    createImageDom : (url)=>{
+        return new Promise((resolve, reject)=>{
+            let img = new Image();
+            img.onload = function(){
+                resolve(this);
+            };
+            img.src = url;
+        });
     }
 };
 export default commonUtil;

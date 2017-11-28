@@ -72,6 +72,13 @@ export default class Router extends Rect{
                         this.currentChildren.name = this.currentRoute;
                         this.currentChildren.active = true;
                         this.routes[this.currentRoute].isLoaded = true;
+
+                        //广播视图加载完毕事件
+                        let event = {
+                            currentTarget : child
+                        };
+                        globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
+
                         resolve();
                     });
                 }

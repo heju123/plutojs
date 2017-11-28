@@ -73,19 +73,17 @@ export default class Component {
     initBackgroundImageDom(url){
         let $this = this;
         return new Promise((resolve, reject)=>{
-            let img = new Image();
-            img.onload = function(){
+            commonUtil.createImageDom(url).then((imgThis)=>{
                 if (!$this.getWidth() || $this.style.autoWidth)
                 {
-                    $this.setWidth(this.width);
+                    $this.setWidth(imgThis.width);
                 }
                 if (!$this.getHeight() || $this.style.autoHeight)
                 {
-                    $this.setHeight(this.height);
+                    $this.setHeight(imgThis.height);
                 }
-                resolve(this);
-            };
-            img.src = url;
+                resolve(imgThis);
+            });
         });
     }
 
@@ -330,19 +328,13 @@ export default class Component {
     asyncGetView(viewCfg, resolve, reject){
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
-            //广播视图加载完毕事件，针对异步加载的视图
-            let event = {
-                currentTarget : childCom
-            };
-            globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
+            if (resolve)
+            {
+                resolve(childCom);
+            }
         });
         this.appendChildren(childCom);
         childCom.parent = this;
-
-        if (resolve)
-        {
-            resolve(childCom);
-        }
     }
 
     /** 设置默认样式 */
