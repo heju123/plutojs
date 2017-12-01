@@ -147,7 +147,7 @@ export default class BoxCollisionDetector{
                         }
                     }
                 }
-                promise.reject();
+                promise.reject(data);
             }
         });
         return promise;

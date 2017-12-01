@@ -56,27 +56,32 @@ export default class Sprite extends Rect {
                             this.setStyle("y", this.getY() + this.ySpeed);
                             this.detectCollisionLock = false;
                         }, ()=>{
-                            let promise = new MPromise();
-
                             //x或y方向发生碰撞，则只移动x或y
+                            let promise1 = new MPromise();
                             this.collisionDetector.detectCollision(this, this.getX() + this.xSpeed, this.getY(), this.detectXCollisionThread).then(()=>{
                                 this.setStyle("x", this.getX() + this.xSpeed);
                             }, ()=>{
                                 this.xSpeed = 0;
                             }).finally(()=>{
-                                promise.resolve();
+                                promise1.resolve();
                             });
+                            let promise2 = new MPromise();
                             this.collisionDetector.detectCollision(this, this.getX(), this.getY() + this.ySpeed, this.detectYCollisionThread).then(()=>{
                                 this.setStyle("y", this.getY() + this.ySpeed);
                             }, ()=>{
                                 this.ySpeed = 0;
                             }).finally(()=>{
-                                promise.resolve();
+                                promise2.resolve();
                             });
 
-                            promise.then(()=>{
+                            Promise.all([promise1,promise2]).then(()=>{
                                 this.detectCollisionLock = false;
                             });
+
+                            if (this.onCollision && typeof(this.onCollision) === "function")//碰撞事件回调
+                            {
+                                this.onCollision.apply(this, [data]);
+                            }
                         });
                     });
                 }
