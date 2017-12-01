@@ -142,7 +142,7 @@ export default class Sprite extends Rect {
                     {
                         if (mapColMax - minCol > minCol - mapColMin)//碰撞处在左边，应该向右移动
                         {
-                            this.setX(maxCol * this.parent.mapSize + this.parent.mapSize);
+                            this.setX(maxCol * this.parent.mapSize + parseInt(this.parent.mapSize));
                         }
                         else
                         {
@@ -157,7 +157,7 @@ export default class Sprite extends Rect {
                         }
                         else
                         {
-                            this.setY(maxRow * this.parent.mapSize + this.parent.mapSize);
+                            this.setY(maxRow * this.parent.mapSize + parseInt(this.parent.mapSize));
                         }
                     }
                 }
