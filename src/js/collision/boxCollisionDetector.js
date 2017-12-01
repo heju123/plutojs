@@ -1,6 +1,9 @@
 import Map from "../ui/components/game/map.js";
 import MPromise from "../util/promise.js";
 
+/**
+ * 盒子模型碰撞检测
+ */
 export default class BoxCollisionDetector{
     constructor() {
     }
