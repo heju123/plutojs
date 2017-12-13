@@ -751,11 +751,10 @@ export default class Component {
                         {
                             this.setWidth(allWH);
                         }
-                        else if (this.style.layout.contentAlign === "center")//内容居中
+                        if (!this.style.autoHeight && this.style.layout.contentAlign === "center")//内容居中
                         {
-                            centerOffset = this.getInnerWidth() / 2 - allWH / 2;
                             this.children.forEach((child, index)=>{
-                                child.setX(child.getX() + centerOffset);
+                                child.setY(this.getInnerHeight() / 2 - child.getHeight() / 2);
                             });
                         }
                     }
@@ -765,11 +764,10 @@ export default class Component {
                         {
                             this.setHeight(allWH);
                         }
-                        else if (this.style.layout.contentAlign === "center")//内容居中
+                        if (!this.style.autoWidth && this.style.layout.contentAlign === "center")//内容居中
                         {
-                            centerOffset = this.getInnerHeight() / 2 - allWH / 2;
                             this.children.forEach((child, index)=>{
-                                child.setY(child.getY() + centerOffset);
+                                child.setX(this.getInnerWidth() / 2 - child.getWidth() / 2);
                             });
                         }
                     }

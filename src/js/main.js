@@ -18,7 +18,15 @@ import Scrollbar from "./ui/components/scrollbar.js";
 
 class Main {
     constructor(eleId){
-        let mainBody = document.getElementById(eleId);
+        let mainBody;
+        if (typeof(eleId) === "string")
+        {
+            mainBody = document.getElementById(eleId);
+        }
+        else
+        {
+            mainBody = eleId;
+        }
         this.fps = new Fps(mainBody);
 
         globalUtil.action = {};
