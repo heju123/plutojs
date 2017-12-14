@@ -8,10 +8,16 @@ import EventBus from "../event/eventBus.js";
 
 export default class Fps{
     constructor(mainBody){
+        let outerDiv = document.createElement("DIV");
+        outerDiv.style.width = "100%";
+        outerDiv.style.height = "100%";
+        outerDiv.style.position = "relative";
         this.canvas = document.createElement("CANVAS");
-        mainBody.appendChild(this.canvas);
         this.canvas.width = mainBody.offsetWidth;
         this.canvas.height = mainBody.offsetHeight;
+        this.canvas.style.position = "absolute";
+        outerDiv.appendChild(this.canvas);
+        mainBody.append(outerDiv);
         this.ctx = this.canvas.getContext('2d');
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
