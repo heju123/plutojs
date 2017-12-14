@@ -13,15 +13,47 @@ export default class Fps{
         outerDiv.style.height = "100%";
         outerDiv.style.position = "relative";
         this.canvas = document.createElement("CANVAS");
+        this.canvas.offset = this.offset.bind(this.canvas);
         this.canvas.width = mainBody.offsetWidth;
         this.canvas.height = mainBody.offsetHeight;
         this.canvas.style.position = "absolute";
         outerDiv.appendChild(this.canvas);
         mainBody.append(outerDiv);
         this.ctx = this.canvas.getContext('2d');
+        this.ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
         globalUtil.eventBus = new EventBus(this.canvas);
+    }
+
+    offset(element) {
+        let offest = {
+            top: 0,
+            left: 0
+        };
+        let _position;
+        getOffset(element, true);
+        return offest;
+        // 递归获取 offset, 可以考虑使用 getBoundingClientRect
+        function getOffset(node, init) {
+            // 非Element 终止递归
+            if (node.nodeType !== 1) {
+                return;
+            }
+            _position = window.getComputedStyle(node)['position'];
+            // position=static: 继续递归父节点
+            if (typeof(init) === 'undefined' && _position === 'static') {
+                getOffset(node.parentNode);
+                return;
+            }
+            offest.top = node.offsetTop + offest.top - node.scrollTop;
+            offest.left = node.offsetLeft + offest.left - node.scrollLeft;
+            // position = fixed: 获取值后退出递归
+            if (_position === 'fixed') {
+                return;
+            }
+            getOffset(node.parentNode);
+        }
     }
 
     setMainView(viewCfg){

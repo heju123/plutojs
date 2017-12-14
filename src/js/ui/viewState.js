@@ -63,8 +63,8 @@ export default class ViewState{
             }
         });
         this.registerEvent("mousemove", (e)=>{
-            this.ctx.mouseAction.mx = e.pageX;
-            this.ctx.mouseAction.my = e.pageY;
+            this.ctx.mouseAction.mx = e.pageX - this.ctx.canvasOffset.left;
+            this.ctx.mouseAction.my = e.pageY - this.ctx.canvasOffset.top;
 
             if (globalUtil.action.dragComponent)//拖动
             {
