@@ -1248,12 +1248,20 @@ export default class Component {
     removeAllChildren(name){
         if (!name)
         {
+            this.children.forEach((child)=>{
+                child.destroy();
+            });
             this.children.length = 0;
         }
         else
         {
             this.children = this.children.filter((child)=>{
-                return child.name !== name;
+                if (child.name === name)
+                {
+                    child.destroy();
+                    return false;
+                }
+                return true;
             });
         }
     }
