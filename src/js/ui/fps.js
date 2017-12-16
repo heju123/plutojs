@@ -93,6 +93,14 @@ export default class Fps{
         }
         if (com.draw(this.ctx))
         {
+            //自定义绘制，在children之前执行
+            if (com.controller && com.controller.drawBefore && typeof(com.controller.drawBefore) === "function")
+            {
+                this.ctx.save();
+                com.controller.drawBefore.apply(com.controller, [this.ctx]);
+                this.ctx.restore();
+            }
+
             let children = com.getChildren();
             if (children)
             {
