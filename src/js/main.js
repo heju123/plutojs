@@ -8,6 +8,7 @@ import globalUtil from "./util/globalUtil.js";
 import Thread from "./util/thread.js";
 import Controller from "./ui/controller.js";
 import MPromise from "./util/promise.js";
+import animationUtil from "./util/animationUtil.js";
 
 import Sprite from "./ui/components/game/sprite.js";
 import Button from "./ui/components/button.js";
@@ -63,6 +64,7 @@ window.monk = {
     Thread : Thread,
     Controller : Controller,
     MPromise : MPromise,
+    animationUtil : animationUtil,
     components : {
         Sprite : Sprite,
         Button : Button,

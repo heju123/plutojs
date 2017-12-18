@@ -12,19 +12,32 @@ let animationUtil = {
      * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
     executeStyleChange : (com, styleKey, toVal, animation)=>{
+        let to = {};
+        to[styleKey] = toVal;
+        return animationUtil.executeAttrChange(com.style, to, animation);
+    },
+    /**
+     * 执行属性改变动画
+     *
+     * @param to 改变的属性，用object表示
+     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
+     */
+    executeAttrChange : (com, to, animation)=>{
         return new Promise((resolve, reject)=>{
-            let to = {};
-            to[styleKey] = toVal;
             to.ease = EasePack[animation.easeType][animation.easing];
             to.onComplete = function() {
                 resolve();
             };
+            if (animation.delay)
+            {
+                to.delay = animation.delay;
+            }
             if (animation.repeat)
             {
                 to.repeat = animation.repeat;
             }
             animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
-            TweenMax.to(com.style, animation.duration, to);
+            TweenMax.to(com, animation.duration, to);
         });
     }
 };
