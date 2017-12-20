@@ -57,7 +57,8 @@ export default class Fps{
     }
 
     setMainView(viewCfg){
-        globalUtil.viewState = new ViewState(this.ctx);
+        this.viewState = new ViewState(this.canvas, this.ctx);
+        globalUtil.viewState = this.viewState;
         globalUtil.viewState.init(viewCfg);
     }
 

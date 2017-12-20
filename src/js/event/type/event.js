@@ -16,6 +16,11 @@ export default class Event {
         this.currentTarget = target;//绑定事件对象
     }
 
+    //设置浏览器事件对象
+    setSourceEvent(event) {
+        this.sourceEvent = event;
+    }
+
     stopPropagation()
     {
         this.propagation = false;

@@ -210,6 +210,10 @@ export default class EventBus{
             case "click" :
                 event = new ClickEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setSourceEvent(eventNotify.sourceEvent);
+                }
                 break;
             case "mousedown" :
                 event = new MouseEvent(eventNotify.listener.type);
@@ -219,6 +223,7 @@ export default class EventBus{
                     event.setButton(eventNotify.sourceEvent.button);
                     event.setPageX(eventNotify.sourceEvent.pageX);
                     event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             case "mousemove" :
@@ -228,6 +233,7 @@ export default class EventBus{
                 {
                     event.setPageX(eventNotify.sourceEvent.pageX);
                     event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             case "mouseup" :
@@ -238,6 +244,7 @@ export default class EventBus{
                     event.setButton(eventNotify.sourceEvent.button);
                     event.setPageX(eventNotify.sourceEvent.pageX);
                     event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             case "keydown" :
@@ -247,6 +254,7 @@ export default class EventBus{
                 {
                     event.setKey(eventNotify.sourceEvent.key);
                     event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             case "keyup" :
@@ -256,6 +264,7 @@ export default class EventBus{
                 {
                     event.setKey(eventNotify.sourceEvent.key);
                     event.setKeyCode(eventNotify.sourceEvent.keyCode);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             case "mousewheel" :
@@ -264,6 +273,7 @@ export default class EventBus{
                 if (eventNotify.sourceEvent)
                 {
                     event.setWheelDelta(eventNotify.sourceEvent.wheelDelta || -eventNotify.sourceEvent.detail);
+                    event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
             default : break;

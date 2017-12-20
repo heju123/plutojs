@@ -8,8 +8,9 @@ import Router from "./components/router.js";
 import Input from "./components/input.js";
 
 export default class ViewState{
-    constructor(ctx){
+    constructor(canvas, ctx){
         this.ctx = ctx;
+        this.canvas = canvas;
 
         this.isViewState = true;
 
@@ -20,6 +21,10 @@ export default class ViewState{
         this.ctx.mouseAction = {};
 
         this.registerEvent("mousedown", (e)=>{
+            if (e.sourceEvent.target !== this.canvas)
+            {
+                return;
+            }
             if (globalUtil.action.hoverComponent)
             {
                 if (globalUtil.action.focusComponent)
@@ -50,6 +55,10 @@ export default class ViewState{
             }
         });
         this.registerEvent("mouseup", (e)=>{
+            if (e.sourceEvent.target !== this.canvas)
+            {
+                return;
+            }
             globalUtil.action.inputListenerDom.focus();
             if (globalUtil.action.activeComponent)
             {
@@ -63,6 +72,10 @@ export default class ViewState{
             }
         });
         this.registerEvent("mousemove", (e)=>{
+            if (e.sourceEvent.target !== this.canvas)
+            {
+                return;
+            }
             this.ctx.mouseAction.mx = e.pageX - this.ctx.canvasOffset.left;
             this.ctx.mouseAction.my = e.pageY - this.ctx.canvasOffset.top;
 
