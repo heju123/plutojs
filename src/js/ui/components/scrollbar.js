@@ -307,6 +307,20 @@ export default class Scrollbar extends Rect {
         return line;
     }
 
+    /** 还原滚动条到初始位置 */
+    restoreScroll(){
+        this.setStyle({
+            contentScrollX : 0,
+            contentScrollY : 0
+        });
+        this.scrollbarOpeLineV.setStyle({
+            y : 0
+        });
+        this.scrollbarOpeLineH.setStyle({
+            x : 0
+        });
+    }
+
     destroy() {
         super.destroy();
 
