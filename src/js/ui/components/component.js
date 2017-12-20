@@ -569,6 +569,10 @@ export default class Component {
                 this.copyStyle(this.style.hover);
             }
         }
+        if (this.style.cursor)
+        {
+            globalUtil.viewState.canvas.style.cursor = this.style.cursor;
+        }
         if (this.parent)
         {
             this.parent.onHover();
@@ -586,6 +590,10 @@ export default class Component {
             {
                 this.restoreStyle();
             }
+        }
+        if (this.style.cursor)
+        {
+            globalUtil.viewState.canvas.style.cursor = "default";
         }
         if (this.parent)
         {
