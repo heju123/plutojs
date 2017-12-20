@@ -42,15 +42,15 @@ export default class EventBus{
             this.createEventNotify(e, "click");
         });
 
-        this.addEventListener(this.canvas, "mousedown", (e)=>{
+        this.addEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
         });
 
-        this.addEventListener(this.canvas, "mousemove", (e)=>{
+        this.addEventListener(document, "mousemove", (e)=>{
             this.createEventNotify(e, "mousemove");
         });
 
-        this.addEventListener(this.canvas, "mouseup", (e)=>{
+        this.addEventListener(document, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
         });
 
