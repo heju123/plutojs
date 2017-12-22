@@ -230,10 +230,14 @@ export default class Scrollbar extends Rect {
         }
         wheelVal = Math.min(wheelVal, this.style.contentHeight - this.getInnerHeight());
         wheelVal = Math.max(wheelVal, 0);
-        this.setStyle("contentScrollY", wheelVal);
+        this.setScrollYValue(wheelVal);
+    }
+
+    setScrollYValue(value){
+        this.setStyle("contentScrollY", value);
         this.setScrollY();
         let scrollObjY = (this.scrollbarBaseLineV.getHeight() - this.scrollbarOpeLineV.getHeight())
-            * (wheelVal / (this.style.contentHeight - this.getInnerHeight()));
+            * (value / (this.style.contentHeight - this.getInnerHeight()));
         this.scrollbarOpeLineV.setY(scrollObjY);
     }
 
