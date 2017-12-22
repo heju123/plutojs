@@ -9,6 +9,7 @@ export default class Component {
     constructor(parent) {
         this.parent = parent;
         this.isInit = false;
+        this.isSort = false;//子组件是否已排序
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
         this.children = [];
@@ -406,6 +407,7 @@ export default class Component {
     /** 添加子节点 */
     appendChildren(child){
         this.children.push(child);
+        this.isSort = false;
 
         child.afterInitPromise.then(()=>{
             this.propagationDoLayout(this);
@@ -910,6 +912,11 @@ export default class Component {
         if (key === "backgroundImagesInterval")
         {
             this.createBackgroundImagesIntervalObj(value);
+        }
+
+        if (key === "zIndex")
+        {
+            this.isSort = false;
         }
 
         let aniPromise;

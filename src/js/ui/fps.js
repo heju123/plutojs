@@ -108,7 +108,11 @@ export default class Fps{
                 this.beforeDrawChildren(com);
                 if (children instanceof Array)
                 {
-                    children.sort((a, b)=>a.style.zIndex - b.style.zIndex);//zIndex升序排序
+                    if (!com.isSort)
+                    {
+                        children.sort((a, b)=>a.style.zIndex - b.style.zIndex);//zIndex升序排序
+                        com.isSort = true;
+                    }
                     let child;
                     for (let i = 0, j = children.length; i < j; i++)
                     {

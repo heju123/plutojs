@@ -301,7 +301,8 @@ export default class Scrollbar extends Rect {
         line.setStyle({
             backgroundColor : lineColor,
             alpha : alpha,
-            borderRadius : radius
+            borderRadius : radius,
+            zIndex : 99999
         });
         line.init();
         return line;
