@@ -31,6 +31,7 @@ class Main {
         this.fps = new Fps(mainBody);
 
         globalUtil.action = {};
+        window.monk.action = globalUtil.action;
 
         //输入框输入监听
         globalUtil.action.inputListenerDom = document.createElement("TEXTAREA");
