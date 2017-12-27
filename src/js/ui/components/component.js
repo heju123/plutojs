@@ -392,7 +392,7 @@ export default class Component {
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
         if (ctx.mouseAction.mx && ctx.mouseAction.my
             && this.isPointInComponent(ctx, ctx.mouseAction.mx, ctx.mouseAction.my)
-            && (!this.parent || (ctx.mouseAction.hoverCom && (this.parent === ctx.mouseAction.hoverCom
+            && (!this.parent || !this.parent.hasClip || (ctx.mouseAction.hoverCom && (this.parent === ctx.mouseAction.hoverCom
                 || this.parent === ctx.mouseAction.hoverCom.parent
                 || this.parent.parentOf(ctx.mouseAction.hoverCom)))))
         {
