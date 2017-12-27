@@ -129,17 +129,20 @@ export default class Rect extends Component{
                 this.restoreOriginalCoor2Zero(ctx);
             }
         }
-        if (this.style.borderRadius)
+        if (this.hasClip)//是否需要剪切边界
         {
-            this.getRectRadiusPath(this, ctx, this.style.borderRadius, -(this.style.borderWidth || 0));
+            if (this.style.borderRadius)
+            {
+                this.getRectRadiusPath(this, ctx, this.style.borderRadius, -(this.style.borderWidth || 0));
+            }
+            else
+            {
+                ctx.rect(this.getRealX() + (this.style.borderWidth || 0),
+                    this.getRealY() + (this.style.borderWidth || 0),
+                    this.getInnerWidth(), this.getInnerHeight());
+            }
+            ctx.clip();
         }
-        else
-        {
-            ctx.rect(this.getRealX() + (this.style.borderWidth || 0),
-                this.getRealY() + (this.style.borderWidth || 0),
-                this.getInnerWidth(), this.getInnerHeight());
-        }
-        ctx.clip();
         ctx.closePath();
     }
 

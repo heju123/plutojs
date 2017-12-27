@@ -12,6 +12,7 @@ export default class Component {
         this.isSort = false;//子组件是否已排序
         this.eventNotifys = [];//事件通知队列
         this.active = true;//为false则不绘制
+        this.hasClip = true;//是否需要剪切边界
         this.children = [];
 
         this.style = {};
@@ -184,6 +185,11 @@ export default class Component {
         this.animation = cfg.animation;
 
         this.type = cfg.type;
+
+        if (cfg.hasClip !== undefined)
+        {
+            this.hasClip = cfg.hasClip;
+        }
 
         allPromise.push(this.init());
 
