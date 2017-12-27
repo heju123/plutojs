@@ -17,6 +17,12 @@ export default class Fps{
         this.canvas.width = mainBody.offsetWidth;
         this.canvas.height = mainBody.offsetHeight;
         this.canvas.style.position = "absolute";
+        this.canvas.ondragstart = function(e){
+            e.preventDefault();
+        };
+        this.canvas.ondragover = function(e){
+            e.preventDefault();
+        };
         outerDiv.appendChild(this.canvas);
         mainBody.append(outerDiv);
         this.ctx = this.canvas.getContext('2d');

@@ -55,15 +55,14 @@ export default class ViewState{
             }
         });
         this.registerEvent("mouseup", (e)=>{
-            if (e.sourceEvent.target !== this.canvas)
+            if (e.sourceEvent.target === this.canvas)
             {
-                return;
-            }
-            globalUtil.action.inputListenerDom.focus();
-            if (globalUtil.action.activeComponent)
-            {
-                globalUtil.action.activeComponent.onActiveout();
-                globalUtil.action.activeComponent = undefined;
+                globalUtil.action.inputListenerDom.focus();
+                if (globalUtil.action.activeComponent)
+                {
+                    globalUtil.action.activeComponent.onActiveout();
+                    globalUtil.action.activeComponent = undefined;
+                }
             }
             if (globalUtil.action.dragComponent)
             {
@@ -72,13 +71,11 @@ export default class ViewState{
             }
         });
         this.registerEvent("mousemove", (e)=>{
-            if (e.sourceEvent.target !== this.canvas)
+            if (e.sourceEvent.target === this.canvas)
             {
-                return;
+                this.ctx.mouseAction.mx = e.pageX - this.ctx.canvasOffset.left;
+                this.ctx.mouseAction.my = e.pageY - this.ctx.canvasOffset.top;
             }
-            this.ctx.mouseAction.mx = e.pageX - this.ctx.canvasOffset.left;
-            this.ctx.mouseAction.my = e.pageY - this.ctx.canvasOffset.top;
-
             if (globalUtil.action.dragComponent)//拖动
             {
                 globalUtil.action.dragComponent.setRealX(e.pageX - globalUtil.action.dragOffset.x);

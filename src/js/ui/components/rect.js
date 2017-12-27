@@ -197,23 +197,24 @@ export default class Rect extends Component{
      * @return -1：无parent；0：不在范围内；1：在范围内
      */
     inParentArea(com){
-        if (!com.parent)
-        {
-            return -1;
-        }
-        else{
-            if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= com.getRealX()
-                || this.getRealXRecursion(com.parent) >= this.getRealXRecursion(com) + com.getWidth()
-                || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= com.getRealY()
-                || this.getRealYRecursion(com.parent) >= this.getRealYRecursion(com) + com.getHeight())//不在parent范围内
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
+        return 1;
+        // if (!com.parent)
+        // {
+        //     return -1;
+        // }
+        // else{
+        //     if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= com.getRealX()
+        //         || this.getRealXRecursion(com.parent) >= this.getRealXRecursion(com) + com.getWidth()
+        //         || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= com.getRealY()
+        //         || this.getRealYRecursion(com.parent) >= this.getRealYRecursion(com) + com.getHeight())//不在parent范围内
+        //     {
+        //         return 0;
+        //     }
+        //     else
+        //     {
+        //         return 1;
+        //     }
+        // }
     }
 
     /**
