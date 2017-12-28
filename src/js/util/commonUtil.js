@@ -94,9 +94,10 @@ let commonUtil = {
      * @param obj 待复制的对象
      * @param dest 复制到目标对象
      * @param override 是否覆盖属性，false:如果dest存在相同不为空的属性，则不做复制操作，true:只复制obj不为空的属性
+     * @param deep 是否深度复制
      * @return 复制的目标对象
      */
-    copyObject : (obj, dest, override)=>{
+    copyObject : (obj, dest, override, deep)=>{
         if (override == undefined)
         {
             override = true;
@@ -114,24 +115,45 @@ let commonUtil = {
                 {
                     continue;
                 }
-                result[key] = obj[key];
+                if (deep && typeof(obj[key]) === "object" && !(obj[key] instanceof Array))
+                {
+                    result[key] = commonUtil.copyObject(obj[key], undefined, override, deep);
+                }
+                else if (deep && typeof(obj[key]) === "object" && obj[key] instanceof Array)
+                {
+                    result[key] = commonUtil.copyArray(obj[key], undefined, deep);
+                }
+                else
+                {
+                    result[key] = obj[key];
+                }
             }
         }
         return result;
     },
-    copyArray : (obj)=>{
-        let result = [];
-        for (let i = 0, j = obj.length; i < j; i++)
-        {
-            if (typeof(obj[i]) == "object")
+    /**
+     * 复制数组
+     * @param obj 待复制的数组
+     * @param dest 复制到目标数组
+     * @param deep 是否深度复制
+     * @return 复制的目标对象
+     */
+    copyArray : (obj, dest, deep)=>{
+        let result = dest || [];
+        obj.forEach((item)=>{
+            if (deep && typeof(item) === "object" && !(item instanceof Array))
             {
-                result[i] = commonUtil.copyObject(obj[i]);
+                result.push(commonUtil.copyObject(item, undefined, true, deep));
+            }
+            else if (deep && typeof(item) === "object" && item instanceof Array)
+            {
+                result.push(commonUtil.copyArray(item, undefined, deep));
             }
             else
             {
-                result[i] = obj[i];
+                result.push(item);
             }
-        }
+        });
         return result;
     },
     /**
