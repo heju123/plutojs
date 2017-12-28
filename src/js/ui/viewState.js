@@ -6,6 +6,7 @@ import commonUtil from "../util/commonUtil.js";
 import Rect from "./components/rect.js";
 import Router from "./components/router.js";
 import Input from "./components/input.js";
+import DragEvent from "../event/type/dragEvent.js";
 
 export default class ViewState{
     constructor(canvas, ctx){
@@ -50,6 +51,12 @@ export default class ViewState{
                             x : e.pageX - globalUtil.action.dragComponent.getRealX(),
                             y : e.pageY - globalUtil.action.dragComponent.getRealY()
                         };
+
+                        let event = new DragEvent("startDrag");
+                        event.setPageX(globalUtil.action.dragOffset.x);
+                        event.setPageY(globalUtil.action.dragOffset.y);
+                        event.setCurrentTarget(globalUtil.action.dragComponent);
+                        globalUtil.eventBus.broadcastEvent("startDrag", event, true);
                     }
                 }
             }
@@ -66,6 +73,12 @@ export default class ViewState{
             }
             if (globalUtil.action.dragComponent)
             {
+                let event = new DragEvent("endDrag");
+                event.setPageX(globalUtil.action.dragOffset.x);
+                event.setPageY(globalUtil.action.dragOffset.y);
+                event.setCurrentTarget(globalUtil.action.dragComponent);
+                globalUtil.eventBus.broadcastEvent("endDrag", event, true);
+
                 globalUtil.action.dragComponent = undefined;
                 globalUtil.action.dragOffset = undefined;
             }
@@ -80,6 +93,12 @@ export default class ViewState{
             {
                 globalUtil.action.dragComponent.setRealX(e.pageX - globalUtil.action.dragOffset.x);
                 globalUtil.action.dragComponent.setRealY(e.pageY - globalUtil.action.dragOffset.y);
+
+                let event = new DragEvent("onDrag");
+                event.setPageX(globalUtil.action.dragOffset.x);
+                event.setPageY(globalUtil.action.dragOffset.y);
+                event.setCurrentTarget(globalUtil.action.dragComponent);
+                globalUtil.eventBus.broadcastEvent("onDrag", event, true);
             }
         });
 
