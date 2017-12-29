@@ -33,6 +33,8 @@ export default class Fps{
     }
 
     offset(element) {
+        element = element || this;
+
         let offest = {
             top: 0,
             left: 0
