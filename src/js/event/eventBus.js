@@ -38,12 +38,17 @@ export default class EventBus{
     }
 
     initDomEvent(){
-        this.addEventListener(this.canvas, "click", (e)=>{
-            this.createEventNotify(e, "click");
-        });
+        // this.addEventListener(this.canvas, "click", (e)=>{
+        //     this.createEventNotify(e, "click");
+        // });
 
+        let clickCom;//click的组件
         this.addEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
+            if (globalUtil.action.hoverComponent)
+            {
+                clickCom = globalUtil.action.hoverComponent;
+            }
         });
 
         this.addEventListener(document, "mousemove", (e)=>{
@@ -52,6 +57,11 @@ export default class EventBus{
 
         this.addEventListener(document, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
+            if (clickCom === globalUtil.action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
+            {
+                this.createEventNotify(e, "click");
+            }
+            clickCom = undefined;
         });
 
         this.addEventListener(window, "keydown", (e)=>{

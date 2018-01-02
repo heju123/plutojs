@@ -80,7 +80,7 @@ export default class Sprite extends Rect {
 
                             if (this.onCollision && typeof(this.onCollision) === "function")//碰撞事件回调
                             {
-                                this.onCollision.apply(this, [data]);
+                                this.onCollision.apply(this, []);
                             }
                         });
                     });
