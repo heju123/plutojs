@@ -76,12 +76,12 @@ export default class Sprite extends Rect {
 
                             Promise.all([promise1,promise2]).then(()=>{
                                 this.detectCollisionLock = false;
-                            });
 
-                            if (this.onCollision && typeof(this.onCollision) === "function")//碰撞事件回调
-                            {
-                                this.onCollision.apply(this, []);
-                            }
+                                if (this.onCollision && typeof(this.onCollision) === "function")//碰撞事件回调
+                                {
+                                    this.onCollision.apply(this, []);
+                                }
+                            });
                         });
                     });
                 }
