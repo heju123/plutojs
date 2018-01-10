@@ -5,6 +5,7 @@ import commonUtil from "../util/commonUtil";
 import globalUtil from "../util/globalUtil";
 import ViewState from "./viewState";
 import EventBus from "../event/eventBus";
+import Component from "./components/component";
 
 export default class Fps{
     canvas : HTMLCanvasElement;
@@ -33,10 +34,10 @@ export default class Fps{
         (<any>this).ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-        (<any>globalUtil).eventBus = new EventBus(this.canvas);
+        globalUtil.eventBus = new EventBus(this.canvas);
     }
 
-    offset(element) {
+    offset(element:any) {
         element = element || this;
 
         let offest = {
@@ -68,10 +69,10 @@ export default class Fps{
         }
     }
 
-    setMainView(viewCfg){
+    setMainView(viewCfg : any){
         this.viewState = new ViewState(this.canvas, this.ctx);
-        (<any>globalUtil).viewState = this.viewState;
-        (<any>globalUtil).viewState.init(viewCfg);
+        globalUtil.viewState = this.viewState;
+        globalUtil.viewState.init(viewCfg);
     }
 
     /** 开始循环绘制 */
@@ -80,7 +81,7 @@ export default class Fps{
     }
 
     /** 绘制子组件之前调用 */
-    beforeDrawChildren(com)
+    beforeDrawChildren(com : Component)
     {
         this.ctx.save();
         /** 防止children超出 */
@@ -90,7 +91,7 @@ export default class Fps{
             com.setClip(this.ctx);
         }
     }
-    afterDrawChildren(com)
+    afterDrawChildren(com : Component)
     {
         if (com.setClip)
         {
@@ -99,7 +100,7 @@ export default class Fps{
         this.ctx.restore();
     }
 
-    drawView(com){
+    drawView(com : Component){
         if (!com.active)
         {
             return;
@@ -154,9 +155,9 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        (<any>globalUtil).viewState.beforeDraw(this.ctx);
-        this.drawView((<any>globalUtil).viewState.rootComponent);
-        (<any>globalUtil).viewState.afterDraw(this.ctx);
+        globalUtil.viewState.beforeDraw(this.ctx);
+        this.drawView(globalUtil.viewState.rootComponent);
+        globalUtil.viewState.afterDraw(this.ctx);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }

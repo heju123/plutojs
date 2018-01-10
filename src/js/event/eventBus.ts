@@ -15,12 +15,12 @@ import Component from "../ui/components/component";
 import Controller from "../ui/controller";
 
 export default class EventBus{
-    private canvas : CanvasRenderingContext2D;
+    private canvas : HTMLCanvasElement;
     private eventListeners : Object;
     private eventNotifyQueue : Array<any>;
     private propagationEventQueue : Object;
 
-    constructor(canvas : CanvasRenderingContext2D){
+    constructor(canvas : HTMLCanvasElement){
         this.canvas = canvas;
         //注册事件列表
         this.eventListeners = {};
@@ -51,9 +51,9 @@ export default class EventBus{
         let clickCom;//click的组件
         this.addEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
-            if ((<any>globalUtil).action.hoverComponent)
+            if (globalUtil.action.hoverComponent)
             {
-                clickCom = (<any>globalUtil).action.hoverComponent;
+                clickCom = globalUtil.action.hoverComponent;
             }
         });
 
@@ -63,7 +63,7 @@ export default class EventBus{
 
         this.addEventListener(document, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
-            if (clickCom === (<any>globalUtil).action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
+            if (clickCom === globalUtil.action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
             {
                 this.createEventNotify(e, "click");
             }

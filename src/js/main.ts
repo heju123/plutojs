@@ -32,17 +32,17 @@ class Main {
         }
         this.fps = new Fps(mainBody);
 
-        (<any>globalUtil).action = {};
-        (<any>window).monk.action = (<any>globalUtil).action;
+        globalUtil.action = {};
+        (<any>window).monk.action = globalUtil.action;
 
         //输入框输入监听
-        (<any>globalUtil).action.inputListenerDom = document.createElement("TEXTAREA");
-        (<any>globalUtil).action.inputListenerDom.style.position = "fixed";
-        (<any>globalUtil).action.inputListenerDom.style.left = "0px";
-        (<any>globalUtil).action.inputListenerDom.style.top = "0px";
-        (<any>globalUtil).action.inputListenerDom.style.opacity = 0;
-        (<any>globalUtil).action.inputListenerDom.style["z-index"] = -1;
-        document.body.appendChild((<any>globalUtil).action.inputListenerDom);
+        globalUtil.action.inputListenerDom = document.createElement("TEXTAREA");
+        globalUtil.action.inputListenerDom.style.position = "fixed";
+        globalUtil.action.inputListenerDom.style.left = "0px";
+        globalUtil.action.inputListenerDom.style.top = "0px";
+        globalUtil.action.inputListenerDom.style.opacity = 0;
+        globalUtil.action.inputListenerDom.style["z-index"] = -1;
+        document.body.appendChild(globalUtil.action.inputListenerDom);
 
         //屏蔽鼠标右键菜单
         mainBody.oncontextmenu = function(e){
