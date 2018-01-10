@@ -1,13 +1,15 @@
 import Event from "./event.js";
 
 export default class WheelEvent extends Event{
-    constructor(type) {
+    wheelDelta : number;
+
+    constructor(type : string) {
         super(type);
 
         this.wheelDelta = undefined;
     }
 
-    setWheelDelta(wheelDelta){
+    setWheelDelta(wheelDelta : number){
         this.wheelDelta = wheelDelta;
     }
 }

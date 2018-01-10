@@ -2,10 +2,12 @@
  * Created by heju on 2017/7/26.
  */
 export default class Stack{
+    top : Object;
+
     constructor() {
     }
 
-    push(obj){
+    push(obj : any){
         if (obj)
         {
             let data;
@@ -31,16 +33,16 @@ export default class Stack{
         {
             return undefined;
         }
-        let ret;
+        let ret : any;
         if (this.top)
         {
-            ret = this.top.value;
+            ret = (<any>this.top).value;
         }
-        this.top = this.top.next;
+        this.top = (<any>this.top).next;
         return ret;
     }
 
     getTop(){
-        return this.top ? this.top.value : undefined;
+        return this.top ? (<any>this.top).value : undefined;
     }
 }

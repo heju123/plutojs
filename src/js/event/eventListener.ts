@@ -1,11 +1,15 @@
 //事件监听类
 export default class EventListener {
-    constructor(type, callback) {
+    type : string;
+    target : any;
+    callback : Function;
+
+    constructor(type : string, callback : Function) {
         this.type = type;
         this.callback = callback;
     }
 
-    setTarget(target)
+    setTarget(target : any)
     {
         this.target = target;
     }

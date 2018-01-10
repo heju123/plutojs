@@ -1,5 +1,7 @@
-import Map from "../ui/components/game/map.js";
-import MPromise from "../util/promise.js";
+import Map from "../ui/components/game/map";
+import MPromise from "../util/promise";
+import Component from "../ui/components/Component";
+import Thread from "../util/thread";
 
 /**
  * 盒子模型碰撞检测
@@ -13,7 +15,7 @@ export default class BoxCollisionDetector{
      *
      * @return 0：无碰撞；[]：返回发生碰撞的最小和最大行列数
      */
-    thread_detectCollision(e){
+    thread_detectCollision(e : any){
         let data = JSON.parse(e.data);
         let mapData = data.mapData;
         let mapColMin = data.mapColMin;
@@ -46,11 +48,11 @@ export default class BoxCollisionDetector{
 
         if (collision.length > 0)
         {
-            self.postMessage(JSON.stringify(collision));
+            self.postMessage(JSON.stringify(collision), "");
         }
         else
         {
-            self.postMessage(0);
+            self.postMessage(0, "");
         }
     }
 
@@ -64,7 +66,7 @@ export default class BoxCollisionDetector{
      * @param fixCoor 发生碰撞时是否修复坐标，防止一直卡在障碍内
      * @return reject：发生碰撞；resolve:未发生碰撞
      */
-    detectCollision(com, sx, sy, thread, fixCoor)
+    detectCollision(com : Component, sx : number, sy : number, thread : Thread, fixCoor : boolean)
     {
         let $this = com;
         let promise = new MPromise();

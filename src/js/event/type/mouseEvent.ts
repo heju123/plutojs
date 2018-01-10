@@ -4,7 +4,11 @@
 import Event from "./event.js";
 
 export default class MouseEvent extends Event{
-    constructor(type) {
+    pageX : number;
+    pageY : number;
+    button : number;
+
+    constructor(type : string) {
         super(type);
 
         this.pageX = undefined;
@@ -12,15 +16,15 @@ export default class MouseEvent extends Event{
         this.button = undefined;
     }
 
-    setPageX(x){
+    setPageX(x : number){
         this.pageX = x;
     }
 
-    setPageY(y){
+    setPageY(y : number){
         this.pageY = y;
     }
 
-    setButton(button){
+    setButton(button : number){
         this.button = button;
     }
 }

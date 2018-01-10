@@ -4,18 +4,21 @@
 import Event from "./event.js";
 
 export default class KeyEvent extends Event{
-    constructor(type) {
+    key : string;
+    keyCode : number;
+
+    constructor(type : string) {
         super(type);
 
         this.key = undefined;
         this.keyCode = undefined;
     }
 
-    setKey(key){
+    setKey(key : string){
         this.key = key;
     }
 
-    setKeyCode(keyCode){
+    setKeyCode(keyCode : number){
         this.keyCode = keyCode;
     }
 }

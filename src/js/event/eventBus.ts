@@ -1,20 +1,26 @@
 /**
  * Created by heju on 2017/7/25.
  */
-import EventListener from "./eventListener.js";
-import ClickEvent from "./type/clickEvent.js";
-import MouseEvent from "./type/mouseEvent.js";
-import KeyEvent from "./type/keyEvent.js";
-import WheelEvent from "./type/wheelEvent.js";
-import Stack from "../data/structure/stack.js";
-import EventNotify from "./eventNotify.js";
+import Event from "./type/event";
+import EventListener from "./eventListener";
+import ClickEvent from "./type/clickEvent";
+import MouseEvent from "./type/mouseEvent";
+import KeyEvent from "./type/keyEvent";
+import WheelEvent from "./type/wheelEvent";
+import Stack from "../data/structure/stack";
+import EventNotify from "./eventNotify";
 import globalUtil from "../util/globalUtil";
 import commonUtil from "../util/commonUtil";
-import Component from "../ui/components/component.js";
-import Controller from "../ui/controller.js";
+import Component from "../ui/components/component";
+import Controller from "../ui/controller";
 
 export default class EventBus{
-    constructor(canvas){
+    private canvas : CanvasRenderingContext2D;
+    private eventListeners : Object;
+    private eventNotifyQueue : Array<any>;
+    private propagationEventQueue : Object;
+
+    constructor(canvas : CanvasRenderingContext2D){
         this.canvas = canvas;
         //注册事件列表
         this.eventListeners = {};
@@ -26,7 +32,7 @@ export default class EventBus{
         this.initDomEvent();
     }
 
-    addEventListener(dom, type, callback){
+    addEventListener(dom : any, type : string, callback : Function){
         if (window.addEventListener)
         {
             dom.addEventListener(type, callback, false);
@@ -45,9 +51,9 @@ export default class EventBus{
         let clickCom;//click的组件
         this.addEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
-            if (globalUtil.action.hoverComponent)
+            if ((<any>globalUtil).action.hoverComponent)
             {
-                clickCom = globalUtil.action.hoverComponent;
+                clickCom = (<any>globalUtil).action.hoverComponent;
             }
         });
 
@@ -57,7 +63,7 @@ export default class EventBus{
 
         this.addEventListener(document, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
-            if (clickCom === globalUtil.action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
+            if (clickCom === (<any>globalUtil).action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
             {
                 this.createEventNotify(e, "click");
             }
@@ -92,7 +98,7 @@ export default class EventBus{
     }
 
     /** 创建鼠标事件通知 */
-    createEventNotify(e, type){
+    createEventNotify(e : any, type : string){
         if (!this.eventListeners[type])
         {
             return;
@@ -129,7 +135,7 @@ export default class EventBus{
     }
 
     /** 创建非鼠标事件通知 */
-    createOtherEventNotify(e, type, ntype){
+    createOtherEventNotify(e : any, type : string, ntype : number){
         if (!this.eventListeners[type])
         {
             return;
@@ -166,7 +172,7 @@ export default class EventBus{
     }
 
     //捕获事件
-    captureEvent(eventNotify){
+    captureEvent(eventNotify : any){
         if (!this.propagationEventQueue[eventNotify.batchNo])
         {
             return;
@@ -213,7 +219,7 @@ export default class EventBus{
         }
     }
 
-    getEvent(eventNotify){
+    getEvent(eventNotify : any){
         let event;
         switch (eventNotify.listener.type)
         {
@@ -298,7 +304,7 @@ export default class EventBus{
      * @param event 发送的事件，里面的currentTarget对象会拿来和listener.target作比较，满足条件则执行事件，currentTarget表示需要将事件推送给哪个组件
      * @param toChildren 是否发送给子组件，如果listener.target是currentTarget的children也满足条件
      */
-    broadcastEvent(type, event, toChildren){
+    broadcastEvent(type : string, event : Event, toChildren? : boolean){
         if (!this.eventListeners[type])
         {
             return;
@@ -337,7 +343,7 @@ export default class EventBus{
      *
      * @param target target有可能是controller，也有可能是component
      */
-    getComponentByTarget(target){
+    getComponentByTarget(target : any){
         let targetCom;
         if (target instanceof Component)
         {
@@ -356,7 +362,7 @@ export default class EventBus{
      * @param type
      * @param com 绑定事件的组件
      */
-    triggerEvent(type, com){
+    triggerEvent(type : string, com : Component){
         let eventNotify = new EventNotify();
         eventNotify.set({
             type : type,
@@ -370,7 +376,7 @@ export default class EventBus{
     }
 
     /** 注册事件 */
-    registerEvent(com, type, callback){
+    registerEvent(com : Component, type : string, callback : Function){
         let listener = this.getEventListener(com, type, callback);
         if (!this.eventListeners[type])
         {
@@ -385,7 +391,7 @@ export default class EventBus{
      *
      * @param callback 如果callback不传，则删除所有type类型的事件
      */
-    removeEvent(com, type, callback){
+    removeEvent(com : Component, type : string, callback? : Function){
         if (!com || !type || !this.eventListeners[type])
         {
             return;
@@ -406,14 +412,14 @@ export default class EventBus{
         }
     }
 
-    removeAllEvent(com){
+    removeAllEvent(com : Component){
         for (let type in this.eventListeners)
         {
             this.removeEvent(com, type);
         }
     }
 
-    getEventListener(target, type, callback){
+    getEventListener(target : Component, type : string, callback : Function){
        let eventListener = new EventListener(type, callback);
        eventListener.setTarget(target);
        return eventListener;
