@@ -4,12 +4,11 @@
   "description": "",
   "main": "",
   "devDependencies": {
-    "babel-core": "*",
-    "babel-loader": "*",
-    "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
     "uglify-js-plugin": "*",
-    "webpack": "*"
+    "webpack": "*",
+    "ts-loader": "*",
+    "typescript": "*"
   },
   "scripts": {
     "build": "webpack --env=prod",

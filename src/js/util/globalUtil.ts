@@ -1,6 +1,6 @@
 /**
  * Created by heju on 2017/7/25.
  */
-let globalUtil = {
+let globalUtil : Object = {
 };
 export default globalUtil;

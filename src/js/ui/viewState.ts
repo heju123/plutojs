@@ -1,14 +1,21 @@
 /**
  * Created by heju on 2017/7/19.
  */
-import globalUtil from "../util/globalUtil.js";
-import commonUtil from "../util/commonUtil.js";
-import Rect from "./components/rect.js";
-import Router from "./components/router.js";
-import Input from "./components/input.js";
-import DragEvent from "../event/type/dragEvent.js";
+import globalUtil from "../util/globalUtil";
+import commonUtil from "../util/commonUtil";
+import Rect from "./components/rect";
+import Router from "./components/router";
+import Input from "./components/input";
+import DragEvent from "../event/type/dragEvent";
 
 export default class ViewState{
+    ctx : CanvasRenderingContext2D;
+    canvas : HTMLCanvasElement;
+    isViewState : boolean;
+    defaultFontFamily : string;
+    defaultFontSize : string;
+    defaultFontColor : string;
+
     constructor(canvas, ctx){
         this.ctx = ctx;
         this.canvas = canvas;

@@ -23,7 +23,7 @@ module.exports = function(env){
     }
 
     return {
-        entry: __dirname + '/src/js/main.js',
+        entry: __dirname + '/src/js/main.ts',
         output: {
             path: 'F:\\projects\\monkTest\\libs\\monk',
             publicPath : "/build/",
@@ -31,15 +31,15 @@ module.exports = function(env){
             chunkFilename: '[name].[chunkhash:5].chunk.js'
         },
         devtool: devtool,  //生成source file
+        resolve: {
+            extensions: ['.ts', '.js']
+        },
         module: {
             loaders: [
                 {
-                    test: /\.js$/,
+                    test: /\.ts$/,
                     exclude: /node_modules/,
-                    loader: 'babel-loader',
-                    query: {
-                        presets: ['es2015']
-                    }
+                    loader: 'ts-loader'
                 }
             ]
         },

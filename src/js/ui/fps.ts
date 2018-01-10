@@ -1,19 +1,23 @@
 /**
  * Created by heju on 2017/7/13.
  */
-import commonUtil from "../util/commonUtil.js";
-import globalUtil from "../util/globalUtil.js";
-import ViewState from "./viewState.js";
-import EventBus from "../event/eventBus.js";
+import commonUtil from "../util/commonUtil";
+import globalUtil from "../util/globalUtil";
+import ViewState from "./viewState";
+import EventBus from "../event/eventBus";
 
 export default class Fps{
-    constructor(mainBody){
-        let outerDiv = document.createElement("DIV");
+    canvas : HTMLCanvasElement;
+    ctx : CanvasRenderingContext2D;
+    viewState : ViewState;
+
+    constructor(mainBody:HTMLDivElement){
+        let outerDiv : HTMLElement = <HTMLCanvasElement>document.createElement("DIV");
         outerDiv.style.width = "100%";
         outerDiv.style.height = "100%";
         outerDiv.style.position = "relative";
-        this.canvas = document.createElement("CANVAS");
-        this.canvas.offset = this.offset.bind(this.canvas);
+        this.canvas = <HTMLCanvasElement>document.createElement("CANVAS");
+        (<any>this.canvas).offset = this.offset.bind(this.canvas);
         this.canvas.width = mainBody.offsetWidth;
         this.canvas.height = mainBody.offsetHeight;
         this.canvas.style.position = "absolute";
@@ -24,12 +28,12 @@ export default class Fps{
             e.preventDefault();
         };
         outerDiv.appendChild(this.canvas);
-        mainBody.append(outerDiv);
+        mainBody.appendChild(outerDiv);
         this.ctx = this.canvas.getContext('2d');
-        this.ctx.canvasOffset = this.offset(this.canvas);
+        (<any>this).ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-        globalUtil.eventBus = new EventBus(this.canvas);
+        (<any>globalUtil).eventBus = new EventBus(this.canvas);
     }
 
     offset(element) {
@@ -43,19 +47,19 @@ export default class Fps{
         getOffset(element, true);
         return offest;
         // 递归获取 offset, 可以考虑使用 getBoundingClientRect
-        function getOffset(node, init) {
+        function getOffset(node:Node, init?:boolean) {
             // 非Element 终止递归
             if (node.nodeType !== 1) {
                 return;
             }
-            _position = window.getComputedStyle(node)['position'];
+            _position = window.getComputedStyle(<Element>node)['position'];
             // position=static: 继续递归父节点
             if (typeof(init) === 'undefined' && _position === 'static') {
                 getOffset(node.parentNode);
                 return;
             }
-            offest.top = node.offsetTop + offest.top - node.scrollTop;
-            offest.left = node.offsetLeft + offest.left - node.scrollLeft;
+            offest.top = (<HTMLElement>node).offsetTop + offest.top - (<HTMLElement>node).scrollTop;
+            offest.left = (<HTMLElement>node).offsetLeft + offest.left - (<HTMLElement>node).scrollLeft;
             // position = fixed: 获取值后退出递归
             if (_position === 'fixed') {
                 return;
@@ -66,8 +70,8 @@ export default class Fps{
 
     setMainView(viewCfg){
         this.viewState = new ViewState(this.canvas, this.ctx);
-        globalUtil.viewState = this.viewState;
-        globalUtil.viewState.init(viewCfg);
+        (<any>globalUtil).viewState = this.viewState;
+        (<any>globalUtil).viewState.init(viewCfg);
     }
 
     /** 开始循环绘制 */
@@ -150,9 +154,9 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        globalUtil.viewState.beforeDraw(this.ctx);
-        this.drawView(globalUtil.viewState.rootComponent);
-        globalUtil.viewState.afterDraw(this.ctx);
+        (<any>globalUtil).viewState.beforeDraw(this.ctx);
+        this.drawView((<any>globalUtil).viewState.rootComponent);
+        (<any>globalUtil).viewState.afterDraw(this.ctx);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }
