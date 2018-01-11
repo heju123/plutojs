@@ -20,7 +20,7 @@ import Scrollbar from "./ui/components/scrollbar";
 class Main {
     fps : Fps;
 
-    constructor(eleId){
+    constructor(eleId : HTMLElement | string){
         let mainBody : any;
         if (typeof(eleId) === "string")
         {
@@ -50,12 +50,12 @@ class Main {
         };
     }
 
-    setMainView(viewCfg){
+    setMainView(viewCfg : any){
         this.fps.setMainView(viewCfg);
         this.fps.startLoop();
     }
 
-    run(viewCfg){
+    run(viewCfg : any){
         this.setMainView(viewCfg);
     }
 }
