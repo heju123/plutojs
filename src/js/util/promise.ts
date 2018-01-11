@@ -1,4 +1,9 @@
 export default class MPromise {
+    promise : Promise<any>;
+    finallyResolve : Function;
+    resolveObj : Function;
+    rejectObj : Function;
+
     constructor() {
         this.promise = new Promise((resolve, reject)=>{
             this.resolveObj = resolve;
@@ -6,15 +11,15 @@ export default class MPromise {
         });
     }
 
-    resolve(data){
+    resolve(data? : any){
         this.resolveObj(data);
     }
 
-    reject(err){
+    reject(err? : any){
         this.rejectObj(err);
     }
 
-    then(resolve, reject){
+    then(resolve? : Function, reject? : Function){
         this.promise.then((data)=>{
             resolve(data);
             if (this.finallyResolve && typeof(this.finallyResolve) === "function")
@@ -31,7 +36,7 @@ export default class MPromise {
         return this;
     }
 
-    finally(resolve){
+    finally(resolve? : Function){
         this.finallyResolve = resolve;
         return this;
     }

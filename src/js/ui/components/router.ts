@@ -1,8 +1,13 @@
-import globalUtil from "../../util/globalUtil.js";
-import Rect from "./rect.js";
+import globalUtil from "../../util/globalUtil";
+import Rect from "./rect";
+import Component from "./component";
 
 export default class Router extends Rect{
-    constructor(parent){
+    currentChildren : Component;
+    routes : any;
+    currentRoute : string;
+
+    constructor(parent? : Component){
         super(parent);
 
         //routes对象结构：每个name下面包含loader：子节点的配置文件；isLoaded：当前路由资源是否加载
@@ -23,7 +28,7 @@ export default class Router extends Rect{
         }
     }
 
-    initCfg(cfg)
+    initCfg(cfg : any) : Promise<any>
     {
         let allPromise = [];
         let promise = super.initCfg(cfg);
@@ -52,7 +57,7 @@ export default class Router extends Rect{
         return Promise.all(allPromise);
     }
 
-    draw(ctx){
+    draw(ctx : CanvasRenderingContext2D){
         if (!super.draw(ctx)) {
             return false;
         }
@@ -60,7 +65,7 @@ export default class Router extends Rect{
         return true;
     }
 
-    getChildrenView(){
+    getChildrenView() : Promise<any>{
         return new Promise((resolve)=>{
             if (!this.currentChildren)
             {
@@ -101,7 +106,7 @@ export default class Router extends Rect{
         });
     }
 
-    getChildren(){
+    getChildren() : Array<Component> | Component{
         return this.currentChildren;
     }
 
@@ -110,7 +115,7 @@ export default class Router extends Rect{
      * @param name 要切换route的name
      * @param destory 是否销毁之前的route
      */
-    changeRoute(name, destory){
+    changeRoute(name : string, destory : boolean){
         if (this.currentChildren)
         {
             this.currentChildren.active = false;
@@ -124,7 +129,7 @@ export default class Router extends Rect{
         this.getChildrenView();
     }
 
-    destroyRoute(name){
+    destroyRoute(name : string){
         this.currentChildren.destroy();
         let cindex = -1;
         this.children.forEach((child, index)=>{

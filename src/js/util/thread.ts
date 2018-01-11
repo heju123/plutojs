@@ -1,10 +1,13 @@
-import MPromise from "./promise.js";
+import MPromise from "./promise";
 
 export default class Thread {
-    constructor(fun) {
+    worker : Worker;
+    callbackPromise : MPromise;
+
+    constructor(fun : Function) {
         if(typeof(Worker)!=="undefined")
         {
-            let scriptDom = document.createElement("SCRIPT");
+            let scriptDom : HTMLScriptElement = <HTMLScriptElement>document.createElement("SCRIPT");
             scriptDom.setAttribute("type", "javascript/worker");
             let textDom = document.createTextNode("self.onmessage=" + fun.toString());
             scriptDom.appendChild(textDom);
@@ -26,11 +29,11 @@ export default class Thread {
      * @param data 发送的数据
      * @param replacer function对象，作为JSON.stringify的过滤器
      */
-    run(data, replacer){
+    run(data : any, replacer : Function){
         let sendData;
         if (typeof(data) == "object")
         {
-            sendData = JSON.stringify(data, replacer);
+            sendData = JSON.stringify(data, <any>replacer);
         }
         else
         {

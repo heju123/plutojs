@@ -1,9 +1,23 @@
-import Rect from "./rect.js";
+import Rect from "./rect";
 import globalUtil from "../../util/globalUtil";
+import Component from "./component";
+import Event from "../../event/type/event";
+import MouseEvent from "../../event/type/mouseEvent";
+import WheelEvent from "../../event/type/wheelEvent";
 
 const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
 export default class Scrollbar extends Rect {
-    constructor(parent) {
+    scrollbarBaseLineV : Component;
+    scrollbarOpeLineV : Component;
+    scrollbarBaseLineH : Component;
+    scrollbarOpeLineH : Component;
+    private doMouseMoveBind : Function;
+    private doMouseUpBind : Function;
+    private doTimeoutLock : boolean;
+    private onScrollObj : Component;
+    private onScrollMDOffset : number;
+
+    constructor(parent? : Component) {
         super(parent);
 
         if (!this.style.scrollText)
@@ -64,13 +78,13 @@ export default class Scrollbar extends Rect {
         this.registerEvent("mousewheel", this.doMouseWheel.bind(this));
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
         this.initScrollbar();
         return promise;
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D) : boolean
     {
         if (!super.draw(ctx))
         {
@@ -170,7 +184,7 @@ export default class Scrollbar extends Rect {
         }
     }
 
-    doMouseDown(type, e){
+    doMouseDown(type : string, e : MouseEvent){
         let x = e.pageX;
         let y = e.pageY;
         let opeLine = this["scrollbarOpeLine" + type];
@@ -178,7 +192,7 @@ export default class Scrollbar extends Rect {
         this.onScrollObj = opeLine;
     }
 
-    doMouseMove(e){
+    doMouseMove(e : MouseEvent){
         let x = e.pageX;
         let y = e.pageY;
         if (this.onScrollObj)
@@ -209,11 +223,11 @@ export default class Scrollbar extends Rect {
         }
     }
 
-    doMouseUp(e){
+    doMouseUp(e : MouseEvent){
         this.onScrollObj = undefined;
     }
 
-    doMouseWheel(e){
+    doMouseWheel(e : WheelEvent){
         if (this.style.contentHeight <= this.getInnerHeight())
         {
             return;
@@ -233,7 +247,7 @@ export default class Scrollbar extends Rect {
         this.setScrollYValue(wheelVal);
     }
 
-    setScrollYValue(value){
+    setScrollYValue(value : number){
         this.setStyle("contentScrollY", value);
         this.setScrollY();
         let scrollObjY = (this.scrollbarBaseLineV.getHeight() - this.scrollbarOpeLineV.getHeight())
@@ -277,9 +291,9 @@ export default class Scrollbar extends Rect {
      *
      * @param oritation 方向，1：竖向滚动条；2：横向滚动条
      */
-    produceLine(oritation, lineColor, alpha)
+    produceLine(oritation : number, lineColor : string, alpha : number) : Component
     {
-        let Rect = require("./rect.js").default;
+        let Rect = require("./rect").default;
         oritation = oritation || 1;
         let padding = 0;
         let swidth = this.style.scrollbarWidth || 10;

@@ -1,8 +1,8 @@
 /**
  * Created by heju on 2017/2/10.
  */
-let httpUtil = {
-    getGetParamStr : (param) => {
+let httpUtil : any = {
+    getGetParamStr : (param : any) => {
         let str = "";
         if (param != undefined)
         {
@@ -14,7 +14,7 @@ let httpUtil = {
         }
         return str;
     },
-    get : (url, param) => {
+    get : (url : string, param : any) => {
         return new Promise((resolve, reject)=>{
             let purl = url;
             if (param)
@@ -22,7 +22,7 @@ let httpUtil = {
                 purl = url + "?" + httpUtil.getGetParamStr(param);
             }
             let xmlhttp;
-            if (window.XMLHttpRequest)
+            if ((<any>window).XMLHttpRequest)
             {
                 //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
                 xmlhttp=new XMLHttpRequest();
@@ -43,10 +43,10 @@ let httpUtil = {
             xmlhttp.send();
         });
     },
-    post : (url, param) => {
+    post : (url : string, param : any) => {
         return new Promise((resolve, reject)=>{
             let xmlhttp;
-            if (window.XMLHttpRequest)
+            if ((<any>window).XMLHttpRequest)
             {
                 //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
                 xmlhttp=new XMLHttpRequest();

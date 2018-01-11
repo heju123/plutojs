@@ -32,7 +32,7 @@ export default class Fps{
         mainBody.appendChild(outerDiv);
         this.ctx = this.canvas.getContext('2d');
         (<any>this).ctx.canvasOffset = this.offset(this.canvas);
-        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        window.requestAnimationFrame = window.requestAnimationFrame || (<any>window).mozRequestAnimationFrame || (<any>window).webkitRequestAnimationFrame || (<any>window).msRequestAnimationFrame;
 
         globalUtil.eventBus = new EventBus(this.canvas);
     }
@@ -85,15 +85,15 @@ export default class Fps{
     {
         this.ctx.save();
         /** 防止children超出 */
-        if (com.setClip)
+        if ((<any>com).setClip)
         {
             com.isDoingParentClip = true;//是否作为parent执行clip
-            com.setClip(this.ctx);
+            (<any>com).setClip(this.ctx);
         }
     }
     afterDrawChildren(com : Component)
     {
-        if (com.setClip)
+        if ((<any>com).setClip)
         {
             com.isDoingParentClip = false;
         }

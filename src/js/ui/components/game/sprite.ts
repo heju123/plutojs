@@ -1,10 +1,23 @@
-import Rect from "../rect.js";
-import Thread from "../../../util/thread.js";
-import MPromise from "../../../util/promise.js";
-import BoxCollisionDetector from "../../../collision/boxCollisionDetector.js";
+import Rect from "../rect";
+import Thread from "../../../util/thread";
+import MPromise from "../../../util/promise";
+import BoxCollisionDetector from "../../../collision/boxCollisionDetector";
+import Component from "../component";
 
 export default class Sprite extends Rect {
-    constructor(parent) {
+    xSpeed : number;
+    ySpeed : number;
+    xAcceleration : number;
+    yAcceleration : number;
+    private collisionDetector : BoxCollisionDetector;
+    private detectCollisionThread : Thread;
+    private detectXCollisionThread : Thread;
+    private detectYCollisionThread : Thread;
+    private detectCollisionLock : boolean;
+    private lastTime : number;
+    onCollision : Function;
+
+    constructor(parent? : Component) {
         super(parent);
 
         this.xSpeed = 0;//大约一毫秒移动的x距离
@@ -20,12 +33,12 @@ export default class Sprite extends Rect {
         this.detectYCollisionThread = new Thread(this.collisionDetector.thread_detectCollision);
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
         return promise;
     }
 
-    draw(ctx) {
+    draw(ctx : CanvasRenderingContext2D) : boolean {
         let currentTime = (new Date()).getTime();
         if (!this.lastTime)
         {

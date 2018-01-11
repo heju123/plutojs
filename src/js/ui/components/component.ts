@@ -1,12 +1,36 @@
 /**
  * Created by heju on 2017/7/20.
  */
-import globalUtil from "../../util/globalUtil.js";
-import commonUtil from "../../util/commonUtil.js";
-import animationUtil from "../../util/animationUtil.js";
+import globalUtil from "../../util/globalUtil";
+import commonUtil from "../../util/commonUtil";
+import animationUtil from "../../util/animationUtil";
 
 export default class Component {
-    constructor(parent) {
+    id : string;
+    name : string;
+    text : any;
+    animation : any;
+    type : string;
+    parent : Component;
+    isInit : boolean;
+    isSort : boolean;
+    eventNotifys : Array<any>;
+    active : boolean;
+    hasClip : boolean;
+    children : Array<Component>;
+    style : any;
+    controller : any;
+    protected originalStyle : any;
+    afterInitPromise : Promise<any>;
+    protected currentBackgroundImage : any;
+    protected currentBackgroundImageIndex : number;
+    protected backgroundImagesIntervalObj : number;
+    isHover : boolean;
+    isFocus : boolean;
+    isActive : boolean;
+    isDoingParentClip : boolean;
+
+    constructor(parent? : Component) {
         this.parent = parent;
         this.isInit = false;
         this.isSort = false;//子组件是否已排序
@@ -22,7 +46,7 @@ export default class Component {
         this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
     }
 
-    init(){
+    init() : Promise<any>{
         let allPromise = [];
         //自适应宽度
         if (this.style.autoWidth)
@@ -72,7 +96,7 @@ export default class Component {
         return this.afterInitPromise;
     }
 
-    initBackgroundImageDom(url){
+    initBackgroundImageDom(url : string) : Promise<any>{
         let $this = this;
         return new Promise((resolve, reject)=>{
             commonUtil.createImageDom(url).then((imgThis)=>{
@@ -89,7 +113,7 @@ export default class Component {
         });
     }
 
-    initBackgroundImages(backgroundImages){
+    initBackgroundImages(backgroundImages? : Array<any>) : Promise<any>{
         let bgImages = backgroundImages || this.style.backgroundImages;
         let allPromise = [];
         if (this.style.backgroundImage)//如果设置backgroundImages的情况下又有backgroundImage，则所有背景图片url都等于backgroundImage
@@ -128,7 +152,7 @@ export default class Component {
         }
         this.currentBackgroundImage = this.style.backgroundImages[this.currentBackgroundImageIndex];
     }
-    createBackgroundImagesIntervalObj(interval){
+    createBackgroundImagesIntervalObj(interval : number){
         this.removeBackgroundImagesIntervalObj();
         this.backgroundImagesIntervalObj = window.setInterval(this.onChangeBgImageInterval.bind(this), interval);
     }
@@ -140,7 +164,7 @@ export default class Component {
     }
 
     /** 配置文件递归初始化样式 */
-    initCfgStyle(cfgStyle){
+    initCfgStyle(cfgStyle : any){
         for (let key in cfgStyle)
         {
             if (key === "hover" || key === "hoverout"
@@ -165,7 +189,7 @@ export default class Component {
      *
      * @param cfg
      */
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let allPromise = [];
         if (cfg.id)
         {
@@ -246,7 +270,7 @@ export default class Component {
         return Promise.all(allPromise);
     }
 
-    initChildrenCfg(childrenCfg){
+    initChildrenCfg(childrenCfg : any) : Promise<any>{
         let allPromise = [];
         if (typeof(childrenCfg) == "object" && childrenCfg instanceof Array)
         {
@@ -273,15 +297,15 @@ export default class Component {
         }
     }
 
-    newComByType(type){
-        let Router = require("./router.js").default;
-        let Rect = require("./rect.js").default;
-        let Input = require("./input.js").default;
-        let Button = require("./button.js").default;
-        let Checkbox = require("./checkbox.js").default;
-        let Scrollbar = require("./scrollbar.js").default;
-        let Map = require("./game/map.js").default;
-        let Sprite = require("./game/sprite.js").default;
+    newComByType(type : string) : Component{
+        let Router = require("./router").default;
+        let Rect = require("./rect").default;
+        let Input = require("./input").default;
+        let Button = require("./button").default;
+        let Checkbox = require("./checkbox").default;
+        let Scrollbar = require("./scrollbar").default;
+        let Map = require("./game/map").default;
+        let Sprite = require("./game/sprite").default;
         let com;
         switch (type)
         {
@@ -313,7 +337,7 @@ export default class Component {
         return com;
     }
 
-    produceChildrenByCfg(chiCfg){
+    produceChildrenByCfg(chiCfg : any) : Promise<any>{
         let childCom;
         if (typeof(chiCfg) === "function")//异步加载view
         {
@@ -332,7 +356,7 @@ export default class Component {
         }
     }
 
-    asyncGetView(viewCfg, resolve, reject){
+    asyncGetView(viewCfg : any, resolve : Function, reject : Function){
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
             if (resolve)
@@ -380,9 +404,9 @@ export default class Component {
         }
     }
 
-    draw(ctx){
+    draw(ctx : CanvasRenderingContext2D) : boolean{
         //不在parent范围内，则不需要绘制
-        let parentArea = this.inParentArea(this);
+        let parentArea = (<any>this).inParentArea(this);
         if (parentArea === 0)
         {
             return false;
@@ -390,13 +414,13 @@ export default class Component {
 
         //判断鼠标是否在组件范围内
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
-        if (ctx.mouseAction.mx && ctx.mouseAction.my
-            && this.isPointInComponent(ctx, ctx.mouseAction.mx, ctx.mouseAction.my)
-            && (!this.parent || !this.parent.hasClip || (ctx.mouseAction.hoverCom && (this.parent === ctx.mouseAction.hoverCom
-                || this.parent === ctx.mouseAction.hoverCom.parent
-                || this.parent.parentOf(ctx.mouseAction.hoverCom)))))
+        if ((<any>ctx).mouseAction.mx && (<any>ctx).mouseAction.my
+            && (<any>this).isPointInComponent(ctx, (<any>ctx).mouseAction.mx, (<any>ctx).mouseAction.my)
+            && (!this.parent || !this.parent.hasClip || ((<any>ctx).mouseAction.hoverCom && (this.parent === (<any>ctx).mouseAction.hoverCom
+                || this.parent === (<any>ctx).mouseAction.hoverCom.parent
+                || this.parent.parentOf((<any>ctx).mouseAction.hoverCom)))))
         {
-            ctx.mouseAction.hoverCom = this;
+            (<any>ctx).mouseAction.hoverCom = this;
         }
 
         //检查事件
@@ -411,7 +435,7 @@ export default class Component {
     }
 
     /** 添加子节点 */
-    appendChildren(child){
+    appendChildren(child : Component){
         this.children.push(child);
         this.isSort = false;
 
@@ -421,7 +445,7 @@ export default class Component {
     }
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */
-    setCommonStyle(ctx){
+    setCommonStyle(ctx : CanvasRenderingContext2D){
         this.setDefaultStyle();//如果样式丢失，则使用默认样式
         //半透明
         let alpha = this.getAlpha();
@@ -447,7 +471,7 @@ export default class Component {
     }
 
     /** 设置ctx的scale */
-    setScaleEnable(ctx){
+    setScaleEnable(ctx : CanvasRenderingContext2D){
         let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")
         {
@@ -462,7 +486,7 @@ export default class Component {
     }
 
     /** 设置ctx的rotate */
-    setRotateEnable(ctx){
+    setRotateEnable(ctx : CanvasRenderingContext2D){
         let rotate = this.style.rotate;
         if (rotate !== undefined && rotate !== 0)
         {
@@ -471,7 +495,7 @@ export default class Component {
     }
 
     /** 设置镜像 */
-    setMirrorEnable(ctx){
+    setMirrorEnable(ctx : CanvasRenderingContext2D){
         let mirror = this.style.mirror;
         if (mirror !== undefined)
         {
@@ -493,13 +517,13 @@ export default class Component {
     }
 
     /** 将坐标原点设置到组件中心 */
-    setOriginalCoor2Center(ctx){
+    setOriginalCoor2Center(ctx : CanvasRenderingContext2D){
         let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
         let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
         ctx.translate(transX, transY);
     }
     /** 将坐标原点从组件中心还原到0,0 */
-    restoreOriginalCoor2Zero(ctx){
+    restoreOriginalCoor2Zero(ctx : CanvasRenderingContext2D){
         let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
         let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
         ctx.translate(-transX, -transY);
@@ -535,7 +559,7 @@ export default class Component {
         }
     }
 
-    onFocus(mx, my){
+    onFocus(mx : number, my : number){
         this.isFocus = true;
         if (this.style.focus)
         {
@@ -609,7 +633,7 @@ export default class Component {
         }
     }
 
-    onActive(mx, my){
+    onActive(mx : number, my : number){
         this.isActive = true;
         if (this.style.active)
         {
@@ -639,8 +663,8 @@ export default class Component {
     }
 
     /** 检查事件是否匹配 */
-    checkEvent(eventNotify){
-        let Map = require("./game/map.js").default;
+    checkEvent(eventNotify : any){
+        let Map = require("./game/map").default;
 
         if (eventNotify.type)
         {
@@ -664,7 +688,7 @@ export default class Component {
     }
 
     /** 冒泡执行doLayout方法 */
-    propagationDoLayout(com){
+    propagationDoLayout(com : Component){
         if (com.doLayout && typeof(com.doLayout) === "function")
         {
             com.doLayout();
@@ -676,7 +700,7 @@ export default class Component {
     }
 
     /** 获取所有的权值 */
-    getAllWeight(){
+    getAllWeight() : number{
         let allWeight = 0;
         this.children.forEach((child, index)=>{
             if (child.style.layout && child.style.layout.layoutWeight)
@@ -794,7 +818,7 @@ export default class Component {
     }
 
     /** this是否是com的父亲 */
-    parentOf(com){
+    parentOf(com : Component) : boolean{
         if (!com || !com.parent)
         {
             return false;
@@ -807,7 +831,7 @@ export default class Component {
     }
 
     /** 执行样式改变动画 */
-    doStyleAnimation(styleKey, toVal){
+    doStyleAnimation(styleKey : string, toVal : string) : Promise<any>{
         if (!this.animation || !this.animation[styleKey])
         {
             return;
@@ -816,7 +840,7 @@ export default class Component {
     }
 
     /** 防止改变originalStyle，所以这里要专门写一个方法，而不使用setStyle方法 */
-    copyStyle(source){
+    copyStyle(source : any){
         for (let key in source)
         {
             if (key === "backgroundImage")//更换图片
@@ -854,19 +878,15 @@ export default class Component {
     }
 
     /** 设置组件样式 */
-    setStyle(){
-        if (arguments.length === 0)
-        {
-            return;
-        }
+    setStyle(arg1 : any, arg2? : any, arg3? : any) : Promise<any>{
         let allAniPromise;
-        if (typeof(arguments[0]) === "object")
+        if (typeof(arg1) === "object")
         {
-            allAniPromise = this.setStyle_obj(arguments[0], arguments[1]);
+            allAniPromise = this.setStyle_obj(arg1, arg2);
         }
-        else if (typeof(arguments[0]) === "string")
+        else if (typeof(arg1) === "string")
         {
-            allAniPromise = this.setStyle_kv(arguments[0], arguments[1], arguments[2]);
+            allAniPromise = this.setStyle_kv(arg1, arg2, arg3);
         }
         if (allAniPromise)
         {
@@ -881,7 +901,7 @@ export default class Component {
             return undefined;
         }
     }
-    setStyle_kv(key, value, doAni){
+    setStyle_kv(key : any, value : any, doAni? : any) : Promise<any>{
         if (this.originalStyle[key] === value)//如果设置的值相同，则不需要耗费性能
         {
             return;
@@ -937,7 +957,7 @@ export default class Component {
         this.originalStyle[key] = value;
         return aniPromise;
     }
-    setStyle_obj(style, doAni){
+    setStyle_obj(style : any, doAni : any) : Array<Promise<any>>{
         let aniPromiseArr = [];
         let aniPromise;
         for (let key in style)
@@ -952,12 +972,12 @@ export default class Component {
     }
 
     /** 移除样式 */
-    removeStyle(key){
+    removeStyle(key : string){
         delete this.style[key];
         delete this.originalStyle[key];
     }
 
-    getController(com){
+    getController(com : Component) : any{
         if (!com.parent)
         {
             return com.controller;
@@ -972,13 +992,13 @@ export default class Component {
         }
     }
 
-    setX(x){
+    setX(x : number | string | Function){
         this.setStyle("x", x);
     }
-    setY(y){
+    setY(y : number | string | Function){
         this.setStyle("y", y);
     }
-    getX(){
+    getX() : number{
         if (this.style.x && typeof(this.style.x) === "function")
         {
             return this.style.x.apply(this, []);
@@ -990,7 +1010,7 @@ export default class Component {
         }
         return this.style.x - (this.style.scrollX || 0);//要减去滚动的长度
     }
-    getY(){
+    getY() : number{
         if (this.style.y && typeof(this.style.y) === "function")
         {
             return this.style.y.apply(this, []);
@@ -1004,7 +1024,7 @@ export default class Component {
     }
 
     //设置真实坐标，传入真实坐标,会转换成x或y
-    setRealX(rx){
+    setRealX(rx : number){
         if (this.parent)
         {
             this.setX(rx - this.getRealXRecursion(this.parent));
@@ -1014,7 +1034,7 @@ export default class Component {
             this.setX(rx);
         }
     }
-    setRealY(ry){
+    setRealY(ry : number){
         if (this.parent)
         {
             this.setY(ry - this.getRealYRecursion(this.parent));
@@ -1026,7 +1046,7 @@ export default class Component {
     }
 
     //获取显示在界面上真实的x坐标，加上父级坐标
-    getRealXRecursion(com){
+    getRealXRecursion(com : Component) : number{
         if (com.parent)
         {
             return com.getX() + this.getRealXRecursion(com.parent) + (com.parent.style.borderWidth || 0);
@@ -1036,10 +1056,10 @@ export default class Component {
             return com.getX();
         }
     }
-    getRealX(){
+    getRealX() : number{
         return this.getRealXRecursion(this);
     }
-    getRealYRecursion(com){
+    getRealYRecursion(com : Component) : number{
         if (com.parent)
         {
             return com.getY() + this.getRealYRecursion(com.parent) + (com.parent.style.borderWidth || 0);
@@ -1048,17 +1068,17 @@ export default class Component {
             return com.getY();
         }
     }
-    getRealY(){
+    getRealY() : number{
         return this.getRealYRecursion(this);
     }
 
     /** 获取文本的坐标 */
-    getTextRealX(){
+    getTextRealX() : number{
         let oriX = this.getRealX() + (this.style.borderWidth || 0);
         //文字居中显示
         if (this.text && this.style.textAlign === "center")
         {
-            let Input = require("./input.js").default;
+            let Input = require("./input").default;
             let textLength;
             if (this instanceof Input)
             {
@@ -1075,18 +1095,18 @@ export default class Component {
         }
         return oriX - (this.style.textScrollX || 0);
     }
-    getTextRealY(){
+    getTextRealY() : number{
         return this.getRealY() + (this.style.borderWidth || 0) - (this.style.textScrollY || 0);
     }
 
     /** 高宽处理 */
-    setWidth(width){
+    setWidth(width : number | string | Function){
         this.setStyle("width", width);
     }
-    setHeight(height){
+    setHeight(height : number | string | Function){
         this.setStyle("height", height);
     }
-    getWidth(){
+    getWidth() : number{
         if (!this.style.width)
         {
             return undefined;
@@ -1102,7 +1122,7 @@ export default class Component {
         }
         return this.style.width;
     }
-    getHeight(){
+    getHeight() : number{
         if (!this.style.height)
         {
             return undefined;
@@ -1119,15 +1139,15 @@ export default class Component {
         return this.style.height;
     }
     //获取去边框的宽高
-    getInnerWidth(){
+    getInnerWidth() : number{
         return this.getWidth() - (this.style.borderWidth || 0) * 2;
     }
-    getInnerHeight(){
+    getInnerHeight() : number{
         return this.getHeight() - (this.style.borderWidth || 0) * 2;
     }
 
     /** 获取alpha值，如果当前组件无alpha，则取父节点的 */
-    getAlpha(){
+    getAlpha() : number{
         if (this.style.alpha)
         {
             return this.style.alpha;
@@ -1147,7 +1167,7 @@ export default class Component {
      *
      * @return true 是0,0
      */
-    needTranslateOriginOfCoor2Center(){
+    needTranslateOriginOfCoor2Center() : boolean{
         let scale = this.style.scale;
         let rotate = this.style.rotate;
         let mirror = this.style.mirror;
@@ -1161,7 +1181,7 @@ export default class Component {
     }
 
     /** 用\n分隔string，实现换行 */
-    getTextForRows(text){
+    getTextForRows(text : string) : any{
         if (!text)
         {
             return undefined;
@@ -1173,7 +1193,7 @@ export default class Component {
         }
         else
         {
-            let Input = require("./input.js").default;
+            let Input = require("./input").default;
             if (this.style.autoLine)//如果自动换行
             {
                 let index = 0;
@@ -1206,7 +1226,7 @@ export default class Component {
     }
 
     /** 获取字符宽度，中文占1个fontSize */
-    getCharWidth(char){
+    getCharWidth(char : string) : number{
         if(char.charCodeAt(0) > 128)
         {
             return parseInt(this.style.fontSize, 10);
@@ -1217,7 +1237,7 @@ export default class Component {
         }
     }
 
-    setText(text){
+    setText(text : string){
         this.text = this.getTextForRows(text);
         //自适应宽度
         if (this.style.autoWidth)
@@ -1226,7 +1246,7 @@ export default class Component {
         }
     }
 
-    getText(){
+    getText() : string{
         if (!this.text)
         {
             return undefined;
@@ -1235,19 +1255,19 @@ export default class Component {
     }
 
     /** 获取文本占的总高度 */
-    getTextHeight(){
+    getTextHeight() : number{
         if (!this.text)
         {
             return 0;
         }
         return this.text.length * parseInt(this.style.fontSize, 10);
     }
-    getTextWidth(){
+    getTextWidth() : number{
         if (!this.text)
         {
             return 0;
         }
-        let Input = require("./input.js").default;
+        let Input = require("./input").default;
         let allWidth = 0;
         this.text.forEach((row, index)=> {
             if (this instanceof Input)
@@ -1262,11 +1282,11 @@ export default class Component {
         return allWidth;
     }
 
-    getChildren(){
+    getChildren() : Array<Component> | Component{
         return this.children;
     }
 
-    removeAllChildren(name){
+    removeAllChildren(name : string){
         if (!name)
         {
             this.children.forEach((child)=>{
@@ -1287,11 +1307,11 @@ export default class Component {
         }
     }
 
-    registerEvent(eventType, callback){
+    registerEvent(eventType : string, callback : Function){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
-    removeEvent(eventType, callback){
+    removeEvent(eventType : string, callback : Function){
         globalUtil.eventBus.removeEvent(this, eventType, callback);
     }
 
@@ -1300,12 +1320,12 @@ export default class Component {
         globalUtil.eventBus.removeAllEvent(this);
     }
 
-    addEventNotify(eventNotify){
+    addEventNotify(eventNotify : any){
         this.eventNotifys.push(eventNotify);
     }
 
     //是否支持拖动
-    getDragComponent(com){
+    getDragComponent(com : Component) : Component{
         if (com.style.draggable)
         {
             return com;
@@ -1320,7 +1340,7 @@ export default class Component {
         }
     }
 
-    getComponentById(id){
+    getComponentById(id : string) : Component{
         if (this.id && this.id === id)
         {
             return this;
@@ -1331,7 +1351,7 @@ export default class Component {
         }
     }
 
-    getComponentByName(name){
+    getComponentByName(name : string) : Component{
         if (this.name && this.name === name)
         {
             return this;
@@ -1343,7 +1363,7 @@ export default class Component {
     }
 
     /** 用name获取组件集合 */
-    getComponentsByName(name){
+    getComponentsByName(name : string) : Array<Component>{
         if (this.name && this.name === name)
         {
             return [this];
@@ -1355,7 +1375,7 @@ export default class Component {
     }
 
     /** 用type获取组件集合 */
-    getComponentsByType(type){
+    getComponentsByType(type : string) : Array<Component>{
         if (this.type && this.type === type)
         {
             return [this];
@@ -1367,7 +1387,7 @@ export default class Component {
     }
 
     /** 触发事件 */
-    triggerEvent(type){
+    triggerEvent(type : string){
         globalUtil.eventBus.triggerEvent(type, this);
     }
 
@@ -1382,7 +1402,7 @@ export default class Component {
             this.controller.destroy();
         }
 
-        this.getChildren().forEach((child)=>{
+        (<Array<Component>>this.getChildren()).forEach((child)=>{
             child.destroy();
         });
     }

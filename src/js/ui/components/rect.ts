@@ -1,21 +1,21 @@
 /**
  * Created by heju on 2017/7/14.
  */
-import commonUtil from "../../util/commonUtil.js";
-import globalUtil from "../../util/globalUtil.js";
-import Component from "./component.js";
+import commonUtil from "../../util/commonUtil";
+import globalUtil from "../../util/globalUtil";
+import Component from "./component";
 
 export default class Rect extends Component{
-    constructor(parent) {
+    constructor(parent? : Component) {
         super(parent);
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
         return promise;
     }
 
-    draw(ctx){
+    draw(ctx : CanvasRenderingContext2D) : boolean{
         if (!super.draw(ctx))
         {
             return false;
@@ -76,7 +76,7 @@ export default class Rect extends Component{
         //绘制文字
         if (this.text && this.text.length > 0)
         {
-            let Input = require("./input.js").default;
+            let Input = require("./input").default;
             ctx.save();
             this.setClip(ctx);
             ctx.beginPath();
@@ -113,7 +113,7 @@ export default class Rect extends Component{
     }
 
     /** 设置后避免超出当前组件范围 */
-    setClip(ctx){
+    setClip(ctx : CanvasRenderingContext2D){
         ctx.beginPath();
         if (this.isDoingParentClip)
         {
@@ -146,14 +146,14 @@ export default class Rect extends Component{
         ctx.closePath();
     }
 
-    getRectRadiusPath(){
+    getRectRadiusPath(arg1? : any, arg2? : any, arg3? : any, arg4? : any, arg5? : any, arg6? : any, arg7? : any) : void{
         if (arguments.length <= 4)
         {
-            this.getRectRadiusPath_self(arguments[0], arguments[1], arguments[2], arguments[3]);
+            this.getRectRadiusPath_self(arg1, arg2, arg3, arg4);
         }
         else
         {
-            this.getRectRadiusPath_xywh(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
+            this.getRectRadiusPath_xywh(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
     }
     /**
@@ -163,7 +163,7 @@ export default class Rect extends Component{
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath_self(self, ctx, radius, padding){
+    getRectRadiusPath_self(self : Component, ctx :CanvasRenderingContext2D, radius : number, padding : number) : void{
         this.getRectRadiusPath_xywh(self.getRealX(), self.getRealY(), self.getWidth(), self.getHeight(), ctx, radius, padding);
     }
     /**
@@ -176,7 +176,7 @@ export default class Rect extends Component{
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath_xywh(px, py, pwidth, pheight, ctx, radius, padding){
+    getRectRadiusPath_xywh(px : number, py : number, pwidth : number, pheight : number, ctx : CanvasRenderingContext2D, radius : number, padding : number) : void{
         padding = padding || 0;
         let x = px - padding;
         let y = py - padding;
@@ -199,7 +199,7 @@ export default class Rect extends Component{
      *
      * @return -1：无parent；0：不在范围内；1：在范围内
      */
-    inParentArea(com){
+    inParentArea(com : Component) : number{
         return 1;
         // if (!com.parent)
         // {
@@ -227,7 +227,7 @@ export default class Rect extends Component{
      * @param py 鼠标y
      * @return true：在范围内
      */
-    isPointInComponent(ctx, px, py){
+    isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean{
         ctx.save();
         ctx.beginPath();
         if (this.needTranslateOriginOfCoor2Center())

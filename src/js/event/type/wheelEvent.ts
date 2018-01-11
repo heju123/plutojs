@@ -1,4 +1,4 @@
-import Event from "./event.js";
+import Event from "./event";
 
 export default class WheelEvent extends Event{
     wheelDelta : number;

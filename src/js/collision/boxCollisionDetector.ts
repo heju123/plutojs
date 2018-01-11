@@ -48,11 +48,11 @@ export default class BoxCollisionDetector{
 
         if (collision.length > 0)
         {
-            self.postMessage(JSON.stringify(collision), "");
+            (<any>self).postMessage(JSON.stringify(collision));
         }
         else
         {
-            self.postMessage(0, "");
+            (<any>self).postMessage(0);
         }
     }
 
@@ -66,7 +66,7 @@ export default class BoxCollisionDetector{
      * @param fixCoor 发生碰撞时是否修复坐标，防止一直卡在障碍内
      * @return reject：发生碰撞；resolve:未发生碰撞
      */
-    detectCollision(com : Component, sx : number, sy : number, thread : Thread, fixCoor : boolean)
+    detectCollision(com : Component, sx : number, sy : number, thread : Thread, fixCoor? : boolean)
     {
         let $this = com;
         let promise = new MPromise();
@@ -130,22 +130,22 @@ export default class BoxCollisionDetector{
                     {
                         if (mapColMax - minCol > minCol - mapColMin)//碰撞处在左边，应该向右移动
                         {
-                            $this.setX(maxCol * $this.parent.mapSize + parseInt($this.parent.mapSize));
+                            $this.setX(maxCol * (<Map>$this.parent).mapSize + parseInt((<Map>$this.parent).mapSize.toString()));
                         }
                         else
                         {
-                            $this.setX(minCol * $this.parent.mapSize - $this.getWidth());
+                            $this.setX(minCol * (<Map>$this.parent).mapSize - $this.getWidth());
                         }
                     }
                     else//竖向运动
                     {
                         if (mapRowMax - minRow < minRow - mapRowMin)//碰撞处在下面，应该向上移动
                         {
-                            $this.setY(minRow * $this.parent.mapSize - $this.getHeight());
+                            $this.setY(minRow * (<Map>$this.parent).mapSize - $this.getHeight());
                         }
                         else
                         {
-                            $this.setY(maxRow * $this.parent.mapSize + parseInt($this.parent.mapSize));
+                            $this.setY(maxRow * (<Map>$this.parent).mapSize + parseInt((<Map>$this.parent).mapSize.toString()));
                         }
                     }
                 }

@@ -1,10 +1,10 @@
 /**
  * Created by heju on 2017/7/14.
  */
-let commonUtil = {
-    asyncLoadedScripts: {},
+let commonUtil : any = {
+    asyncLoadedScripts : {},
     asyncLoadedScriptsCallbackQueue: {},
-    getScriptDomFromUrl : (url)=>{
+    getScriptDomFromUrl : (url : string)=>{
         let dom;
         if (/.+\.js$/.test(url))
         {
@@ -24,7 +24,7 @@ let commonUtil = {
     /**
      * 异步加载script或css
      */
-    asyncLoadScript: (url, callback) => {
+    asyncLoadScript: (url : string, callback : Function) => {
         let $this = commonUtil;
         if ($this.asyncLoadedScripts[url] != undefined)//已加载script标签
         {
@@ -77,12 +77,12 @@ let commonUtil = {
         }
         document.getElementsByTagName('head')[0].appendChild(scriptDom);
     },
-    concatList : (list, addList)=>{
+    concatList : (list : Array<any>, addList : Array<any>)=>{
         addList.forEach((item)=>{
             list.push(item);
         });
     },
-    isEmptyObj : (obj)=>{
+    isEmptyObj : (obj : Object)=>{
         for (let key in obj)
         {
             return false;
@@ -97,7 +97,7 @@ let commonUtil = {
      * @param deep 是否深度复制
      * @return 复制的目标对象
      */
-    copyObject : (obj, dest, override, deep)=>{
+    copyObject : (obj : Object, dest : Object, override : boolean, deep : boolean)=>{
         if (override == undefined)
         {
             override = true;
@@ -138,7 +138,7 @@ let commonUtil = {
      * @param deep 是否深度复制
      * @return 复制的目标对象
      */
-    copyArray : (obj, dest, deep)=>{
+    copyArray : (obj : Array<any>, dest : Array<any>, deep : boolean)=>{
         let result = dest || [];
         obj.forEach((item)=>{
             if (deep && typeof(item) === "object" && !(item instanceof Array))
@@ -163,7 +163,7 @@ let commonUtil = {
      * @param value key字段值
      * @return 数组信息
      */
-    getArrayInfoByKey : (arr, key, value)=>{
+    getArrayInfoByKey : (arr : Array<any>, key : string, value : string)=>{
         let item;
         for (let i = 0, j = arr.length; i < j; i++)
         {
@@ -180,7 +180,7 @@ let commonUtil = {
      * @param arr
      * @param object
      */
-    inArray : (arr, object)=>{
+    inArray : (arr : Array<any>, object : any)=>{
         if (arr == undefined || object == undefined)
         {
             return false;
@@ -197,7 +197,7 @@ let commonUtil = {
         return false;
     },
     /** 根据后缀获取时间(单位：秒) */
-    getTimeSecForSuffix : (time)=>{
+    getTimeSecForSuffix : (time : any)=>{
         if (time.toString().lastIndexOf("ms") > -1)
         {
             time = time.substring(0, time.lastIndexOf("ms"));
@@ -217,7 +217,7 @@ let commonUtil = {
      * @param compareObj 比较的对象，如果obj中的某属性在compareObj对象中不存在，则删除
      * @param ignoreAttrs 这些属性除外，传入字符串，逗号分割
      */
-    removeExtraAttr : (obj, compareObj, ignoreAttrs)=>{
+    removeExtraAttr : (obj : Object, compareObj : Object, ignoreAttrs : Array<any>)=>{
         for (let key in obj)
         {
             if (ignoreAttrs.indexOf(key) > -1)
@@ -235,13 +235,13 @@ let commonUtil = {
      *
      * @param msg
      */
-    popMessageTooltip : (msg, opts)=>{
+    popMessageTooltip : (msg : string, opts : any)=>{
         alert(msg);
     },
     /**
      * 创建图片dom
      */
-    createImageDom : (url)=>{
+    createImageDom : (url : string)=>{
         return new Promise((resolve, reject)=>{
             let img = new Image();
             img.onload = function(){

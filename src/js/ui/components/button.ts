@@ -1,12 +1,13 @@
-import Rect from "./rect.js";
+import Rect from "./rect";
+import Component from "./component";
 
 export default class Button extends Rect {
-    constructor(parent) {
+    constructor(parent? : Component) {
         super(parent);
         this.setStyle("textAlign", "center");
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
         this.setStyle("lineHeight", this.getHeight());
 

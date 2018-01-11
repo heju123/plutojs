@@ -1,9 +1,10 @@
-import commonUtil from "./commonUtil.js";
-import TweenMax from "../../libs/TweenLite/TweenMax.min.js";
-import EasePack from "../../libs/TweenLite/easing/EasePack.min.js";
-import ColorPropsPlugin from "../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
+import commonUtil from "./commonUtil";
+import * as TweenMax from "../../libs/TweenLite/TweenMax.min.js";
+import * as EasePack from "../../libs/TweenLite/easing/EasePack.min.js";
+import * as ColorPropsPlugin from "../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
+import Component from "../ui/components/component";
 
-let animationUtil = {
+let animationUtil : any = {
     /**
      * 执行样式改变动画
      *
@@ -11,7 +12,7 @@ let animationUtil = {
      * @param toVal 修改后的值
      * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
-    executeStyleChange : (com, styleKey, toVal, animation)=>{
+    executeStyleChange : (com : Component, styleKey : string, toVal : string, animation : any)=>{
         let to = {};
         to[styleKey] = toVal;
         return animationUtil.executeAttrChange(com.style, to, animation);
@@ -22,7 +23,7 @@ let animationUtil = {
      * @param to 改变的属性，用object表示
      * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
-    executeAttrChange : (com, to, animation)=>{
+    executeAttrChange : (com : Component, to : any, animation : any)=>{
         return new Promise((resolve, reject)=>{
             to.ease = EasePack[animation.easeType][animation.easing];
             to.onComplete = function() {

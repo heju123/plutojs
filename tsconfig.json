@@ -2,13 +2,17 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
+    "allowJs": true,
     "sourceMap": true,
     "lib": [
       "es5",
-      "ES2015",
-      "DOM"
+      "es2015",
+      "dom"
     ]
   },
+  "files": [
+    "extraDeclare.d.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

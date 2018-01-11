@@ -1,7 +1,10 @@
-import Rect from "./rect.js";
+import Rect from "./rect";
+import Component from "./component";
 
 export default class Checkbox extends Rect {
-    constructor(parent) {
+    checked : boolean;
+
+    constructor(parent? : Component) {
         super(parent);
 
         this.setStyle({
@@ -17,14 +20,14 @@ export default class Checkbox extends Rect {
         });
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
 
         this.checked = cfg.checked;
         return promise;
     }
 
-    draw(ctx) {
+    draw(ctx : CanvasRenderingContext2D) : boolean {
         if (!super.draw(ctx)) {
             return false;
         }

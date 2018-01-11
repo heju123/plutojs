@@ -1,10 +1,17 @@
-import Rect from "../rect.js";
+import Rect from "../rect";
 import globalUtil from "../../../util/globalUtil";
-import httpUtil from "../../../util/httpUtil.js";
+import httpUtil from "../../../util/httpUtil";
 import commonUtil from "../../../util/commonUtil";
+import Component from "../component";
 
 export default class Map extends Rect {
-    constructor(parent) {
+    mapWidth : number;
+    mapHeight : number;
+    mapSize : number;
+    mapData : Array<Array<any>>;
+    terrainPolicy : any;
+
+    constructor(parent? : Component) {
         super(parent);
 
         this.mapWidth = 0;
@@ -12,7 +19,7 @@ export default class Map extends Rect {
         this.mapSize = 0;
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
 
         if (cfg.mapDataUrl)
@@ -72,7 +79,7 @@ export default class Map extends Rect {
         if (this.terrainPolicy && this.mapData)
         {
             this.removeAllChildren("map_data");
-            let rect;
+            let rect : Rect;
             let style;
             for (let row = 0; row < this.mapData.length; row++)
             {

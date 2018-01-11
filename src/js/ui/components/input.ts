@@ -1,12 +1,18 @@
 /**
  * Created by heju on 2017/7/30.
  */
-import Scrollbar from "./scrollbar.js";
+import Scrollbar from "./scrollbar";
 import globalUtil from "../../util/globalUtil";
 import commonUtil from "../../util/commonUtil";
+import Component from "./component";
 
 export default class Input extends Scrollbar {
-    constructor(parent) {
+    showTextCursor : boolean;
+    showTextCursorInterval : number;
+    textCursorX : number;
+    textCursorY : number;
+
+    constructor(parent? : Component) {
         super(parent);
 
         this.showTextCursor = true;
@@ -18,12 +24,12 @@ export default class Input extends Scrollbar {
         });
     }
 
-    initCfg(cfg){
+    initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
         return promise;
     }
 
-    draw(ctx) {
+    draw(ctx : CanvasRenderingContext2D) : boolean {
         if (!super.draw(ctx)) {
             return false;
         }
@@ -64,7 +70,7 @@ export default class Input extends Scrollbar {
         this.textCursorY = this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
     }
 
-    drawTextCursor(ctx){
+    drawTextCursor(ctx : CanvasRenderingContext2D){
         if (this.showTextCursor)
         {
             if (!globalUtil.action.inputListenerDom.compositionMode)
@@ -84,7 +90,7 @@ export default class Input extends Scrollbar {
         }
     }
 
-    onFocus(mx, my){
+    onFocus(mx : number, my : number){
         super.onFocus(mx, my);
 
         this.showTextCursorInterval = 0;
@@ -120,11 +126,11 @@ export default class Input extends Scrollbar {
         }
     }
 
-    getTextRealX(){
+    getTextRealX() : number{
         return super.getTextRealX();
     }
 
-    getTextRealY(){
+    getTextRealY() : number{
         let oriY = super.getTextRealY();
         if (this.style.multiLine)
         {
@@ -136,7 +142,7 @@ export default class Input extends Scrollbar {
         }
     }
 
-    setText(text){
+    setText(text : string){
         super.setText(text);
         this.doLayout();
     }

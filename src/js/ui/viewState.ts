@@ -7,6 +7,7 @@ import Rect from "./components/rect";
 import Router from "./components/router";
 import Input from "./components/input";
 import DragEvent from "../event/type/dragEvent";
+import Component from "./components/component";
 
 export default class ViewState{
     ctx : CanvasRenderingContext2D;
@@ -15,8 +16,9 @@ export default class ViewState{
     defaultFontFamily : string;
     defaultFontSize : string;
     defaultFontColor : string;
+    rootComponent : Component;
 
-    constructor(canvas, ctx){
+    constructor(canvas : HTMLCanvasElement, ctx : CanvasRenderingContext2D){
         this.ctx = ctx;
         this.canvas = canvas;
 
@@ -26,7 +28,7 @@ export default class ViewState{
         this.defaultFontSize = "14px";
         this.defaultFontColor = "#333";
 
-        this.ctx.mouseAction = {};
+        (<any>this.ctx).mouseAction = {};
 
         this.registerEvent("mousedown", (e)=>{
             if (e.sourceEvent.target !== this.canvas)
@@ -93,8 +95,8 @@ export default class ViewState{
         this.registerEvent("mousemove", (e)=>{
             if (e.sourceEvent.target === this.canvas)
             {
-                this.ctx.mouseAction.mx = e.pageX - this.ctx.canvasOffset.left;
-                this.ctx.mouseAction.my = e.pageY - this.ctx.canvasOffset.top;
+                (<any>this.ctx).mouseAction.mx = e.pageX - (<any>this.ctx).canvasOffset.left;
+                (<any>this.ctx).mouseAction.my = e.pageY - (<any>this.ctx).canvasOffset.top;
             }
             if (globalUtil.action.dragComponent)//拖动
             {
@@ -130,7 +132,7 @@ export default class ViewState{
         });
     }
 
-    init(viewCfg){
+    init(viewCfg : any){
         if (viewCfg.type == "rect")
         {
             this.rootComponent = new Rect();
@@ -145,28 +147,28 @@ export default class ViewState{
     }
 
     /** 绘制前 */
-    beforeDraw(ctx){
+    beforeDraw(ctx : CanvasRenderingContext2D){
         //通知触发事件
         globalUtil.eventBus.doNotifyEvent();
 
-        ctx.mouseAction.hoverCom = undefined;
+        (<any>ctx).mouseAction.hoverCom = undefined;
     }
 
     /** 绘制后 */
-    afterDraw(ctx){
+    afterDraw(ctx : CanvasRenderingContext2D){
         globalUtil.eventBus.propagationEvent();
 
         //全部绘制完后检查hover的组件，并且上一次hover的组件和这一次的不能相同
-        if (ctx.mouseAction.hoverCom)
+        if ((<any>ctx).mouseAction.hoverCom)
         {
             //这一次hover的组件不等于上一次hover的组件，则表示上一次hover的组件hoverout了
-            if (globalUtil.action.hoverComponent !== ctx.mouseAction.hoverCom)
+            if (globalUtil.action.hoverComponent !== (<any>ctx).mouseAction.hoverCom)
             {
                 if (globalUtil.action.hoverComponent)
                 {
                     globalUtil.action.hoverComponent.onHoverout();
                 }
-                globalUtil.action.hoverComponent = ctx.mouseAction.hoverCom;
+                globalUtil.action.hoverComponent = (<any>ctx).mouseAction.hoverCom;
                 globalUtil.action.hoverComponent.onHover();
             }
         }
@@ -181,11 +183,11 @@ export default class ViewState{
         }
     }
 
-    addEventNotify(eventNotify){
+    addEventNotify(eventNotify : any){
         globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
-    getComponentInChildrenByKey(key, val, com) {
+    getComponentInChildrenByKey(key : string, val : string, com : Component) {
         let children = com.getChildren();
         if (children)
         {
@@ -229,7 +231,7 @@ export default class ViewState{
         }
     }
 
-    _getComponentsInChildrenByKey(retArr, key, val, com) {
+    _getComponentsInChildrenByKey(retArr : Array<any>, key : string, val : string, com : Component) {
         let children = com.getChildren();
         if (children)
         {
@@ -260,13 +262,13 @@ export default class ViewState{
         }
     }
     /** 用key获取组件列表 */
-    getComponentsInChildrenByKey(key, val, com) {
+    getComponentsInChildrenByKey(key : string, val : string, com : Component) {
         let retArr = [];
         this._getComponentsInChildrenByKey(retArr, key, val, com);
         return retArr;
     }
 
-    getComponentById(id){
+    getComponentById(id : string){
         if (this.rootComponent.id && this.rootComponent.id === id)
         {
             return this.rootComponent;
@@ -277,7 +279,7 @@ export default class ViewState{
         }
     }
 
-    getComponentByName(name){
+    getComponentByName(name : string){
         if (this.rootComponent.name && this.rootComponent.name === name)
         {
             return this.rootComponent;
@@ -289,7 +291,7 @@ export default class ViewState{
     }
 
     /** 用name获取组件集合 */
-    getComponentsByName(name){
+    getComponentsByName(name : string){
         if (this.rootComponent.name && this.rootComponent.name === name)
         {
             return [this.rootComponent];
@@ -301,7 +303,7 @@ export default class ViewState{
     }
 
     /** 用type获取组件集合 */
-    getComponentsByType(type){
+    getComponentsByType(type : string){
         if (this.rootComponent.type && this.rootComponent.type === type)
         {
             return [this.rootComponent];
@@ -320,11 +322,11 @@ export default class ViewState{
         return this.ctx.canvas.height;
     }
 
-    registerEvent(eventType, callback){
+    registerEvent(eventType : string, callback : Function){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
-    removeEvent(eventType, callback){
+    removeEvent(eventType : string, callback : Function){
         globalUtil.eventBus.removeEvent(this, eventType, callback);
     }
 
