@@ -4,8 +4,9 @@
 import globalUtil from "../../util/globalUtil";
 import commonUtil from "../../util/commonUtil";
 import animationUtil from "../../util/animationUtil";
+import EventNotify from "../../event/eventNotify";
 
-export default class Component {
+abstract class Component {
     id : string;
     name : string;
     text : any;
@@ -14,7 +15,7 @@ export default class Component {
     parent : Component;
     isInit : boolean;
     isSort : boolean;
-    eventNotifys : Array<any>;
+    eventNotifys : Array<EventNotify>;
     active : boolean;
     hasClip : boolean;
     children : Array<Component>;
@@ -406,7 +407,7 @@ export default class Component {
 
     draw(ctx : CanvasRenderingContext2D) : boolean{
         //不在parent范围内，则不需要绘制
-        let parentArea = (<any>this).inParentArea(this);
+        let parentArea = this.inParentArea(this);
         if (parentArea === 0)
         {
             return false;
@@ -415,7 +416,7 @@ export default class Component {
         //判断鼠标是否在组件范围内
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
         if ((<any>ctx).mouseAction.mx && (<any>ctx).mouseAction.my
-            && (<any>this).isPointInComponent(ctx, (<any>ctx).mouseAction.mx, (<any>ctx).mouseAction.my)
+            && this.isPointInComponent(ctx, (<any>ctx).mouseAction.mx, (<any>ctx).mouseAction.my)
             && (!this.parent || !this.parent.hasClip || ((<any>ctx).mouseAction.hoverCom && (this.parent === (<any>ctx).mouseAction.hoverCom
                 || this.parent === (<any>ctx).mouseAction.hoverCom.parent
                 || this.parent.parentOf((<any>ctx).mouseAction.hoverCom)))))
@@ -433,6 +434,10 @@ export default class Component {
         }
         return true;
     }
+
+    abstract inParentArea(com : Component) : number;
+
+    abstract isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean;
 
     /** 添加子节点 */
     appendChildren(child : Component){
@@ -663,7 +668,7 @@ export default class Component {
     }
 
     /** 检查事件是否匹配 */
-    checkEvent(eventNotify : any){
+    checkEvent(eventNotify : EventNotify){
         let Map = require("./game/map").default;
 
         if (eventNotify.type)
@@ -1320,7 +1325,7 @@ export default class Component {
         globalUtil.eventBus.removeAllEvent(this);
     }
 
-    addEventNotify(eventNotify : any){
+    addEventNotify(eventNotify : EventNotify){
         this.eventNotifys.push(eventNotify);
     }
 
@@ -1407,3 +1412,5 @@ export default class Component {
         });
     }
 }
+
+export default Component;
