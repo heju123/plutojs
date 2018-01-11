@@ -2,11 +2,12 @@ import Map from "../ui/components/game/map";
 import MPromise from "../util/promise";
 import Component from "../ui/components/Component";
 import Thread from "../util/thread";
+import CollisionDetector from "../collision/collisionDetector";
 
 /**
  * 盒子模型碰撞检测
  */
-export default class BoxCollisionDetector{
+export default class BoxCollisionDetector implements CollisionDetector{
     constructor() {
     }
 
@@ -66,7 +67,7 @@ export default class BoxCollisionDetector{
      * @param fixCoor 发生碰撞时是否修复坐标，防止一直卡在障碍内
      * @return reject：发生碰撞；resolve:未发生碰撞
      */
-    detectCollision(com : Component, sx : number, sy : number, thread : Thread, fixCoor? : boolean)
+    detectCollision(com : Component, sx : number, sy : number, thread : Thread, fixCoor? : boolean) : MPromise
     {
         let $this = com;
         let promise = new MPromise();

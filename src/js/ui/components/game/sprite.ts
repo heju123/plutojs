@@ -2,6 +2,7 @@ import Rect from "../rect";
 import Thread from "../../../util/thread";
 import MPromise from "../../../util/promise";
 import BoxCollisionDetector from "../../../collision/boxCollisionDetector";
+import CollisionDetector from "../../../collision/collisionDetector";
 import Component from "../component";
 
 export default class Sprite extends Rect {
@@ -9,7 +10,7 @@ export default class Sprite extends Rect {
     ySpeed : number;
     xAcceleration : number;
     yAcceleration : number;
-    private collisionDetector : BoxCollisionDetector;
+    private collisionDetector : CollisionDetector;
     private detectCollisionThread : Thread;
     private detectXCollisionThread : Thread;
     private detectYCollisionThread : Thread;
