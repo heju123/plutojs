@@ -5,6 +5,7 @@ import globalUtil from "../../util/globalUtil";
 import commonUtil from "../../util/commonUtil";
 import animationUtil from "../../util/animationUtil";
 import EventNotify from "../../event/eventNotify";
+import ViewState from "../viewState";
 
 abstract class Component {
     id : string;
@@ -13,6 +14,7 @@ abstract class Component {
     animation : any;
     type : string;
     parent : Component;
+    viewState : ViewState;
     isInit : boolean;
     isSort : boolean;
     eventNotifys : Array<EventNotify>;
@@ -33,6 +35,7 @@ abstract class Component {
 
     constructor(parent? : Component) {
         this.parent = parent;
+        this.viewState = globalUtil.viewState;
         this.isInit = false;
         this.isSort = false;//子组件是否已排序
         this.eventNotifys = [];//事件通知队列
