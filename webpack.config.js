@@ -1,4 +1,4 @@
-//'D:\\nodeProjects\\monkTest\\libs\\monk'
+//'D:\\nodeProjects\\monkTest\\libs\\plutojs'
 module.exports = function(env){
     var compile_mode = env;
 
@@ -9,7 +9,7 @@ module.exports = function(env){
     var plugins = [];
     plugins.push(new cleanWebpackPlugin(['*.{js,map}', 'images/*.{png,jpg,jpeg,gif}'],
         {
-            root: 'F:\\projects\\monkTest\\libs\\monk',
+            root: 'F:\\projects\\monkTest\\libs\\plutojs',
             verbose: true,
             dry: false
         }))
@@ -25,9 +25,9 @@ module.exports = function(env){
     return {
         entry: __dirname + '/src/js/main.ts',
         output: {
-            path: 'F:\\projects\\monkTest\\libs\\monk',
+            path: 'F:\\projects\\monkTest\\libs\\plutojs',
             publicPath : "/build/",
-            filename: "monk.js",
+            filename: "pluto.js",
             chunkFilename: '[name].[chunkhash:5].chunk.js'
         },
         devtool: devtool,  //生成source file

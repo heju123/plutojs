@@ -33,7 +33,7 @@ class Main {
         this.fps = new Fps(mainBody);
 
         globalUtil.action = {};
-        (<any>window).monk.action = globalUtil.action;
+        (<any>window).plutojs.action = globalUtil.action;
 
         //输入框输入监听
         globalUtil.action.inputListenerDom = document.createElement("TEXTAREA");
@@ -60,7 +60,7 @@ class Main {
     }
 }
 
-(<any>window).monk = {
+(<any>window).plutojs = {
     Main : Main,
     commonUtil : commonUtil,
     httpUtil : httpUtil,
