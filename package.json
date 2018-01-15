@@ -4,11 +4,6 @@
   "description": "",
   "main": "",
   "devDependencies": {
-    "clean-webpack-plugin": "*",
-    "uglify-js-plugin": "*",
-    "webpack": "*",
-    "ts-loader": "*",
-    "typescript": "*"
   },
   "scripts": {
     "build": "webpack --env=prod",
