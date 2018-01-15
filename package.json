@@ -3,9 +3,6 @@
   "version": "2.0.2",
   "description": "plutojs",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heju123/plutojs.git"
@@ -18,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/heju123/plutojs/issues"
   },
-  "homepage": "https://github.com/heju123/plutojs#readme"
+  "homepage": "https://github.com/heju123/plutojs#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "*",
+    "copy-webpack-plugin": "*",
+    "webpack": "*"
+  },
+  "scripts": {
+    "dev": "webpack --env=dev --progress --watch"
+  }
 }
