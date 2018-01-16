@@ -2,7 +2,7 @@
   "name": "plutojs",
   "version": "2.0.2",
   "description": "plutojs",
-  "main": "index.js",
+  "main": "src/js/main.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heju123/plutojs.git"
@@ -17,11 +17,17 @@
   },
   "homepage": "https://github.com/heju123/plutojs#readme",
   "devDependencies": {
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
-    "copy-webpack-plugin": "*",
-    "webpack": "*"
+    "webpack": "*",
+    "lite-server": "^2.3.0",
+    "ts-loader": "*",
+    "typescript": "*"
   },
   "scripts": {
-    "dev": "webpack --env=dev --progress --watch"
+    "dev": "webpack --env=dev --progress --watch",
+    "test": "lite-server"
   }
 }

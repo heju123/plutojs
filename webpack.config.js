@@ -1,7 +1,13 @@
+const path = require('path');
+
+function resolve (dir) {
+    return path.join(__dirname, '.', dir)
+}
+
 module.exports = function(env){
     var cleanWebpackPlugin = require('clean-webpack-plugin');
-    var copyWebpackPlugin = require('copy-webpack-plugin');
 
+    var devtool = "source-map";
     var plugins = [];
     plugins.push(new cleanWebpackPlugin(['**'],
         {
@@ -9,14 +15,27 @@ module.exports = function(env){
             verbose: true,
             dry: false
         }));
-    plugins.push(new copyWebpackPlugin([
-        { from: 'src/**/*', to: 'D:\\nodeProjects\\plutoTest\\node_modules\\plutojs' }
-    ]));
 
     return {
-        entry: __dirname + '/test/test.js',
+        entry: __dirname + '/test/src/js/main.js',
         output: {
-            filename: "test.js"
+            path: __dirname + '/test/build',
+            publicPath : "/build/",
+            filename: "bundle.js",
+            chunkFilename: '[name].chunk.js'
+        },
+        devtool: devtool,  //生成source file
+        resolve: {
+            extensions: ['.ts', '.js']
+        },
+        module: {
+            loaders: [
+                {
+                    test: /\.(ts|js)$/,
+                    exclude: /node_modules/,
+                    loader: 'ts-loader'
+                }
+            ]
         },
         plugins: plugins
     };

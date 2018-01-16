@@ -10,6 +10,7 @@ import Controller from "./ui/controller";
 import MPromise from "./util/promise";
 import animationUtil from "./util/animationUtil";
 
+import Component from "./ui/components/component";
 import Sprite from "./ui/components/game/sprite";
 import Button from "./ui/components/button";
 import Checkbox from "./ui/components/checkbox";
@@ -33,7 +34,6 @@ class Main {
         this.fps = new Fps(mainBody);
 
         globalUtil.action = {};
-        (<any>window).plutojs.action = globalUtil.action;
 
         //输入框输入监听
         globalUtil.action.inputListenerDom = document.createElement("TEXTAREA");
@@ -59,21 +59,4 @@ class Main {
         this.setMainView(viewCfg);
     }
 }
-
-(<any>window).plutojs = {
-    Main : Main,
-    commonUtil : commonUtil,
-    httpUtil : httpUtil,
-    Thread : Thread,
-    Controller : Controller,
-    MPromise : MPromise,
-    animationUtil : animationUtil,
-    components : {
-        Sprite : Sprite,
-        Button : Button,
-        Checkbox : Checkbox,
-        Input : Input,
-        Rect : Rect,
-        Scrollbar : Scrollbar
-    }
-};
+export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Button,Checkbox,Input,Rect,Scrollbar};
