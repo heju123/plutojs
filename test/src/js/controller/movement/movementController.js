@@ -1,4 +1,4 @@
-import {Controller} from "../../../../../src/js/main";
+import {Controller} from "~/js/main";
 import spriteAction from "../../view/movement/spriteAction.js";
 
 export default class MovementController extends Controller{

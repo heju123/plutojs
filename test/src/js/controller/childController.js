@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/20.
  */
-import {Controller} from "../../../../src/js/main";
+import {Controller} from "~/js/main";
 
 export default class ChildController extends Controller{
     constructor(component) {

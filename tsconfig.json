@@ -11,7 +11,7 @@
     ]
   },
   "files": [
-    "extraDeclare.d.ts"
+    "plutojs.d.ts"
   ],
   "exclude": [
     "node_modules"

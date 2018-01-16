@@ -1,4 +1,4 @@
-import {Controller} from "../../../../../src/js/main";
+import {Controller} from "~/js/main";
 
 export default class MapTestController extends Controller{
     constructor(component) {

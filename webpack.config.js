@@ -4,8 +4,8 @@ const cleanWebpackPlugin = require('clean-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const copyWebpackPlugin = require('copy-webpack-plugin');
 
-function resolve (dir) {
-    return path.join(__dirname, '.', dir)
+function resolvePath(subdir) {
+    return path.join(__dirname, ".", subdir);
 }
 
 module.exports = function(env){
@@ -28,7 +28,11 @@ module.exports = function(env){
         },
         devtool: devtool,  //生成source file
         resolve: {
-            extensions: ['.ts', '.js']
+            extensions: ['.ts', '.js'],
+            alias: {
+                '~': resolvePath('src'),
+                '@': resolvePath('test/src')
+            }
         },
         module: {
             loaders: [

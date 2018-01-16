@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/19.
  */
-import {Main} from "../../../src/js/main";
+import {Main} from "~/js/main";
 import route from "./view/route.js";
 
 class TestMain {

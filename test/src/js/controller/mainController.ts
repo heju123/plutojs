@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/14.
  */
-import {Controller,Component,Thread} from "../../../../src/js/main";
+import {Controller,Component,Thread} from "~/js/main";
 
 export default class MainController extends Controller{
     constructor(component : Component) {
