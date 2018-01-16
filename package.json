@@ -2,7 +2,7 @@
   "name": "plutojs",
   "version": "2.0.4",
   "description": "plutojs",
-  "main": "src/js/main.ts",
+  "main": "dist/app.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heju123/plutojs.git"
@@ -24,11 +24,13 @@
     "webpack": "*",
     "html-webpack-plugin": "*",
     "copy-webpack-plugin": "*",
+    "uglify-js-plugin": "*",
     "lite-server": "^2.3.0",
     "ts-loader": "*",
     "typescript": "*"
   },
   "scripts": {
+    "build": "webpack --env=prod",
     "dev": "webpack --env=dev --progress --watch",
     "test": "lite-server"
   }

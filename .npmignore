@@ -1,6 +1,11 @@
 .idea
-dist
+build
+libs
+node_modules
+src
 test
 bs-config.js
-index.html
+package-lock.json
+plutojs.d.ts
+tsconfig.json
 webpack.config.js
