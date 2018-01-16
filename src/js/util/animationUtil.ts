@@ -1,7 +1,7 @@
 import commonUtil from "./commonUtil";
-import * as TweenMax from "../../libs/TweenLite/TweenMax.min.js";
-import * as EasePack from "../../libs/TweenLite/easing/EasePack.min.js";
-import * as ColorPropsPlugin from "../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
+import * as TweenMax from "../../../libs/TweenLite/TweenMax.min.js";
+import * as EasePack from "../../../libs/TweenLite/easing/EasePack.min.js";
+import * as ColorPropsPlugin from "../../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
 import Component from "../ui/components/component";
 
 let animationUtil : any = {
