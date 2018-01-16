@@ -1,4 +1,4 @@
-import LayoutTestController from "../controller/layoutTestController.js";
+import LayoutTestController from "../controller/layoutTestController";
 
 export default {
     type : "rect",

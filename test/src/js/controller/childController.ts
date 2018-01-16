@@ -1,10 +1,10 @@
 /**
  * Created by heju on 2017/7/20.
  */
-import {Controller} from "~/js/main";
+import {Controller,Component} from "~/js/main";
 
 export default class ChildController extends Controller{
-    constructor(component) {
+    constructor(component : Component) {
         super(component);
 
         this.component.registerEvent("mousedown", this.mousedownPanel.bind(this, 1));

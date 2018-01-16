@@ -1,7 +1,7 @@
-import {Controller} from "~/js/main";
+import {Controller,Component} from "~/js/main";
 
 export default class MapTestController extends Controller{
-    constructor(component) {
+    constructor(component : Component) {
         super(component);
     }
 

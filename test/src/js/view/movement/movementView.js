@@ -1,5 +1,5 @@
-import MovementController from "../../controller/movement/movementController.js";
-import MapTestController from "../../controller/movement/mapTestController.js";
+import MovementController from "../../controller/movement/movementController";
+import MapTestController from "../../controller/movement/mapTestController";
 
 export default {
     type : "rect",

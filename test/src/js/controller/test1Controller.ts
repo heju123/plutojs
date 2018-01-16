@@ -1,10 +1,10 @@
 /**
  * Created by heju on 2017/7/21.
  */
-import {Controller} from "~/js/main";
+import {Controller,Component} from "~/js/main";
 
 export default class Test1Controller extends Controller{
-    constructor(component) {
+    constructor(component : Component) {
         super(component);
         // this.component.registerEvent("click", (e)=>{
         //     console.log("test1");

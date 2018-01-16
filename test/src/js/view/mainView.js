@@ -1,6 +1,6 @@
 import MainController from "../controller/mainController";
-import ChildController from "../controller/childController.js";
-import layoutTestView from "./layoutTestView.js";
+import ChildController from "../controller/childController";
+import layoutTestView from "./layoutTestView";
 
 export default {
     controller : MainController,

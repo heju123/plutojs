@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/21.
  */
-import Test1Controller from "../controller/test1Controller.js";
+import Test1Controller from "../controller/test1Controller";
 
 export default {
     controller : Test1Controller,
