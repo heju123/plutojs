@@ -22,6 +22,8 @@
     "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
     "webpack": "*",
+    "html-webpack-plugin": "*",
+    "copy-webpack-plugin": "*",
     "lite-server": "^2.3.0",
     "ts-loader": "*",
     "typescript": "*"

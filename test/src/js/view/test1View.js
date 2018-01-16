@@ -44,10 +44,10 @@ export default {
                 y : 50,
                 autoWidth : true,
                 autoHeight : true,
-                backgroundImage : "/src/images/default_man.png",
+                backgroundImage : "/images/default_man.png",
                 alpha : 1.0,
                 hover : {
-                    backgroundImage : "/src/images/man.png"
+                    backgroundImage : "/images/man.png"
                 }
             },
             events : {

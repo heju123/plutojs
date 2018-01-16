@@ -48,7 +48,7 @@ export default {
                         y : 140,
                         width : "60%",
                         height : "60%",
-                        backgroundImage : "/src/images/bg.jpeg"
+                        backgroundImage : "/images/bg.jpeg"
                     },
                     children : [
                         {
@@ -176,7 +176,7 @@ export default {
                 y : 160,
                 width : 100,
                 height : 160,
-                backgroundImage : "/src/images/bg.jpeg",
+                backgroundImage : "/images/bg.jpeg",
                 borderWidth : 4,
                 //borderRadius : 30,
                 borderColor : "#7a7a7a",
@@ -239,7 +239,7 @@ export default {
                 y : 350,
                 width : 32,
                 height : 32,
-                backgroundImage : "/src/images/tip_msg.png",
+                backgroundImage : "/images/tip_msg.png",
                 backgroundImageClip : [0,128,32,32],
                 hover : {
                     mirror : "horizontal"

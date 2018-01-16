@@ -66,7 +66,7 @@ export default {
                         y : 10,
                         backgroundColor : "#dbdbdb"
                     },
-                    mapDataUrl : "/src/maps/test1.map",
+                    mapDataUrl : "/maps/test1.map",
                     terrainPolicy : {
                         "block" : {
                             backgroundColor : "#000000"
