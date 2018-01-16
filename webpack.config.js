@@ -23,8 +23,8 @@ module.exports = function(env){
         output: {
             path: __dirname + '/test/dist',
             publicPath : "/",
-            filename: "[name].js",
-            chunkFilename: '[name].[chunkhash:5].chunk.js'
+            filename: "[name].[chunkhash].js",
+            chunkFilename: '[name].[chunkhash].chunk.js'
         },
         devtool: devtool,  //生成source file
         resolve: {
@@ -53,7 +53,8 @@ module.exports = function(env){
                 minify: {
                     removeComments: true,
                     collapseWhitespace: true,
-                    removeAttributeQuotes: true
+                    removeAttributeQuotes: true,
+                    minifyCSS: true
                 },
                 // necessary to consistently work with multiple chunks via CommonsChunkPlugin
                 chunksSortMode: 'dependency'
@@ -74,7 +75,9 @@ module.exports = function(env){
             new copyWebpackPlugin([
                 { from: 'test/src/images', to: 'images' },
                 {from: 'test/src/maps', to: 'maps'}
-            ])
+            ]),
+            // keep module.id stable when vender modules does not change
+            new webpack.HashedModuleIdsPlugin()
         ]
     };
 };
