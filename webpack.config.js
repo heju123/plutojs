@@ -13,13 +13,7 @@ module.exports = function(env){
     var compile_mode = env;
 
     var output = {
-        entry: {
-            vendor: [
-                "./libs/TweenLite/TweenMax.min.js",
-                "./libs/TweenLite/easing/EasePack.min.js",
-                "./libs/TweenLite/plugins/ColorPropsPlugin.min.js"
-            ]
-        },
+        entry : {},
         output: {
             path: __dirname + '/dist',
             publicPath : "/",
@@ -27,10 +21,7 @@ module.exports = function(env){
         },
         resolve: {
             extensions: ['.ts', '.js'],
-            alias: {
-                '~': resolvePath('src'),
-                '@': resolvePath('test/src')
-            }
+            alias: {}
         },
         module: {
             loaders: [
@@ -48,23 +39,6 @@ module.exports = function(env){
                     verbose: true,
                     dry: false
                 }),
-            new webpack.optimize.CommonsChunkPlugin({
-                name: "vendor",
-                // filename: "vendor.js"
-                // (Give the chunk a different name)
-
-                minChunks: Infinity,
-                // (with more entries, this ensures that no other module
-                //  goes into the vendor chunk)
-            }),
-            new webpack.optimize.CommonsChunkPlugin({
-                name: 'manifest',
-                minChunks: Infinity
-            }),
-            new copyWebpackPlugin([
-                { from: 'test/src/images', to: 'images' },
-                {from: 'test/src/maps', to: 'maps'}
-            ]),
             // keep module.id stable when vender modules does not change
             new webpack.HashedModuleIdsPlugin()
         ]
@@ -73,6 +47,7 @@ module.exports = function(env){
     output.entry.app = __dirname + '/test/src/js/main.js';
     output.devtool = "source-map";
     output.output.filename = "[name].[chunkhash].js";
+    output.resolve.alias['~'] = resolvePath('src');
 
     if (compile_mode == "prod")
     {
@@ -86,8 +61,31 @@ module.exports = function(env){
             sourceMap: true
         }));
     }
-    else
+    else//test
     {
+        output.resolve.alias['@'] = resolvePath('test/src');
+
+        output.entry.vendor = [
+            "./libs/TweenLite/TweenMax.min.js",
+            "./libs/TweenLite/easing/EasePack.min.js",
+            "./libs/TweenLite/plugins/ColorPropsPlugin.min.js"
+        ];
+
+        output.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            // filename: "vendor.js"
+            // (Give the chunk a different name)
+
+            minChunks: Infinity,
+            // (with more entries, this ensures that no other module
+            //  goes into the vendor chunk)
+        }));
+
+        output.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            minChunks: Infinity
+        }));
+
         output.plugins.push(new htmlWebpackPlugin({
             filename: 'index.html',
             template: 'test/index.html',
@@ -101,6 +99,11 @@ module.exports = function(env){
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }));
+
+        output.plugins.push(new copyWebpackPlugin([
+            { from: 'test/src/images', to: 'images' },
+            {from: 'test/src/maps', to: 'maps'}
+        ]));
     }
 
     return output;
