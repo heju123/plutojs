@@ -1,33 +1,13 @@
 /**
  * Created by heju on 2017/7/27.
  */
-import mainView from "./mainView.js";
+import {commonUtil} from "~/js/main";
 
-export default {
+let output = {
     id : "mainRoute",
     type : "route",
-    routes : {
-        "main" : {
-            view : mainView,
-            default : true
-        },
-        "movement" : {
-            view : (get) => {
-                return new Promise((resolve, reject)=>{
-                    require.ensure([], require => {
-                        get(require("./movement/movementView.js").default, resolve, reject);
-                    },'movementView');
-                });
-            }
-        },
-        "test" : {
-            view : (get) => {
-                return new Promise((resolve, reject)=>{
-                    require.ensure([], require => {
-                        get(require("./test1View.js").default, resolve, reject);
-                    },'test1View');
-                });
-            }
-        }
-    }
-}
+    routes : {}
+};
+
+commonUtil.copyObject(require("./index/route").default, output.routes, false);
+export default output;

@@ -2,7 +2,7 @@ export default {
     stay : {
         width : 24,
         height : 56,
-        backgroundImage : "/images/hero-stay.png",
+        backgroundImage : "/images/sprite/hero-stay.png",
         backgroundImages : [
             {
                 clip : [0,0,24,56]
@@ -22,7 +22,7 @@ export default {
     run : {
         width : 48,
         height : 48,
-        backgroundImage : "/images/hero-run.png",
+        backgroundImage : "/images/sprite/hero-run.png",
         backgroundImages : [
             {
                 clip : [0,0,44,48]

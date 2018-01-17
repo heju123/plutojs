@@ -97,7 +97,7 @@ let commonUtil : any = {
      * @param deep 是否深度复制
      * @return 复制的目标对象
      */
-    copyObject : (obj : Object, dest : Object, override : boolean, deep : boolean)=>{
+    copyObject : (obj : Object, dest : Object, override? : boolean, deep? : boolean)=>{
         if (override == undefined)
         {
             override = true;

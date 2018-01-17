@@ -44,12 +44,12 @@ export default class MainController extends Controller{
 
     changeRoute(e){
         let mainRoute = this.viewState.getComponentById("mainRoute");
-        mainRoute.changeRoute("test");
+        mainRoute.changeRoute("main.test");
     }
 
     goMovement(e){
         let mainRoute = this.viewState.getComponentById("mainRoute");
-        mainRoute.changeRoute("movement", true);
+        mainRoute.changeRoute("main.movement", true);
     }
 
     getAllInput(e)
