@@ -8,7 +8,7 @@ export default {
         view : mainView,
         default : true
     },
-    "main.movement" : {
+    "movement" : {
         view : (get) => {
             return new Promise((resolve, reject)=>{
                 require.ensure([], require => {
@@ -17,7 +17,7 @@ export default {
             });
         }
     },
-    "main.test" : {
+    "test" : {
         view : (get) => {
             return new Promise((resolve, reject)=>{
                 require.ensure([], require => {
