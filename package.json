@@ -1,6 +1,6 @@
 {
   "name": "plutojs",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "plutojs",
   "main": "dist/app.js",
   "repository": {
