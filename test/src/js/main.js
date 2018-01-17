@@ -2,7 +2,7 @@
  * Created by heju on 2017/7/19.
  */
 import {Main} from "~/js/main";
-import route from "./view/route.js";
+import route from "./route.js";
 
 class TestMain {
     constructor(){
