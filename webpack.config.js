@@ -52,8 +52,8 @@ module.exports = function(env){
     if (compile_mode == "prod")
     {
         output.entry.app = __dirname + '/build/build.js';
-        output.devtool = "cheap-module-source-map";
         output.output.filename = "[name].js";
+        output.devtool = "cheap-module-source-map";
 
         output.plugins.push(new uglifyJsPlugin({
             compress: true, //default 'true', you can pass 'false' to disable this plugin
