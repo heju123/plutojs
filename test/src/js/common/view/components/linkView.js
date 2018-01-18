@@ -1,0 +1,40 @@
+import {commonUtil} from "~/js/main";
+
+export default (text, opts)=>{
+    const output = {
+        type : "rect",
+        style : {
+            x : 10,
+            height : 40,
+            lineHeight : 40,
+            autoWidth : true,
+            cursor : "pointer",
+            hover : function(){
+                this.setStyle("fontColor" , "#337ab7");
+            },
+            hoverout : function(){
+                this.setStyle("fontColor" , "#333333");
+            }
+        },
+        animation : {
+            "fontColor" : {
+                duration : "300ms",
+                easeType : "Linear",
+                easing : "ease"
+            }
+        },
+        text : text
+    };
+
+    if (opts && opts.style)
+    {
+        commonUtil.copyObject(opts.style, output.style, true);
+    }
+
+    if (opts && opts.events)
+    {
+        output.events = opts.events;
+    }
+
+    return output;
+}

@@ -785,7 +785,7 @@ abstract class Component {
                                 height = child.getHeight();
                             }
                             child.setY(allWH);
-                            child.setX(0);
+                            child.setX(child.getX() || 0);
                             child.setHeight(height);
                             allWH += height;
                         }
