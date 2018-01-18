@@ -1,3 +1,4 @@
+import commonStyle from "@/js/common//view/style/commonStyle";
 import NavController from "../controller/navController";
 import linkView from "@/js/common/view/components/linkView";
 
@@ -23,7 +24,7 @@ export default {
                 y: 0,
                 width: "100%",
                 height: TOP_HEIGHT,
-                backgroundColor: "#aeaeae"
+                backgroundColor: commonStyle.themeColor
             }
         },
         //内容
@@ -56,12 +57,17 @@ export default {
                                 }
                             },
                             children : [
-                                linkView("fsadadsdf", {
+                                linkView("输入框", {
                                     style : {
                                         fontSize : "16px"
                                     },
                                     events : {
-                                        "click" : "onClickItem"
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["input"];
+                                            }
+                                        }
                                     }
                                 })
                             ]

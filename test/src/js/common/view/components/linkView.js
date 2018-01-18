@@ -1,3 +1,4 @@
+import commonStyle from "@/js/common//view/style/commonStyle";
 import {commonUtil} from "~/js/main";
 
 export default (text, opts)=>{
@@ -10,10 +11,10 @@ export default (text, opts)=>{
             autoWidth : true,
             cursor : "pointer",
             hover : function(){
-                this.setStyle("fontColor" , "#337ab7");
+                this.setStyle("fontColor" , commonStyle.themeColor);
             },
             hoverout : function(){
-                this.setStyle("fontColor" , "#333333");
+                this.setStyle("fontColor" , commonStyle.fontColor);
             }
         },
         animation : {

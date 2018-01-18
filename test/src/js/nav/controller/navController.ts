@@ -5,7 +5,7 @@ export default class NavController extends Controller{
         super(component);
     }
 
-    onClickItem(e){
-        console.log(e);
+    goLink(param, e){
+        console.log(param[0]);
     }
 }
