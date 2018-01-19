@@ -1284,9 +1284,18 @@ abstract class Component {
             }
             else
             {
-                //如果fontSize>12px，则measureText方法计算的字体宽度会有问题，还要乘以比例
-                allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width
-                    * (parseInt(this.style.fontSize, 10)  > 12 ? parseInt(this.style.fontSize, 10) / 12 : 1));
+                if (commonUtil.getBrowserName() === "Firefox")
+                {
+                    //Firefox要乘以固定比例
+                    allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width
+                        * parseInt(this.style.fontSize, 10) / 10);
+                }
+                else
+                {
+                    //如果fontSize>12px，则measureText方法计算的字体宽度会有问题，还要乘以比例
+                    allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width
+                        * (parseInt(this.style.fontSize, 10)  > 12 ? parseInt(this.style.fontSize, 10) / 12 : 1));
+                }
             }
         });
         return allWidth;

@@ -48,7 +48,7 @@ export default {
                             children : [
                                 getLinkView("首页", {
                                     style : {
-                                        fontSize : "16px"
+                                        fontSize : "18px"
                                     },
                                     events : {
                                         "click" : {
@@ -61,7 +61,7 @@ export default {
                                 }),
                                 getLinkView("输入框", {
                                     style : {
-                                        fontSize : "16px"
+                                        fontSize : "18px"
                                     },
                                     events : {
                                         "click" : {

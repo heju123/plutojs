@@ -249,6 +249,24 @@ let commonUtil : any = {
             };
             img.src = url;
         });
+    },
+    getBrowserName : () => {
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        if (userAgent.indexOf("Opera") > -1) {
+            return "Opera"
+        } //判断是否Opera浏览器
+        else if (userAgent.indexOf("Firefox") > -1) {
+            return "Firefox";
+        } //判断是否Firefox浏览器
+        else if (userAgent.indexOf("Chrome") > -1){
+            return "Chrome";
+        }
+        else if (userAgent.indexOf("Safari") > -1) {
+            return "Safari";
+        } //判断是否Safari浏览器
+        else if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+            return "IE";
+        } //判断是否IE浏览器
     }
 };
 export default commonUtil;
