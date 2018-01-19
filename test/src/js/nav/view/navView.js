@@ -46,6 +46,19 @@ export default {
                                 }
                             },
                             children : [
+                                getLinkView("首页", {
+                                    style : {
+                                        fontSize : "16px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["main"];
+                                            }
+                                        }
+                                    }
+                                }),
                                 getLinkView("输入框", {
                                     style : {
                                         fontSize : "16px"
