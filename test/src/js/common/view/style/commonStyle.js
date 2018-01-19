@@ -7,7 +7,7 @@ let commonStyle = {
     inputStyle : {
         backgroundColor : "#ffffff",
         borderWidth : 1,
-        borderColor : "#dfdfdf",
+        borderColor : "#cccccc",
         borderRadius : 5,
         focus : {
             borderColor : THEME_COLOR

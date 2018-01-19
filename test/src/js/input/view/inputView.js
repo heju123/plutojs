@@ -61,14 +61,63 @@ export default {
                                     children : [
                                         {
                                             type : "input",
-                                            style : commonUtil.copyObject({
+                                            style : Object.assign({}, commonStyle.inputStyle, {
                                                 x : PADDING_LEFT,
                                                 y : function(){
                                                     return this.parent.getHeight() / 2 - this.getHeight() / 2;
                                                 },
                                                 width : 300,
                                                 height : 30
-                                            }, commonStyle.inputStyle, true)
+                                            }, true)
+                                        }
+                                    ]
+                                },
+                                {
+                                    type : "rect",
+                                    name : "row",
+                                    style : {
+                                        x : 0,
+                                        width : "100%",
+                                        height : FORM_ROW_HEIGHT
+                                    },
+                                    children : [
+                                        {
+                                            type : "input",
+                                            style : Object.assign({}, commonStyle.inputStyle, {
+                                                x : PADDING_LEFT,
+                                                y : function(){
+                                                    return this.parent.getHeight() / 2 - this.getHeight() / 2;
+                                                },
+                                                width : 300,
+                                                height : 30,
+                                                backgroundColor : "#d7d7d7",
+                                                readOnly : true
+                                            }, true),
+                                            text : "readOnly"
+                                        }
+                                    ]
+                                },
+                                {
+                                    type : "rect",
+                                    name : "row",
+                                    style : {
+                                        x : 0,
+                                        width : "100%",
+                                        height : 200
+                                    },
+                                    children : [
+                                        {
+                                            type : "input",
+                                            style : Object.assign({}, commonStyle.inputStyle, {
+                                                x : PADDING_LEFT,
+                                                y : function(){
+                                                    return this.parent.getHeight() / 2 - this.getHeight() / 2;
+                                                },
+                                                width : 300,
+                                                height : 160,
+                                                multiLine : true,
+                                                autoLine : true
+                                            }, true)
                                         }
                                     ]
                                 }
