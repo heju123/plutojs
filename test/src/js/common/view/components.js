@@ -1,7 +1,8 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
 import {commonUtil} from "~/js/main";
 
-export default (text, opts)=>{
+//超链接
+export let getLinkView = (text, opts) => {
     const output = {
         type : "rect",
         style : {
@@ -38,4 +39,4 @@ export default (text, opts)=>{
     }
 
     return output;
-}
+};

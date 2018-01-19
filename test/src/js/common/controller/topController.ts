@@ -1,12 +1,12 @@
 import {Controller,Component} from "~/js/main";
 
-export default class NavController extends Controller{
+export default class TopController extends Controller{
     constructor(component : Component) {
         super(component);
     }
 
-    goLink(param, e){
+    goHome(){
         let mainRoute = this.viewState.getComponentById("mainRoute");
-        mainRoute.changeRoute(param[0]);
+        mainRoute.changeRoute("nav");
     }
 }

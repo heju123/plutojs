@@ -1,4 +1,18 @@
-export default {
-    fontColor : "#333333",
-    themeColor : "#fc8042"
+const FONT_COLOR = "#333333";
+const THEME_COLOR = "#fc8042";
+
+let commonStyle = {
+    fontColor : FONT_COLOR,
+    themeColor : THEME_COLOR,
+    inputStyle : {
+        backgroundColor : "#ffffff",
+        borderWidth : 1,
+        borderColor : "#dfdfdf",
+        borderRadius : 5,
+        focus : {
+            borderColor : THEME_COLOR
+        }
+    }
 };
+
+export default commonStyle;

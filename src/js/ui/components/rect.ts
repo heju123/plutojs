@@ -83,7 +83,7 @@ export default class Rect extends Component{
 
             ctx.font = this.style.fontSize + " " + this.style.fontFamily;
             ctx.fillStyle = this.style.fontColor;
-            ctx.textBaseline="hanging";
+            ctx.textBaseline = this.style.textBaseline || "hanging";
             let char;
             let cindex;
             this.text.forEach((row, index)=>{

@@ -10,5 +10,6 @@ let output = {
 };
 
 commonUtil.copyObject(require("./nav/route").default, output.routes, false);
+commonUtil.copyObject(require("./input/route").default, output.routes, false);
 commonUtil.copyObject(require("./index/route").default, output.routes, false);
 export default output;

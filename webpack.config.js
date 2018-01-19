@@ -102,7 +102,8 @@ module.exports = function(env){
 
         output.plugins.push(new copyWebpackPlugin([
             { from: 'test/src/images', to: 'images' },
-            {from: 'test/src/maps', to: 'maps'}
+            {from: 'test/src/maps', to: 'maps'},
+            {from: 'test/libs', to: 'libs'}
         ]));
     }
 

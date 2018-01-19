@@ -1,10 +1,14 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
-import NavController from "../controller/navController";
+import {commonUtil} from "~/js/main";
+import InputController from "../controller/inputController";
 import {getLinkView} from "@/js/common/view/components";
 import {topView,topHeight} from "@/js/common/view/top/topView";
 
+const PADDING_LEFT = 20;
+const FORM_ROW_HEIGHT = 60;
+
 export default {
-    controller : NavController,
+    controller : InputController,
     type : "rect",
     style : {
         x : 0,
@@ -34,7 +38,7 @@ export default {
                     children: [
                         {
                             type : "rect",
-                            name : "list",
+                            name : "form",
                             style : {
                                 x : 0,
                                 y : 0,
@@ -46,19 +50,28 @@ export default {
                                 }
                             },
                             children : [
-                                getLinkView("输入框", {
+                                {
+                                    type : "rect",
+                                    name : "row",
                                     style : {
-                                        fontSize : "16px"
+                                        x : 0,
+                                        width : "100%",
+                                        height : FORM_ROW_HEIGHT
                                     },
-                                    events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["input"];
-                                            }
+                                    children : [
+                                        {
+                                            type : "input",
+                                            style : commonUtil.copyObject({
+                                                x : PADDING_LEFT,
+                                                y : function(){
+                                                    return this.parent.getHeight() / 2 - this.getHeight() / 2;
+                                                },
+                                                width : 300,
+                                                height : 30
+                                            }, commonStyle.inputStyle, true)
                                         }
-                                    }
-                                })
+                                    ]
+                                }
                             ]
                         }
                     ]

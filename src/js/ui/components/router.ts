@@ -115,7 +115,11 @@ export default class Router extends Rect{
      * @param name 要切换route的name
      * @param destory 是否销毁之前的route
      */
-    changeRoute(name : string, destory : boolean){
+    changeRoute(name : string, destory? : boolean){
+        if (destory === undefined)
+        {
+            destory = true;
+        }
         if (this.currentChildren)
         {
             this.currentChildren.active = false;
