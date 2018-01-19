@@ -396,7 +396,7 @@ abstract class Component {
         }
         if (this.style.autoLine === undefined)//是否自动换行
         {
-            this.setStyle("autoLine", true);
+            this.setStyle("autoLine", false);
         }
         if (this.style.scale === undefined)//缩放
         {

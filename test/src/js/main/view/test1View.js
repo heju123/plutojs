@@ -66,7 +66,8 @@ export default {
                 y : -10,
                 width : 80,
                 height : 80,
-                backgroundColor : "#15c9ff"
+                backgroundColor : "#15c9ff",
+                autoLine : true
             },
             text : "法大f师傅eg大师傅大师傅士大夫士大夫士大efege夫法大师傅大gre师傅大师傅wfe士大夫士大夫士大夫法大师傅大",
             children : [

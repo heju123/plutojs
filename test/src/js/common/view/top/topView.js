@@ -30,7 +30,6 @@ export let topView = ()=>{
                     fontFamily : "FontAwesome",
                     fontColor : "#ffffff",
                     textBaseline : "top",
-                    autoLine : false,
                     cursor : "pointer",
                     hover : {
                         x : 9

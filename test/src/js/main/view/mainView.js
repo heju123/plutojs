@@ -197,7 +197,9 @@ export default {
                         //borderRadius : 30,
                         borderColor : "#7a7a7a",
                         multiLine : true,
+                        autoLine : true,
                         scale : "1,1",
+                        fontColor : "#ffffff",
                         focus : {
                             borderColor : "#ff0000"
                         },
