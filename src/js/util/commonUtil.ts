@@ -252,7 +252,8 @@ let commonUtil : any = {
     },
     getBrowserName : () => {
         var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-        if (userAgent.indexOf("Opera") > -1) {
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera) {
             return "Opera"
         } //判断是否Opera浏览器
         else if (userAgent.indexOf("Firefox") > -1) {
