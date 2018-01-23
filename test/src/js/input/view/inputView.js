@@ -68,7 +68,7 @@ export default {
                                                 },
                                                 width : 300,
                                                 height : 30
-                                            }, true)
+                                            })
                                         }
                                     ]
                                 },
@@ -92,7 +92,7 @@ export default {
                                                 height : 30,
                                                 backgroundColor : "#d7d7d7",
                                                 readOnly : true
-                                            }, true),
+                                            }),
                                             text : "readOnly"
                                         }
                                     ]
@@ -117,7 +117,7 @@ export default {
                                                 height : 160,
                                                 multiLine : true,
                                                 autoLine : true
-                                            }, true)
+                                            })
                                         }
                                     ]
                                 }
