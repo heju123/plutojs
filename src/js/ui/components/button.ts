@@ -5,6 +5,7 @@ export default class Button extends Rect {
     constructor(parent? : Component) {
         super(parent);
         this.setStyle("textAlign", "center");
+        this.setStyle("cursor", "pointer");
     }
 
     initCfg(cfg : any) : Promise<any>{

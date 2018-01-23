@@ -322,6 +322,10 @@ export default class ViewState{
         return this.ctx.canvas.height;
     }
 
+    getHoverComponent(){
+        return globalUtil.action.hoverComponent;
+    }
+
     registerEvent(eventType : string, callback : Function){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }

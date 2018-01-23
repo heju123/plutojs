@@ -71,6 +71,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("按钮", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["button"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }

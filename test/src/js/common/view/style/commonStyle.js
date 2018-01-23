@@ -12,6 +12,28 @@ let commonStyle = {
         focus : {
             borderColor : THEME_COLOR
         }
+    },
+    readOnlyInputStyle : {
+        backgroundColor : "#d7d7d7",
+        focus : {
+            borderColor : "#cccccc"
+        }
+    },
+    buttonStyle : {
+        backgroundColor : THEME_COLOR,
+        fontColor : "#ffffff",
+        borderRadius : 5,
+        hover : {
+            backgroundColor : "#fc8042",
+            alpha : 0.9
+        },
+        active : {
+            backgroundColor : "#e5733e",
+            alpha : 0.9
+        }
+    },
+    disabledButtonStyle : {
+        alpha : 0.6
     }
 };
 
