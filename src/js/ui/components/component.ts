@@ -406,6 +406,10 @@ abstract class Component {
         {
             this.style.rotate = 0;
         }
+        if (this.style.disabled === undefined)
+        {
+            this.style.disabled = false;
+        }
     }
 
     draw(ctx : CanvasRenderingContext2D) : boolean{
@@ -418,7 +422,7 @@ abstract class Component {
 
         //判断鼠标是否在组件范围内
         //防止鼠标指向子组件超出父组件的范围部分而hover到这个子组件上
-        if ((<any>ctx).mouseAction.mx && (<any>ctx).mouseAction.my
+        if (!this.style.disabled && (<any>ctx).mouseAction.mx && (<any>ctx).mouseAction.my
             && this.isPointInComponent(ctx, (<any>ctx).mouseAction.mx, (<any>ctx).mouseAction.my)
             && (!this.parent || !this.parent.hasClip || ((<any>ctx).mouseAction.hoverCom && (this.parent === (<any>ctx).mouseAction.hoverCom
                 || this.parent === (<any>ctx).mouseAction.hoverCom.parent

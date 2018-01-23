@@ -116,7 +116,7 @@ export default class EventBus{
                 for (let i = eventListeners.length - 1; i >=0; i--)
                 {
                     listener = eventListeners[i];
-                    if (listener.target.isViewState || listener.target.active)
+                    if (listener.target.isViewState || (listener.target.active && !listener.target.style.disabled))
                     {
                         eventNotify = new EventNotify();
                         eventNotify.set({
