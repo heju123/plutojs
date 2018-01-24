@@ -84,6 +84,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("复选框", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["checkbox"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }

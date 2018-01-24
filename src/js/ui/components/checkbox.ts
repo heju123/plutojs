@@ -3,6 +3,8 @@ import Component from "./component";
 
 export default class Checkbox extends Rect {
     checked : boolean;
+    private startPoint : any;
+    private path : Array<any> = [];
 
     constructor(parent? : Component) {
         super(parent);
@@ -10,13 +12,38 @@ export default class Checkbox extends Rect {
         this.setStyle({
             width : 25,
             height : 25,
-            backgroundColor : "#dfdfdf",
+            backgroundColor : "#f2f2f2",
             borderWidth : 1,
-            borderColor : "#7a7a7a"
+            borderColor : "#7c7c7c"
         });
 
         this.registerEvent("click", ()=>{
             this.checked = !this.checked;
+        });
+
+        this.startPoint = {
+            x : ()=>{
+                return this.getRealX() + 5;
+            },
+            y : ()=>{
+                return this.getRealY() + this.getHeight() / 2;
+            }
+        };
+        this.path.push({
+            x : ()=>{
+                return this.getRealX() + this.getWidth() / 2 - 2;
+            },
+            y : ()=>{
+                return this.getRealY() + this.getHeight() - 6;
+            }
+        });
+        this.path.push({
+            x : ()=>{
+                return this.getRealX() - 3 + this.getWidth();
+            },
+            y : ()=>{
+                return this.getRealY() + 5;
+            }
         });
     }
 
@@ -41,11 +68,9 @@ export default class Checkbox extends Rect {
 
             ctx.lineWidth = this.style.lineWidth || 4;
             ctx.strokeStyle = "#333";
-            let oriX = this.getRealX();
-            let oriY = this.getRealY();
-            ctx.moveTo(oriX + 5, oriY + this.getHeight() / 2);
-            ctx.lineTo(oriX + this.getWidth() / 2 - 2, oriY + this.getHeight() - 6);
-            ctx.lineTo(oriX - 3 + this.getWidth(), oriY + 5);
+            ctx.moveTo(this.startPoint.x(), this.startPoint.y());
+            ctx.lineTo(this.path[0].x(), this.path[0].y());
+            ctx.lineTo(this.path[1].x(), this.path[1].y());
             ctx.stroke();
 
             ctx.closePath();
