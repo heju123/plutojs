@@ -20,10 +20,11 @@ let animationUtil : any = {
     /**
      * 执行属性改变动画
      *
+     * @param target 改变属性的目标对象
      * @param to 改变的属性，用object表示
      * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
-    executeAttrChange : (com : Component, to : any, animation : any)=>{
+    executeAttrChange : (target : any, to : any, animation : any)=>{
         return new Promise((resolve, reject)=>{
             to.ease = EasePack[animation.easeType][animation.easing];
             to.onComplete = function() {
@@ -38,7 +39,7 @@ let animationUtil : any = {
                 to.repeat = animation.repeat;
             }
             animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
-            TweenMax.to(com, animation.duration, to);
+            TweenMax.to(target, animation.duration, to);
         });
     }
 };
