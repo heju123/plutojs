@@ -47,9 +47,9 @@ export default class SequenceDraw{
 
     private doDrawAni(){
         let path = this.paths[this.doAniIndex];
+        path.show = true;
         if (path.duration)
         {
-            path.show = true;
             if (path instanceof PointPath)
             {
                 let to = {
@@ -66,6 +66,11 @@ export default class SequenceDraw{
                 });
             }
         }
+        else
+        {
+            this.doAniIndex++;
+            this.doDrawAni();
+        }
     }
 
     draw(ctx : CanvasRenderingContext2D){
@@ -73,7 +78,7 @@ export default class SequenceDraw{
         this.paths.forEach((path)=>{
             if (path.show)
             {
-                if (path.target instanceof Point)
+                if (path instanceof PointPath)
                 {
                     ctx.lineTo(path.getDrawTarget().x, path.getDrawTarget().y);
                 }
