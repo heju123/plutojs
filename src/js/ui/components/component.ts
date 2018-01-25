@@ -100,7 +100,7 @@ abstract class Component {
         return this.afterInitPromise;
     }
 
-    initBackgroundImageDom(url : string) : Promise<any>{
+    private initBackgroundImageDom(url : string) : Promise<any>{
         let $this = this;
         return new Promise((resolve, reject)=>{
             commonUtil.createImageDom(url).then((imgThis)=>{
@@ -117,7 +117,7 @@ abstract class Component {
         });
     }
 
-    initBackgroundImages(backgroundImages? : Array<any>) : Promise<any>{
+    private initBackgroundImages(backgroundImages? : Array<any>) : Promise<any>{
         let bgImages = backgroundImages || this.style.backgroundImages;
         let allPromise = [];
         if (this.style.backgroundImage)//如果设置backgroundImages的情况下又有backgroundImage，则所有背景图片url都等于backgroundImage
@@ -148,7 +148,7 @@ abstract class Component {
     }
 
     //背景图片轮询播放
-    onChangeBgImageInterval(){
+    private onChangeBgImageInterval(){
         this.currentBackgroundImageIndex++;
         if (this.currentBackgroundImageIndex > this.style.backgroundImages.length - 1)
         {
@@ -156,11 +156,11 @@ abstract class Component {
         }
         this.currentBackgroundImage = this.style.backgroundImages[this.currentBackgroundImageIndex];
     }
-    createBackgroundImagesIntervalObj(interval : number){
+    private createBackgroundImagesIntervalObj(interval : number){
         this.removeBackgroundImagesIntervalObj();
         this.backgroundImagesIntervalObj = window.setInterval(this.onChangeBgImageInterval.bind(this), interval);
     }
-    removeBackgroundImagesIntervalObj(){
+    private removeBackgroundImagesIntervalObj(){
         if (this.backgroundImagesIntervalObj)
         {
             window.clearInterval(this.backgroundImagesIntervalObj);
@@ -168,7 +168,7 @@ abstract class Component {
     }
 
     /** 配置文件递归初始化样式 */
-    initCfgStyle(cfgStyle : any){
+    private initCfgStyle(cfgStyle : any){
         for (let key in cfgStyle)
         {
             if (key === "hover" || key === "hoverout"
@@ -274,7 +274,7 @@ abstract class Component {
         return Promise.all(allPromise);
     }
 
-    initChildrenCfg(childrenCfg : any) : Promise<any>{
+    private initChildrenCfg(childrenCfg : any) : Promise<any>{
         let allPromise = [];
         if (typeof(childrenCfg) == "object" && childrenCfg instanceof Array)
         {
@@ -301,7 +301,7 @@ abstract class Component {
         }
     }
 
-    newComByType(type : string) : Component{
+    private newComByType(type : string) : Component{
         let Router = require("./router").default;
         let Rect = require("./rect").default;
         let Input = require("./input").default;
@@ -341,7 +341,7 @@ abstract class Component {
         return com;
     }
 
-    produceChildrenByCfg(chiCfg : any) : Promise<any>{
+    protected produceChildrenByCfg(chiCfg : any) : Promise<any>{
         let childCom;
         if (typeof(chiCfg) === "function")//异步加载view
         {
@@ -360,7 +360,7 @@ abstract class Component {
         }
     }
 
-    asyncGetView(viewCfg : any, resolve : Function, reject : Function){
+    private asyncGetView(viewCfg : any, resolve : Function, reject : Function){
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
             if (resolve)
@@ -373,7 +373,7 @@ abstract class Component {
     }
 
     /** 设置默认样式 */
-    setDefaultStyle(){
+    private setDefaultStyle(){
         if (this.style.fontFamily === undefined)
         {
             this.setStyle("fontFamily", globalUtil.viewState.defaultFontFamily);
@@ -442,9 +442,11 @@ abstract class Component {
         return true;
     }
 
-    abstract inParentArea(com : Component) : number;
+    protected abstract inParentArea(com : Component) : number;
 
-    abstract isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean;
+    protected abstract isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean;
+
+    protected abstract setClip(ctx : CanvasRenderingContext2D) : void;
 
     /** 添加子节点 */
     appendChildren(child : Component){
@@ -457,7 +459,7 @@ abstract class Component {
     }
 
     /** 设置通用样式，所有组件在绘制前都应该设置 */
-    setCommonStyle(ctx : CanvasRenderingContext2D){
+    protected setCommonStyle(ctx : CanvasRenderingContext2D){
         this.setDefaultStyle();//如果样式丢失，则使用默认样式
         //半透明
         let alpha = this.getAlpha();
@@ -483,7 +485,7 @@ abstract class Component {
     }
 
     /** 设置ctx的scale */
-    setScaleEnable(ctx : CanvasRenderingContext2D){
+    protected setScaleEnable(ctx : CanvasRenderingContext2D){
         let scale = this.style.scale;
         if (scale !== undefined && scale !== "1,1")
         {
@@ -498,7 +500,7 @@ abstract class Component {
     }
 
     /** 设置ctx的rotate */
-    setRotateEnable(ctx : CanvasRenderingContext2D){
+    protected setRotateEnable(ctx : CanvasRenderingContext2D){
         let rotate = this.style.rotate;
         if (rotate !== undefined && rotate !== 0)
         {
@@ -507,7 +509,7 @@ abstract class Component {
     }
 
     /** 设置镜像 */
-    setMirrorEnable(ctx : CanvasRenderingContext2D){
+    protected setMirrorEnable(ctx : CanvasRenderingContext2D){
         let mirror = this.style.mirror;
         if (mirror !== undefined)
         {
@@ -529,27 +531,27 @@ abstract class Component {
     }
 
     /** 将坐标原点设置到组件中心 */
-    setOriginalCoor2Center(ctx : CanvasRenderingContext2D){
+    protected setOriginalCoor2Center(ctx : CanvasRenderingContext2D){
         let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
         let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
         ctx.translate(transX, transY);
     }
     /** 将坐标原点从组件中心还原到0,0 */
-    restoreOriginalCoor2Zero(ctx : CanvasRenderingContext2D){
+    protected restoreOriginalCoor2Zero(ctx : CanvasRenderingContext2D){
         let transX = this.getRealXRecursion(this) + this.getWidth() / 2;
         let transY = this.getRealYRecursion(this) + this.getHeight() / 2;
         ctx.translate(-transX, -transY);
     }
 
     /** 将样式恢复成original */
-    restoreStyle2Original(){
+    protected restoreStyle2Original(){
         this.copyStyle(this.originalStyle);
         //删掉多余样式
         commonUtil.removeExtraAttr(this.style, this.originalStyle, "hover,hoverout,active,activeout,focus,focusout");
     }
 
     /** 将样式恢复成active或hover或focus或original */
-    restoreStyle(){
+    private restoreStyle(){
         if (this.isActive && this.style.active)
         {
             this.restoreStyle2Original();
@@ -675,7 +677,7 @@ abstract class Component {
     }
 
     /** 检查事件是否匹配 */
-    checkEvent(eventNotify : EventNotify){
+    private checkEvent(eventNotify : EventNotify){
         let Map = require("./game/map").default;
 
         if (eventNotify.type)
@@ -700,7 +702,7 @@ abstract class Component {
     }
 
     /** 冒泡执行doLayout方法 */
-    propagationDoLayout(com : Component){
+    private propagationDoLayout(com : Component){
         if (com.doLayout && typeof(com.doLayout) === "function")
         {
             com.doLayout();
@@ -712,7 +714,7 @@ abstract class Component {
     }
 
     /** 获取所有的权值 */
-    getAllWeight() : number{
+    private getAllWeight() : number{
         let allWeight = 0;
         this.children.forEach((child, index)=>{
             if (child.style.layout && child.style.layout.layoutWeight)
@@ -726,7 +728,7 @@ abstract class Component {
         });
         return allWeight;
     }
-    doLayout(){
+    protected doLayout(){
         if (this.style.layout && this.style.layout.type && this.children.length > 0)
         {
             switch(this.style.layout.type)
@@ -852,7 +854,7 @@ abstract class Component {
     }
 
     /** 防止改变originalStyle，所以这里要专门写一个方法，而不使用setStyle方法 */
-    copyStyle(source : any){
+    private copyStyle(source : any){
         for (let key in source)
         {
             if (key === "backgroundImage")//更换图片
@@ -913,7 +915,7 @@ abstract class Component {
             return undefined;
         }
     }
-    setStyle_kv(key : any, value : any, doAni? : any) : Promise<any>{
+    private setStyle_kv(key : any, value : any, doAni? : any) : Promise<any>{
         if (this.originalStyle[key] === value)//如果设置的值相同，则不需要耗费性能
         {
             return;
@@ -969,7 +971,7 @@ abstract class Component {
         this.originalStyle[key] = value;
         return aniPromise;
     }
-    setStyle_obj(style : any, doAni : any) : Array<Promise<any>>{
+    private setStyle_obj(style : any, doAni : any) : Array<Promise<any>>{
         let aniPromiseArr = [];
         let aniPromise;
         for (let key in style)
@@ -1085,7 +1087,7 @@ abstract class Component {
     }
 
     /** 获取文本的坐标 */
-    getTextRealX() : number{
+    protected getTextRealX() : number{
         let oriX = this.getRealX() + (this.style.borderWidth || 0);
         //文字居中显示
         if (this.text && this.style.textAlign === "center")
@@ -1107,7 +1109,7 @@ abstract class Component {
         }
         return oriX - (this.style.textScrollX || 0);
     }
-    getTextRealY() : number{
+    protected getTextRealY() : number{
         return this.getRealY() + (this.style.borderWidth || 0) - (this.style.textScrollY || 0);
     }
 
@@ -1179,7 +1181,7 @@ abstract class Component {
      *
      * @return true 是0,0
      */
-    needTranslateOriginOfCoor2Center() : boolean{
+    protected needTranslateOriginOfCoor2Center() : boolean{
         let scale = this.style.scale;
         let rotate = this.style.rotate;
         let mirror = this.style.mirror;
@@ -1193,7 +1195,7 @@ abstract class Component {
     }
 
     /** 用\n分隔string，实现换行 */
-    getTextForRows(text : string) : any{
+    protected getTextForRows(text : string) : any{
         if (!text)
         {
             return undefined;
@@ -1238,7 +1240,7 @@ abstract class Component {
     }
 
     /** 获取字符宽度，中文占1个fontSize */
-    getCharWidth(char : string) : number{
+    protected getCharWidth(char : string) : number{
         if(char.charCodeAt(0) > 128)
         {
             return parseInt(this.style.fontSize, 10);
@@ -1267,14 +1269,14 @@ abstract class Component {
     }
 
     /** 获取文本占的总高度 */
-    getTextHeight() : number{
+    protected getTextHeight() : number{
         if (!this.text)
         {
             return 0;
         }
         return this.text.length * parseInt(this.style.fontSize, 10);
     }
-    getTextWidth() : number{
+    protected getTextWidth() : number{
         if (!this.text)
         {
             return 0;

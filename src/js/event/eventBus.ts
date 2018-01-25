@@ -43,11 +43,7 @@ export default class EventBus{
         }
     }
 
-    initDomEvent(){
-        // this.addEventListener(this.canvas, "click", (e)=>{
-        //     this.createEventNotify(e, "click");
-        // });
-
+    private initDomEvent(){
         let clickCom;//click的组件
         this.addEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
@@ -91,14 +87,14 @@ export default class EventBus{
      *
      * @return 批次号（时间戳）
      */
-    createPropagationStack(){
+    private createPropagationStack(){
         let batchNo = (new Date).getTime();
         this.propagationEventQueue[batchNo] = new Stack();
         return batchNo;
     }
 
     /** 创建鼠标事件通知 */
-    createEventNotify(e : any, type : string){
+    private createEventNotify(e : any, type : string){
         if (!this.eventListeners[type])
         {
             return;
@@ -135,7 +131,7 @@ export default class EventBus{
     }
 
     /** 创建非鼠标事件通知 */
-    createOtherEventNotify(e : any, type : string, ntype : number){
+    private createOtherEventNotify(e : any, type : string, ntype : number){
         if (!this.eventListeners[type])
         {
             return;
@@ -219,7 +215,7 @@ export default class EventBus{
         }
     }
 
-    getEvent(eventNotify : any){
+    private getEvent(eventNotify : any){
         let event;
         switch (eventNotify.listener.type)
         {
@@ -343,7 +339,7 @@ export default class EventBus{
      *
      * @param target target有可能是controller，也有可能是component
      */
-    getComponentByTarget(target : any){
+    private getComponentByTarget(target : any){
         let targetCom;
         if (target instanceof Component)
         {
@@ -419,7 +415,7 @@ export default class EventBus{
         }
     }
 
-    getEventListener(target : Component, type : string, callback : Function){
+    private getEventListener(target : Component, type : string, callback : Function){
        let eventListener = new EventListener(type, callback);
        eventListener.setTarget(target);
        return eventListener;

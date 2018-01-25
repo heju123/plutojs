@@ -3,9 +3,9 @@ import Rect from "./rect";
 import Component from "./component";
 
 export default class Router extends Rect{
-    currentChildren : Component;
-    routes : any;
-    currentRoute : string;
+    private currentChildren : Component;
+    private routes : any;
+    private currentRoute : string;
 
     constructor(parent? : Component){
         super(parent);
@@ -65,7 +65,7 @@ export default class Router extends Rect{
         return true;
     }
 
-    getChildrenView() : Promise<any>{
+    private getChildrenView() : Promise<any>{
         return new Promise((resolve)=>{
             if (!this.currentChildren)
             {

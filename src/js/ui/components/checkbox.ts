@@ -1,10 +1,11 @@
 import Rect from "./rect";
 import Component from "./component";
+import Point from "../draw/point";
+import SequenceDraw from "../draw/sequenceDraw";
 
 export default class Checkbox extends Rect {
     checked : boolean;
-    private startPoint : any;
-    private path : Array<any> = [];
+    private sequenceDraw : SequenceDraw = new SequenceDraw(this);
 
     constructor(parent? : Component) {
         super(parent);
@@ -21,29 +22,13 @@ export default class Checkbox extends Rect {
             this.checked = !this.checked;
         });
 
-        this.startPoint = {
-            x : ()=>{
-                return this.getRealX() + 5;
-            },
-            y : ()=>{
-                return this.getRealY() + this.getHeight() / 2;
-            }
-        };
-        this.path.push({
-            x : ()=>{
-                return this.getRealX() + this.getWidth() / 2 - 2;
-            },
-            y : ()=>{
-                return this.getRealY() + this.getHeight() - 6;
-            }
-        });
-        this.path.push({
-            x : ()=>{
-                return this.getRealX() - 3 + this.getWidth();
-            },
-            y : ()=>{
-                return this.getRealY() + 5;
-            }
+        this.registerEvent("$onViewLoaded", ()=>{
+            let startPoint = new Point(this.getRealX() + 5, this.getRealY() + this.getHeight() / 2);
+            this.sequenceDraw.setStartPoint(startPoint);
+            let point = new Point(this.getRealX() + this.getWidth() / 2 - 2, this.getRealY() + this.getHeight() - 6);
+            this.sequenceDraw.pushPath(point);
+            point = new Point(this.getRealX() - 3 + this.getWidth(), this.getRealY() + 5);
+            this.sequenceDraw.pushPath(point);
         });
     }
 
@@ -68,10 +53,7 @@ export default class Checkbox extends Rect {
 
             ctx.lineWidth = this.style.lineWidth || 4;
             ctx.strokeStyle = "#333";
-            ctx.moveTo(this.startPoint.x(), this.startPoint.y());
-            ctx.lineTo(this.path[0].x(), this.path[0].y());
-            ctx.lineTo(this.path[1].x(), this.path[1].y());
-            ctx.stroke();
+            this.sequenceDraw.draw(ctx);
 
             ctx.closePath();
             ctx.restore();

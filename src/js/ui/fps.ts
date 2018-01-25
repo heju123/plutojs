@@ -81,7 +81,7 @@ export default class Fps{
     }
 
     /** 绘制子组件之前调用 */
-    beforeDrawChildren(com : Component)
+    private beforeDrawChildren(com : Component)
     {
         this.ctx.save();
         /** 防止children超出 */
@@ -91,7 +91,7 @@ export default class Fps{
             (<any>com).setClip(this.ctx);
         }
     }
-    afterDrawChildren(com : Component)
+    private afterDrawChildren(com : Component)
     {
         if ((<any>com).setClip)
         {
@@ -100,7 +100,7 @@ export default class Fps{
         this.ctx.restore();
     }
 
-    drawView(com : Component){
+    private drawView(com : Component){
         if (!com.active)
         {
             return;
@@ -150,7 +150,7 @@ export default class Fps{
         }
     }
 
-    draw(){
+    private draw(){
         //背景
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

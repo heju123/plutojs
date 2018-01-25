@@ -7,10 +7,10 @@ import commonUtil from "../../util/commonUtil";
 import Component from "./component";
 
 export default class Input extends Scrollbar {
-    showTextCursor : boolean;
-    showTextCursorInterval : number;
-    textCursorX : number;
-    textCursorY : number;
+    private showTextCursor : boolean;
+    private showTextCursorInterval : number;
+    private textCursorX : number;
+    private textCursorY : number;
 
     constructor(parent? : Component) {
         super(parent);
@@ -49,7 +49,7 @@ export default class Input extends Scrollbar {
     }
 
     /** 获取文本输入光标位置 */
-    getTextCursorPos(){
+    private getTextCursorPos(){
         let selectionEnd = globalUtil.action.inputListenerDom.selectionEnd;
         let textRow;
         if (this.text && this.text.length > 0)
@@ -70,7 +70,7 @@ export default class Input extends Scrollbar {
         this.textCursorY = this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
     }
 
-    drawTextCursor(ctx : CanvasRenderingContext2D){
+    private drawTextCursor(ctx : CanvasRenderingContext2D){
         if (this.showTextCursor)
         {
             if (!globalUtil.action.inputListenerDom.compositionMode)
@@ -126,11 +126,11 @@ export default class Input extends Scrollbar {
         }
     }
 
-    getTextRealX() : number{
+    protected getTextRealX() : number{
         return super.getTextRealX();
     }
 
-    getTextRealY() : number{
+    protected getTextRealY() : number{
         let oriY = super.getTextRealY();
         if (this.style.multiLine)
         {

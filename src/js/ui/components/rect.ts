@@ -113,7 +113,7 @@ export default class Rect extends Component{
     }
 
     /** 设置后避免超出当前组件范围 */
-    setClip(ctx : CanvasRenderingContext2D){
+    protected setClip(ctx : CanvasRenderingContext2D){
         ctx.beginPath();
         if (this.isDoingParentClip)
         {
@@ -146,7 +146,7 @@ export default class Rect extends Component{
         ctx.closePath();
     }
 
-    getRectRadiusPath(arg1? : any, arg2? : any, arg3? : any, arg4? : any, arg5? : any, arg6? : any, arg7? : any) : void{
+    private getRectRadiusPath(arg1? : any, arg2? : any, arg3? : any, arg4? : any, arg5? : any, arg6? : any, arg7? : any) : void{
         if (arguments.length <= 4)
         {
             this.getRectRadiusPath_self(arg1, arg2, arg3, arg4);
@@ -163,7 +163,7 @@ export default class Rect extends Component{
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath_self(self : Component, ctx :CanvasRenderingContext2D, radius : number, padding : number) : void{
+    private getRectRadiusPath_self(self : Component, ctx :CanvasRenderingContext2D, radius : number, padding : number) : void{
         this.getRectRadiusPath_xywh(self.getRealX(), self.getRealY(), self.getWidth(), self.getHeight(), ctx, radius, padding);
     }
     /**
@@ -176,7 +176,7 @@ export default class Rect extends Component{
      * @param radius 圆角半径
      * @param padding 整体扩大的像素
      */
-    getRectRadiusPath_xywh(px : number, py : number, pwidth : number, pheight : number, ctx : CanvasRenderingContext2D, radius : number, padding : number) : void{
+    private getRectRadiusPath_xywh(px : number, py : number, pwidth : number, pheight : number, ctx : CanvasRenderingContext2D, radius : number, padding : number) : void{
         padding = padding || 0;
         let x = px - padding;
         let y = py - padding;
@@ -199,7 +199,7 @@ export default class Rect extends Component{
      *
      * @return -1：无parent；0：不在范围内；1：在范围内
      */
-    inParentArea(com : Component) : number{
+    protected inParentArea(com : Component) : number{
         return 1;
         // if (!com.parent)
         // {
@@ -227,7 +227,7 @@ export default class Rect extends Component{
      * @param py 鼠标y
      * @return true：在范围内
      */
-    isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean{
+    protected isPointInComponent(ctx : CanvasRenderingContext2D, px : number, py : number) : boolean{
         ctx.save();
         ctx.beginPath();
         if (this.needTranslateOriginOfCoor2Center())

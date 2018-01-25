@@ -175,7 +175,7 @@ export default class ViewState{
     }
 
     /** 将textarea中的值设置到焦点组件 */
-    setVal2FocusCom(){
+    private setVal2FocusCom(){
         if (!globalUtil.action.focusComponent.style.readOnly)//readOnly时禁止输入
         {
             globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
@@ -187,7 +187,7 @@ export default class ViewState{
         globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
-    getComponentInChildrenByKey(key : string, val : string, com : Component) {
+    private getComponentInChildrenByKey(key : string, val : string, com : Component) {
         let children = com.getChildren();
         if (children)
         {
@@ -231,7 +231,7 @@ export default class ViewState{
         }
     }
 
-    _getComponentsInChildrenByKey(retArr : Array<any>, key : string, val : string, com : Component) {
+    private _getComponentsInChildrenByKey(retArr : Array<any>, key : string, val : string, com : Component) {
         let children = com.getChildren();
         if (children)
         {
@@ -262,7 +262,7 @@ export default class ViewState{
         }
     }
     /** 用key获取组件列表 */
-    getComponentsInChildrenByKey(key : string, val : string, com : Component) {
+    private getComponentsInChildrenByKey(key : string, val : string, com : Component) {
         let retArr = [];
         this._getComponentsInChildrenByKey(retArr, key, val, com);
         return retArr;

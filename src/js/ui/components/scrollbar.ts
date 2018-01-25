@@ -7,10 +7,10 @@ import WheelEvent from "../../event/type/wheelEvent";
 
 const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
 export default class Scrollbar extends Rect {
-    scrollbarBaseLineV : Component;
-    scrollbarOpeLineV : Component;
-    scrollbarBaseLineH : Component;
-    scrollbarOpeLineH : Component;
+    private scrollbarBaseLineV : Component;
+    private scrollbarOpeLineV : Component;
+    private scrollbarBaseLineH : Component;
+    private scrollbarOpeLineH : Component;
     private doMouseMoveBind : Function;
     private doMouseUpBind : Function;
     private doTimeoutLock : boolean;
@@ -36,7 +36,7 @@ export default class Scrollbar extends Rect {
         });
     }
 
-    initScrollbar(){
+    private initScrollbar(){
         //竖向滚动条
         this.scrollbarBaseLineV = this.produceLine(1, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineV.active = false;
@@ -108,7 +108,7 @@ export default class Scrollbar extends Rect {
     }
 
     /** 组件被Hover时执行的定时函数 */
-    doHoverTimeout(){
+    private doHoverTimeout(){
         this.doTimeoutLock = true;
         this.getContentWH();
         this.showScrollbar();
@@ -132,7 +132,7 @@ export default class Scrollbar extends Rect {
     }
 
     /** 获取滚动条内容占用的高宽 */
-    getContentWH(){
+    private getContentWH(){
         let maxWidth = 0;
         let maxHeight = 0;
         if (this.style.scrollText && this.text)
@@ -157,7 +157,7 @@ export default class Scrollbar extends Rect {
     }
 
     /** 判断是否显示滚动条 */
-    showScrollbar(){
+    private showScrollbar(){
         if (this.scrollbarBaseLineH)
         {
             if (this.style.contentWidth <= this.getInnerWidth())
@@ -184,7 +184,7 @@ export default class Scrollbar extends Rect {
         }
     }
 
-    doMouseDown(type : string, e : MouseEvent){
+    private doMouseDown(type : string, e : MouseEvent){
         let x = e.pageX;
         let y = e.pageY;
         let opeLine = this["scrollbarOpeLine" + type];
@@ -192,7 +192,7 @@ export default class Scrollbar extends Rect {
         this.onScrollObj = opeLine;
     }
 
-    doMouseMove(e : MouseEvent){
+    private doMouseMove(e : MouseEvent){
         let x = e.pageX;
         let y = e.pageY;
         if (this.onScrollObj)
@@ -223,11 +223,11 @@ export default class Scrollbar extends Rect {
         }
     }
 
-    doMouseUp(e : MouseEvent){
+    private doMouseUp(e : MouseEvent){
         this.onScrollObj = undefined;
     }
 
-    doMouseWheel(e : WheelEvent){
+    private doMouseWheel(e : WheelEvent){
         if (this.style.contentHeight <= this.getInnerHeight())
         {
             return;
@@ -247,7 +247,7 @@ export default class Scrollbar extends Rect {
         this.setScrollYValue(wheelVal);
     }
 
-    setScrollYValue(value : number){
+    private setScrollYValue(value : number){
         this.setStyle("contentScrollY", value);
         this.setScrollY();
         let scrollObjY = (this.scrollbarBaseLineV.getHeight() - this.scrollbarOpeLineV.getHeight())
@@ -256,7 +256,7 @@ export default class Scrollbar extends Rect {
     }
 
     //设置所有子节点的滚动值
-    setScrollX(){
+    private setScrollX(){
         if (this.style.scrollText)
         {
             this.setStyle("textScrollX", this.style.contentScrollX);
@@ -271,7 +271,7 @@ export default class Scrollbar extends Rect {
             });
         }
     }
-    setScrollY(){
+    private setScrollY(){
         if (this.style.scrollText)
         {
             this.setStyle("textScrollY", this.style.contentScrollY);
@@ -291,7 +291,7 @@ export default class Scrollbar extends Rect {
      *
      * @param oritation 方向，1：竖向滚动条；2：横向滚动条
      */
-    produceLine(oritation : number, lineColor : string, alpha : number) : Component
+    private produceLine(oritation : number, lineColor : string, alpha : number) : Component
     {
         let Rect = require("./rect").default;
         oritation = oritation || 1;
