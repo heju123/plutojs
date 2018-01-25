@@ -23,9 +23,10 @@ let commonStyle = {
         backgroundColor : THEME_COLOR,
         fontColor : "#ffffff",
         borderRadius : 5,
+        alpha : 1,
         hover : {
             backgroundColor : "#fc8042",
-            alpha : 0.9
+            alpha : 0.8
         },
         active : {
             backgroundColor : "#e5733e",

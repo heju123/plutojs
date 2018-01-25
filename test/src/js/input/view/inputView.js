@@ -1,4 +1,5 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
+import commonAnimation from "@/js/common//view/animation/commonAnimation";
 import {commonUtil} from "~/js/main";
 import InputController from "../controller/inputController";
 import {getLinkView} from "@/js/common/view/components";
@@ -68,7 +69,8 @@ export default {
                                                 },
                                                 width : 300,
                                                 height : 30
-                                            })
+                                            }),
+                                            animation : commonAnimation.inputAnimation
                                         }
                                     ]
                                 },
@@ -92,7 +94,8 @@ export default {
                                                 height : 30,
                                                 readOnly : true
                                             }, commonStyle.readOnlyInputStyle),
-                                            text : "readOnly"
+                                            text : "readOnly",
+                                            animation : commonAnimation.inputAnimation
                                         }
                                     ]
                                 },
@@ -116,7 +119,8 @@ export default {
                                                 height : 160,
                                                 multiLine : true,
                                                 autoLine : true
-                                            })
+                                            }),
+                                            animation : commonAnimation.inputAnimation
                                         }
                                     ]
                                 }

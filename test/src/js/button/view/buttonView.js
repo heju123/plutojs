@@ -1,4 +1,5 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
+import commonAnimation from "@/js/common//view/animation/commonAnimation";
 import {commonUtil} from "~/js/main";
 import ButtonController from "../controller/buttonController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
@@ -68,6 +69,7 @@ export default {
                                                 autoWidth : true,
                                                 height : 30
                                             }),
+                                            animation : commonAnimation.buttonAnimation,
                                             text : "按钮1",
                                             events : {
                                                 "click" : "testClick"
@@ -95,6 +97,7 @@ export default {
                                                 height : 30,
                                                 disabled : true
                                             }, commonStyle.disabledButtonStyle),
+                                            animation : commonAnimation.buttonAnimation,
                                             text : "按钮disabled",
                                             events : {
                                                 "click" : "testClick"
@@ -142,6 +145,7 @@ export default {
                                                     }
                                                 }
                                             }),
+                                            animation : commonAnimation.buttonAnimation,
                                             events : {
                                                 "click" : "testClick"
                                             }
