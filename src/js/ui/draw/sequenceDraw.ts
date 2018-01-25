@@ -1,9 +1,11 @@
 import Component from "../components/component";
 import Controller from "../controller";
 import Point from "./point";
+import PointPath from "./path/pointPath";
 import Path from "./path/path";
 import animationUtil from "../../util/animationUtil";
 
+/** 按顺序绘制，可实现缓动 */
 export default class SequenceDraw{
     private self : Component | Controller;//执行绘制的组件或controller
     private startPoint : Point;
@@ -48,7 +50,7 @@ export default class SequenceDraw{
         if (path.duration)
         {
             path.show = true;
-            if (path.getDrawTarget() instanceof Point)
+            if (path instanceof PointPath)
             {
                 let to = {
                   x : path.target.x,
