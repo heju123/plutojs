@@ -50,7 +50,7 @@ export default class Checkbox extends Rect {
         let startPoint : Point = new Point(this.getRealX() + 5, this.getRealY() + this.getHeight() / 2);
         this.sequenceDraw.setStartPoint(startPoint);
         let point : Point = new Point(this.getRealX() + this.getWidth() / 2 - 2, this.getRealY() + this.getHeight() - 6);
-        let path : Path = new PointPath(point, "300ms");
+        let path : Path = new PointPath(point, "250ms");
         this.sequenceDraw.pushPath(path);
         point = new Point(this.getRealX() - 3 + this.getWidth(), this.getRealY() + 5);
         path = new PointPath(point, "200ms");

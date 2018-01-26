@@ -10,7 +10,6 @@ export default class SequenceDraw{
     private self : Component | Controller;//执行绘制的组件或controller
     private startPoint : Point;
     private paths : Array<Path> = [];
-    private doAniIndex : number;
 
     constructor(self : Component){
         this.self = self;
@@ -40,13 +39,13 @@ export default class SequenceDraw{
     finish(){
         if (this.paths.length > 0)
         {
-            this.doAniIndex = 0;
-            this.doDrawAni();
+            let doAniIndex = 0;
+            this.doDrawAni(doAniIndex);
         }
     }
 
-    private doDrawAni(){
-        let path = this.paths[this.doAniIndex];
+    private doDrawAni(index : number){
+        let path = this.paths[index];
         path.show = true;
         if (path.duration)
         {
@@ -61,15 +60,15 @@ export default class SequenceDraw{
                     easeType : "Linear",
                     easing : "ease"
                 }).then(()=>{
-                    this.doAniIndex++;
-                    this.doDrawAni();
+                    index++;
+                    this.doDrawAni(index);
                 });
             }
         }
         else
         {
-            this.doAniIndex++;
-            this.doDrawAni();
+            index++;
+            this.doDrawAni(index);
         }
     }
 

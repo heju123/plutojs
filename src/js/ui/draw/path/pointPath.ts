@@ -15,10 +15,6 @@ export default class PointPath{
         {
             this.duration = commonUtil.getTimeSecForSuffix(duration);
         }
-        if (!this.duration)
-        {
-            this.show = true;
-        }
     }
 
     /** 设置绘制对象，从上个路径结束点开始 */
