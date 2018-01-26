@@ -103,7 +103,7 @@ export default class SequenceDraw{
                 else if (path instanceof ArcPath)
                 {
                     ctx.arc(path.getDrawTarget().centerPoint.x, path.getDrawTarget().centerPoint.y,
-                        path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle);
+                        path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle, path.anticlockwise);
                 }
             }
         });

@@ -9,6 +9,7 @@ export default class ArcPath implements Path{
     private drawTarget : Arc;//绘制对象，主要用于缓动的实现
     duration : number;//执行时间，单位：秒
     show : boolean = false;//是否显示
+    anticlockwise : boolean = false;//是否逆时针方向绘制
 
     constructor(target : Arc, duration? : string){
         this.target = target;

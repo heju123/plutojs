@@ -30,8 +30,9 @@ export default class MainController extends Controller{
             this.sequenceDraw.pushPath(path);
 
             let centerPoint : Point = new Point(250, 450);
-            let arc : Arc = new Arc(centerPoint, 50, 0, 0.5 * Math.PI);
+            let arc : Arc = new Arc(centerPoint, 50, 0, -0.5 * Math.PI);
             let arcPath : Path = new ArcPath(arc, "1s");
+            arcPath.anticlockwise = true;
             this.sequenceDraw.pushPath(arcPath);
 
             let point : Point = new Point(100, 450);
