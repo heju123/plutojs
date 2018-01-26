@@ -12,7 +12,13 @@ import {
     Checkbox,
     Input,
     Rect,
-    Scrollbar
+    Scrollbar,
+    ArcPath,
+    PointPath,
+    Path,
+    Arc,
+    Point,
+    SequenceDraw
 } from "~/js/main";
 
 window.plutojs = {
@@ -33,5 +39,13 @@ window.plutojs = {
         Input : Input,
         Rect : Rect,
         Scrollbar : Scrollbar
+    },
+    draw : {
+        ArcPath : ArcPath,
+        PointPath : PointPath,
+        Path : Path,
+        Arc : Arc,
+        Point : Point,
+        SequenceDraw : SequenceDraw
     }
 };

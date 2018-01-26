@@ -1,9 +1,11 @@
 /**
  * Created by heju on 2017/7/14.
  */
-import {Controller,Component,Thread} from "~/js/main";
+import {Controller,Component,Thread,SequenceDraw,Point,PointPath,Arc,ArcPath,Path} from "~/js/main";
 
 export default class MainController extends Controller{
+    private sequenceDraw : SequenceDraw = new SequenceDraw(this.component);
+
     constructor(component : Component) {
         super(component);
 
@@ -16,6 +18,26 @@ export default class MainController extends Controller{
             thread.terminate();
         }).finally(()=>{
             console.log("finally");
+        });
+
+        this.registerEvent("$onViewLoaded", ()=>{
+            this.sequenceDraw.clearPath();
+            let startPoint : Point = new Point(250, 350);
+            this.sequenceDraw.setStartPoint(startPoint);
+
+            let point : Point = new Point(300, 450);
+            let path : Path = new PointPath(point, "1s");
+            this.sequenceDraw.pushPath(path);
+
+            let centerPoint : Point = new Point(250, 450);
+            let arc : Arc = new Arc(centerPoint, 50, 0, 0.5 * Math.PI);
+            let arcPath : Path = new ArcPath(arc, "1s");
+            this.sequenceDraw.pushPath(arcPath);
+
+            let point : Point = new Point(100, 450);
+            let path : Path = new PointPath(point, "1s");
+            this.sequenceDraw.pushPath(path);
+            this.sequenceDraw.finish();
         });
     }
 
@@ -61,5 +83,13 @@ export default class MainController extends Controller{
     onClickCheckbox(e)
     {
         console.log(e.target.checked);
+    }
+
+    draw(ctx : CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#333";
+        this.sequenceDraw.draw(ctx);
+        ctx.closePath();
     }
 }

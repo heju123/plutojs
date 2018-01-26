@@ -2,6 +2,7 @@ import Component from "../components/component";
 import Controller from "../controller";
 import Point from "./point";
 import PointPath from "./path/pointPath";
+import ArcPath from "./path/arcPath";
 import Path from "./path/path";
 import animationUtil from "../../util/animationUtil";
 
@@ -46,6 +47,10 @@ export default class SequenceDraw{
 
     private doDrawAni(index : number){
         let path = this.paths[index];
+        if (!path)
+        {
+            return;
+        }
         path.show = true;
         if (path.duration)
         {
@@ -54,6 +59,20 @@ export default class SequenceDraw{
                 let to = {
                   x : path.target.x,
                   y : path.target.y
+                };
+                animationUtil.executeAttrChange(path.getDrawTarget(), to, {
+                    duration : path.duration,
+                    easeType : "Linear",
+                    easing : "ease"
+                }).then(()=>{
+                    index++;
+                    this.doDrawAni(index);
+                });
+            }
+            else if (path instanceof ArcPath)
+            {
+                let to = {
+                    endAngle : path.target.endAngle
                 };
                 animationUtil.executeAttrChange(path.getDrawTarget(), to, {
                     duration : path.duration,
@@ -80,6 +99,11 @@ export default class SequenceDraw{
                 if (path instanceof PointPath)
                 {
                     ctx.lineTo(path.getDrawTarget().x, path.getDrawTarget().y);
+                }
+                else if (path instanceof ArcPath)
+                {
+                    ctx.arc(path.getDrawTarget().centerPoint.x, path.getDrawTarget().centerPoint.y,
+                        path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle);
                 }
             }
         });
