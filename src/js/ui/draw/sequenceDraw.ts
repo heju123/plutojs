@@ -1,5 +1,4 @@
 import Component from "../components/component";
-import Controller from "../controller";
 import Point from "./point";
 import PointPath from "./path/pointPath";
 import ArcPath from "./path/arcPath";
@@ -8,12 +7,12 @@ import animationUtil from "../../util/animationUtil";
 
 /** 按顺序绘制，可实现缓动 */
 export default class SequenceDraw{
-    private self : Component | Controller;//执行绘制的组件或controller
+    private parent : Component;
     private startPoint : Point;
     private paths : Array<Path> = [];
 
-    constructor(self : Component){
-        this.self = self;
+    constructor(parent : Component){
+        this.parent = parent;
     }
 
     setStartPoint(point : Point){
@@ -96,21 +95,22 @@ export default class SequenceDraw{
         {
             return;
         }
-        ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        ctx.moveTo(this.startPoint.x + this.parent.getRealX(), this.startPoint.y + this.parent.getRealY());
         this.paths.forEach((path)=>{
             if (path.show)
             {
                 if (path.newPath)
                 {
-                    ctx.moveTo(path.getStartPoint().x, path.getStartPoint().y);
+                    ctx.moveTo(path.getStartPoint().x + this.parent.getRealX(), path.getStartPoint().y + this.parent.getRealY());
                 }
                 if (path instanceof PointPath)
                 {
-                    ctx.lineTo(path.getDrawTarget().x, path.getDrawTarget().y);
+                    ctx.lineTo(path.getDrawTarget().x + this.parent.getRealX(), path.getDrawTarget().y + this.parent.getRealY());
                 }
                 else if (path instanceof ArcPath)
                 {
-                    ctx.arc(path.getDrawTarget().centerPoint.x, path.getDrawTarget().centerPoint.y,
+                    ctx.arc(path.getDrawTarget().centerPoint.x + this.parent.getRealX(),
+                        path.getDrawTarget().centerPoint.y + this.parent.getRealY(),
                         path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle, path.anticlockwise);
                 }
             }

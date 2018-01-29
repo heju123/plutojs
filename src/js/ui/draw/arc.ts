@@ -39,12 +39,29 @@ export default class Arc{
      * @return [xOffset,yOffset]
      */
     static getCenterPointOffsetBy2PointAndRadius(point1 : Point, point2 : Point, radius : number) : Array<number>{
+        let yOffset : number;
+        let xOffset : number;
         let pointDistance : number = Math.sqrt(Math.pow(Math.abs(point2.y - point1.y), 2) + Math.pow(Math.abs(point2.x - point1.x), 2));//两点之间的距离
-        let bigAngle : number = Math.acos(pointDistance / 2 / radius);//反cos求大角
-        let littleAngle : number = Math.atan(Math.abs(point2.y - point1.y) / Math.abs(point2.x - point1.x));//用斜率反tan求小角
-        let angle : number = bigAngle - littleAngle;//大角减小角获得需要的角度
-        let yOffset : number = Math.sin(angle) * radius;
-        let xOffset : number = Math.cos(angle) * radius;
+        if (point2.y - point1.y !== 0 && point2.x - point1.x !== 0)
+        {
+            let bigAngle : number = Math.acos(pointDistance / 2 / radius);//反cos求大角
+            let littleAngle : number = Math.atan(Math.abs(point2.y - point1.y) / Math.abs(point2.x - point1.x));//用斜率反tan求小角
+            let angle : number = bigAngle - littleAngle;//大角减小角获得需要的角度
+            yOffset = Math.sin(angle) * radius;
+            xOffset = Math.cos(angle) * radius;
+        }
+        else if (point2.y - point1.y === 0 && point2.x - point1.x !== 0)//两点连线呈水平直线
+        {
+            let angle = Math.acos(pointDistance / 2 / radius);
+            xOffset = pointDistance / 2;
+            yOffset = Math.tan(angle) * (pointDistance / 2);
+        }
+        else if (point2.y - point1.y !== 0 && point2.x - point1.x === 0)//两点连线呈垂直直线
+        {
+            let angle = Math.acos(pointDistance / 2 / radius);
+            yOffset = pointDistance / 2;
+            xOffset = Math.tan(angle) * (pointDistance / 2);
+        }
         return [xOffset, yOffset];
     }
 

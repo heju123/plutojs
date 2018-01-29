@@ -33,92 +33,142 @@ export default {
             },
             children : [
                 {
-                    id : "rect1",
-                    type : "rect",
-                    style : {
-                        x : 10,
-                        y : 10,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#ff8532"
-                    }
-                },
-                {
-                    id : "rect2",
-                    type : "rect",
-                    style : {
-                        x : 100,
-                        y : 100,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#ff8532"
-                    }
-                },
-                {
-                    id : "rect3",
-                    type : "rect",
-                    style : {
-                        x : 280,
-                        y : 10,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#FF606A"
-                    }
-                },
-                {
-                    id : "rect4",
-                    type : "rect",
-                    style : {
-                        x : 200,
-                        y : 100,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#FF606A"
-                    }
-                },
-                {
-                    id : "rect5",
-                    type : "rect",
-                    style : {
-                        x : 10,
-                        y : 210,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#94b8ff"
-                    }
-                },
-                {
-                    id : "rect6",
-                    type : "rect",
-                    style : {
-                        x : 80,
-                        y : 310,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#94b8ff"
-                    }
-                },
-                {
-                    id : "rect7",
-                    type : "rect",
-                    style : {
-                        x : 280,
-                        y : 200,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#4ffcff"
-                    }
-                },
-                {
-                    id : "rect8",
-                    type : "rect",
-                    style : {
-                        x : 200,
-                        y : 310,
-                        width : 20,
-                        height : 20,
-                        backgroundColor : "#4ffcff"
-                    }
+                    id : "scrollbar",
+                    type: "scrollbar",
+                    children: [
+                        {
+                            id : "rect1",
+                            type : "rect",
+                            style : {
+                                x : 10,
+                                y : 10,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#ff8532"
+                            }
+                        },
+                        {
+                            id : "rect2",
+                            type : "rect",
+                            style : {
+                                x : 100,
+                                y : 100,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#ff8532"
+                            }
+                        },
+                        {
+                            id : "rect3",
+                            type : "rect",
+                            style : {
+                                x : 280,
+                                y : 10,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#FF606A"
+                            }
+                        },
+                        {
+                            id : "rect4",
+                            type : "rect",
+                            style : {
+                                x : 200,
+                                y : 100,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#FF606A"
+                            }
+                        },
+                        {
+                            id : "rect5",
+                            type : "rect",
+                            style : {
+                                x : 10,
+                                y : 210,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#94b8ff"
+                            }
+                        },
+                        {
+                            id : "rect6",
+                            type : "rect",
+                            style : {
+                                x : 80,
+                                y : 310,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#94b8ff"
+                            }
+                        },
+                        {
+                            id : "rect7",
+                            type : "rect",
+                            style : {
+                                x : 280,
+                                y : 200,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#4ffcff"
+                            }
+                        },
+                        {
+                            id : "rect8",
+                            type : "rect",
+                            style : {
+                                x : 200,
+                                y : 310,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#4ffcff"
+                            }
+                        },
+                        {
+                            id : "rect9",
+                            type : "rect",
+                            style : {
+                                x : 10,
+                                y : 480,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#c380ff"
+                            }
+                        },
+                        {
+                            id : "rect10",
+                            type : "rect",
+                            style : {
+                                x : 180,
+                                y : 480,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#c380ff"
+                            }
+                        },
+                        {
+                            id : "rect13",
+                            type : "rect",
+                            style : {
+                                x : 480,
+                                y : 10,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#4bffee"
+                            }
+                        },
+                        {
+                            id : "rect14",
+                            type : "rect",
+                            style : {
+                                x : 480,
+                                y : 200,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#4bffee"
+                            }
+                        }
+                    ]
                 }
             ]
         }
