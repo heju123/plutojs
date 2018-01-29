@@ -110,6 +110,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("嵌套路由", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["nestRoute"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }
