@@ -91,6 +91,7 @@ export default class MainController extends Controller{
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#333";
         this.sequenceDraw.draw(ctx);
+
         ctx.closePath();
     }
 }

@@ -116,6 +116,7 @@ export default {
                     ]
                 },
                 {
+                    id : "testButton",
                     type : "button",
                     style : {
                         x : 240,
@@ -276,6 +277,7 @@ export default {
                 },
                 layoutTestView,
                 {
+                    id : "testCheckbox",
                     type : "checkbox",
                     style : {
                         x : 340,

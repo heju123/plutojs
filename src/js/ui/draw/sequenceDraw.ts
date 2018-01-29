@@ -92,10 +92,18 @@ export default class SequenceDraw{
     }
 
     draw(ctx : CanvasRenderingContext2D){
+        if (!this.startPoint)
+        {
+            return;
+        }
         ctx.moveTo(this.startPoint.x, this.startPoint.y);
         this.paths.forEach((path)=>{
             if (path.show)
             {
+                if (path.newPath)
+                {
+                    ctx.moveTo(path.getStartPoint().x, path.getStartPoint().y);
+                }
                 if (path instanceof PointPath)
                 {
                     ctx.lineTo(path.getDrawTarget().x, path.getDrawTarget().y);

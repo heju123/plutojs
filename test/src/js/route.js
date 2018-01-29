@@ -10,6 +10,7 @@ let output = {
 };
 
 commonUtil.copyObject(require("./nav/route").default, output.routes, false);
+commonUtil.copyObject(require("./draw/route").default, output.routes, false);
 commonUtil.copyObject(require("./input/route").default, output.routes, false);
 commonUtil.copyObject(require("./button/route").default, output.routes, false);
 commonUtil.copyObject(require("./checkbox/route").default, output.routes, false);

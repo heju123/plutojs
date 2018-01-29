@@ -10,6 +10,7 @@ export default class ArcPath implements Path{
     duration : number;//执行时间，单位：秒
     show : boolean = false;//是否显示
     anticlockwise : boolean = false;//是否逆时针方向绘制
+    newPath : boolean = false;
 
     constructor(target : Arc, duration? : string){
         this.target = target;
@@ -31,6 +32,10 @@ export default class ArcPath implements Path{
 
     getDrawTarget() : Arc{
         return this.drawTarget;
+    }
+
+    getStartPoint() : Point{
+        return this.target.getStartPoint();
     }
 
     getLastPoint() : Point{
