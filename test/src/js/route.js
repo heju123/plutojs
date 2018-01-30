@@ -16,4 +16,5 @@ commonUtil.copyObject(require("./button/route").default, output.routes, false);
 commonUtil.copyObject(require("./checkbox/route").default, output.routes, false);
 commonUtil.copyObject(require("./main/route").default, output.routes, false);
 commonUtil.copyObject(require("./nestRoute/route").default, output.routes, false);
+commonUtil.copyObject(require("./scrollbar/route").default, output.routes, false);
 export default output;

@@ -123,6 +123,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("滚动条与布局", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["scrollbar"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }

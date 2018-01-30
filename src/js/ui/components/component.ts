@@ -729,7 +729,7 @@ abstract class Component {
         return allWeight;
     }
     protected doLayout(){
-        if (this.style.layout && this.style.layout.type && this.children.length > 0)
+        if (this.style.layout && this.style.layout.type)
         {
             switch(this.style.layout.type)
             {
@@ -740,9 +740,11 @@ abstract class Component {
                     {
                         allWeight = this.getAllWeight();//总权值
                     }
-                    let allWH = 0;//记录高宽，确定x和y坐标
-                    let hY = 0;//horizontal模式下的y坐标
-                    let maxHeight = 0;//记录子组件最大高度值，自动换行时有用
+                    let allWH : number = 0;//记录高宽，确定x和y坐标
+                    let hY : number = 0;//horizontal模式下的y坐标
+                    let maxHeight : number = 0;//记录子组件最大高度值，自动换行时有用
+                    let maxChildrenHeight : number = 0;//记录子组件最大高度，horizontal自动换行时用
+                    let maxChildrenWidth : number = 0;//记录子组件最大宽度，vertical时记录最大宽度
                     this.children.forEach((child, index)=>{
                         let weight = 1;
                         if (child.style.layout && child.style.layout.layoutWeight)
@@ -769,6 +771,7 @@ abstract class Component {
                                 {
                                     allWH = 0;
                                     hY += maxHeight;
+                                    maxChildrenHeight += maxHeight;
                                     maxHeight = 0;
                                 }
                             }
@@ -794,16 +797,21 @@ abstract class Component {
                             child.setX(child.getX() || 0);
                             child.setHeight(height);
                             allWH += height;
+                            maxChildrenWidth = Math.max(maxChildrenWidth, child.getWidth());
                         }
                     });
+                    maxChildrenHeight += maxHeight;
 
                     //自适应高宽
-                    let centerOffset = 0;//内容居中时子组件偏移量
                     if (!this.style.layout.orientation || this.style.layout.orientation === "horizontal")
                     {
                         if (this.style.autoWidth)//自适应宽度内容居中无意义
                         {
                             this.setWidth(allWH);
+                        }
+                        if (this.style.autoHeight)
+                        {
+                            this.setHeight(maxChildrenHeight);
                         }
                         if (!this.style.autoHeight && this.style.layout.contentAlign === "center")//内容居中
                         {
@@ -817,6 +825,10 @@ abstract class Component {
                         if (this.style.autoHeight)
                         {
                             this.setHeight(allWH);
+                        }
+                        if (this.style.autoWidth)
+                        {
+                            this.setWidth(maxChildrenWidth);
                         }
                         if (!this.style.autoWidth && this.style.layout.contentAlign === "center")//内容居中
                         {
@@ -1311,6 +1323,16 @@ abstract class Component {
         return this.children;
     }
 
+    /** 删除指定位置的子组件 */
+    removeChildren(index : number){
+        if (this.children[index])
+        {
+            this.children[index].destroy();
+            this.children.splice(index, 1);
+            this.doLayout();
+        }
+    }
+
     removeAllChildren(name : string){
         if (!name)
         {
@@ -1318,6 +1340,7 @@ abstract class Component {
                 child.destroy();
             });
             this.children.length = 0;
+            this.doLayout();
         }
         else
         {
@@ -1325,6 +1348,7 @@ abstract class Component {
                 if (child.name === name)
                 {
                     child.destroy();
+                    this.doLayout();
                     return false;
                 }
                 return true;
