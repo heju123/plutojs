@@ -338,6 +338,13 @@ export default class Scrollbar extends Rect {
         this.scrollbarOpeLineH.setStyle({
             x : 0
         });
+        this.setScrollX();
+        this.setScrollY();
+    }
+
+    protected doLayout(){
+        this.restoreScroll();
+        super.doLayout();
     }
 
     destroy() {
