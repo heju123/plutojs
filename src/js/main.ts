@@ -12,6 +12,7 @@ import animationUtil from "./util/animationUtil";
 
 import Component from "./ui/components/component";
 import Sprite from "./ui/components/game/sprite";
+import Router from "./ui/components/router";
 import Button from "./ui/components/button";
 import Checkbox from "./ui/components/checkbox";
 import Input from "./ui/components/input";
@@ -66,5 +67,5 @@ class Main {
         this.setMainView(viewCfg);
     }
 }
-export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Button,Checkbox,Input,Rect,Scrollbar,
+export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
     ArcPath,PointPath,Path,Arc,Point,SequenceDraw};

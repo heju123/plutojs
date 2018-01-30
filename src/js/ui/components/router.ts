@@ -134,12 +134,12 @@ export default class Router extends Rect{
     }
 
     destroyRoute(name : string){
-        this.currentChildren.destroy();
         let cindex = -1;
         this.children.forEach((child, index)=>{
             if (child.name === name)
             {
                 cindex = index;
+                child.destroy();
             }
         });
         if (cindex > -1)

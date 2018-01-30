@@ -32,12 +32,12 @@ export default class MainController extends Controller{
             let centerPoint : Point = new Point(250, 450);
             let arc : Arc = new Arc(centerPoint, 50, 0, -0.5 * Math.PI);
             let arcPath : Path = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = true;
+            (<ArcPath>arcPath).anticlockwise = true;
             this.sequenceDraw.pushPath(arcPath);
 
-            let point : Point = new Point(100, 450);
-            let path : Path = new PointPath(point, "1s");
-            this.sequenceDraw.pushPath(path);
+            let point2 : Point = new Point(100, 450);
+            let path2 : Path = new PointPath(point2, "1s");
+            this.sequenceDraw.pushPath(path2);
             this.sequenceDraw.finish();
         });
     }

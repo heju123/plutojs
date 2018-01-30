@@ -23,7 +23,7 @@ export default class DrawController extends Controller{
             this.arcTestDraw.setStartPoint(point1);
             let arc : Arc = new Arc(centerPoint, 100, startAngle, endAngle);
             let arcPath : Path = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = true;
+            (<ArcPath>arcPath).anticlockwise = true;
             this.arcTestDraw.pushPath(arcPath);
 
             //连线2
@@ -38,7 +38,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 80, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = false;
+            (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -54,7 +54,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 160, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = false;
+            (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -70,7 +70,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 100, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = true;
+            (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -86,7 +86,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 100, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = false;
+            (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -100,7 +100,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 150, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = true;
+            (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -116,7 +116,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 103, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = true;
+            (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 
@@ -130,7 +130,7 @@ export default class DrawController extends Controller{
 
             arc = new Arc(centerPoint, 123, startAngle, endAngle);
             arcPath = new ArcPath(arc, "1s");
-            arcPath.anticlockwise = false;
+            (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
             this.arcTestDraw.pushPath(arcPath);
 

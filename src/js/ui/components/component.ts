@@ -1427,7 +1427,7 @@ abstract class Component {
             this.controller.destroy();
         }
 
-        (<Array<Component>>this.getChildren()).forEach((child)=>{
+        (<Array<Component>>this.children).forEach((child)=>{
             child.destroy();
         });
     }

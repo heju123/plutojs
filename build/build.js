@@ -8,6 +8,7 @@ import {
     animationUtil,
     Component,
     Sprite,
+    Router,
     Button,
     Checkbox,
     Input,
@@ -34,6 +35,7 @@ window.plutojs = {
     components : {
         Component : Component,
         Sprite : Sprite,
+        Router : Router,
         Button : Button,
         Checkbox : Checkbox,
         Input : Input,
