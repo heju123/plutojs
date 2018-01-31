@@ -19,10 +19,10 @@ import Input from "./ui/components/input";
 import Rect from "./ui/components/rect";
 import Scrollbar from "./ui/components/scrollbar";
 
-import CurvePath from "./ui/draw/path/curvePath";
+import ArcPath from "./ui/draw/path/arcPath";
 import PointPath from "./ui/draw/path/pointPath";
 import Path from "./ui/draw/path/path";
-import Curve from "./ui/draw/curve";
+import Arc from "./ui/draw/arc";
 import Point from "./ui/draw/point";
 import SequenceDraw from "./ui/draw/sequenceDraw";
 
@@ -68,4 +68,4 @@ class Main {
     }
 }
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
-    CurvePath,PointPath,Path,Curve,Point,SequenceDraw};
+    ArcPath,PointPath,Path,Arc,Point,SequenceDraw};

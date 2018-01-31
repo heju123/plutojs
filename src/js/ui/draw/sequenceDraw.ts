@@ -1,7 +1,7 @@
 import Component from "../components/component";
 import Point from "./point";
 import PointPath from "./path/pointPath";
-import CurvePath from "./path/curvePath";
+import ArcPath from "./path/arcPath";
 import Path from "./path/path";
 import animationUtil from "../../util/animationUtil";
 
@@ -68,7 +68,7 @@ export default class SequenceDraw{
                     this.doDrawAni(index);
                 });
             }
-            else if (path instanceof CurvePath)
+            else if (path instanceof ArcPath)
             {
                 let to = {
                     endAngle : path.target.endAngle
@@ -107,7 +107,7 @@ export default class SequenceDraw{
                 {
                     ctx.lineTo(path.getDrawTarget().x + this.parent.getRealX(), path.getDrawTarget().y + this.parent.getRealY());
                 }
-                else if (path instanceof CurvePath)
+                else if (path instanceof ArcPath)
                 {
                     ctx.arc(path.getDrawTarget().centerPoint.x + this.parent.getRealX(),
                         path.getDrawTarget().centerPoint.y + this.parent.getRealY(),

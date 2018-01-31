@@ -1,7 +1,7 @@
 /**
  * Created by heju on 2017/7/14.
  */
-import {Controller,Component,Thread,SequenceDraw,Point,PointPath,Curve,CurvePath,Path} from "~/js/main";
+import {Controller,Component,Thread,SequenceDraw,Point,PointPath,Arc,ArcPath,Path} from "~/js/main";
 
 export default class MainController extends Controller{
     private sequenceDraw : SequenceDraw = new SequenceDraw(this.component);
@@ -30,9 +30,9 @@ export default class MainController extends Controller{
             this.sequenceDraw.pushPath(path);
 
             let centerPoint : Point = new Point(250, 450);
-            let arc : Curve = new Curve(centerPoint, 50, 0, -0.5 * Math.PI);
-            let arcPath : Path = new CurvePath(arc, "1s");
-            (<CurvePath>arcPath).anticlockwise = true;
+            let arc : Arc = new Arc(centerPoint, 50, 0, -0.5 * Math.PI);
+            let arcPath : Path = new ArcPath(arc, "1s");
+            (<ArcPath>arcPath).anticlockwise = true;
             this.sequenceDraw.pushPath(arcPath);
 
             let point2 : Point = new Point(100, 450);

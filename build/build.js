@@ -14,10 +14,10 @@ import {
     Input,
     Rect,
     Scrollbar,
-    CurvePath,
+    ArcPath,
     PointPath,
     Path,
-    Curve,
+    Arc,
     Point,
     SequenceDraw
 } from "~/js/main";
@@ -43,10 +43,10 @@ window.plutojs = {
         Scrollbar : Scrollbar
     },
     draw : {
-        CurvePath : CurvePath,
+        ArcPath : ArcPath,
         PointPath : PointPath,
         Path : Path,
-        Arc : Curve,
+        Arc : Arc,
         Point : Point,
         SequenceDraw : SequenceDraw
     }

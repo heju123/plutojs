@@ -1,14 +1,14 @@
 import Point from "../point";
-import Curve from "../curve";
+import Arc from "../arc";
 
 interface Path{
-    target : Point | Curve;
+    target : Point | Arc;
     duration : number;//执行时间，单位：秒
     show : boolean;//是否显示
     newPath : boolean;//是否是一个新的路径（不和上一个路径连续），默认false
 
-    setDrawTarget(prevTarget : Point | Curve);
-    getDrawTarget() : Point | Curve;
+    setDrawTarget(prevTarget : Point | Arc);
+    getDrawTarget() : Point | Arc;
 
     /** 获取开始绘制的点 */
     getStartPoint() : Point;
