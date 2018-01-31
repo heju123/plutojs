@@ -14,21 +14,21 @@ export default class QuadraticCurveController extends Controller{
             this.ctrlPoint = new Point(this.component.getRealX() + 200, this.component.getRealY() + 200);
             this.endPoint = new Point(this.component.getRealX() + 400, this.component.getRealY() + 150);
         });
+    }
 
-        this.component.registerEvent("mousedown", (e)=>{
-            this.dragPoint = new Point(e.pageX, e.pageY);
-        });
-        this.component.registerEvent("mousemove", (e)=>{
-            if (this.dragPoint)
-            {
-                this.dragPoint.x = e.pageX;
-                this.dragPoint.y = e.pageY;
-                this.ctrlPoint = this.dragPoint;
-            }
-        });
-        this.component.registerEvent("mouseup", (e)=>{
-            this.dragPoint = undefined;
-        });
+    onMousedown(e){
+        this.dragPoint = new Point(e.pageX, e.pageY);
+    }
+    onMousemove(e){
+        if (this.dragPoint)
+        {
+            this.dragPoint.x = e.pageX;
+            this.dragPoint.y = e.pageY;
+            this.ctrlPoint = this.dragPoint;
+        }
+    }
+    onMouseup(e){
+        this.dragPoint = undefined;
     }
 
     draw(ctx : CanvasRenderingContext2D) {

@@ -181,6 +181,11 @@ export default {
                                 borderWidth : 1,
                                 borderColor : "#a0a0a0"
                             },
+                            events : {
+                                "mousedown" : "onMousedown",
+                                "mousemove" : "onMousemove",
+                                "mouseup" : "onMouseup"
+                            }
                         }
                     ]
                 }
