@@ -307,10 +307,10 @@ window.plutojs.components.Scrollbar
 window.plutojs.components.Sprite
 window.plutojs.components.Router   
 ### 对外提供绘制封装
-window.plutojs.draw.ArcPath
+window.plutojs.draw.CurvePath
 window.plutojs.draw.PointPath
 window.plutojs.draw.Path
-window.plutojs.draw.Arc
+window.plutojs.draw.Curve
 window.plutojs.draw.Point
 window.plutojs.draw.SequenceDraw   
 ### 对外提供的通用插件
