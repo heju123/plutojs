@@ -1,6 +1,6 @@
 import Point from "./point";
 
-export default class Arc{
+export default class Curve{
     centerPoint : Point;//圆中心坐标
     radius : number;
     startAngle : number;//起始角度
