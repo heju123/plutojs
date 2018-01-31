@@ -1329,7 +1329,7 @@ abstract class Component {
         {
             this.children[index].destroy();
             this.children.splice(index, 1);
-            this.doLayout();
+            this.propagationDoLayout(this);
         }
     }
 
@@ -1340,7 +1340,7 @@ abstract class Component {
                 child.destroy();
             });
             this.children.length = 0;
-            this.doLayout();
+            this.propagationDoLayout(this);
         }
         else
         {
@@ -1348,7 +1348,7 @@ abstract class Component {
                 if (child.name === name)
                 {
                     child.destroy();
-                    this.doLayout();
+                    this.propagationDoLayout(this);
                     return false;
                 }
                 return true;
