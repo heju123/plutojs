@@ -4,7 +4,8 @@ export default class QuadraticCurveController extends Controller{
     private ctrlPoint : Point;
     private startPoint : Point;
     private endPoint : Point;
-    private dragPoint : Point;
+    private dragging : boolean = false;
+    private quadraticCurve : QuadraticCurve;
 
     constructor(component : Component) {
         super(component);
@@ -13,30 +14,30 @@ export default class QuadraticCurveController extends Controller{
             this.startPoint = new Point(this.component.getRealX() + 0, this.component.getRealY() + 150);
             this.ctrlPoint = new Point(this.component.getRealX() + 200, this.component.getRealY() + 200);
             this.endPoint = new Point(this.component.getRealX() + 400, this.component.getRealY() + 150);
+
+            this.quadraticCurve = new QuadraticCurve(this.ctrlPoint, this.endPoint);
         });
     }
 
     onMousedown(e){
-        this.dragPoint = new Point(e.pageX, e.pageY);
+        this.dragging = true;
     }
     onMousemove(e){
-        if (this.dragPoint)
+        if (this.dragging)
         {
-            this.dragPoint.x = e.pageX;
-            this.dragPoint.y = e.pageY;
-            this.ctrlPoint = this.dragPoint;
+            this.ctrlPoint.x = e.pageX;
+            this.ctrlPoint.y = e.pageY;
         }
     }
     onMouseup(e){
-        this.dragPoint = undefined;
+        this.dragging = false;
     }
 
     draw(ctx : CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.moveTo(this.startPoint.x, this.startPoint.y);
-        let quadraticCurve : QuadraticCurve = new QuadraticCurve(this.ctrlPoint, this.endPoint);
-        quadraticCurve.draw(ctx);
+        this.quadraticCurve.draw(ctx);
         ctx.closePath();
     }
 }
