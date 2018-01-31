@@ -20,12 +20,11 @@ export default class PointPath implements Path{
         }
     }
 
-    /** 设置绘制对象，从上个路径结束点开始 */
-    setDrawTarget(prevPoint : Point){
-        this.startPoint = prevPoint;
+    setStartPoint(startPoint : Point){
+        this.startPoint = startPoint;
         if (this.duration)//如果不设置duration，则不需要缓动
         {
-            this.drawTarget = new Point(prevPoint.x, prevPoint.y);
+            this.drawTarget = new Point(startPoint.x, startPoint.y);
         }
     }
 

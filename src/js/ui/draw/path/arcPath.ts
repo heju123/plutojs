@@ -21,8 +21,7 @@ export default class ArcPath implements Path{
         }
     }
 
-    /** 设置绘制对象，从上个路径结束点开始 */
-    setDrawTarget(prevPoint : Point){
+    setStartPoint(startPoint : Point){
         if (this.duration)//如果不设置duration，则不需要缓动
         {
             this.drawTarget = new Arc(this.target.centerPoint, this.target.radius,

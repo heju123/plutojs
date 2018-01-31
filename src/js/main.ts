@@ -25,6 +25,8 @@ import Path from "./ui/draw/path/path";
 import Arc from "./ui/draw/arc";
 import Point from "./ui/draw/point";
 import SequenceDraw from "./ui/draw/sequenceDraw";
+import QuadraticCurve from "./ui/draw/quadraticCurve";
+import BezierCurve from "./ui/draw/bezierCurve";
 
 class Main {
     fps : Fps;
@@ -68,4 +70,4 @@ class Main {
     }
 }
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
-    ArcPath,PointPath,Path,Arc,Point,SequenceDraw};
+    ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve};

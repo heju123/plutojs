@@ -19,7 +19,9 @@ import {
     Path,
     Arc,
     Point,
-    SequenceDraw
+    SequenceDraw,
+    QuadraticCurve,
+    BezierCurve
 } from "~/js/main";
 
 window.plutojs = {
@@ -48,6 +50,8 @@ window.plutojs = {
         Path : Path,
         Arc : Arc,
         Point : Point,
-        SequenceDraw : SequenceDraw
+        SequenceDraw : SequenceDraw,
+        QuadraticCurve : QuadraticCurve,
+        BezierCurve : BezierCurve
     }
 };

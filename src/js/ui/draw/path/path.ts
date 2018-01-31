@@ -7,7 +7,14 @@ interface Path{
     show : boolean;//是否显示
     newPath : boolean;//是否是一个新的路径（不和上一个路径连续），默认false
 
-    setDrawTarget(prevTarget : Point | Arc);
+    /**
+     * 设置绘制对象，从上个路径结束点开始
+     *
+     * @param 开始绘制的点，可以是上个路径的结束点
+     */
+    setStartPoint(prevTarget : Point | Arc);
+
+    /** 获取绘制对象 */
     getDrawTarget() : Point | Arc;
 
     /** 获取开始绘制的点 */

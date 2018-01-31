@@ -2,6 +2,7 @@ import commonStyle from "@/js/common//view/style/commonStyle";
 import {commonUtil} from "~/js/main";
 import DrawController from "../controller/drawController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
+import QuadraticCurveController from "../controller/quadraticCurveController";
 
 const PADDING_LEFT = 20;
 const FORM_ROW_HEIGHT = 60;
@@ -167,6 +168,19 @@ export default {
                                 height : 20,
                                 backgroundColor : "#4bffee"
                             }
+                        },
+                        {
+                            name : "quadraticCurve",
+                            type : "rect",
+                            controller : QuadraticCurveController,
+                            style : {
+                                x : 650,
+                                y : 10,
+                                width : 400,
+                                height : 300,
+                                borderWidth : 1,
+                                borderColor : "#a0a0a0"
+                            },
                         }
                     ]
                 }
