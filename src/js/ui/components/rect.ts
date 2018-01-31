@@ -200,24 +200,43 @@ export default class Rect extends Component{
      * @return -1：无parent；0：不在范围内；1：在范围内
      */
     protected inParentArea(com : Component) : number{
-        return 1;
-        // if (!com.parent)
-        // {
-        //     return -1;
-        // }
-        // else{
-        //     if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= com.getRealX()
-        //         || this.getRealXRecursion(com.parent) >= this.getRealXRecursion(com) + com.getWidth()
-        //         || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= com.getRealY()
-        //         || this.getRealYRecursion(com.parent) >= this.getRealYRecursion(com) + com.getHeight())//不在parent范围内
-        //     {
-        //         return 0;
-        //     }
-        //     else
-        //     {
-        //         return 1;
-        //     }
-        // }
+        if (!com.parent)
+        {
+            return -1;
+        }
+        else{
+            let comX = com.getRealX();
+            let comY = com.getRealY();
+            let comWidth = com.getWidth();
+            let comHeight = com.getHeight();
+            //设置比例
+            if (com.style.scale !== undefined && com.style.scale !== "1,1")
+            {
+                let scaleArr = com.style.scale.split(",");
+                let newWidth = comWidth * parseFloat(scaleArr[0]);
+                let newHeight = comHeight * parseFloat(scaleArr[1]);
+                comX = comX - (newWidth - comWidth) / 2;
+                comY = comY - (newHeight - comHeight) / 2;
+                comWidth = newWidth;
+                comHeight = newHeight;
+            }
+            if (comX + comWidth < 0 || comX > this.viewState.canvas.width
+                || comY + comHeight < 0 || comY > this.viewState.canvas.height)//不在屏幕范围内
+            {
+                return 0;
+            }
+            if (this.getRealXRecursion(com.parent) + com.parent.getInnerWidth() <= comX
+                || this.getRealXRecursion(com.parent) >= comX + comWidth
+                || this.getRealYRecursion(com.parent) + com.parent.getInnerHeight() <= comY
+                || this.getRealYRecursion(com.parent) >= comY + comHeight)//不在parent范围内
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 
     /**

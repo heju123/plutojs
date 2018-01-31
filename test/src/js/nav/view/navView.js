@@ -136,6 +136,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("遮挡测试", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["cliptest"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }

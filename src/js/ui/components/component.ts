@@ -1333,7 +1333,7 @@ abstract class Component {
         }
     }
 
-    removeAllChildren(name : string){
+    removeAllChildren(name? : string){
         if (!name)
         {
             this.children.forEach((child)=>{
