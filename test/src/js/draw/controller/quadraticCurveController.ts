@@ -12,6 +12,7 @@ export default class QuadraticCurveController extends Controller{
     private ySpeed : number = 0;
     private xAcceleration : number = 0;
     private yAcceleration : number = 0;
+    private yFriction : number = 0.1;//y轴摩擦力
     private lastTime : number;
 
     constructor(component : Component) {
@@ -60,6 +61,18 @@ export default class QuadraticCurveController extends Controller{
                     if (this.yAcceleration !== 0)
                     {
                         this.ySpeed = this.ySpeed + this.yAcceleration;
+                    }
+
+                    //摩擦力
+                    if (this.ySpeed > 0)
+                    {
+                        this.ySpeed -= this.yFriction;
+                        this.ySpeed = Math.max(this.ySpeed, 0);
+                    }
+                    else if (this.ySpeed < 0)
+                    {
+                        this.ySpeed += this.yFriction;
+                        this.ySpeed = Math.min(this.ySpeed, 0);
                     }
 
                     if (this.xSpeed !== 0)

@@ -1,8 +1,8 @@
-import Map from "../ui/components/game/map";
-import MPromise from "../util/promise";
-import Component from "../ui/components/Component";
-import Thread from "../util/thread";
-import CollisionDetector from "../collision/collisionDetector";
+import Map from "../../ui/components/game/map";
+import MPromise from "../../util/promise";
+import Component from "../../ui/components/Component";
+import Thread from "../../util/thread";
+import CollisionDetector from "./collisionDetector";
 
 /**
  * 盒子模型碰撞检测

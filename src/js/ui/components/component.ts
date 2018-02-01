@@ -6,6 +6,8 @@ import commonUtil from "../../util/commonUtil";
 import animationUtil from "../../util/animationUtil";
 import EventNotify from "../../event/eventNotify";
 import ViewState from "../viewState";
+import PhysicsQueue from "../../effect/physics/physicsQueue";
+import Physics from "../../effect/physics/physics";
 
 abstract class Component {
     id : string;
@@ -32,6 +34,7 @@ abstract class Component {
     isFocus : boolean;
     isActive : boolean;
     isDoingParentClip : boolean;
+    private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
 
     constructor(parent? : Component) {
         this.parent = parent;
@@ -439,7 +442,18 @@ abstract class Component {
             });
             this.eventNotifys.length = 0;
         }
+
+        //物理影响
+        if (this.physicsQueue.getLength() > 0)
+        {
+            this.physicsQueue.effect();
+        }
         return true;
+    }
+
+    /** 添加物理现象 */
+    addPhysics(physics : Physics){
+        this.physicsQueue.add(physics);
     }
 
     protected abstract inParentArea(com : Component) : number;

@@ -1,8 +1,8 @@
 import Rect from "../rect";
 import Thread from "../../../util/thread";
 import MPromise from "../../../util/promise";
-import BoxCollisionDetector from "../../../collision/boxCollisionDetector";
-import CollisionDetector from "../../../collision/collisionDetector";
+import BoxCollisionDetector from "../../../effect/collision/boxCollisionDetector";
+import CollisionDetector from "../../../effect/collision/collisionDetector";
 import Component from "../component";
 
 export default class Sprite extends Rect {
