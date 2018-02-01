@@ -61,9 +61,9 @@ export default class PhysicsQueue{
         return this.queue.length;
     }
 
-    destory(){
+    destroy(){
         this.queue.forEach((physics)=>{
-            physics.destory();
+            physics.destroy();
         });
     }
 }

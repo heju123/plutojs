@@ -45,7 +45,7 @@ export default class Speed extends BasePhysics implements Physics{
         });
     }
 
-    destory(){
-        super.destory();
+    destroy(){
+        super.destroy();
     }
 }

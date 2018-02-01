@@ -82,4 +82,8 @@ export default class QuadraticCurveController extends Controller{
         this.quadraticCurve.draw(ctx);
         ctx.closePath();
     }
+
+    destroy(){
+        this.physicsQueue.destroy();
+    }
 }

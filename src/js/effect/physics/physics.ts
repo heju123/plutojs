@@ -8,6 +8,6 @@ interface Physics{
 
     pushBeforeQueue(physics : Physics);
 
-    destory();
+    destroy();
 }
 export default Physics;

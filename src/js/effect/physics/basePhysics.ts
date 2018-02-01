@@ -26,11 +26,11 @@ export default class BasePhysics{
         this.beforeQueue.push(physics);
     }
 
-    destory(){
+    destroy(){
         if (this.beforeQueue.length > 0)
         {
             this.beforeQueue.forEach((physics)=>{
-                physics.destory();
+                physics.destroy();
             });
         }
     }

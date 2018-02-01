@@ -1464,7 +1464,7 @@ abstract class Component {
 
         if (this.physicsQueue.getLength() > 0)
         {
-            this.physicsQueue.destory();
+            this.physicsQueue.destroy();
         }
 
         if (this.controller && this.controller.destroy

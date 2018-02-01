@@ -25,7 +25,7 @@ export default class Acceleration extends BasePhysics implements Physics{
         });
     }
 
-    destory() {
-        super.destory();
+    destroy() {
+        super.destroy();
     }
 }

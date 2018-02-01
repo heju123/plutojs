@@ -48,7 +48,7 @@ export default class Friction extends BasePhysics implements Physics{
         });
     }
 
-    destory(){
-        super.destory();
+    destroy(){
+        super.destroy();
     }
 }

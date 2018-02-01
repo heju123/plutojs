@@ -60,8 +60,8 @@ export default class Collision extends BasePhysics implements Physics{
         });
     }
 
-    destory(){
-        super.destory();
+    destroy(){
+        super.destroy();
         this.detectCollisionThread.terminate();
     }
 }
