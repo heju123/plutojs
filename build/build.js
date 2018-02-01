@@ -21,7 +21,13 @@ import {
     Point,
     SequenceDraw,
     QuadraticCurve,
-    BezierCurve
+    BezierCurve,
+    Acceleration,
+    Collision,
+    Friction,
+    Physics,
+    PhysicsQueue,
+    Speed
 } from "~/js/main";
 
 window.plutojs = {
@@ -53,5 +59,13 @@ window.plutojs = {
         SequenceDraw : SequenceDraw,
         QuadraticCurve : QuadraticCurve,
         BezierCurve : BezierCurve
+    },
+    physics : {
+        Acceleration : Acceleration,
+        Collision : Collision,
+        Friction : Friction,
+        Physics : Physics,
+        PhysicsQueue : PhysicsQueue,
+        Speed : Speed
     }
 };

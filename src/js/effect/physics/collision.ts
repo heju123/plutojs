@@ -5,7 +5,7 @@ import BoxCollisionDetector from "../collision/boxCollisionDetector";
 import CollisionDetector from "../collision/collisionDetector";
 import CollisionReject from "./effectReject/collisionReject";
 
-/** 加速度 */
+/** 碰撞 */
 export default class Collision extends BasePhysics implements Physics{
     private collisionDetector : CollisionDetector;
     private detectCollisionThread : Thread;

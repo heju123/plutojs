@@ -1,4 +1,4 @@
-import {Controller,Component,Point,QuadraticCurve} from "~/js/main";
+import {Controller,Component,Point,QuadraticCurve,PhysicsQueue,Friction,Acceleration,Physics} from "~/js/main";
 
 export default class QuadraticCurveController extends Controller{
     private ctrlPoint : Point;
@@ -6,13 +6,14 @@ export default class QuadraticCurveController extends Controller{
     private endPoint : Point;
     private dragging : boolean = false;
     private quadraticCurve : QuadraticCurve;
+    private lock : boolean = false;
 
     private centerPoint : Point;
     private xSpeed : number = 0;
     private ySpeed : number = 0;
     private xAcceleration : number = 0;
     private yAcceleration : number = 0;
-    private yFriction : number = 0.1;//y轴摩擦力
+    private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
     private lastTime : number;
 
     constructor(component : Component) {
@@ -26,6 +27,11 @@ export default class QuadraticCurveController extends Controller{
             this.quadraticCurve = new QuadraticCurve(this.ctrlPoint, this.endPoint);
             this.centerPoint = new Point(this.component.getRealX() + 200, this.component.getRealY() + 150);
         });
+
+        let acceleration : Physics = new Acceleration(this);
+        let friction : Physics = new Friction(this, "y", 0.1);
+        this.physicsQueue.add(acceleration);
+        this.physicsQueue.add(friction);
     }
 
     onMousedown(e){
@@ -50,39 +56,21 @@ export default class QuadraticCurveController extends Controller{
         else {
             if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
             {
-                if (this.dragging === false)
+                if (this.dragging === false && !this.lock)
                 {
+                    this.lock = true;
                     this.yAcceleration = (this.centerPoint.y - this.ctrlPoint.y) * 0.1;
-
-                    if (this.xAcceleration !== 0)
-                    {
-                        this.xSpeed = this.xSpeed + this.xAcceleration;
-                    }
-                    if (this.yAcceleration !== 0)
-                    {
-                        this.ySpeed = this.ySpeed + this.yAcceleration;
-                    }
-
-                    //摩擦力
-                    if (this.ySpeed > 0)
-                    {
-                        this.ySpeed -= this.yFriction;
-                        this.ySpeed = Math.max(this.ySpeed, 0);
-                    }
-                    else if (this.ySpeed < 0)
-                    {
-                        this.ySpeed += this.yFriction;
-                        this.ySpeed = Math.min(this.ySpeed, 0);
-                    }
-
-                    if (this.xSpeed !== 0)
-                    {
-                        this.ctrlPoint.x = this.ctrlPoint.x + this.xSpeed;
-                    }
-                    if (this.ySpeed !== 0)
-                    {
-                        this.ctrlPoint.y = this.ctrlPoint.y + this.ySpeed;
-                    }
+                    this.physicsQueue.doEffect().then(()=>{
+                        if (this.xSpeed !== 0)
+                        {
+                            this.ctrlPoint.x = this.ctrlPoint.x + this.xSpeed;
+                        }
+                        if (this.ySpeed !== 0)
+                        {
+                            this.ctrlPoint.y = this.ctrlPoint.y + this.ySpeed;
+                        }
+                        this.lock = false;
+                    });
                 }
                 this.lastTime = currentTime;
             }

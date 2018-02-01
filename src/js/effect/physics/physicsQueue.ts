@@ -1,15 +1,14 @@
-import Component from "../../ui/components/component";
 import Physics from "./physics";
 
 /** 物理效果队列 */
 export default class PhysicsQueue{
-    private component : Component;//当前组件
+    private self : any;//当前对象
     private queue : Array<Physics> = [];
     private lastTime : number;
     private executeLock : boolean = false;
 
-    constructor(component){
-        this.component = component;
+    constructor(self : any){
+        this.self = self;
     }
 
     effect(){
@@ -28,11 +27,7 @@ export default class PhysicsQueue{
             {
                 this.executeLock = true;
 
-                let allPromise : Array<Promise<any>> = [];
-                this.queue.forEach((physics)=>{
-                    allPromise.push(physics.effect());
-                });
-                Promise.all(allPromise).then(()=>{
+                this.doEffect().then(()=>{
                     this.executeLock = false;
                 }, ()=>{
                     this.executeLock = false;
@@ -41,6 +36,21 @@ export default class PhysicsQueue{
                 this.lastTime = currentTime;
             }
         }
+    }
+
+    /** 无间隔立即执行 */
+    doEffect() : Promise<any>{
+        return new Promise((resolve, reject)=>{
+            let allPromise : Array<Promise<any>> = [];
+            this.queue.forEach((physics)=>{
+                allPromise.push(physics.effect());
+            });
+            Promise.all(allPromise).then(()=>{
+                resolve();
+            }, ()=>{
+                reject();
+            });
+        });
     }
 
     add(physics : Physics){

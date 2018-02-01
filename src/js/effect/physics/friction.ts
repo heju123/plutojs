@@ -6,7 +6,7 @@ export default class Friction extends BasePhysics implements Physics{
     private friction : number;//摩擦力数值
     private direction : string;//方向，x：x方向；y：y方向；xy：同时
 
-    constructor(target : any, direction, friction){
+    constructor(target : any, direction : string, friction : number){
         super(target);
         this.direction = direction;
         this.friction = friction;

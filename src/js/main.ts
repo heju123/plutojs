@@ -28,6 +28,13 @@ import SequenceDraw from "./ui/draw/sequenceDraw";
 import QuadraticCurve from "./ui/draw/quadraticCurve";
 import BezierCurve from "./ui/draw/bezierCurve";
 
+import Acceleration from "./effect/physics/acceleration";
+import Collision from "./effect/physics/collision";
+import Friction from "./effect/physics/friction";
+import Physics from "./effect/physics/physics";
+import PhysicsQueue from "./effect/physics/physicsQueue";
+import Speed from "./effect/physics/speed";
+
 class Main {
     fps : Fps;
 
@@ -70,4 +77,5 @@ class Main {
     }
 }
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
-    ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve};
+    ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve,
+    Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed};
