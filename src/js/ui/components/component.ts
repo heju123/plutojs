@@ -417,10 +417,13 @@ abstract class Component {
 
     draw(ctx : CanvasRenderingContext2D) : boolean{
         //不在parent范围内，则不需要绘制
-        let parentArea = this.inParentArea(this);
-        if (parentArea === 0)
+        if (!this.style.alwaysDraw)
         {
-            return false;
+            let parentArea = this.inParentArea(this);
+            if (parentArea === 0)
+            {
+                return false;
+            }
         }
 
         //判断鼠标是否在组件范围内
@@ -1458,6 +1461,11 @@ abstract class Component {
         this.removeAllEvent();
 
         this.removeBackgroundImagesIntervalObj();
+
+        if (this.physicsQueue.getLength() > 0)
+        {
+            this.physicsQueue.destory();
+        }
 
         if (this.controller && this.controller.destroy
             && typeof(this.controller.destroy) === "function")

@@ -1,6 +1,6 @@
 import Physics from "./physics";
 import BasePhysics from "./basePhysics";
-import Thread from "../../../util/thread";
+import Thread from "../../util/thread";
 import BoxCollisionDetector from "../collision/boxCollisionDetector";
 import CollisionDetector from "../collision/collisionDetector";
 import CollisionReject from "./effectReject/collisionReject";
@@ -11,8 +11,8 @@ export default class Collision extends BasePhysics implements Physics{
     private detectCollisionThread : Thread;
     private direction : string;//方向，x：检测x方向的碰撞；y：检测y方向的碰撞；xy：同时检测
 
-    constructor(direction){
-        super();
+    constructor(target : any, direction? : string){
+        super(target);
 
         this.direction = direction;
 
@@ -23,29 +23,45 @@ export default class Collision extends BasePhysics implements Physics{
     effect() : Promise<any> {
         return new Promise((resolve, reject)=>{
             super.effect().then(()=>{
-                let x = this.target.getX();
-                let y = this.target.getY();
-                if (this.direction.indexOf("x") > -1)
+                if (this.target.xSpeed !== 0 || this.target.ySpeed !== 0)
                 {
-                    x += this.target.xSpeed;
-                }
-                else if (this.direction.indexOf("y") > -1)
-                {
-                    y += this.target.ySpeed;
-                }
-                this.collisionDetector.detectCollision(this.target, x, y, this.detectCollisionThread, true).then(()=>{
-                    resolve();
-                }, (data)=>{
-                    reject(new CollisionReject("collision", data));
-                    if (this.onCollision && typeof(this.onCollision) === "function")
+                    let x = this.target.getX();
+                    let y = this.target.getY();
+                    if (this.direction && this.direction.indexOf("x") > -1)
                     {
-                        this.onCollision.apply(this, [data]);
+                        x += this.target.xSpeed;
                     }
-                }).finally(()=>{
-                });
+                    else if (this.direction && this.direction.indexOf("y") > -1)
+                    {
+                        y += this.target.ySpeed;
+                    }
+                    this.collisionDetector.detectCollision(this.target, this.target.getX(), this.target.getY(), this.detectCollisionThread, true).then(()=>{
+                    }, ()=>{
+                    }).finally(()=>{
+                        this.collisionDetector.detectCollision(this.target, x, y, this.detectCollisionThread, false).then(()=>{
+                            resolve();
+                        }, (data)=>{
+                            reject(new CollisionReject(data, this.direction));
+                            if ((<any>this).onCollision && typeof((<any>this).onCollision) === "function")
+                            {
+                                (<any>this).onCollision.apply(this, [data]);
+                            }
+                        }).finally(()=>{
+                        });
+                    });
+                }
+                else
+                {
+                    resolve();
+                }
             },(data)=>{
                 reject(data);
             });
         });
+    }
+
+    destory(){
+        super.destory();
+        this.detectCollisionThread.terminate();
     }
 }

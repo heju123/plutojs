@@ -2,16 +2,17 @@ import Physics from "./physics";
 
 export default class BasePhysics{
     target : any;
-    afterQueue : Array<Physics> = [];
+    beforeQueue : Array<Physics> = [];
 
-    constructor(){
+    constructor(target : any){
+        this.target = target;
     }
 
     effect() : Promise<any> {
-        if (this.afterQueue.length > 0)
+        if (this.beforeQueue.length > 0)
         {
             let allPromise : Array<Promise<any>> = [];
-            this.afterQueue.forEach((physics)=>{
+            this.beforeQueue.forEach((physics)=>{
                 allPromise.push(physics.effect());
             });
             return Promise.all(allPromise);
@@ -21,11 +22,16 @@ export default class BasePhysics{
         });
     }
 
-    setTarget(target : any){
-        this.target = target;
+    pushBeforeQueue(physics : Physics){
+        this.beforeQueue.push(physics);
     }
 
-    pushAfterQueue(physics : Physics){
-        this.afterQueue.push(physics);
+    destory(){
+        if (this.beforeQueue.length > 0)
+        {
+            this.beforeQueue.forEach((physics)=>{
+                physics.destory();
+            });
+        }
     }
 }

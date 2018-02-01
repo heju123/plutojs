@@ -1,13 +1,13 @@
 interface Physics{
     //作用目标
     target : any;
-    afterQueue : Array<Physics>;//当前效果执行完后需要执行的队列，存在先后顺序的情况使用
-
-    setTarget(target : any);
+    beforeQueue : Array<Physics>;//执行当前效果之前执行的队列，如果reject，则不执行当前效果
 
     /** 执行影响 */
     effect() : Promise<any>;
 
-    pushAfterQueue(physics : Physics);
+    pushBeforeQueue(physics : Physics);
+
+    destory();
 }
 export default Physics;

@@ -1,9 +1,7 @@
 export default class EffectReject{
-    private name : string;
-    private data : string;
+    data : string;
 
-    constructor(name, data){
-        this.name = name;
+    constructor(data : any){
         this.data = data;
     }
 }

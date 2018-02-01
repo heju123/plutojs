@@ -1,10 +1,10 @@
 import EffectReject from "./effectReject";
 
 export default class CollisionReject extends EffectReject{
-    private direction : string;
+    direction : string;
 
-    constructor(name, data, direction){
-        super(name, data);
+    constructor(data : any, direction : string){
+        super(data);
         this.direction = direction;
     }
 }

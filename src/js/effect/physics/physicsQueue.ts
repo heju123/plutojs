@@ -17,7 +17,6 @@ export default class PhysicsQueue{
         {
             return;
         }
-        this.executeLock = true;
         let currentTime = (new Date()).getTime();
         if (!this.lastTime)
         {
@@ -27,6 +26,8 @@ export default class PhysicsQueue{
         {
             if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
             {
+                this.executeLock = true;
+
                 let allPromise : Array<Promise<any>> = [];
                 this.queue.forEach((physics)=>{
                     allPromise.push(physics.effect());
@@ -43,11 +44,16 @@ export default class PhysicsQueue{
     }
 
     add(physics : Physics){
-        physics.setTarget(this.component);
         this.queue.push(physics);
     }
 
     getLength() : number{
         return this.queue.length;
+    }
+
+    destory(){
+        this.queue.forEach((physics)=>{
+            physics.destory();
+        });
     }
 }
