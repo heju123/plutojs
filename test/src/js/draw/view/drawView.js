@@ -3,6 +3,7 @@ import {commonUtil} from "~/js/main";
 import DrawController from "../controller/drawController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
 import QuadraticCurveController from "../controller/quadraticCurveController";
+import BezierCurveController from "../controller/bezierCurveController";
 
 const PADDING_LEFT = 20;
 const FORM_ROW_HEIGHT = 60;
@@ -176,6 +177,24 @@ export default {
                             style : {
                                 x : 650,
                                 y : 10,
+                                width : 400,
+                                height : 300,
+                                borderWidth : 1,
+                                borderColor : "#a0a0a0"
+                            },
+                            events : {
+                                "mousedown" : "onMousedown",
+                                "mousemove" : "onMousemove",
+                                "mouseup" : "onMouseup"
+                            }
+                        },
+                        {
+                            name : "bezierCurve",
+                            type : "rect",
+                            controller : BezierCurveController,
+                            style : {
+                                x : 650,
+                                y : 350,
                                 width : 400,
                                 height : 300,
                                 borderWidth : 1,

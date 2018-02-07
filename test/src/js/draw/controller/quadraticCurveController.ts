@@ -83,6 +83,7 @@ export default class QuadraticCurveController extends Controller{
         ctx.lineWidth = 2;
         ctx.moveTo(this.startPoint.x, this.startPoint.y);
         this.quadraticCurve.draw(ctx);
+        ctx.stroke();
         ctx.closePath();
     }
 

@@ -13,6 +13,5 @@ export default class QuadraticCurve{
 
     draw(ctx){
         ctx.quadraticCurveTo(this.ctrlPoint.x,this.ctrlPoint.y,this.endPoint.x,this.endPoint.y);
-        ctx.stroke();
     }
 }
