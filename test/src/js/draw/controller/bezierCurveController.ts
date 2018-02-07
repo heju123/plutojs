@@ -41,6 +41,7 @@ export default class BezierCurveController extends Controller{
         }
     }
     onMouseup(e){
+        console.log(this.dragObj);
         this.dragObj = undefined;
     }
 
