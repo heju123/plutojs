@@ -29,9 +29,11 @@ export default class QuadraticCurveController extends Controller{
         });
 
         let acceleration : Physics = new Acceleration(this);
-        let friction : Physics = new Friction(this, "y", 0.1);
+        let xfriction : Physics = new Friction(this, "x", 0.2);
+        let yfriction : Physics = new Friction(this, "y", 0.1);
         this.physicsQueue.add(acceleration);
-        this.physicsQueue.add(friction);
+        this.physicsQueue.add(xfriction);
+        this.physicsQueue.add(yfriction);
     }
 
     onMousedown(e){
@@ -59,6 +61,7 @@ export default class QuadraticCurveController extends Controller{
                 if (this.dragging === false && !this.lock)
                 {
                     this.lock = true;
+                    this.xAcceleration = (this.centerPoint.x - this.ctrlPoint.x) * 0.01;
                     this.yAcceleration = (this.centerPoint.y - this.ctrlPoint.y) * 0.1;
                     this.physicsQueue.doEffect().then(()=>{
                         if (this.xSpeed !== 0)
