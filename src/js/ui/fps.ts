@@ -59,8 +59,8 @@ export default class Fps{
                 getOffset(node.parentNode);
                 return;
             }
-            offest.top = (<HTMLElement>node).offsetTop + offest.top - (<HTMLElement>node).scrollTop;
-            offest.left = (<HTMLElement>node).offsetLeft + offest.left - (<HTMLElement>node).scrollLeft;
+            offest.top = (<HTMLElement>node).offsetTop + offest.top - (node.parentNode ? (<HTMLElement>node.parentNode).scrollTop : 0);
+            offest.left = (<HTMLElement>node).offsetLeft + offest.left - (node.parentNode ? (<HTMLElement>node.parentNode).scrollLeft : 0);
             // position = fixed: 获取值后退出递归
             if (_position === 'fixed') {
                 return;
