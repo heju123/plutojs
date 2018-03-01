@@ -19,13 +19,13 @@ export default class QuadraticCurveController extends Controller{
     constructor(component : Component) {
         super(component);
 
-        this.registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point(this.component.getRealX() + 0, this.component.getRealY() + 150);
-            this.ctrlPoint = new Point(this.component.getRealX() + 200, this.component.getRealY() + 200);
-            this.endPoint = new Point(this.component.getRealX() + 400, this.component.getRealY() + 150);
+        (<Controller>this).registerEvent("$onViewLoaded", ()=>{
+            this.startPoint = new Point((<Controller>this).component.getRealX() + 0, (<Controller>this).component.getRealY() + 150);
+            this.ctrlPoint = new Point((<Controller>this).component.getRealX() + 200, (<Controller>this).component.getRealY() + 200);
+            this.endPoint = new Point((<Controller>this).component.getRealX() + 400, (<Controller>this).component.getRealY() + 150);
 
             this.quadraticCurve = new QuadraticCurve(this.ctrlPoint, this.endPoint);
-            this.centerPoint = new Point(this.component.getRealX() + 200, this.component.getRealY() + 150);
+            this.centerPoint = new Point((<Controller>this).component.getRealX() + 200, (<Controller>this).component.getRealY() + 150);
         });
 
         let acceleration : Physics = new Acceleration(this);

@@ -11,11 +11,11 @@ export default class BezierCurveController extends Controller{
     constructor(component : Component) {
         super(component);
 
-        this.registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point(this.component.getRealX() + 0, this.component.getRealY() + 150);
-            this.ctrl1Point = new Point(this.component.getRealX() + 10, this.component.getRealY() + 290);
-            this.ctrl2Point = new Point(this.component.getRealX() + 390, this.component.getRealY() + 10);
-            this.endPoint = new Point(this.component.getRealX() + 400, this.component.getRealY() + 150);
+        (<Controller>this).registerEvent("$onViewLoaded", ()=>{
+            this.startPoint = new Point((<Controller>this).component.getRealX() + 0, (<Controller>this).component.getRealY() + 150);
+            this.ctrl1Point = new Point((<Controller>this).component.getRealX() + 10, (<Controller>this).component.getRealY() + 290);
+            this.ctrl2Point = new Point((<Controller>this).component.getRealX() + 390, (<Controller>this).component.getRealY() + 10);
+            this.endPoint = new Point((<Controller>this).component.getRealX() + 400, (<Controller>this).component.getRealY() + 150);
 
             this.bezierCurve = new BezierCurve(this.ctrl1Point, this.ctrl2Point, this.endPoint);
         });
@@ -41,7 +41,6 @@ export default class BezierCurveController extends Controller{
         }
     }
     onMouseup(e){
-        console.log(this.dragObj);
         this.dragObj = undefined;
     }
 
@@ -69,6 +68,5 @@ export default class BezierCurveController extends Controller{
     }
 
     destroy(){
-        this.physicsQueue.destroy();
     }
 }
