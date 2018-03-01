@@ -1319,18 +1319,10 @@ abstract class Component {
             }
             else
             {
-                if (commonUtil.getBrowserName() === "Firefox")
-                {
-                    //Firefox要乘以固定比例
-                    allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width
-                        * parseInt(this.style.fontSize, 10) / 10);
-                }
-                else
-                {
-                    //如果fontSize>12px，则measureText方法计算的字体宽度会有问题，还要乘以比例
-                    allWidth = Math.max(allWidth, globalUtil.viewState.ctx.measureText(row).width
-                        * (parseInt(this.style.fontSize, 10)  > 12 ? parseInt(this.style.fontSize, 10) / 12 : 1));
-                }
+                globalUtil.action.measureTextDom.style["font-size"] = this.style.fontSize;
+                globalUtil.action.measureTextDom.style["font-family"] = this.style.fontFamily;
+                globalUtil.action.measureTextDom.innerText = row;
+                allWidth = globalUtil.action.measureTextDom.offsetWidth;
             }
         });
         return allWidth;

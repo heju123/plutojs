@@ -61,6 +61,16 @@ class Main {
         globalUtil.action.inputListenerDom.style["z-index"] = -1;
         document.body.appendChild(globalUtil.action.inputListenerDom);
 
+        //字符串长度检测
+        globalUtil.action.measureTextDom = document.createElement("DIV");
+        globalUtil.action.measureTextDom.style["display"] = "inline-block";
+        globalUtil.action.measureTextDom.style.position = "fixed";
+        globalUtil.action.measureTextDom.style.left = "0px";
+        globalUtil.action.measureTextDom.style.top = "0px";
+        globalUtil.action.measureTextDom.style.opacity = 0;
+        globalUtil.action.measureTextDom.style["z-index"] = -1;
+        document.body.appendChild(globalUtil.action.measureTextDom);
+
         //屏蔽鼠标右键菜单
         mainBody.oncontextmenu = function(e){
             e.preventDefault();
