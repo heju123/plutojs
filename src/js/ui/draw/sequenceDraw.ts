@@ -95,22 +95,22 @@ export default class SequenceDraw{
         {
             return;
         }
-        ctx.moveTo(this.startPoint.x + this.parent.getRealX(), this.startPoint.y + this.parent.getRealY());
+        ctx.moveTo(this.startPoint.x + this.parent.getRealX() - this.parent.style.contentScrollX, this.startPoint.y + this.parent.getRealY() - this.parent.style.contentScrollY);
         this.paths.forEach((path)=>{
             if (path.show)
             {
                 if (path.newPath)
                 {
-                    ctx.moveTo(path.getStartPoint().x + this.parent.getRealX(), path.getStartPoint().y + this.parent.getRealY());
+                    ctx.moveTo(path.getStartPoint().x + this.parent.getRealX() - this.parent.style.contentScrollX, path.getStartPoint().y + this.parent.getRealY() - this.parent.style.contentScrollY);
                 }
                 if (path instanceof PointPath)
                 {
-                    ctx.lineTo(path.getDrawTarget().x + this.parent.getRealX(), path.getDrawTarget().y + this.parent.getRealY());
+                    ctx.lineTo(path.getDrawTarget().x + this.parent.getRealX() - this.parent.style.contentScrollX, path.getDrawTarget().y + this.parent.getRealY() - this.parent.style.contentScrollY);
                 }
                 else if (path instanceof ArcPath)
                 {
-                    ctx.arc(path.getDrawTarget().centerPoint.x + this.parent.getRealX(),
-                        path.getDrawTarget().centerPoint.y + this.parent.getRealY(),
+                    ctx.arc(path.getDrawTarget().centerPoint.x + this.parent.getRealX() - this.parent.style.contentScrollX,
+                        path.getDrawTarget().centerPoint.y + this.parent.getRealY() - this.parent.style.contentScrollY,
                         path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle, path.anticlockwise);
                 }
             }

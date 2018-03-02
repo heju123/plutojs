@@ -138,7 +138,7 @@ export default class DrawController extends Controller{
         });
     }
 
-    draw(ctx : CanvasRenderingContext2D) {
+    drawBefore(ctx : CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#333";
