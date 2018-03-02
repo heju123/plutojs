@@ -4,6 +4,7 @@ import DrawController from "../controller/drawController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
 import QuadraticCurveController from "../controller/quadraticCurveController";
 import BezierCurveController from "../controller/bezierCurveController";
+import WaveController from "../controller/waveController";
 
 const PADDING_LEFT = 20;
 const FORM_ROW_HEIGHT = 60;
@@ -197,6 +198,24 @@ export default {
                                 y : 350,
                                 width : 400,
                                 height : 300,
+                                borderWidth : 1,
+                                borderColor : "#a0a0a0"
+                            },
+                            events : {
+                                "mousedown" : "onMousedown",
+                                "mousemove" : "onMousemove",
+                                "mouseup" : "onMouseup"
+                            }
+                        },
+                        {
+                            name : "wave",
+                            type : "rect",
+                            controller : WaveController,
+                            style : {
+                                x : 10,
+                                y : 600,
+                                width : 500,
+                                height : 400,
                                 borderWidth : 1,
                                 borderColor : "#a0a0a0"
                             },

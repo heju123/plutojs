@@ -6,6 +6,7 @@ import MouseEvent from "../../event/type/mouseEvent";
 import WheelEvent from "../../event/type/wheelEvent";
 
 const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
+const DEFAULT_SCROLLBAR_WIDTH = 10;//滚动条的默认宽度
 export default class Scrollbar extends Rect {
     private scrollbarBaseLineV : Component;
     private scrollbarOpeLineV : Component;
@@ -151,8 +152,8 @@ export default class Scrollbar extends Rect {
             });
         }
         this.setStyle({
-            contentWidth : maxWidth,
-            contentHeight : maxHeight
+            contentWidth : maxWidth + (this.style.scrollbarWidth || DEFAULT_SCROLLBAR_WIDTH),
+            contentHeight : maxHeight + (this.style.scrollbarWidth || DEFAULT_SCROLLBAR_WIDTH)
         });
     }
 
@@ -296,7 +297,7 @@ export default class Scrollbar extends Rect {
         let Rect = require("./rect").default;
         oritation = oritation || 1;
         let padding = 0;
-        let swidth = this.style.scrollbarWidth || 10;
+        let swidth = this.style.scrollbarWidth || DEFAULT_SCROLLBAR_WIDTH;
         let radius = this.style.scrollbarRadius || 6;
 
         let line = new Rect(this);
