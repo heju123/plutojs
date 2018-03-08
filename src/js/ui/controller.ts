@@ -14,6 +14,21 @@ export default class Controller{
         this.viewState = globalUtil.viewState;
     }
 
+    /** 用相对坐标获取显示在界面上的真实坐标 */
+    getDrawX(x){
+        return x + this.component.getRealX();
+    }
+    getDrawY(y){
+        return y + this.component.getRealY();
+    }
+    //显示在界面上的真实坐标转换为相对坐标
+    getX(drawX){
+        return drawX - this.component.getRealX();
+    }
+    getY(drawY){
+        return drawY - this.component.getRealY();
+    }
+
     registerEvent(eventType : string, callback : Function){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }

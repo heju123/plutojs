@@ -7,12 +7,12 @@ import animationUtil from "../../util/animationUtil";
 
 /** 按顺序绘制，可实现缓动 */
 export default class SequenceDraw{
-    private parent : Component;
+    private component : Component;
     private startPoint : Point;
     private paths : Array<Path> = [];
 
-    constructor(parent : Component){
-        this.parent = parent;
+    constructor(component : Component){
+        this.component = component;
     }
 
     setStartPoint(point : Point){
@@ -95,22 +95,22 @@ export default class SequenceDraw{
         {
             return;
         }
-        ctx.moveTo(this.startPoint.x + this.parent.getRealX() - this.parent.style.contentScrollX, this.startPoint.y + this.parent.getRealY() - this.parent.style.contentScrollY);
+        ctx.moveTo(this.startPoint.x + this.component.getRealX() - this.component.style.contentScrollX, this.startPoint.y + this.component.getRealY() - this.component.style.contentScrollY);
         this.paths.forEach((path)=>{
             if (path.show)
             {
                 if (path.newPath)
                 {
-                    ctx.moveTo(path.getStartPoint().x + this.parent.getRealX() - this.parent.style.contentScrollX, path.getStartPoint().y + this.parent.getRealY() - this.parent.style.contentScrollY);
+                    ctx.moveTo(path.getStartPoint().x + this.component.getRealX() - this.component.style.contentScrollX, path.getStartPoint().y + this.component.getRealY() - this.component.style.contentScrollY);
                 }
                 if (path instanceof PointPath)
                 {
-                    ctx.lineTo(path.getDrawTarget().x + this.parent.getRealX() - this.parent.style.contentScrollX, path.getDrawTarget().y + this.parent.getRealY() - this.parent.style.contentScrollY);
+                    ctx.lineTo(path.getDrawTarget().x + this.component.getRealX() - this.component.style.contentScrollX, path.getDrawTarget().y + this.component.getRealY() - this.component.style.contentScrollY);
                 }
                 else if (path instanceof ArcPath)
                 {
-                    ctx.arc(path.getDrawTarget().centerPoint.x + this.parent.getRealX() - this.parent.style.contentScrollX,
-                        path.getDrawTarget().centerPoint.y + this.parent.getRealY() - this.parent.style.contentScrollY,
+                    ctx.arc(path.getDrawTarget().centerPoint.x + this.component.getRealX() - this.component.style.contentScrollX,
+                        path.getDrawTarget().centerPoint.y + this.component.getRealY() - this.component.style.contentScrollY,
                         path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle, path.anticlockwise);
                 }
             }

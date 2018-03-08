@@ -12,23 +12,23 @@ export default class BezierCurveController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point((<Controller>this).component.getRealX() + 0, (<Controller>this).component.getRealY() + 150);
-            this.ctrl1Point = new Point((<Controller>this).component.getRealX() + 10, (<Controller>this).component.getRealY() + 290);
-            this.ctrl2Point = new Point((<Controller>this).component.getRealX() + 390, (<Controller>this).component.getRealY() + 10);
-            this.endPoint = new Point((<Controller>this).component.getRealX() + 400, (<Controller>this).component.getRealY() + 150);
+            this.startPoint = new Point(0, 150);
+            this.ctrl1Point = new Point(10, 290);
+            this.ctrl2Point = new Point(390, 10);
+            this.endPoint = new Point(400, 150);
 
-            this.bezierCurve = new BezierCurve(this.ctrl1Point, this.ctrl2Point, this.endPoint);
+            this.bezierCurve = new BezierCurve((<Controller>this).component, this.ctrl1Point, this.ctrl2Point, this.endPoint);
         });
     }
 
     onMousedown(e){
-        if (e.pageX >= this.ctrl1Point.x - 5 && e.pageX <= this.ctrl1Point.x + 5
-            && e.pageY >= this.ctrl1Point.y - 5 && e.pageY <= this.ctrl1Point.y + 5)
+        if (e.pageX >= (<Controller>this).getDrawX(this.ctrl1Point.x) - 5 && e.pageX <= (<Controller>this).getDrawX(this.ctrl1Point.x) + 5
+            && e.pageY >= (<Controller>this).getDrawY(this.ctrl1Point.y) - 5 && e.pageY <= (<Controller>this).getDrawY(this.ctrl1Point.y) + 5)
         {
             this.dragObj = this.ctrl1Point;
         }
-        if (e.pageX >= this.ctrl2Point.x - 5 && e.pageX <= this.ctrl2Point.x + 5
-            && e.pageY >= this.ctrl2Point.y - 5 && e.pageY <= this.ctrl2Point.y + 5)
+        if (e.pageX >= (<Controller>this).getDrawX(this.ctrl2Point.x) - 5 && e.pageX <= (<Controller>this).getDrawX(this.ctrl2Point.x) + 5
+            && e.pageY >= (<Controller>this).getDrawY(this.ctrl2Point.y) - 5 && e.pageY <= (<Controller>this).getDrawY(this.ctrl2Point.y) + 5)
         {
             this.dragObj = this.ctrl2Point;
         }
@@ -36,8 +36,8 @@ export default class BezierCurveController extends Controller{
     onMousemove(e){
         if (this.dragObj)
         {
-            this.dragObj.x = e.pageX;
-            this.dragObj.y = e.pageY;
+            this.dragObj.x = (<Controller>this).getX(e.pageX);
+            this.dragObj.y = (<Controller>this).getY(e.pageY);
         }
     }
     onMouseup(e){
@@ -47,22 +47,22 @@ export default class BezierCurveController extends Controller{
     draw(ctx : CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.lineWidth = 2;
-        ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        ctx.moveTo((<Controller>this).getDrawX(this.startPoint.x), (<Controller>this).getDrawY(this.startPoint.y));
         this.bezierCurve.draw(ctx);
         ctx.stroke();
         ctx.closePath();
 
         ctx.beginPath();
         ctx.fillStyle = "#a3a3a3";
-        ctx.arc(this.ctrl1Point.x, this.ctrl1Point.y, 10, 0, 2 * Math.PI);
-        ctx.arc(this.ctrl2Point.x, this.ctrl2Point.y, 10, 0, 2 * Math.PI);
+        ctx.arc((<Controller>this).getDrawX(this.ctrl1Point.x), (<Controller>this).getDrawY(this.ctrl1Point.y), 10, 0, 2 * Math.PI);
+        ctx.arc((<Controller>this).getDrawX(this.ctrl2Point.x), (<Controller>this).getDrawY(this.ctrl2Point.y), 10, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
 
         ctx.beginPath();
         ctx.fillStyle = "#ff0000";
-        ctx.arc(this.ctrl1Point.x, this.ctrl1Point.y, 1, 0, 2 * Math.PI);
-        ctx.arc(this.ctrl2Point.x, this.ctrl2Point.y, 1, 0, 2 * Math.PI);
+        ctx.arc((<Controller>this).getDrawX(this.ctrl1Point.x), (<Controller>this).getDrawY(this.ctrl1Point.y), 1, 0, 2 * Math.PI);
+        ctx.arc((<Controller>this).getDrawX(this.ctrl2Point.x), (<Controller>this).getDrawY(this.ctrl2Point.y), 1, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
     }

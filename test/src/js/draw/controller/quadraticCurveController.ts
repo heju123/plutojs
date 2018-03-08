@@ -20,12 +20,12 @@ export default class QuadraticCurveController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point((<Controller>this).component.getRealX() + 0, (<Controller>this).component.getRealY() + 150);
-            this.ctrlPoint = new Point((<Controller>this).component.getRealX() + 200, (<Controller>this).component.getRealY() + 200);
-            this.endPoint = new Point((<Controller>this).component.getRealX() + 400, (<Controller>this).component.getRealY() + 150);
+            this.startPoint = new Point(0, 150);
+            this.ctrlPoint = new Point(200, 200);
+            this.endPoint = new Point(400, 150);
 
-            this.quadraticCurve = new QuadraticCurve(this.ctrlPoint, this.endPoint);
-            this.centerPoint = new Point((<Controller>this).component.getRealX() + 200, (<Controller>this).component.getRealY() + 150);
+            this.quadraticCurve = new QuadraticCurve((<Controller>this).component, this.ctrlPoint, this.endPoint);
+            this.centerPoint = new Point(200, 150);
         });
 
         let acceleration : Physics = new Acceleration(this);
@@ -42,8 +42,8 @@ export default class QuadraticCurveController extends Controller{
     onMousemove(e){
         if (this.dragging)
         {
-            this.ctrlPoint.x = e.pageX;
-            this.ctrlPoint.y = e.pageY;
+            this.ctrlPoint.x = (<Controller>this).getX(e.pageX);
+            this.ctrlPoint.y = (<Controller>this).getY(e.pageY);
         }
     }
     onMouseup(e){
@@ -81,7 +81,7 @@ export default class QuadraticCurveController extends Controller{
 
         ctx.beginPath();
         ctx.lineWidth = 2;
-        ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        ctx.moveTo((<Controller>this).getDrawX(this.startPoint.x), (<Controller>this).getDrawY(this.startPoint.y));
         this.quadraticCurve.draw(ctx);
         ctx.stroke();
         ctx.closePath();
