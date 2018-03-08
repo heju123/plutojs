@@ -16,10 +16,11 @@ export default class WaveController extends Controller{
     draw(ctx : CanvasRenderingContext2D) {
         ctx.fillStyle = "#77b8ff";
         ctx.beginPath();
+        //水面
         ctx.moveTo((<Controller>this).getDrawX(this.startPoint.x), (<Controller>this).getDrawY(this.startPoint.y));
         ctx.lineTo((<Controller>this).getDrawX(this.endPoint.x), (<Controller>this).getDrawY(this.endPoint.y));
 
-        //绘制水区域
+        //水体
         ctx.lineTo((<Controller>this).component.getRealX() + (<Controller>this).component.getWidth(),
             (<Controller>this).component.getRealY() + (<Controller>this).component.getHeight());
         ctx.lineTo((<Controller>this).component.getRealX(),
