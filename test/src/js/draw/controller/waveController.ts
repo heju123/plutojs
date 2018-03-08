@@ -5,8 +5,8 @@ export default class WaveController extends Controller{
     private endPoint : Point;
     private startPointYSpeed : number = -0.8;
     private endPointYSpeed : number = -0.8;
-    private minY : number = 140;
-    private maxY : number = 230;
+    private seMinY : number = 140;
+    private seMaxY : number = 230;
 
     private ctrl1Point : Point;
     private ctrl2Point : Point;
@@ -42,11 +42,11 @@ export default class WaveController extends Controller{
 
                     this.startPoint.y += this.startPointYSpeed;
                     this.endPoint.y += this.endPointYSpeed;
-                    if (this.startPoint.y <= this.minY || this.startPoint.y >= this.maxY)
+                    if (this.startPoint.y <= this.seMinY || this.startPoint.y >= this.seMaxY)
                     {
                         this.startPointYSpeed = -this.startPointYSpeed;
                     }
-                    if (this.endPoint.y <= this.minY || this.endPoint.y >= this.maxY)
+                    if (this.endPoint.y <= this.seMinY || this.endPoint.y >= this.seMaxY)
                     {
                         this.endPointYSpeed = -this.endPointYSpeed;
                     }
