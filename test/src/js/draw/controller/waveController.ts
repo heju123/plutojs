@@ -5,11 +5,15 @@ export default class WaveController extends Controller{
     private endPoint : Point;
     private startPointYSpeed : number = -0.8;
     private endPointYSpeed : number = -0.8;
-    private seMinY : number = 140;
-    private seMaxY : number = 230;
+    private seMinY : number = 150;
+    private seMaxY : number = 250;
 
     private ctrl1Point : Point;
     private ctrl2Point : Point;
+    private ctrlMinY : number = 100;
+    private ctrlMaxY : number = 200;
+    private ctrl1YSpeed : number = -0.8;
+    private ctrl2YSpeed : number = 0.8;
     private bezierCurve : BezierCurve;
 
     private lastTime : number;
@@ -19,10 +23,10 @@ export default class WaveController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point(0, 150);
-            this.endPoint = new Point(500, 200);
+            this.startPoint = new Point(0, 220);
+            this.endPoint = new Point(500, 180);
 
-            this.ctrl1Point = new Point(150, 300);
+            this.ctrl1Point = new Point(150, 200);
             this.ctrl2Point = new Point(350, 100);
             this.bezierCurve = new BezierCurve((<Controller>this).component, this.ctrl1Point, this.ctrl2Point, this.endPoint);
         });
@@ -49,6 +53,17 @@ export default class WaveController extends Controller{
                     if (this.endPoint.y <= this.seMinY || this.endPoint.y >= this.seMaxY)
                     {
                         this.endPointYSpeed = -this.endPointYSpeed;
+                    }
+
+                    this.ctrl1Point.y += this.ctrl1YSpeed;
+                    this.ctrl2Point.y += this.ctrl2YSpeed;
+                    if (this.ctrl1Point.y <= this.ctrlMinY || this.ctrl1Point.y >= this.ctrlMaxY)
+                    {
+                        this.ctrl1YSpeed = -this.ctrl1YSpeed;
+                    }
+                    if (this.ctrl2Point.y <= this.ctrlMinY || this.ctrl2Point.y >= this.ctrlMaxY)
+                    {
+                        this.ctrl2YSpeed = -this.ctrl2YSpeed;
                     }
 
                     this.lock = false;
