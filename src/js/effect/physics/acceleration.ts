@@ -8,6 +8,12 @@ export default class Acceleration extends BasePhysics implements Physics{
     }
 
     effect() : Promise<any> {
+        if (this.isDelay())
+        {
+            return new Promise((resolve, reject)=>{
+                resolve();
+            });
+        }
         return new Promise((resolve, reject)=>{
             super.effect().then(()=>{
                 if (this.target.xAcceleration !== 0)

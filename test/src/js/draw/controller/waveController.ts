@@ -1,19 +1,26 @@
-import {Controller,Component,Point,BezierCurve} from "~/js/main";
+import {Controller,Component,Point,BezierCurve,PhysicsQueue,Physics,Acceleration} from "~/js/main";
 
 export default class WaveController extends Controller{
+    private centerPoint : Point = new Point(250, 200);
     private startPoint : Point;
     private endPoint : Point;
-    private startPointYSpeed : number = -0.8;
-    private endPointYSpeed : number = -0.8;
-    private seMinY : number = 150;
-    private seMaxY : number = 250;
+    private sPPhysics : any = {
+        xAcceleration : 0,
+        yAcceleration : 0,
+        xSpeed : 0,
+        ySpeed : 0
+    };
+    private ePPhysics : any = {
+        xAcceleration : 0,
+        yAcceleration : 0,
+        xSpeed : 0,
+        ySpeed : 0
+    };
+
+    private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
 
     private ctrl1Point : Point;
     private ctrl2Point : Point;
-    private ctrlMinY : number = 100;
-    private ctrlMaxY : number = 200;
-    private ctrl1YSpeed : number = -0.8;
-    private ctrl2YSpeed : number = 0.8;
     private bezierCurve : BezierCurve;
 
     private lastTime : number;
@@ -23,13 +30,19 @@ export default class WaveController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point(0, 220);
-            this.endPoint = new Point(500, 180);
+            this.startPoint = new Point(0, 240);
+            this.endPoint = new Point(500, 240);
 
-            this.ctrl1Point = new Point(150, 200);
-            this.ctrl2Point = new Point(350, 100);
+            this.ctrl1Point = new Point(230, 240);
+            this.ctrl2Point = new Point(270, 240);
             this.bezierCurve = new BezierCurve((<Controller>this).component, this.ctrl1Point, this.ctrl2Point, this.endPoint);
         });
+
+        let sAcceleration : Physics = new Acceleration(this.sPPhysics);
+        sAcceleration.delay = 800;
+        let eAcceleration : Physics = new Acceleration(this.ePPhysics);
+        this.physicsQueue.add(sAcceleration);
+        this.physicsQueue.add(eAcceleration);
     }
 
     draw(ctx : CanvasRenderingContext2D) {
@@ -44,35 +57,27 @@ export default class WaveController extends Controller{
                 {
                     this.lock = true;
 
-                    this.startPoint.y += this.startPointYSpeed;
-                    this.endPoint.y += this.endPointYSpeed;
-                    if (this.startPoint.y <= this.seMinY || this.startPoint.y >= this.seMaxY)
-                    {
-                        this.startPointYSpeed = -this.startPointYSpeed;
-                    }
-                    if (this.endPoint.y <= this.seMinY || this.endPoint.y >= this.seMaxY)
-                    {
-                        this.endPointYSpeed = -this.endPointYSpeed;
-                    }
-
-                    this.ctrl1Point.y += this.ctrl1YSpeed;
-                    this.ctrl2Point.y += this.ctrl2YSpeed;
-                    if (this.ctrl1Point.y <= this.ctrlMinY || this.ctrl1Point.y >= this.ctrlMaxY)
-                    {
-                        this.ctrl1YSpeed = -this.ctrl1YSpeed;
-                    }
-                    if (this.ctrl2Point.y <= this.ctrlMinY || this.ctrl2Point.y >= this.ctrlMaxY)
-                    {
-                        this.ctrl2YSpeed = -this.ctrl2YSpeed;
-                    }
-
-                    this.lock = false;
+                    this.sPPhysics.yAcceleration = (this.centerPoint.y - this.startPoint.y) * 0.001;
+                    this.ePPhysics.yAcceleration = (this.centerPoint.y - this.endPoint.y) * 0.001;
+                    this.physicsQueue.doEffect().then(()=>{
+                        if (this.sPPhysics.ySpeed !== 0)
+                        {
+                            this.startPoint.y = this.startPoint.y + this.sPPhysics.ySpeed;
+                            this.ctrl1Point.y = this.startPoint.y - (this.centerPoint.y * 2 - this.startPoint.y) * 0.2;
+                        }
+                        if (this.ePPhysics.ySpeed !== 0)
+                        {
+                            this.endPoint.y = this.endPoint.y + this.ePPhysics.ySpeed;
+                            this.ctrl2Point.y = this.endPoint.y - (this.centerPoint.y * 2 - this.endPoint.y) * 0.2;
+                        }
+                        this.lock = false;
+                    });
                 }
                 this.lastTime = currentTime;
             }
         }
 
-        ctx.fillStyle = "#77b8ff";
+        ctx.fillStyle = "#8ab9ff";
         ctx.beginPath();
         //水面
         ctx.moveTo((<Controller>this).getDrawX(this.startPoint.x), (<Controller>this).getDrawY(this.startPoint.y));

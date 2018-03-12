@@ -3,6 +3,7 @@ import Physics from "./physics";
 export default class BasePhysics{
     target : any;
     beforeQueue : Array<Physics> = [];
+    delay : number;
 
     constructor(target : any){
         this.target = target;
@@ -24,6 +25,16 @@ export default class BasePhysics{
 
     pushBeforeQueue(physics : Physics){
         this.beforeQueue.push(physics);
+    }
+
+    isDelay() : boolean{
+        if (this.delay){
+            setTimeout(()=>{
+                this.delay = undefined;
+            }, this.delay);
+            return true;
+        }
+        return false;
     }
 
     destroy(){
