@@ -8,6 +8,7 @@ import EventNotify from "../../event/eventNotify";
 import ViewState from "../viewState";
 import PhysicsQueue from "../../effect/physics/physicsQueue";
 import Physics from "../../effect/physics/physics";
+import Particle from "../../effect/particle/particle";
 
 abstract class Component {
     id : string;
@@ -35,6 +36,7 @@ abstract class Component {
     isActive : boolean;
     isDoingParentClip : boolean;
     private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
+    private particleList : Array<Particle> = [];
 
     constructor(parent? : Component) {
         this.parent = parent;
@@ -451,12 +453,31 @@ abstract class Component {
         {
             this.physicsQueue.effect();
         }
+
+        //粒子效果绘制
+        if (this.particleList.length > 0)
+        {
+            this.particleList.forEach((particle)=>{
+                if (particle.alive)
+                {
+                    particle.draw(ctx);
+                }
+            });
+        }
         return true;
     }
 
     /** 添加物理现象 */
     addPhysics(physics : Physics){
         this.physicsQueue.add(physics);
+    }
+
+    /** 添加粒子 */
+    addParticle(particle : Particle) {
+        this.particleList.push(particle);
+    }
+    emptyParticles(){
+        this.particleList.length = 0;
     }
 
     protected abstract inParentArea(com : Component) : number;

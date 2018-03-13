@@ -80,6 +80,8 @@ y坐标，相对于父组件
 旋转角度，角度为单位
 #### style.mirror
 镜像翻转；例：horizontal水平翻转，vertical垂直翻转
+#### style.alwaysDraw
+组件在被遮挡的情况下是否仍然需要绘制
 #### animation
 动画属性；
 例：

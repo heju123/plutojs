@@ -149,6 +149,19 @@ export default {
                                             }
                                         }
                                     }
+                                }),
+                                getLinkView("粒子效果", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : {
+                                            callback : "goLink",
+                                            param : (self)=>{
+                                                return ["particleEffects"];
+                                            }
+                                        }
+                                    }
                                 })
                             ]
                         }
