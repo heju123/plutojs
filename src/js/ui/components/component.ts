@@ -498,6 +498,7 @@ abstract class Component {
             particle.mounted.apply(particle, []);
         }
     }
+    /** 清空所有粒子 */
     emptyParticles(){
         this.particleList.forEach((item)=>{
             if (item.value.beforeDestroy)
