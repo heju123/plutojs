@@ -31,6 +31,7 @@ import {
     BaseParticle,
     Particle,
     Stack,
+    LinkedItem,
     LinkedList
 } from "~/js/main";
 
@@ -74,6 +75,7 @@ window.plutojs = {
     },
     data : {
         Stack,
+        LinkedItem,
         LinkedList
     },
     particle : {

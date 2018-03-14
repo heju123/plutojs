@@ -1,18 +1,21 @@
-class LinkedItem<T>{
-    value : T;
-    next : LinkedItem<T>;
-    prev : LinkedItem<T>;
-
-    constructor(value) {
-        this.value = value;
-    }
-}
+import LinkedItem from "./linkedItem";
 
 export default class LinkedList<T>{
     head : LinkedItem<T>;
     rear : LinkedItem<T>;
 
     constructor() {
+    }
+
+    forEach(fun : Function){
+        if (this.head)
+        {
+            let item : LinkedItem<T> = this.head;
+            do{
+                fun(item);
+            }
+            while(item = item.next);
+        }
     }
 
     add(obj : T){

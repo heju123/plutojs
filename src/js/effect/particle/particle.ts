@@ -18,5 +18,10 @@ interface Particle{
     lifeTime : number;
 
     draw(ctx : CanvasRenderingContext2D) : boolean;
+
+    beforeMount() : void;
+    mounted() : void;
+    beforeDestroy() : void;
+    destroyed() : void;
 }
 export default Particle;

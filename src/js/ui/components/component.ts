@@ -10,6 +10,7 @@ import PhysicsQueue from "../../effect/physics/physicsQueue";
 import Physics from "../../effect/physics/physics";
 import Particle from "../../effect/particle/particle";
 import LinkedList from "../../data/structure/linkedList";
+import LinkedItem from "../../data/structure/linkedItem";
 
 abstract class Component {
     id : string;
@@ -458,18 +459,24 @@ abstract class Component {
         //粒子效果绘制
         if (this.particleList.head)
         {
-            let particle = this.particleList.head;
-            do{console.log(particle);
+            this.particleList.forEach((particle)=>{
                 if (particle.value.alive)
                 {
                     particle.value.draw(ctx);
                 }
                 else//粒子已失效，需要清除
                 {
+                    if (particle.value.beforeDestroy)
+                    {
+                        particle.value.beforeDestroy.apply(this, []);
+                    }
                     this.particleList.remove(particle);
+                    if (particle.value.destroyed)
+                    {
+                        particle.value.destroyed.apply(this, []);
+                    }
                 }
-            }
-            while(particle = particle.next);
+            });
         }
         return true;
     }
@@ -481,10 +488,28 @@ abstract class Component {
 
     /** 添加粒子 */
     addParticle(particle : Particle) {
+        if (particle.beforeMount)
+        {
+            particle.beforeMount.apply(particle, []);
+        }
         this.particleList.add(particle);
+        if (particle.mounted)
+        {
+            particle.mounted.apply(particle, []);
+        }
     }
     emptyParticles(){
-        this.particleList.clear();
+        this.particleList.forEach((item)=>{
+            if (item.value.beforeDestroy)
+            {
+                item.value.beforeDestroy.apply(this, []);
+            }
+            this.particleList.remove(item);
+            if (item.value.destroyed)
+            {
+                item.value.destroyed.apply(this, []);
+            }
+        });
     }
 
     protected abstract inParentArea(com : Component) : number;

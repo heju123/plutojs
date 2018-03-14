@@ -16,4 +16,7 @@ export default class Particle1 extends BaseParticle implements Particle{
         ctx.fillRect(this.component.getRealX() + 10, this.component.getRealY() + 10, 50, 50);
         ctx.closePath();
     }
+
+    beforeMount(){
+    }
 }
