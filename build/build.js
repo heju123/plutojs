@@ -27,45 +27,57 @@ import {
     Friction,
     Physics,
     PhysicsQueue,
-    Speed
+    Speed,
+    BaseParticle,
+    Particle,
+    Stack,
+    LinkedList
 } from "~/js/main";
 
 window.plutojs = {
-    Main : Main,
-    Controller : Controller,
+    Main,
+    Controller,
     utils : {
-        Thread : Thread,
-        MPromise : MPromise,
-        commonUtil : commonUtil,
-        httpUtil : httpUtil,
-        animationUtil : animationUtil
+        Thread,
+        MPromise,
+        commonUtil,
+        httpUtil,
+        animationUtil
     },
     components : {
-        Component : Component,
-        Sprite : Sprite,
-        Router : Router,
-        Button : Button,
-        Checkbox : Checkbox,
-        Input : Input,
-        Rect : Rect,
-        Scrollbar : Scrollbar
+        Component,
+        Sprite,
+        Router,
+        Button,
+        Checkbox,
+        Input,
+        Rect,
+        Scrollbar
     },
     draw : {
-        ArcPath : ArcPath,
-        PointPath : PointPath,
-        Path : Path,
-        Arc : Arc,
-        Point : Point,
-        SequenceDraw : SequenceDraw,
-        QuadraticCurve : QuadraticCurve,
-        BezierCurve : BezierCurve
+        ArcPath,
+        PointPath,
+        Path,
+        Arc,
+        Point,
+        SequenceDraw,
+        QuadraticCurve,
+        BezierCurve
     },
     physics : {
-        Acceleration : Acceleration,
-        Collision : Collision,
-        Friction : Friction,
-        Physics : Physics,
-        PhysicsQueue : PhysicsQueue,
-        Speed : Speed
+        Acceleration,
+        Collision,
+        Friction,
+        Physics,
+        PhysicsQueue,
+        Speed
+    },
+    data : {
+        Stack,
+        LinkedList
+    },
+    particle : {
+        BaseParticle,
+        Particle
     }
 };

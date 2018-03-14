@@ -35,6 +35,12 @@ import Physics from "./effect/physics/physics";
 import PhysicsQueue from "./effect/physics/physicsQueue";
 import Speed from "./effect/physics/speed";
 
+import BaseParticle from "./effect/particle/baseParticle";
+import Particle from "./effect/particle/particle";
+
+import Stack from "./data/structure/stack";
+import LinkedList from "./data/structure/linkedList";
+
 class Main {
     fps : Fps;
 
@@ -88,4 +94,5 @@ class Main {
 }
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
     ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve,
-    Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed};
+    Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed,
+    BaseParticle,Particle,Stack,LinkedList};

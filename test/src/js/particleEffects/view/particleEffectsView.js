@@ -34,7 +34,7 @@ export default {
                     type: "scrollbar",
                     children: [
                         {
-                            name : "wave",
+                            name : "particle1",
                             type : "rect",
                             style : {
                                 x : 10,

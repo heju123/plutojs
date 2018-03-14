@@ -9,6 +9,7 @@ import ViewState from "../viewState";
 import PhysicsQueue from "../../effect/physics/physicsQueue";
 import Physics from "../../effect/physics/physics";
 import Particle from "../../effect/particle/particle";
+import LinkedList from "../../data/structure/linkedList";
 
 abstract class Component {
     id : string;
@@ -36,7 +37,7 @@ abstract class Component {
     isActive : boolean;
     isDoingParentClip : boolean;
     private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
-    private particleList : Array<Particle> = [];
+    private particleList : LinkedList<Particle> = new LinkedList();
 
     constructor(parent? : Component) {
         this.parent = parent;
@@ -455,14 +456,20 @@ abstract class Component {
         }
 
         //粒子效果绘制
-        if (this.particleList.length > 0)
+        if (this.particleList.head)
         {
-            this.particleList.forEach((particle)=>{
-                if (particle.alive)
+            let particle = this.particleList.head;
+            do{console.log(particle);
+                if (particle.value.alive)
                 {
-                    particle.draw(ctx);
+                    particle.value.draw(ctx);
                 }
-            });
+                else//粒子已失效，需要清除
+                {
+                    this.particleList.remove(particle);
+                }
+            }
+            while(particle = particle.next);
         }
         return true;
     }
@@ -474,10 +481,10 @@ abstract class Component {
 
     /** 添加粒子 */
     addParticle(particle : Particle) {
-        this.particleList.push(particle);
+        this.particleList.add(particle);
     }
     emptyParticles(){
-        this.particleList.length = 0;
+        this.particleList.clear();
     }
 
     protected abstract inParentArea(com : Component) : number;
