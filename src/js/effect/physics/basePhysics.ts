@@ -1,6 +1,6 @@
 import Physics from "./physics";
 
-export default class BasePhysics{
+export default abstract class BasePhysics{
     target : any;
     beforeQueue : Array<Physics> = [];
     delay : number;

@@ -2,7 +2,7 @@ import Component from "../../ui/components/component";
 import PhysicsQueue from "../physics/physicsQueue";
 import Physics from "../physics/physics";
 
-export default class BaseParticle{
+export default abstract class BaseParticle{
     x : number = 0;
     y : number = 0;
     xSpeed : number = 0;
