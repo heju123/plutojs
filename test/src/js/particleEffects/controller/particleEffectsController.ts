@@ -7,8 +7,12 @@ export default class ParticleEffectsController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            let p : Particle = new Particle1((<Controller>this).component.getComponentByName("particle1"), 5000);
-            (<Controller>this).component.getComponentByName("particle1").addParticle(p);
+            let p : Particle;
+            for (let i = 0; i <= 100; i++)
+            {
+                p = new Particle1((<Controller>this).component.getComponentByName("particle1"), 20000);
+                (<Controller>this).component.getComponentByName("particle1").addParticle(p);
+            }
         });
     }
 }

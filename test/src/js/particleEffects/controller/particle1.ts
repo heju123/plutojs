@@ -4,11 +4,25 @@ export default class Particle1 extends BaseParticle implements Particle{
     constructor(component : Component, lifeTime? : number) {
         super(component, lifeTime);
 
-        (<Particle>this).yAcceleration = 0.05;
+        (<Particle>this).setX((<Particle>this).component.getWidth() / 2);
+        (<Particle>this).setY((<Particle>this).component.getHeight() / 2);
+
+        (<Particle>this).ySpeed = this.getRanSpeed();
+        (<Particle>this).xSpeed = this.getRanSpeed();
+
         let speed : Physics = new Speed(this);
-        let acceleration : Physics = new Acceleration(this);
-        (<Particle>this).addPhysics(acceleration);
         (<Particle>this).addPhysics(speed);
+    }
+
+    private getRanSpeed(){
+        if (Math.random() >= 0.5)
+        {
+            return Math.random() * 0.3 + 0.1;
+        }
+        else
+        {
+            return -Math.random() * 0.3 + 0.1;
+        }
     }
 
     draw(ctx : CanvasRenderingContext2D) : boolean{
@@ -18,8 +32,14 @@ export default class Particle1 extends BaseParticle implements Particle{
         }
 
         ctx.beginPath();
-        ctx.fillStyle = "#ff0000";
-        ctx.fillRect((<Particle>this).getRealX(), (<Particle>this).getRealY(), 50, 50);
+        var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), 3,
+            (<Particle>this).getRealX(), (<Particle>this).getRealY(), 10);
+        radialGradient.addColorStop(0, '#ff6a42');
+        radialGradient.addColorStop(1, '#ffffff');
+        ctx.fillStyle = radialGradient;
+
+        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), 10, 0, 2 * Math.PI);
+        ctx.fill();
         ctx.closePath();
     }
 
