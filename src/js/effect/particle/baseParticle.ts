@@ -1,4 +1,6 @@
 import Component from "../../ui/components/component";
+import PhysicsQueue from "../physics/physicsQueue";
+import Physics from "../physics/physics";
 
 export default class BaseParticle{
     x : number = 0;
@@ -13,6 +15,8 @@ export default class BaseParticle{
     alive : boolean = true;
 
     lifeTime : number = -1;
+
+    private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
 
     private lastTime : number;
     private lock : boolean = false;
@@ -33,19 +37,31 @@ export default class BaseParticle{
     }
 
     draw(ctx : CanvasRenderingContext2D) : boolean{
-        let currentTime = (new Date()).getTime();
-        if (!this.lastTime) {
-            this.lastTime = currentTime;
-        }
-        else {
-            if (currentTime - this.lastTime >= 1)//大约1毫秒执行一次
-            {
-                this.lock = true;
-
-                this.lock = false;
-                this.lastTime = currentTime;
-            }
-        }
+        this.physicsQueue.effect();
         return true;
+    }
+
+    /** 添加物理现象 */
+    addPhysics(physics : Physics){
+        this.physicsQueue.add(physics);
+    }
+
+    setX(x : number){
+        this.x = x;
+    }
+    setY(y : number){
+        this.y = y;
+    }
+    getX() : number{
+        return this.x;
+    }
+    getY() : number{
+        return this.y;
+    }
+    getRealX() : number{
+        return this.component.getRealX() + this.getX();
+    }
+    getRealY() : number{
+        return this.component.getRealY() + this.getY();
     }
 }

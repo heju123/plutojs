@@ -1,4 +1,5 @@
 import Component from "../../ui/components/component";
+import Physics from "../physics/physics";
 
 interface Particle{
     x : number;
@@ -19,9 +20,18 @@ interface Particle{
 
     draw(ctx : CanvasRenderingContext2D) : boolean;
 
+    addPhysics(physics : Physics);
+
     beforeMount() : void;
     mounted() : void;
     beforeDestroy() : void;
     destroyed() : void;
+
+    setX(x : number);
+    setY(y : number);
+    getX() : number;
+    getY() : number;
+    getRealX() : number;
+    getRealY() : number;
 }
 export default Particle;

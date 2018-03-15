@@ -19,11 +19,25 @@ export default class Speed extends BasePhysics implements Physics{
             super.effect().then(()=>{
                 if (this.target.xSpeed && this.target.xSpeed !== 0)
                 {
-                    this.target.setStyle("x", this.target.getX() + this.target.xSpeed);
+                    if (this.target.setStyle)
+                    {
+                        this.target.setStyle("x", this.target.getX() + this.target.xSpeed);
+                    }
+                    else
+                    {
+                        this.target.setX(this.target.getX() + this.target.xSpeed);
+                    }
                 }
                 if (this.target.ySpeed && this.target.ySpeed !== 0)
                 {
-                    this.target.setStyle("y", this.target.getY() + this.target.ySpeed);
+                    if (this.target.setStyle)
+                    {
+                        this.target.setStyle("y", this.target.getY() + this.target.ySpeed);
+                    }
+                    else
+                    {
+                        this.target.setY(this.target.getY() + this.target.ySpeed);
+                    }
                 }
                 resolve();
             }, (data)=>{
@@ -34,7 +48,14 @@ export default class Speed extends BasePhysics implements Physics{
                         this.target.xSpeed = 0;
                         if (this.target.ySpeed && this.target.ySpeed !== 0)
                         {
-                            this.target.setStyle("y", this.target.getY() + this.target.ySpeed);
+                            if (this.target.setStyle)
+                            {
+                                this.target.setStyle("y", this.target.getY() + this.target.ySpeed);
+                            }
+                            else
+                            {
+                                this.target.setY(this.target.getY() + this.target.ySpeed);
+                            }
                         }
                     }
                     else if (data.direction === "y")
@@ -42,7 +63,14 @@ export default class Speed extends BasePhysics implements Physics{
                         this.target.ySpeed = 0;
                         if (this.target.xSpeed && this.target.xSpeed !== 0)
                         {
-                            this.target.setStyle("x", this.target.getX() + this.target.xSpeed);
+                            if (this.target.setStyle)
+                            {
+                                this.target.setStyle("x", this.target.getX() + this.target.xSpeed);
+                            }
+                            else
+                            {
+                                this.target.setX(this.target.getX() + this.target.xSpeed);
+                            }
                         }
                     }
                 }
