@@ -1,7 +1,7 @@
 import {Controller,Component,Point,Particle,BaseParticle,Physics,Acceleration,Speed,animationUtil} from "~/js/main";
 
 export default class Particle1 extends BaseParticle implements Particle{
-    alpha : number = 1.0;
+    alpha : number = 0;
 
     constructor(component : Component, lifeTime? : number) {
         super(component, lifeTime);
@@ -49,6 +49,13 @@ export default class Particle1 extends BaseParticle implements Particle{
     beforeMount(){
     }
     mounted(){
+        animationUtil.executeAttrChange(this, {alpha : 1}, {
+            duration : "5s",
+            onComplete : function(){
+            },
+            easeType : "Linear",
+            easing : "ease"
+        });
     }
     beforeDestroy() : Promise<any>{
         return new Promise((resolve, reject)=>{
@@ -59,7 +66,7 @@ export default class Particle1 extends BaseParticle implements Particle{
                 },
                 easeType : "Linear",
                 easing : "ease"
-            })
+            });
         });
     }
     destroyed(){
