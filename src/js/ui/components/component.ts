@@ -460,20 +460,33 @@ abstract class Component {
         if (this.particleList.head)
         {
             this.particleList.forEach((particle)=>{
-                if (particle.value.alive)
+                particle.value.draw(ctx);
+                if (!particle.value.alive)//粒子已失效，需要清除
                 {
-                    particle.value.draw(ctx);
-                }
-                else//粒子已失效，需要清除
-                {
+                    let promise;
                     if (particle.value.beforeDestroy)
                     {
-                        particle.value.beforeDestroy.apply(this, []);
+                        promise = particle.value.beforeDestroy.apply(particle.value, []);
                     }
-                    this.particleList.remove(particle);
-                    if (particle.value.destroyed)
+                    if (promise)
                     {
-                        particle.value.destroyed.apply(this, []);
+                        promise.then(()=>{
+                            this.particleList.remove(particle);
+
+                            if (particle.value.destroyed)
+                            {
+                                particle.value.destroyed.apply(this, []);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        this.particleList.remove(particle);
+
+                        if (particle.value.destroyed)
+                        {
+                            particle.value.destroyed.apply(this, []);
+                        }
                     }
                 }
             });

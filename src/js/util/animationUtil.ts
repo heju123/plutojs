@@ -10,7 +10,7 @@ let animationUtil : any = {
      *
      * @param styleKey 样式key
      * @param toVal 修改后的值
-     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
+     * @param animation{duration：间隔时间（带单位后缀）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
     executeStyleChange : (com : Component, styleKey : string, toVal : string, animation : any)=>{
         let to = {};
@@ -22,7 +22,7 @@ let animationUtil : any = {
      *
      * @param target 改变属性的目标对象
      * @param to 改变的属性，用object表示
-     * @param animation{duration：间隔时间（单位：秒）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
+     * @param animation{duration：间隔时间（带单位后缀）；easeType：动画类型（如：Linear或Elastic）；easing：动画执行方式（如：ease或easeOut）；repeat：循环执行的次数}
      */
     executeAttrChange : (target : any, to : any, animation : any)=>{
         return new Promise((resolve, reject)=>{

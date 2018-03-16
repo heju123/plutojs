@@ -10,7 +10,7 @@ export default class ParticleEffectsController extends Controller{
             let p : Particle;
             for (let i = 0; i <= 100; i++)
             {
-                p = new Particle1((<Controller>this).component.getComponentByName("particle1"), 20000);
+                p = new Particle1((<Controller>this).component.getComponentByName("particle1"), 10000);
                 (<Controller>this).component.getComponentByName("particle1").addParticle(p);
             }
         });

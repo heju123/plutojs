@@ -24,7 +24,7 @@ interface Particle{
 
     beforeMount() : void;
     mounted() : void;
-    beforeDestroy() : void;
+    beforeDestroy() : Promise<any>;
     destroyed() : void;
 
     setX(x : number);

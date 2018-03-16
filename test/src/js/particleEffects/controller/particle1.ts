@@ -1,6 +1,8 @@
-import {Controller,Component,Point,Particle,BaseParticle,Physics,Acceleration,Speed} from "~/js/main";
+import {Controller,Component,Point,Particle,BaseParticle,Physics,Acceleration,Speed,animationUtil} from "~/js/main";
 
 export default class Particle1 extends BaseParticle implements Particle{
+    alpha : number = 1.0;
+
     constructor(component : Component, lifeTime? : number) {
         super(component, lifeTime);
 
@@ -32,13 +34,14 @@ export default class Particle1 extends BaseParticle implements Particle{
         }
 
         ctx.beginPath();
-        var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), 3,
-            (<Particle>this).getRealX(), (<Particle>this).getRealY(), 10);
-        radialGradient.addColorStop(0, '#ff6a42');
+        ctx.globalAlpha = this.alpha;
+        var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), 2,
+            (<Particle>this).getRealX(), (<Particle>this).getRealY(), 4);
+        radialGradient.addColorStop(0, '#ff6172');
         radialGradient.addColorStop(1, '#ffffff');
         ctx.fillStyle = radialGradient;
 
-        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), 10, 0, 2 * Math.PI);
+        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), 4, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
     }
@@ -47,7 +50,17 @@ export default class Particle1 extends BaseParticle implements Particle{
     }
     mounted(){
     }
-    beforeDestroy(){
+    beforeDestroy() : Promise<any>{
+        return new Promise((resolve, reject)=>{
+            animationUtil.executeAttrChange(this, {alpha : 0}, {
+                duration : "2s",
+                onComplete : function(){
+                    resolve();
+                },
+                easeType : "Linear",
+                easing : "ease"
+            })
+        });
     }
     destroyed(){
     }
