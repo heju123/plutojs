@@ -460,7 +460,9 @@ abstract class Component {
         if (this.particleList.head)
         {
             this.particleList.forEach((particle)=>{
+                ctx.save();
                 particle.value.draw(ctx);
+                ctx.restore();
                 if (!particle.value.alive)//粒子已失效，需要清除
                 {
                     let promise;

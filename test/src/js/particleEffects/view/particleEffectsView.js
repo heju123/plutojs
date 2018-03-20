@@ -39,8 +39,8 @@ export default {
                             style : {
                                 x : 10,
                                 y : 10,
-                                width : 500,
-                                height : 400,
+                                width : 300,
+                                height : 300,
                                 borderWidth : 1,
                                 borderColor : "#a0a0a0"
                             }

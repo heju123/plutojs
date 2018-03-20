@@ -2,12 +2,13 @@ import {Controller,Component,Point,Particle,BaseParticle,Physics,Acceleration,Sp
 
 export default class Particle1 extends BaseParticle implements Particle{
     alpha : number = 0;
+    private particleRadius : number = 4;
 
     constructor(component : Component, lifeTime? : number) {
         super(component, lifeTime);
 
-        (<Particle>this).setX((<Particle>this).component.getWidth() / 2);
-        (<Particle>this).setY((<Particle>this).component.getHeight() / 2);
+        (<Particle>this).setX((<Particle>this).component.getWidth() / 2 - this.particleRadius);
+        (<Particle>this).setY((<Particle>this).component.getHeight() / 2 - this.particleRadius);
 
         (<Particle>this).ySpeed = this.getRanSpeed();
         (<Particle>this).xSpeed = this.getRanSpeed();
@@ -17,7 +18,7 @@ export default class Particle1 extends BaseParticle implements Particle{
     }
 
     private getRanSpeed(){
-        if (Math.random() >= 0.5)
+        if (Math.random() > 0.5)
         {
             return Math.random() * 0.3 + 0.1;
         }
@@ -35,13 +36,13 @@ export default class Particle1 extends BaseParticle implements Particle{
 
         ctx.beginPath();
         ctx.globalAlpha = this.alpha;
-        var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), 2,
-            (<Particle>this).getRealX(), (<Particle>this).getRealY(), 4);
+        var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius / 2,
+            (<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius);
         radialGradient.addColorStop(0, '#ff6172');
         radialGradient.addColorStop(1, '#ffffff');
         ctx.fillStyle = radialGradient;
 
-        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), 4, 0, 2 * Math.PI);
+        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
     }
@@ -50,7 +51,7 @@ export default class Particle1 extends BaseParticle implements Particle{
     }
     mounted(){
         animationUtil.executeAttrChange(this, {alpha : 1}, {
-            duration : "5s",
+            duration : "1s",
             onComplete : function(){
             },
             easeType : "Linear",
