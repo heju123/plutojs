@@ -463,8 +463,9 @@ abstract class Component {
                 ctx.save();
                 particle.value.draw(ctx);
                 ctx.restore();
-                if (!particle.value.alive)//粒子已失效，需要清除
+                if (!particle.value.alive && !particle.value.isDestroying)//粒子已失效，需要清除
                 {
+                    particle.value.isDestroying = true;
                     let promise;
                     if (particle.value.beforeDestroy)
                     {

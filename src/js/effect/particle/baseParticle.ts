@@ -13,6 +13,7 @@ export default abstract class BaseParticle{
     component : Component;
 
     alive : boolean = true;
+    isDestroying = false;//是否正在销毁，为了避免延迟情况下重复调用销毁方法
 
     lifeTime : number = -1;
 

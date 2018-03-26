@@ -44,6 +44,21 @@ export default {
                                 borderWidth : 1,
                                 borderColor : "#a0a0a0"
                             }
+                        },
+                        {
+                            name : "particle2",
+                            type : "rect",
+                            style : {
+                                x : 10,
+                                y : 350,
+                                width : 300,
+                                height : 300,
+                                borderWidth : 1,
+                                borderColor : "#a0a0a0"
+                            },
+                            events : {
+                                "mousemove" : "onParticleAreaMouseMove"
+                            }
                         }
                     ]
                 }
