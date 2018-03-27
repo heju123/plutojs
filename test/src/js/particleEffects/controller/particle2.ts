@@ -30,11 +30,11 @@ export default class Particle1 extends BaseParticle implements Particle{
     private getRanSpeed(){
         if (Math.random() > 0.5)
         {
-            return Math.random() * 1 + 0.3;
+            return Math.random() * 2 + 0.05;
         }
         else
         {
-            return -(Math.random() * 1 + 0.3);
+            return -(Math.random() * 2 + 0.05);
         }
     }
 
