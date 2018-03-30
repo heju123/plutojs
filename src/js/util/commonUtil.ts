@@ -77,6 +77,44 @@ let commonUtil : any = {
         }
         document.getElementsByTagName('head')[0].appendChild(scriptDom);
     },
+    getFileNameFromUrl : (url : string) : string =>{
+        return url.substring(url.lastIndexOf("/") + 1, url.length);
+    },
+    isIncludeScript : (name : string) : boolean =>{
+        var js = /js$/i.test(name);
+        var es=document.getElementsByTagName(js?'script':'link');
+        for(var i=0;i<es.length;i++)
+            if(es[i][js?'src':'href'].indexOf(name)!=-1)return true;
+        return false;
+    },
+    loadScripts : (scriptArr : Array<string>)=>{
+        if (scriptArr instanceof Array)
+        {
+            var promises = [];
+            for (var i = 0; i < scriptArr.length; i++)
+            {
+                promises.push(new Promise(function(resolve, reject){
+                    if (commonUtil.isIncludeScript(commonUtil.getFileNameFromUrl(scriptArr[i])))
+                    {
+                        resolve();
+                    }
+                    else
+                    {
+                        commonUtil.asyncLoadScript(scriptArr[i], function(){
+                            resolve();
+                        });
+                    }
+                }));
+            }
+            return Promise.all(promises);
+        }
+        else
+        {
+            return new Promise(function(resolve, reject){
+                resolve();
+            });
+        }
+    },
     concatList : (list : Array<any>, addList : Array<any>)=>{
         addList.forEach((item)=>{
             list.push(item);
