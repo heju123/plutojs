@@ -195,44 +195,32 @@ let commonUtil : any = {
         return result;
     },
     /**
-     * 用key值获取数组
-     * @param arr 数组
-     * @param key 字段名
-     * @param value key字段值
-     * @return 数组信息
+     * 获取数组值
+     * @param arr
+     * @param object
+     * @param key，如果不传，则比较object整个
      */
-    getArrayInfoByKey : (arr : Array<any>, key : string, value : string)=>{
-        let item;
-        for (let i = 0, j = arr.length; i < j; i++)
-        {
+    getArray: function (arr, object, key) {
+        if (arr == undefined || object == undefined) {
+            return undefined;
+        }
+        var item;
+        for (var i = 0, j = arr.length; i < j; i++) {
             item = arr[i];
-            if (item[key] === value)
+            if (!key)
             {
-                return item;
+                if (item === object) {
+                    return item;
+                }
+            }
+            else
+            {
+                if (item[key] === object) {
+                    return item;
+                }
             }
         }
         return undefined;
-    },
-    /**
-     * 判断对象是否在数组中
-     * @param arr
-     * @param object
-     */
-    inArray : (arr : Array<any>, object : any)=>{
-        if (arr == undefined || object == undefined)
-        {
-            return false;
-        }
-        let item;
-        for (let i = 0,j = arr.length; i < j; i++)
-        {
-            item = arr[i];
-            if (item === object)
-            {
-                return true;
-            }
-        }
-        return false;
     },
     /** 根据后缀获取时间(单位：秒) */
     getTimeSecForSuffix : (time : any)=>{
