@@ -460,9 +460,7 @@ abstract class Component {
         if (this.particleList.head)
         {
             this.particleList.forEach((particle)=>{
-                ctx.save();
-                particle.value.draw(ctx);
-                ctx.restore();
+                particle.value.readyToDraw(ctx);
                 if (!particle.value.alive && !particle.value.isDestroying)//粒子已失效，需要清除
                 {
                     particle.value.isDestroying = true;

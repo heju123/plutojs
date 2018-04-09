@@ -28,12 +28,7 @@ export default class Particle1 extends BaseParticle implements Particle{
         }
     }
 
-    draw(ctx : CanvasRenderingContext2D) : boolean{
-        if (!super.draw(ctx))
-        {
-            return;
-        }
-
+    draw(ctx : CanvasRenderingContext2D){
         ctx.beginPath();
         ctx.globalAlpha = this.alpha;
         var radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius / 2,

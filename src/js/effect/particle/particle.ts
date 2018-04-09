@@ -18,7 +18,8 @@ interface Particle{
     //存活时间，单位：毫秒，-1：永久
     lifeTime : number;
 
-    draw(ctx : CanvasRenderingContext2D) : boolean;
+    readyToDraw(ctx : CanvasRenderingContext2D);
+    draw(ctx : CanvasRenderingContext2D);
 
     addPhysics(physics : Physics);
 

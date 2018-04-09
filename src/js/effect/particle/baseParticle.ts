@@ -37,10 +37,14 @@ export default abstract class BaseParticle{
         }
     }
 
-    draw(ctx : CanvasRenderingContext2D) : boolean{
+    readyToDraw(ctx : CanvasRenderingContext2D){
         this.physicsQueue.effect();
-        return true;
+        ctx.save();
+        this.draw(ctx);
+        ctx.restore();
     }
+
+    abstract draw(ctx : CanvasRenderingContext2D);
 
     /** 添加物理现象 */
     addPhysics(physics : Physics){
