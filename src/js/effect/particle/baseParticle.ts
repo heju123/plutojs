@@ -1,8 +1,10 @@
 import Component from "../../ui/components/component";
 import PhysicsQueue from "../physics/physicsQueue";
 import Physics from "../physics/physics";
+import Cache from "../../cache/cache";
 
 export default abstract class BaseParticle{
+    alpha : number = 1;
     x : number = 0;
     y : number = 0;
     xSpeed : number = 0;
@@ -22,7 +24,9 @@ export default abstract class BaseParticle{
     private lastTime : number;
     private lock : boolean = false;
 
-    constructor(component : Component, lifeTime? : number){
+    cache : Cache;
+
+    constructor(component : Component, lifeTime? : number, cache? : Cache){
         this.component = component;
 
         if (lifeTime)
@@ -35,12 +39,33 @@ export default abstract class BaseParticle{
                 this.alive = false;
             }, this.lifeTime);
         }
+
+        if (cache)
+        {
+            this.cache = cache;
+        }
     }
 
     readyToDraw(ctx : CanvasRenderingContext2D){
         this.physicsQueue.effect();
         ctx.save();
-        this.draw(ctx);
+        if (ctx.globalAlpha !== this.alpha)
+        {
+            ctx.globalAlpha = this.alpha;
+        }
+        if (this.cache)
+        {
+            if (this.cache.isEmpty)
+            {
+                this.draw(this.cache.getContext());
+                this.cache.isEmpty = false;
+            }
+            ctx.drawImage(this.cache.getCache(), this.getRealX(), this.getRealY());
+        }
+        else
+        {
+            this.draw(ctx);
+        }
         ctx.restore();
     }
 

@@ -1,6 +1,6 @@
 export default class Cache{
     private canvas : HTMLCanvasElement;
-    isEmpty : boolean = false;
+    isEmpty : boolean = true;
 
     constructor(width : number, height : number) {
         this.canvas = <HTMLCanvasElement>document.createElement("CANVAS");

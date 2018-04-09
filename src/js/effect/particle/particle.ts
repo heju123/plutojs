@@ -1,7 +1,9 @@
 import Component from "../../ui/components/component";
 import Physics from "../physics/physics";
+import Cache from "../../cache/cache";
 
 interface Particle{
+    alpha : number;
     x : number;
     y : number;
     xSpeed : number;
@@ -17,6 +19,8 @@ interface Particle{
 
     //存活时间，单位：毫秒，-1：永久
     lifeTime : number;
+
+    cache : Cache;//缓存对象
 
     readyToDraw(ctx : CanvasRenderingContext2D);
     draw(ctx : CanvasRenderingContext2D);

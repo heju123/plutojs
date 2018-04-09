@@ -1,11 +1,11 @@
 import {Controller,Component,Point,Particle,BaseParticle,Physics,Acceleration,Speed,animationUtil} from "~/js/main";
+import Cache from "../../../../../src/js/cache/cache";
 
-export default class Particle1 extends BaseParticle implements Particle{
-    alpha : number = 1;
+export default class Particle2 extends BaseParticle implements Particle{
     private particleRadius : number = 2;
 
-    constructor(component : Component, lifeTime? : number, opts? : any) {
-        super(component, lifeTime);
+    constructor(component : Component, lifeTime? : number, cache? : Cache, opts? : any) {
+        super(component, lifeTime, cache);
 
         var options = opts || {
             x : (<Particle>this).component.getWidth() / 2 - this.particleRadius,
@@ -40,14 +40,13 @@ export default class Particle1 extends BaseParticle implements Particle{
 
     draw(ctx : CanvasRenderingContext2D){
         ctx.beginPath();
-        ctx.globalAlpha = this.alpha;
-        let radialGradient = ctx.createRadialGradient((<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius / 2,
-            (<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius);
+        let radialGradient = ctx.createRadialGradient(this.particleRadius, this.particleRadius, this.particleRadius / 2,
+            this.particleRadius, this.particleRadius, this.particleRadius);
         radialGradient.addColorStop(0, '#6bd3ff');
         radialGradient.addColorStop(1, '#ffffff');
         ctx.fillStyle = radialGradient;
 
-        ctx.arc((<Particle>this).getRealX(), (<Particle>this).getRealY(), this.particleRadius, 0, 2 * Math.PI);
+        ctx.arc(this.particleRadius, this.particleRadius, this.particleRadius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
     }
