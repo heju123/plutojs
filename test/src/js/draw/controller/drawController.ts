@@ -40,6 +40,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线3
@@ -56,6 +57,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线4
@@ -72,6 +74,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线5
@@ -88,6 +91,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线6
@@ -102,6 +106,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线7
@@ -118,6 +123,7 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = true;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
 
             //连线8
@@ -132,7 +138,18 @@ export default class DrawController extends Controller{
             arcPath = new ArcPath(arc, "1s");
             (<ArcPath>arcPath).anticlockwise = false;
             arcPath.newPath = true;
+            arcPath.setStartPoint(point1);
             this.arcTestDraw.pushPath(arcPath);
+
+            //连线9
+            let rect15 = (<Controller>this).component.getComponentById("rect15");
+            let rect16 = (<Controller>this).component.getComponentById("rect16");
+            point1 = new Point(rect15.getX() + rect15.getWidth() / 2, rect15.getY() + rect15.getHeight() / 2);
+            point2 = new Point(rect16.getX() + rect16.getWidth() / 2, rect16.getY() + rect16.getHeight() / 2);
+            let pointPath = new PointPath(point2, "1s");
+            pointPath.newPath = true;
+            pointPath.setStartPoint(point1);
+            this.arcTestDraw.pushPath(pointPath);
 
             this.arcTestDraw.finish();
         });

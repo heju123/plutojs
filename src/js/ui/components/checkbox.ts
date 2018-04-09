@@ -47,16 +47,16 @@ export default class Checkbox extends Rect {
     //初始化check动画
     private initCheckedAni(){
         this.sequenceDraw.clearPath();
-        let startPoint : Point = new Point(this.getRealX() + 5, this.getRealY() + this.getHeight() / 2);
+        let startPoint : Point = new Point(5, this.getHeight() / 2);
         this.sequenceDraw.setStartPoint(startPoint);
 
-        let point : Point = new Point(this.getRealX() + this.getWidth() / 2 - 2, this.getRealY() + this.getHeight() - 6);
-        let path : Path = new PointPath(point, "250ms");
-        this.sequenceDraw.pushPath(path);
+        let point1 : Point = new Point(this.getWidth() / 2 - 2, this.getHeight() - 6);
+        let path1 : Path = new PointPath(point1, "250ms");
+        this.sequenceDraw.pushPath(path1);
 
-        point = new Point(this.getRealX() - 3 + this.getWidth(), this.getRealY() + 5);
-        path = new PointPath(point, "200ms");
-        this.sequenceDraw.pushPath(path);
+        let point2 : Point = new Point(this.getWidth() - 3, 5);
+        let path2 : Path = new PointPath(point2, "200ms");
+        this.sequenceDraw.pushPath(path2);
         this.sequenceDraw.finish();
     }
 

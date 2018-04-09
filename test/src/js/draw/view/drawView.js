@@ -172,6 +172,28 @@ export default {
                             }
                         },
                         {
+                            id : "rect15",
+                            type : "rect",
+                            style : {
+                                x : 430,
+                                y : 320,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#ff675f"
+                            }
+                        },
+                        {
+                            id : "rect16",
+                            type : "rect",
+                            style : {
+                                x : 500,
+                                y : 480,
+                                width : 20,
+                                height : 20,
+                                backgroundColor : "#ff675f"
+                            }
+                        },
+                        {
                             name : "quadraticCurve",
                             type : "rect",
                             controller : QuadraticCurveController,

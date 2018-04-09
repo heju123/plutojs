@@ -20,13 +20,16 @@ export default class SequenceDraw{
     }
 
     pushPath(path : Path){
-        if (this.paths.length > 0)
+        if (!path.newPath)
         {
-            path.setStartPoint(this.paths[this.paths.length - 1].getLastPoint());
-        }
-        else
-        {
-            path.setStartPoint(this.startPoint);
+            if (this.paths.length > 0)
+            {
+                path.setStartPoint(this.paths[this.paths.length - 1].getLastPoint());
+            }
+            else
+            {
+                path.setStartPoint(this.startPoint);
+            }
         }
         this.paths.push(path);
     }
