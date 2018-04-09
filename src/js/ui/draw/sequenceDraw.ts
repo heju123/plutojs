@@ -98,22 +98,25 @@ export default class SequenceDraw{
         {
             return;
         }
-        ctx.moveTo(this.startPoint.x + this.component.getRealX() - this.component.style.contentScrollX, this.startPoint.y + this.component.getRealY() - this.component.style.contentScrollY);
+        ctx.moveTo(this.startPoint.x + this.component.getRealX() - (this.component.style.contentScrollX || 0),
+            this.startPoint.y + this.component.getRealY() - (this.component.style.contentScrollY || 0));
         this.paths.forEach((path)=>{
             if (path.show)
             {
                 if (path.newPath)
                 {
-                    ctx.moveTo(path.getStartPoint().x + this.component.getRealX() - this.component.style.contentScrollX, path.getStartPoint().y + this.component.getRealY() - this.component.style.contentScrollY);
+                    ctx.moveTo(path.getStartPoint().x + this.component.getRealX() - (this.component.style.contentScrollX || 0),
+                        path.getStartPoint().y + this.component.getRealY() - (this.component.style.contentScrollY || 0));
                 }
                 if (path instanceof PointPath)
                 {
-                    ctx.lineTo(path.getDrawTarget().x + this.component.getRealX() - this.component.style.contentScrollX, path.getDrawTarget().y + this.component.getRealY() - this.component.style.contentScrollY);
+                    ctx.lineTo(path.getDrawTarget().x + this.component.getRealX() - (this.component.style.contentScrollX || 0),
+                        path.getDrawTarget().y + this.component.getRealY() - (this.component.style.contentScrollY || 0));
                 }
                 else if (path instanceof ArcPath)
                 {
-                    ctx.arc(path.getDrawTarget().centerPoint.x + this.component.getRealX() - this.component.style.contentScrollX,
-                        path.getDrawTarget().centerPoint.y + this.component.getRealY() - this.component.style.contentScrollY,
+                    ctx.arc(path.getDrawTarget().centerPoint.x + this.component.getRealX() - (this.component.style.contentScrollX || 0),
+                        path.getDrawTarget().centerPoint.y + this.component.getRealY() - (this.component.style.contentScrollY || 0),
                         path.getDrawTarget().radius, path.getDrawTarget().startAngle, path.getDrawTarget().endAngle, path.anticlockwise);
                 }
             }
