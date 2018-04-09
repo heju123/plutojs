@@ -42,6 +42,8 @@ import Stack from "./data/structure/stack";
 import LinkedItem from "./data/structure/linkedItem";
 import LinkedList from "./data/structure/linkedList";
 
+import Cache from "./cache/cache";
+
 class Main {
     fps : Fps;
 
@@ -96,4 +98,5 @@ class Main {
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
     ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve,
     Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed,
-    BaseParticle,Particle,Stack,LinkedItem,LinkedList};
+    BaseParticle,Particle,Stack,LinkedItem,LinkedList,
+    Cache};
