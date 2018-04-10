@@ -24,7 +24,6 @@ import {
     Acceleration,
     Collision,
     Friction,
-    Physics,
     PhysicsQueue,
     Speed,
     BaseParticle,
@@ -67,7 +66,6 @@ window.plutojs = {
         Acceleration,
         Collision,
         Friction,
-        Physics,
         PhysicsQueue,
         Speed
     },
