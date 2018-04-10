@@ -21,7 +21,7 @@
     "babel-loader": "*",
     "babel-preset-es2015": "*",
     "clean-webpack-plugin": "*",
-    "webpack": "*",
+    "webpack": "~3.10.0",
     "html-webpack-plugin": "*",
     "copy-webpack-plugin": "*",
     "uglify-js-plugin": "*",
