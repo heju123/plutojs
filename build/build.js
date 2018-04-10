@@ -16,7 +16,6 @@ import {
     Scrollbar,
     ArcPath,
     PointPath,
-    Path,
     Arc,
     Point,
     SequenceDraw,
@@ -29,7 +28,6 @@ import {
     PhysicsQueue,
     Speed,
     BaseParticle,
-    Particle,
     Stack,
     LinkedItem,
     LinkedList,
@@ -59,7 +57,6 @@ window.plutojs = {
     draw : {
         ArcPath,
         PointPath,
-        Path,
         Arc,
         Point,
         SequenceDraw,
@@ -80,8 +77,7 @@ window.plutojs = {
         LinkedList
     },
     particle : {
-        BaseParticle,
-        Particle
+        BaseParticle
     },
     cache : {
         Cache
