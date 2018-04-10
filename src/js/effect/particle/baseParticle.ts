@@ -46,7 +46,7 @@ export default abstract class BaseParticle{
         }
     }
 
-    readyToDraw(ctx : CanvasRenderingContext2D){
+    drawParticle(ctx : CanvasRenderingContext2D){
         this.physicsQueue.effect();
         ctx.save();
         if (ctx.globalAlpha !== this.alpha)

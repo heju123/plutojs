@@ -22,7 +22,7 @@ interface Particle{
 
     cache : Cache;//缓存对象
 
-    readyToDraw(ctx : CanvasRenderingContext2D);
+    drawParticle(ctx : CanvasRenderingContext2D);
     draw(ctx : CanvasRenderingContext2D);
 
     addPhysics(physics : Physics);
