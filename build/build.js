@@ -30,7 +30,8 @@ import {
     Stack,
     LinkedItem,
     LinkedList,
-    Cache
+    Cache,
+    DomImage
 } from "~/js/main";
 
 window.plutojs = {
@@ -79,5 +80,8 @@ window.plutojs = {
     },
     cache : {
         Cache
+    },
+    dom : {
+        DomImage
     }
 };

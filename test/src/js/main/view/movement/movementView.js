@@ -12,14 +12,15 @@ export default {
     },
     children : [
         {
-            type : "rect",
+            type : "dom",
+            className : "DomImage",
             style : {
                 x : 0,
                 y : 0,
                 width : "100%",
                 height : "100%",
-                backgroundImage : "/images/bg.jpeg",
-                zIndex : 0
+                src : "/images/bg.jpeg",
+                zIndex : 10
             }
         },
         {

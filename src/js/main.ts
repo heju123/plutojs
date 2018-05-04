@@ -44,6 +44,8 @@ import LinkedList from "./data/structure/linkedList";
 
 import Cache from "./cache/cache";
 
+import DomImage from "./ui/dom/domImage";
+
 class Main {
     fps : Fps;
 
@@ -99,4 +101,5 @@ export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Compon
     ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve,
     Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed,
     BaseParticle,Particle,Stack,LinkedItem,LinkedList,
-    Cache};
+    Cache,
+    DomImage};

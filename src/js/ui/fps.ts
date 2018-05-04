@@ -6,18 +6,19 @@ import globalUtil from "../util/globalUtil";
 import ViewState from "./viewState";
 import EventBus from "../event/eventBus";
 import Component from "./components/component";
+import DomFactory from "./dom/domFactory";
 
 export default class Fps{
-    canvasBox : HTMLElement;
     canvas : HTMLCanvasElement;
     ctx : CanvasRenderingContext2D;
     viewState : ViewState;
+    domFactory : DomFactory;
 
     constructor(mainBody:HTMLDivElement){
-        this.canvasBox = <HTMLCanvasElement>document.createElement("DIV");
-        this.canvasBox.style.width = "100%";
-        this.canvasBox.style.height = "100%";
-        this.canvasBox.style.position = "relative";
+        globalUtil.showArea = <HTMLElement>document.createElement("DIV");
+        globalUtil.showArea.style.width = "100%";
+        globalUtil.showArea.style.height = "100%";
+        globalUtil.showArea.style.position = "relative";
         this.canvas = <HTMLCanvasElement>document.createElement("CANVAS");
         (<any>this.canvas).offset = this.offset.bind(this.canvas);
         this.canvas.width = mainBody.offsetWidth;
@@ -30,13 +31,16 @@ export default class Fps{
         this.canvas.ondragover = function(e){
             e.preventDefault();
         };
-        this.canvasBox.appendChild(this.canvas);
-        mainBody.appendChild(this.canvasBox);
+        globalUtil.showArea.appendChild(this.canvas);
+        mainBody.appendChild(globalUtil.showArea);
         this.ctx = this.canvas.getContext('2d');
         (<any>this).ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || (<any>window).mozRequestAnimationFrame || (<any>window).webkitRequestAnimationFrame || (<any>window).msRequestAnimationFrame;
 
         globalUtil.eventBus = new EventBus(this.canvas);
+
+        this.domFactory = new DomFactory();
+        globalUtil.domFactory = this.domFactory;
     }
 
     offset(element:any) {
@@ -153,8 +157,7 @@ export default class Fps{
 
     private draw(){
         //背景
-        this.ctx.fillStyle = "#000";
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.viewState.beforeDraw(this.ctx);
         this.drawView(this.viewState.rootComponent);

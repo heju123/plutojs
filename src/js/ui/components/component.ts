@@ -370,6 +370,12 @@ abstract class Component {
         else
         {
             return new Promise((resolve)=>{
+                if (chiCfg.type === "dom")
+                {
+                    globalUtil.domFactory.createDom(this, chiCfg.className, chiCfg);
+                    resolve();
+                    return;
+                }
                 childCom = this.newComByType(chiCfg.type);
                 childCom.initCfg(chiCfg).then(()=>{
                     resolve(childCom);
@@ -381,6 +387,12 @@ abstract class Component {
     }
 
     private asyncGetView(viewCfg : any, resolve : Function, reject : Function){
+        if (viewCfg.type === "dom")
+        {
+            globalUtil.domFactory.createDom(this, viewCfg.className, viewCfg);
+            resolve();
+            return;
+        }
         let childCom = this.newComByType(viewCfg.type);
         childCom.initCfg(viewCfg).then(()=>{
             if (resolve)
