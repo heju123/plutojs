@@ -8,10 +8,20 @@ export default {
         x : 0,
         y : 0,
         width : "100%",
-        height : "100%",
-        backgroundColor : "#fff"
+        height : "100%"
     },
     children : [
+        {
+            type : "rect",
+            style : {
+                x : 0,
+                y : 0,
+                width : "100%",
+                height : "100%",
+                backgroundImage : "/images/bg.jpeg",
+                zIndex : 0
+            }
+        },
         {
             type : "rect",
             style : {
@@ -51,7 +61,6 @@ export default {
                 x : 0,
                 y : 60,
                 width : "100%",
-                backgroundColor : "#f1f1f1",
                 height : function(){
                     return this.parent.getHeight() - 60;
                 }

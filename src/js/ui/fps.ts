@@ -8,28 +8,30 @@ import EventBus from "../event/eventBus";
 import Component from "./components/component";
 
 export default class Fps{
+    canvasBox : HTMLElement;
     canvas : HTMLCanvasElement;
     ctx : CanvasRenderingContext2D;
     viewState : ViewState;
 
     constructor(mainBody:HTMLDivElement){
-        let outerDiv : HTMLElement = <HTMLCanvasElement>document.createElement("DIV");
-        outerDiv.style.width = "100%";
-        outerDiv.style.height = "100%";
-        outerDiv.style.position = "relative";
+        this.canvasBox = <HTMLCanvasElement>document.createElement("DIV");
+        this.canvasBox.style.width = "100%";
+        this.canvasBox.style.height = "100%";
+        this.canvasBox.style.position = "relative";
         this.canvas = <HTMLCanvasElement>document.createElement("CANVAS");
         (<any>this.canvas).offset = this.offset.bind(this.canvas);
         this.canvas.width = mainBody.offsetWidth;
         this.canvas.height = mainBody.offsetHeight;
         this.canvas.style.position = "absolute";
+        this.canvas.style["z-index"] = 100;
         this.canvas.ondragstart = function(e){
             e.preventDefault();
         };
         this.canvas.ondragover = function(e){
             e.preventDefault();
         };
-        outerDiv.appendChild(this.canvas);
-        mainBody.appendChild(outerDiv);
+        this.canvasBox.appendChild(this.canvas);
+        mainBody.appendChild(this.canvasBox);
         this.ctx = this.canvas.getContext('2d');
         (<any>this).ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || (<any>window).mozRequestAnimationFrame || (<any>window).webkitRequestAnimationFrame || (<any>window).msRequestAnimationFrame;

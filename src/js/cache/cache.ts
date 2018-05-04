@@ -1,3 +1,4 @@
+/** 一些复杂绘制比如画圆或渐变等，用cache会性能一些 */
 export default class Cache{
     private canvas : HTMLCanvasElement;
     isEmpty : boolean = true;
