@@ -3,6 +3,7 @@ import Component from "../component";
 import Speed from "../../../effect/physics/speed";
 import Acceleration from "../../../effect/physics/acceleration";
 import Collision from "../../../effect/physics/collision";
+import ViewState from "../../viewState";
 
 export default class Sprite extends Rect {
     xSpeed : number;
@@ -11,7 +12,7 @@ export default class Sprite extends Rect {
     yAcceleration : number;
     onCollision : Function;
 
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
 
         this.xSpeed = 0;//大约一毫秒移动的x距离

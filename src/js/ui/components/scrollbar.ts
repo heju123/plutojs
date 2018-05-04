@@ -4,6 +4,7 @@ import Component from "./component";
 import Event from "../../event/type/event";
 import MouseEvent from "../../event/type/mouseEvent";
 import WheelEvent from "../../event/type/wheelEvent";
+import ViewState from "../viewState";
 
 const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
 const DEFAULT_SCROLLBAR_WIDTH = 10;//滚动条的默认宽度
@@ -18,7 +19,7 @@ export default class Scrollbar extends Rect {
     private onScrollObj : Component;
     private onScrollMDOffset : number;
 
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
 
         if (!this.style.scrollText)
@@ -74,8 +75,8 @@ export default class Scrollbar extends Rect {
         this.scrollbarOpeLineH.registerEvent("mousedown", this.doMouseDown.bind(this, "H"));
         this.doMouseMoveBind = this.doMouseMove.bind(this);
         this.doMouseUpBind = this.doMouseUp.bind(this);
-        globalUtil.viewState.registerEvent("mousemove", this.doMouseMoveBind);
-        globalUtil.viewState.registerEvent("mouseup", this.doMouseUpBind);
+        this.viewState.registerEvent("mousemove", this.doMouseMoveBind);
+        this.viewState.registerEvent("mouseup", this.doMouseUpBind);
         this.registerEvent("mousewheel", this.doMouseWheel.bind(this));
     }
 
@@ -351,7 +352,7 @@ export default class Scrollbar extends Rect {
     destroy() {
         super.destroy();
 
-        globalUtil.viewState.removeEvent("mousemove", this.doMouseMoveBind);
-        globalUtil.viewState.removeEvent("mouseup", this.doMouseUpBind);
+        this.viewState.removeEvent("mousemove", this.doMouseMoveBind);
+        this.viewState.removeEvent("mouseup", this.doMouseUpBind);
     }
 }

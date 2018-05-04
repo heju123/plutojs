@@ -73,8 +73,7 @@ export default class Fps{
 
     setMainView(viewCfg : any){
         this.viewState = new ViewState(this.canvas, this.ctx);
-        globalUtil.viewState = this.viewState;
-        globalUtil.viewState.init(viewCfg);
+        this.viewState.init(viewCfg);
     }
 
     /** 开始循环绘制 */
@@ -157,9 +156,9 @@ export default class Fps{
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        globalUtil.viewState.beforeDraw(this.ctx);
-        this.drawView(globalUtil.viewState.rootComponent);
-        globalUtil.viewState.afterDraw(this.ctx);
+        this.viewState.beforeDraw(this.ctx);
+        this.drawView(this.viewState.rootComponent);
+        this.viewState.afterDraw(this.ctx);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }

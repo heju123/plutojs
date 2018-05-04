@@ -11,7 +11,7 @@ export default class Controller{
 
     constructor(component : Component) {
         this.component = component;
-        this.viewState = globalUtil.viewState;
+        this.viewState = this.component.viewState;
     }
 
     /** 用相对坐标获取显示在界面上的真实坐标 */

@@ -40,9 +40,22 @@ abstract class Component {
     private physicsQueue : PhysicsQueue = new PhysicsQueue(this);
     private particleList : LinkedList<Particle> = new LinkedList();
 
-    constructor(parent? : Component) {
-        this.parent = parent;
-        this.viewState = globalUtil.viewState;
+    constructor(parent? : Component | ViewState) {
+        if (parent)
+        {
+            if (parent instanceof Component)
+            {
+                this.parent = parent;
+                if (!this.viewState)
+                {
+                    this.viewState = this.parent.viewState;
+                }
+            }
+            else if (parent instanceof ViewState)
+            {
+                this.viewState = parent;
+            }
+        }
         this.isInit = false;
         this.isSort = false;//子组件是否已排序
         this.eventNotifys = [];//事件通知队列
@@ -383,15 +396,15 @@ abstract class Component {
     private setDefaultStyle(){
         if (this.style.fontFamily === undefined)
         {
-            this.setStyle("fontFamily", globalUtil.viewState.defaultFontFamily);
+            this.setStyle("fontFamily", this.viewState.defaultFontFamily);
         }
         if (this.style.fontSize === undefined)
         {
-            this.setStyle("fontSize", globalUtil.viewState.defaultFontSize);
+            this.setStyle("fontSize", this.viewState.defaultFontSize);
         }
         if (this.style.fontColor === undefined)
         {
-            this.setStyle("fontColor", globalUtil.viewState.defaultFontColor);
+            this.setStyle("fontColor", this.viewState.defaultFontColor);
         }
         if (this.style.zIndex === undefined)
         {
@@ -702,7 +715,7 @@ abstract class Component {
         }
         if (this.style.cursor)
         {
-            globalUtil.viewState.canvas.style.cursor = this.style.cursor;
+            this.viewState.canvas.style.cursor = this.style.cursor;
         }
         if (this.parent)
         {
@@ -724,7 +737,7 @@ abstract class Component {
         }
         if (this.style.cursor)
         {
-            globalUtil.viewState.canvas.style.cursor = "default";
+            this.viewState.canvas.style.cursor = "default";
         }
         if (this.parent)
         {
@@ -1197,7 +1210,7 @@ abstract class Component {
             }
             else
             {
-                textLength = globalUtil.viewState.ctx.measureText(this.getText()).width;
+                textLength = this.viewState.ctx.measureText(this.getText()).width;
             }
             if (textLength <= this.getWidth())
             {
@@ -1228,7 +1241,7 @@ abstract class Component {
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
-            let maxWidth = this.parent ? this.parent.getInnerWidth() : globalUtil.viewState.getWidth();
+            let maxWidth = this.parent ? this.parent.getInnerWidth() : this.viewState.getWidth();
             return maxWidth * (this.style.width.substring(0, this.style.width.length - 1) / 100);
         }
         return this.style.width;
@@ -1244,7 +1257,7 @@ abstract class Component {
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
-            let maxHeight = this.parent ? this.parent.getInnerHeight() : globalUtil.viewState.getHeight();
+            let maxHeight = this.parent ? this.parent.getInnerHeight() : this.viewState.getHeight();
             return maxHeight * (this.style.height.substring(0, this.style.height.length - 1) / 100);
         }
         return this.style.height;
@@ -1473,7 +1486,7 @@ abstract class Component {
         }
         else
         {
-            return globalUtil.viewState.getComponentInChildrenByKey("id", id, this);
+            return this.viewState.getComponentInChildrenByKey("id", id, this);
         }
     }
 
@@ -1484,7 +1497,7 @@ abstract class Component {
         }
         else
         {
-            return globalUtil.viewState.getComponentInChildrenByKey("name", name, this);
+            return this.viewState.getComponentInChildrenByKey("name", name, this);
         }
     }
 
@@ -1496,7 +1509,7 @@ abstract class Component {
         }
         else
         {
-            return globalUtil.viewState.getComponentsInChildrenByKey("name", name, this);
+            return this.viewState.getComponentsInChildrenByKey("name", name, this);
         }
     }
 
@@ -1508,7 +1521,7 @@ abstract class Component {
         }
         else
         {
-            return globalUtil.viewState.getComponentsInChildrenByKey("type", type, this);
+            return this.viewState.getComponentsInChildrenByKey("type", type, this);
         }
     }
 

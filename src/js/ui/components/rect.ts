@@ -4,9 +4,10 @@
 import commonUtil from "../../util/commonUtil";
 import globalUtil from "../../util/globalUtil";
 import Component from "./component";
+import ViewState from "../viewState";
 
 export default class Rect extends Component{
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
     }
 

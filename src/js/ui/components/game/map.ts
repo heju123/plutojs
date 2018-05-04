@@ -3,6 +3,7 @@ import globalUtil from "../../../util/globalUtil";
 import httpUtil from "../../../util/httpUtil";
 import commonUtil from "../../../util/commonUtil";
 import Component from "../component";
+import ViewState from "../../viewState";
 
 export default class Map extends Rect {
     mapWidth : number;
@@ -11,7 +12,7 @@ export default class Map extends Rect {
     mapData : Array<Array<any>>;
     terrainPolicy : any;
 
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
 
         this.mapWidth = 0;

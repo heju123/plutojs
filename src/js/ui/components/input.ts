@@ -5,6 +5,7 @@ import Scrollbar from "./scrollbar";
 import globalUtil from "../../util/globalUtil";
 import commonUtil from "../../util/commonUtil";
 import Component from "./component";
+import ViewState from "../viewState";
 
 export default class Input extends Scrollbar {
     private showTextCursor : boolean;
@@ -12,7 +13,7 @@ export default class Input extends Scrollbar {
     private textCursorX : number;
     private textCursorY : number;
 
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
 
         this.showTextCursor = true;

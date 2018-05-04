@@ -1,8 +1,9 @@
 import Rect from "./rect";
 import Component from "./component";
+import ViewState from "../viewState";
 
 export default class Button extends Rect {
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
         this.setStyle("textAlign", "center");
         this.setStyle("cursor", "pointer");

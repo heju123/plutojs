@@ -1,13 +1,14 @@
 import globalUtil from "../../util/globalUtil";
 import Rect from "./rect";
 import Component from "./component";
+import ViewState from "../viewState";
 
 export default class Router extends Rect{
     private currentChildren : Component;
     private routes : any;
     private currentRoute : string;
 
-    constructor(parent? : Component){
+    constructor(parent? : Component | ViewState){
         super(parent);
 
         //routes对象结构：每个name下面包含loader：子节点的配置文件；isLoaded：当前路由资源是否加载
@@ -18,8 +19,8 @@ export default class Router extends Rect{
         this.setY(0);
         if (!parent)//最顶层
         {
-            this.setWidth(globalUtil.viewState.getWidth());
-            this.setHeight(globalUtil.viewState.getHeight());
+            this.setWidth(this.viewState.getWidth());
+            this.setHeight(this.viewState.getHeight());
         }
         else
         {

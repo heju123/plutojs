@@ -135,11 +135,11 @@ export default class ViewState{
     init(viewCfg : any){
         if (viewCfg.type == "rect")
         {
-            this.rootComponent = new Rect();
+            this.rootComponent = new Rect(this);
         }
         else if (viewCfg.type == "route")
         {
-            this.rootComponent = new Router();
+            this.rootComponent = new Router(this);
         }
         this.rootComponent.initCfg(viewCfg).then(()=>{
             globalUtil.eventBus.broadcastEvent("$onViewLoaded");//view加载完成事件（所有同步加载的视图加载完毕）
@@ -187,7 +187,7 @@ export default class ViewState{
         globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
-    private getComponentInChildrenByKey(key : string, val : string, com : Component) {
+    getComponentInChildrenByKey(key : string, val : string, com : Component) {
         let children = com.getChildren();
         if (children)
         {
@@ -262,7 +262,7 @@ export default class ViewState{
         }
     }
     /** 用key获取组件列表 */
-    private getComponentsInChildrenByKey(key : string, val : string, com : Component) {
+    getComponentsInChildrenByKey(key : string, val : string, com : Component) {
         let retArr = [];
         this._getComponentsInChildrenByKey(retArr, key, val, com);
         return retArr;
@@ -286,7 +286,7 @@ export default class ViewState{
         }
         else
         {
-            return globalUtil.viewState.getComponentInChildrenByKey("name", name, this.rootComponent);
+            return this.getComponentInChildrenByKey("name", name, this.rootComponent);
         }
     }
 

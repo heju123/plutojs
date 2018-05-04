@@ -4,12 +4,13 @@ import Point from "../draw/point";
 import Path from "../draw/path/path";
 import PointPath from "../draw/path/pointPath";
 import SequenceDraw from "../draw/sequenceDraw";
+import ViewState from "../viewState";
 
 export default class Checkbox extends Rect {
     checked : boolean;
     private sequenceDraw : SequenceDraw = new SequenceDraw(this);
 
-    constructor(parent? : Component) {
+    constructor(parent? : Component | ViewState) {
         super(parent);
 
         this.setStyle({
