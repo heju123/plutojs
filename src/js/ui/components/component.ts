@@ -558,16 +558,6 @@ abstract class Component {
 
     protected abstract setClip(ctx : CanvasRenderingContext2D) : void;
 
-    /** 添加子节点 */
-    appendChildren(child : Component){
-        this.children.push(child);
-        this.isSort = false;
-
-        child.afterInitPromise.then(()=>{
-            this.propagationDoLayout(this);
-        });
-    }
-
     /** 设置通用样式，所有组件在绘制前都应该设置 */
     protected setCommonStyle(ctx : CanvasRenderingContext2D){
         this.setDefaultStyle();//如果样式丢失，则使用默认样式
@@ -1425,8 +1415,41 @@ abstract class Component {
         return this.children;
     }
 
+    /** 添加子节点 */
+    appendChildren(child : Component){
+        this.children.push(child);
+        this.isSort = false;
+
+        child.afterInitPromise.then(()=>{
+            this.propagationDoLayout(this);
+        });
+    }
+
+    /** 删除子组件 */
+    removeChildren(){
+        if (typeof(arguments[0]) === "number")
+        {
+            this._removeChildrenByIndex(arguments[0]);
+        }
+        else if (typeof(arguments[0]) === "object" && arguments[0] instanceof Component)
+        {
+            this._removeChildrenByCom(arguments[0]);
+        }
+    }
+    _removeChildrenByCom(obj : Component){
+        let item;
+        for (let i = 0; i < this.children.length; i++)
+        {
+            item = this.children[i];
+            if (item === obj)
+            {
+                this._removeChildrenByIndex(i);
+                break;
+            }
+        }
+    }
     /** 删除指定位置的子组件 */
-    removeChildren(index : number){
+    _removeChildrenByIndex(index : number){
         if (this.children[index])
         {
             this.children[index].destroy();
