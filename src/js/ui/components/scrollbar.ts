@@ -52,8 +52,8 @@ export default class Scrollbar extends Rect {
             }
         });
         this.scrollbarOpeLineV.type = "V";
-        this.scrollbarBaseLineV.appendChildren(this.scrollbarOpeLineV);
-        this.appendChildren(this.scrollbarBaseLineV);
+        this.scrollbarBaseLineV.appendChild(this.scrollbarOpeLineV);
+        this.appendChild(this.scrollbarBaseLineV);
         //横向滚动条
         this.scrollbarBaseLineH = this.produceLine(2, this.style.baseLineColor || "#000", this.style.baseLineAlpha || 0.25);
         this.scrollbarBaseLineH.active = false;
@@ -67,8 +67,8 @@ export default class Scrollbar extends Rect {
             }
         });
         this.scrollbarOpeLineH.type = "H";
-        this.scrollbarBaseLineH.appendChildren(this.scrollbarOpeLineH);
-        this.appendChildren(this.scrollbarBaseLineH);
+        this.scrollbarBaseLineH.appendChild(this.scrollbarOpeLineH);
+        this.appendChild(this.scrollbarBaseLineH);
 
         //注册事件
         this.scrollbarOpeLineV.registerEvent("mousedown", this.doMouseDown.bind(this, "V"));

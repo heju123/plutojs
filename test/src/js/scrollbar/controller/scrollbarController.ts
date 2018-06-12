@@ -32,7 +32,7 @@ export default class ScrollbarController extends Controller{
                     backgroundColor : "#" + Math.floor(Math.random() * 0xffffff).toString(16)
                 }
             });
-            parent.appendChildren(rect);
+            parent.appendChild(rect);
         }
     }
 
@@ -43,7 +43,7 @@ export default class ScrollbarController extends Controller{
 
     asyncRemoveChild(name : string){
         let scrollbar3 = this.component.getComponentById(name);
-        scrollbar3.removeChildren(scrollbar3.children.length - 1);
+        scrollbar3.removeChild(scrollbar3.children.length - 1);
     }
 
     asyncRemoveAllChildren(name : string){

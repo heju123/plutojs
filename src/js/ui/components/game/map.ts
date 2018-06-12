@@ -118,7 +118,7 @@ export default class Map extends Rect {
                             commonUtil.copyObject(this.terrainPolicy[this.mapData[row][col].terrain], style, true);
                         }
                         rect.setStyle(style);
-                        this.appendChildren(rect);
+                        this.appendChild(rect);
                     }
                 }
             }

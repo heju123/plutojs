@@ -380,7 +380,7 @@ abstract class Component {
                 childCom.initCfg(chiCfg).then(()=>{
                     resolve(childCom);
                 });
-                this.appendChildren(childCom);
+                this.appendChild(childCom);
                 childCom.parent = this;
             });
         }
@@ -400,7 +400,7 @@ abstract class Component {
                 resolve(childCom);
             }
         });
-        this.appendChildren(childCom);
+        this.appendChild(childCom);
         childCom.parent = this;
     }
 
@@ -1416,7 +1416,7 @@ abstract class Component {
     }
 
     /** 添加子节点 */
-    appendChildren(child : Component){
+    appendChild(child : Component){
         this.children.push(child);
         this.isSort = false;
 
@@ -1426,30 +1426,30 @@ abstract class Component {
     }
 
     /** 删除子组件 */
-    removeChildren(){
+    removeChild(){
         if (typeof(arguments[0]) === "number")
         {
-            this._removeChildrenByIndex(arguments[0]);
+            this._removeChildByIndex(arguments[0]);
         }
         else if (typeof(arguments[0]) === "object" && arguments[0] instanceof Component)
         {
-            this._removeChildrenByCom(arguments[0]);
+            this._removeChildByCom(arguments[0]);
         }
     }
-    _removeChildrenByCom(obj : Component){
+    _removeChildByCom(obj : Component){
         let item;
         for (let i = 0; i < this.children.length; i++)
         {
             item = this.children[i];
             if (item === obj)
             {
-                this._removeChildrenByIndex(i);
+                this._removeChildByIndex(i);
                 break;
             }
         }
     }
     /** 删除指定位置的子组件 */
-    _removeChildrenByIndex(index : number){
+    _removeChildByIndex(index : number){
         if (this.children[index])
         {
             this.children[index].destroy();
