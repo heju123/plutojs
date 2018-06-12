@@ -23,34 +23,45 @@ export default class Map extends Rect {
     initCfg(cfg : any) : Promise<any>{
         let promise = super.initCfg(cfg);
 
+        let allPromise = [promise];
+        let thisPromise;
         if (cfg.mapDataUrl)
         {
-            httpUtil.get(cfg.mapDataUrl).then((data)=>{
-                if (data)
-                {
-                    data = JSON.parse(data);
-                    if (data.mapData)
+            thisPromise = new Promise((resolve, reject)=>{
+                httpUtil.get(cfg.mapDataUrl).then((data)=>{
+                    if (data)
                     {
-                        data.mapData = JSON.parse(data.mapData);
+                        data = JSON.parse(data);
+                        if (data.mapData)
+                        {
+                            data.mapData = JSON.parse(data.mapData);
+                        }
                     }
-                }
-                this.mapWidth = data.width;
-                this.mapHeight = data.height;
-                this.mapSize = data.size;
-                this.mapData = data.mapData;
-                if (!this.mapData)//cfg无mapData信息，则初始化默认地图数据
-                {
-                    this.initMapData();
-                }
-                else
-                {
-                    this.initWH();
-                    this.onMapDataChanged();
-                }
+                    this.mapWidth = data.width;
+                    this.mapHeight = data.height;
+                    this.mapSize = data.size;
+                    this.mapData = data.mapData;
+                    if (!this.mapData)//cfg无mapData信息，则初始化默认地图数据
+                    {
+                        this.initMapData();
+                    }
+                    else
+                    {
+                        this.initWH();
+                        this.onMapDataChanged();
+                    }
+                    resolve();
+                }, ()=>{
+                    reject();
+                });
             });
         }
+        if (thisPromise)
+        {
+            allPromise.push(thisPromise);
+        }
         this.terrainPolicy = cfg.terrainPolicy;
-        return promise;
+        return Promise.all(allPromise);
     }
 
     //初始化地图数据
@@ -80,6 +91,7 @@ export default class Map extends Rect {
         if (this.terrainPolicy && this.mapData)
         {
             this.removeAllChildren("map_data");
+            //绘制地形
             let rect : Rect;
             let style;
             for (let row = 0; row < this.mapData.length; row++)
