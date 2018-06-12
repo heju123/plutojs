@@ -1364,7 +1364,7 @@ abstract class Component {
     }
 
     setText(text : string){
-        this.text = this.getTextForRows(text);
+        this.text = this.getTextForRows(text.toString());
         //自适应宽度
         if (this.style.autoWidth)
         {
