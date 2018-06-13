@@ -264,6 +264,18 @@ let commonUtil : any = {
     popMessageTooltip : (msg : string, opts : any)=>{
         alert(msg);
     },
+    /** 弹出确认框 */
+    popConfirm : (msg : string)=>{
+        return new Promise((resolve, reject)=> {
+            var ret = window.confirm(msg);
+            if (ret) {
+                resolve();
+            }
+            else {
+                reject();
+            }
+        });
+    },
     /**
      * 创建图片dom
      */
