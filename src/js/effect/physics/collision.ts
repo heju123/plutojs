@@ -48,9 +48,9 @@ export default class Collision extends BasePhysics implements Physics{
                             resolve();
                         }, (data)=>{
                             reject(new CollisionReject(data, this.direction));
-                            if ((<any>this).onCollision && typeof((<any>this).onCollision) === "function")
+                            if ((<any>this).target.onCollision && typeof((<any>this).target.onCollision) === "function")
                             {
-                                (<any>this).onCollision.apply(this, [data]);
+                                (<any>this).target.onCollision.apply(this, [data]);
                             }
                         }).finally(()=>{
                         });
