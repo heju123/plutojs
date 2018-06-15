@@ -66,6 +66,10 @@ export default class EventBus{
             clickCom = undefined;
         });
 
+        this.addEventListener(document, "dblclick", (e)=>{
+            this.createEventNotify(e, "dblclick");
+        });
+
         this.addEventListener(window, "keydown", (e)=>{
             this.createOtherEventNotify(e, "keydown", 2);
         });
@@ -199,7 +203,7 @@ export default class EventBus{
             while (eventNotify = this.propagationEventQueue[key].pop())
             {
                 if (eventNotify.listener.target.isViewState || !bubble//viewstate节点或第一个节点
-                    || (event && event.immediatePropagation && bubble === eventNotify.listener.target)//自己
+                    || (event && event.immediatePropagation && bubble === eventNotify.listener.target)//如果上一个节点等于当前节点，则必须满足immediatePropagation等于true才继续执行
                     || (event && event.propagation && eventNotify.listener.target.parentOf(bubble)))//parent
                 {
                     event = this.getEvent(eventNotify);
@@ -220,6 +224,14 @@ export default class EventBus{
         switch (eventNotify.listener.type)
         {
             case "click" :
+                event = new ClickEvent(eventNotify.listener.type);
+                event.setCurrentTarget(eventNotify.listener.target);
+                if (eventNotify.sourceEvent)
+                {
+                    event.setSourceEvent(eventNotify.sourceEvent);
+                }
+                break;
+            case "dblclick" :
                 event = new ClickEvent(eventNotify.listener.type);
                 event.setCurrentTarget(eventNotify.listener.target);
                 if (eventNotify.sourceEvent)

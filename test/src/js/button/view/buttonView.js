@@ -94,6 +94,34 @@ export default {
                                                     return this.parent.getHeight() / 2 - this.getHeight() / 2;
                                                 },
                                                 autoWidth : true,
+                                                height : 30
+                                            }),
+                                            animation : commonAnimation.buttonAnimation,
+                                            text : "双击测试",
+                                            events : {
+                                                "click" : "testClick",
+                                                "dblclick" : "testDblClick"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    type : "rect",
+                                    name : "row",
+                                    style : {
+                                        x : 0,
+                                        width : "100%",
+                                        height : FORM_ROW_HEIGHT
+                                    },
+                                    children : [
+                                        {
+                                            type : "button",
+                                            style : Object.assign({}, commonStyle.buttonStyle, {
+                                                x : PADDING_LEFT,
+                                                y : function(){
+                                                    return this.parent.getHeight() / 2 - this.getHeight() / 2;
+                                                },
+                                                autoWidth : true,
                                                 height : 30,
                                                 disabled : true
                                             }, commonStyle.disabledButtonStyle),

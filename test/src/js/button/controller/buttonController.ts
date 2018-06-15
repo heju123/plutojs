@@ -8,4 +8,8 @@ export default class ButtonController extends Controller{
     testClick(){
         console.log("click!");
     }
+
+    testDblClick(){
+        console.log("dblclick!");
+    }
 }
