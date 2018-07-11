@@ -54,7 +54,7 @@ export default {
                 "click" : {
                     callback : "imgClick",
                     param : (self)=>{
-                        return [self.width, self.height];
+                        return [self.getWidth(), self.getHeight()];
                     }
                 }
             }
