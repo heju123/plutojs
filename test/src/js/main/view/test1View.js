@@ -76,7 +76,7 @@ export default {
                         y : 20,
                         width : 50,
                         height : 50,
-                        backgroundColor : "#128db6"
+                        backgroundColor : "#b63373"
                     }
                 }
             ]

@@ -1,6 +1,6 @@
 let evalUtil : any = {
-    /** 以this开头的语句解析 */
-    evalThisSyntax : (arg : string, context : any)=>{
+    /** 解析类似a.b.c的语句 */
+    evalDotSyntax : (arg : string, context : any)=>{
         let items = arg.split(".");
         if (items.length === 1)
         {
@@ -8,10 +8,14 @@ let evalUtil : any = {
         }
         else
         {
-            let currVal = context;
+            let currVal : any = "";
             let funInfo;
             items.forEach((item)=>{
-                if (item !== "this")
+                if (item === "this")
+                {
+                    currVal = context;
+                }
+                else
                 {
                     funInfo = evalUtil.evalFunction(item, currVal);
                     if (typeof(currVal[funInfo.name]) === "function")
@@ -29,14 +33,18 @@ let evalUtil : any = {
     },
     /** 解析参数 */
     evalArg : (arg : string, context : any)=>{
+        if (!arg)
+        {
+            return "";
+        }
         arg = arg.replace(/(^\s*)|(\s*$)/g, "");//去掉前后空格
         if (/^\'.*\'$/.test(arg))//字符串
         {
             return arg.replace(/\'/g, "");
         }
-        else if (/^this/.test(arg))//如果以this打头
+        else if (arg.split(".").length > 1)//类似a.b.c的语句
         {
-            return evalUtil.evalThisSyntax(arg, context);
+            return evalUtil.evalDotSyntax(arg, context);
         }
         return arg;//其他如数字类型
     },
