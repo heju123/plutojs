@@ -6,6 +6,7 @@ import {
     Controller,
     MPromise,
     animationUtil,
+    evalUtil,
     Component,
     Sprite,
     Router,
@@ -42,7 +43,8 @@ window.plutojs = {
         MPromise,
         commonUtil,
         httpUtil,
-        animationUtil
+        animationUtil,
+        evalUtil
     },
     components : {
         Component,

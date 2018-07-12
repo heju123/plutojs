@@ -5,8 +5,8 @@ export default class NavController extends Controller{
         super(component);
     }
 
-    goLink(param, e){
+    goLink(routeName, e){
         let mainRoute = this.viewState.getComponentById("mainRoute");
-        mainRoute.changeRoute(param[0]);
+        mainRoute.changeRoute(routeName);
     }
 }

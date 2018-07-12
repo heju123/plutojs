@@ -51,12 +51,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["main"];
-                                            }
-                                        }
+                                        "click" : "goLink('main')"
                                     }
                                 }),
                                 getLinkView("draw test", {
@@ -64,12 +59,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["draw"];
-                                            }
-                                        }
+                                        "click" : "goLink('draw')"
                                     }
                                 }),
                                 getLinkView("输入框", {
@@ -77,12 +67,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["input"];
-                                            }
-                                        }
+                                        "click" : "goLink('input')"
                                     }
                                 }),
                                 getLinkView("按钮", {
@@ -90,12 +75,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["button"];
-                                            }
-                                        }
+                                        "click" : "goLink('button')"
                                     }
                                 }),
                                 getLinkView("复选框", {
@@ -103,12 +83,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["checkbox"];
-                                            }
-                                        }
+                                        "click" : "goLink('checkbox')"
                                     }
                                 }),
                                 getLinkView("嵌套路由", {
@@ -116,12 +91,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["nestRoute"];
-                                            }
-                                        }
+                                        "click" : "goLink('nestRoute')"
                                     }
                                 }),
                                 getLinkView("滚动条与布局", {
@@ -129,12 +99,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["scrollbar"];
-                                            }
-                                        }
+                                        "click" : "goLink('scrollbar')"
                                     }
                                 }),
                                 getLinkView("遮挡测试", {
@@ -142,12 +107,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["cliptest"];
-                                            }
-                                        }
+                                        "click" : "goLink('cliptest')"
                                     }
                                 }),
                                 getLinkView("粒子效果", {
@@ -155,12 +115,7 @@ export default {
                                         fontSize : "18px"
                                     },
                                     events : {
-                                        "click" : {
-                                            callback : "goLink",
-                                            param : (self)=>{
-                                                return ["particleEffects"];
-                                            }
-                                        }
+                                        "click" : "goLink('particleEffects')"
                                     }
                                 })
                             ]

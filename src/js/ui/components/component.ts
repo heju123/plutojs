@@ -253,41 +253,19 @@ abstract class Component {
         //事件绑定配置
         if (cfg.events)
         {
-            let eventInfo;
             let funName;
-            let param;
             let controller;
             for (let type in cfg.events)
             {
-                eventInfo = cfg.events[type];
-                if (typeof(eventInfo) == "object")
-                {
-                    funName = eventInfo.callback;
-                    if (eventInfo.param)//有参数
-                    {
-                        param = eventInfo.param.apply(this, [this]);
-                    }
-                }
-                else
-                {
-                    funName = eventInfo;
-                }
+                funName = cfg.events[type];
                 controller = this.getController(this);
                 if (typeof(funName) === "function")//如果funName是function，则直接绑定
                 {
-                    this.registerEvent(type, funName.bind(this));//funName是写在配置文件里的function，所以要绑定this为component
+                    this.registerEvent(type, funName.bind(this));
                 }
-                else if (controller && controller[funName]
-                    && typeof(controller[funName]) == "function")
+                else if (typeof(funName) === "string")
                 {
-                    if (param)
-                    {
-                        this.registerEvent(type, controller[funName].bind(controller, param));
-                    }
-                    else
-                    {
-                        this.registerEvent(type, controller[funName].bind(controller));
-                    }
+                    this.registerEvent(type, funName);
                 }
             }
         }
@@ -1426,7 +1404,7 @@ abstract class Component {
     }
 
     /** 删除子组件 */
-    removeChild(){
+    removeChild(arg0 : number | Component){
         if (typeof(arguments[0]) === "number")
         {
             this._removeChildByIndex(arguments[0]);
@@ -1481,11 +1459,11 @@ abstract class Component {
         }
     }
 
-    registerEvent(eventType : string, callback : Function){
+    registerEvent(eventType : string, callback : Function | string){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
-    removeEvent(eventType : string, callback : Function){
+    removeEvent(eventType : string, callback : Function | string){
         globalUtil.eventBus.removeEvent(this, eventType, callback);
     }
 

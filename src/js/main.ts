@@ -9,6 +9,7 @@ import Thread from "./util/thread";
 import Controller from "./ui/controller";
 import MPromise from "./util/promise";
 import animationUtil from "./util/animationUtil";
+import evalUtil from "./util/evalUtil";
 
 import Component from "./ui/components/component";
 import Sprite from "./ui/components/game/sprite";
@@ -97,7 +98,7 @@ class Main {
         this.setMainView(viewCfg);
     }
 }
-export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
+export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,evalUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
     ArcPath,PointPath,Path,Arc,Point,SequenceDraw,QuadraticCurve,BezierCurve,
     Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed,
     BaseParticle,Particle,Stack,LinkedItem,LinkedList,

@@ -113,17 +113,17 @@ export default class ViewState{
 
         //输入框事件
         globalUtil.action.inputListenerDom.compositionMode = false;//是否输入法状态
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
+        globalUtil.eventBus.addDomEventListener(globalUtil.action.inputListenerDom, "compositionstart", (e)=>{
             globalUtil.action.inputListenerDom.compositionMode = true;
         });
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
+        globalUtil.eventBus.addDomEventListener(globalUtil.action.inputListenerDom, "compositionend", (e)=>{
             globalUtil.action.inputListenerDom.compositionMode = false;
             if (globalUtil.action.focusComponent && globalUtil.action.focusComponent instanceof Input)
             {
                 this.setVal2FocusCom();
             }
         });
-        globalUtil.eventBus.addEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
+        globalUtil.eventBus.addDomEventListener(globalUtil.action.inputListenerDom, "input", (e)=>{
             if (!globalUtil.action.inputListenerDom.compositionMode
                 && globalUtil.action.focusComponent && globalUtil.action.focusComponent instanceof Input)
             {
@@ -326,7 +326,7 @@ export default class ViewState{
         return globalUtil.action.hoverComponent;
     }
 
-    registerEvent(eventType : string, callback : Function){
+    registerEvent(eventType : string, callback : Function | string){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 

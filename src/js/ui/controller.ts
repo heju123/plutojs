@@ -29,11 +29,11 @@ export default class Controller{
         return drawY - this.component.getRealY();
     }
 
-    registerEvent(eventType : string, callback : Function){
+    registerEvent(eventType : string, callback : Function | string){
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
-    removeEvent(eventType : string, callback : Function){
+    removeEvent(eventType : string, callback : Function | string){
         globalUtil.eventBus.removeEvent(this, eventType, callback);
     }
 

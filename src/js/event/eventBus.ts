@@ -32,7 +32,7 @@ export default class EventBus{
         this.initDomEvent();
     }
 
-    addEventListener(dom : any, type : string, callback : Function){
+    addDomEventListener(dom : any, type : string, callback : Function){
         if (window.addEventListener)
         {
             dom.addEventListener(type, callback, false);
@@ -45,7 +45,7 @@ export default class EventBus{
 
     private initDomEvent(){
         let clickCom;//click的组件
-        this.addEventListener(document, "mousedown", (e)=>{
+        this.addDomEventListener(document, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
             if (globalUtil.action.hoverComponent)
             {
@@ -53,11 +53,11 @@ export default class EventBus{
             }
         });
 
-        this.addEventListener(document, "mousemove", (e)=>{
+        this.addDomEventListener(document, "mousemove", (e)=>{
             this.createEventNotify(e, "mousemove");
         });
 
-        this.addEventListener(document, "mouseup", (e)=>{
+        this.addDomEventListener(document, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
             if (clickCom === globalUtil.action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
             {
@@ -66,22 +66,22 @@ export default class EventBus{
             clickCom = undefined;
         });
 
-        this.addEventListener(document, "dblclick", (e)=>{
+        this.addDomEventListener(document, "dblclick", (e)=>{
             this.createEventNotify(e, "dblclick");
         });
 
-        this.addEventListener(window, "keydown", (e)=>{
+        this.addDomEventListener(window, "keydown", (e)=>{
             this.createOtherEventNotify(e, "keydown", 2);
         });
 
-        this.addEventListener(window, "keyup", (e)=>{
+        this.addDomEventListener(window, "keyup", (e)=>{
             this.createOtherEventNotify(e, "keyup", 2);
         });
 
-        this.addEventListener(this.canvas, "DOMMouseScroll", (e)=>{
+        this.addDomEventListener(this.canvas, "DOMMouseScroll", (e)=>{
             this.createOtherEventNotify(e, "mousewheel", 3);
         });
-        this.addEventListener(this.canvas, "mousewheel", (e)=>{
+        this.addDomEventListener(this.canvas, "mousewheel", (e)=>{
             this.createOtherEventNotify(e, "mousewheel", 3);
         });
     }
@@ -208,9 +208,9 @@ export default class EventBus{
                 {
                     event = this.getEvent(eventNotify);
                     event.setTarget(target);
-                    if (eventNotify.listener.callback && typeof(eventNotify.listener.callback) === "function")
+                    if (eventNotify.listener.callback)
                     {
-                        eventNotify.listener.callback(event);
+                        eventNotify.listener.executeCallback(event);
                     }
                     bubble = eventNotify.listener.target;
                 }
@@ -318,12 +318,12 @@ export default class EventBus{
             return;
         }
         this.eventListeners[type].forEach((listener)=>{
-            if (listener.callback && typeof(listener.callback) === "function")
+            if (listener.callback)
             {
                 //event不包含currentTarget则不需要做对象比较，直接触发事件
                 if (!event || !event.currentTarget)
                 {
-                    listener.callback(event);
+                    listener.executeCallback(event);
                 }
                 else
                 {
@@ -334,12 +334,12 @@ export default class EventBus{
                     {
                         if (!toChildren && currentTargetCom === targetCom)
                         {
-                            listener.callback(event);
+                            listener.executeCallback(event);
                         }
                         else if (toChildren && (currentTargetCom === targetCom ||
                                 currentTargetCom.parentOf(targetCom)))
                         {
-                            listener.callback(event);
+                            listener.executeCallback(event);
                         }
                     }
                 }
@@ -384,7 +384,7 @@ export default class EventBus{
     }
 
     /** 注册事件 */
-    registerEvent(com : Component, type : string, callback : Function){
+    registerEvent(com : Component, type : string, callback : Function | string){
         let listener = this.getEventListener(com, type, callback);
         if (!this.eventListeners[type])
         {
@@ -399,7 +399,7 @@ export default class EventBus{
      *
      * @param callback 如果callback不传，则删除所有type类型的事件
      */
-    removeEvent(com : Component, type : string, callback? : Function){
+    removeEvent(com : Component, type : string, callback? : Function | string){
         if (!com || !type || !this.eventListeners[type])
         {
             return;
@@ -427,7 +427,7 @@ export default class EventBus{
         }
     }
 
-    private getEventListener(target : Component, type : string, callback : Function){
+    private getEventListener(target : Component, type : string, callback : Function | string){
        let eventListener = new EventListener(type, callback);
        eventListener.setTarget(target);
        return eventListener;

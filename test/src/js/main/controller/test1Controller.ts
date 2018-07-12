@@ -33,13 +33,14 @@ export default class Test1Controller extends Controller{
         // });
     }
 
-    onClick(e){
-        console.log("panel click");
+    onClick(width, height, e){
+        console.log(this);
+        console.log(width,height);
     }
 
-    imgClick(width, e)
+    imgClick(e)
     {
-        console.log(width);
+        console.log(e);
     }
 
     changeRoute(e){

@@ -51,12 +51,7 @@ export default {
                 }
             },
             events : {
-                "click" : {
-                    callback : "imgClick",
-                    param : (self)=>{
-                        return [self.getWidth(), self.getHeight()];
-                    }
-                }
+                "click" : "imgClick"
             }
         },
         {
@@ -65,9 +60,12 @@ export default {
                 x : -10,
                 y : -10,
                 width : 80,
-                height : 80,
+                height : 79,
                 backgroundColor : "#15c9ff",
                 autoLine : true
+            },
+            events : {
+                "click" : "onClick(this.getWidth(), this.getHeight().toString())"
             },
             text : "法大f师傅eg大师傅大师傅士大夫士大夫士大efege夫法大师傅大gre师傅大师傅wfe士大夫士大夫士大夫法大师傅大",
             children : [
