@@ -82,7 +82,7 @@ export default {
                         backgroundColor : "#b63373"
                     },
                     events : {
-                        "click" : "onClick(this.getWidth(), this.getHeight().toString())"
+                        "click" : "onClick(this.getWidth(), this.getHeight().toString(), 6, '8', 0.3233000001)"
                     }
                 }
             ]

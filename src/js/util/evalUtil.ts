@@ -43,15 +43,19 @@ let evalUtil : any = {
         {
             return context;
         }
-        else if (/^\'.*\'$/.test(arg))//字符串
+        else if (!isNaN(Number(arg)))//数字
         {
-            return arg.replace(/\'/g, "");
+            return Number(arg);
+        }
+        else if (/(^\'.*\'$)|(^\".*\"$)/.test(arg))//字符串
+        {
+            return arg.replace(/\'|\"/g, "");
         }
         else if (/\./.test(arg))//类似a.b.c的语句
         {
             return evalUtil.evalDotSyntax(arg, context);
         }
-        return arg;//其他如数字类型
+        return arg;//其他
     },
     /** 解析如function1(arg1,'arg2',this.getWidth())这种字符串 */
     evalFunction : (funStr : string, context : any)=>{

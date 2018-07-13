@@ -33,9 +33,8 @@ export default class Test1Controller extends Controller{
         // });
     }
 
-    onClick(width, height, e){
-        console.log(this);
-        console.log(width,height);
+    onClick(width, height, num, str, f, e){
+        console.log(width,height,num,str,f);
     }
 
     imgClick(e)
