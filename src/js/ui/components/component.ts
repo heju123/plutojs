@@ -243,7 +243,16 @@ abstract class Component {
 
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
-            this.controller = new cfg.controller(this, cfg.controllerParam);
+            this.controller = Object.create(cfg.controller.prototype);
+            if (cfg.controllerParam && cfg.controllerParam instanceof Array)
+            {
+                cfg.controllerParam.unshift(this);
+                cfg.controller.apply(this.controller, cfg.controllerParam);
+            }
+            else
+            {
+                cfg.controller.apply(this.controller, [this]);
+            }
         }
         if (cfg.children)
         {
