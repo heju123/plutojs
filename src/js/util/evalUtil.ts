@@ -39,7 +39,11 @@ let evalUtil : any = {
             return "";
         }
         arg = arg.replace(/(^\s*)|(\s*$)/g, "");//去掉前后空格
-        if (/^\'.*\'$/.test(arg))//字符串
+        if (arg === "this")
+        {
+            return context;
+        }
+        else if (/^\'.*\'$/.test(arg))//字符串
         {
             return arg.replace(/\'/g, "");
         }

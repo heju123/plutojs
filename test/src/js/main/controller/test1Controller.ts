@@ -43,8 +43,8 @@ export default class Test1Controller extends Controller{
         console.log(e);
     }
 
-    getChild(child1, child2){
-        console.log(child1, child2);
+    getChild(child1, child2, self){
+        console.log(child1, child2, self);
     }
 
     changeRoute(e){

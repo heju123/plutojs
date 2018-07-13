@@ -66,7 +66,7 @@ export default {
                 autoLine : true
             },
             events : {
-                "click" : "getChild(this.getComponentById('aabb'), this.getComponentByName(this.name))"
+                "click" : "getChild(this.getComponentById('aabb'), this.getComponentByName(this.name), this)"
             },
             text : "法大f师傅eg大师傅大师傅士大夫士大夫士大efege夫法大师傅大gre师傅大师傅wfe士大夫士大夫士大夫法大师傅大",
             children : [
