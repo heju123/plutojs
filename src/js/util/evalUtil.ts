@@ -1,16 +1,17 @@
 let evalUtil : any = {
     /** 解析类似a.b.c的语句 */
     evalDotSyntax : (arg : string, context : any)=>{
-        let items = arg.split(".");
-        if (items.length === 1)
+        //正则表达式按圆点分割，如：'this.aaa.getWidth().getHeight(\'321\',\"123\").getComponent2$_ByName(this.name_21, this.aabb)'
+        let itemsMatch = arg.match(/(\w|\$|(\((\w|\s|\.|\$|\,|\"|\')*\)))+/g);
+        if (itemsMatch.length === 1)
         {
-            return context;
+            return arg;
         }
         else
         {
             let currVal : any = "";
             let funInfo;
-            items.forEach((item)=>{
+            itemsMatch.forEach((item)=>{
                 if (item === "this")
                 {
                     currVal = context;
@@ -42,7 +43,7 @@ let evalUtil : any = {
         {
             return arg.replace(/\'/g, "");
         }
-        else if (arg.split(".").length > 1)//类似a.b.c的语句
+        else if (/\./.test(arg))//类似a.b.c的语句
         {
             return evalUtil.evalDotSyntax(arg, context);
         }
@@ -62,8 +63,10 @@ let evalUtil : any = {
                 if (argsStrMatch[0] !== "()")
                 {
                     let argsStr = argsStrMatch[0].substring(1, argsStrMatch[0].length - 1);
-                    let args = argsStr.split(",");
-                    args.forEach((arg)=>{
+
+                    //正则表达式按逗号分割参数，如：'this.getComponent2$_ByName(this.name_21, this.aabb), \"aaa\", this.getWidth(\'111\', 222, \"333\"), this.getHeight()'
+                    let argsMatch = argsStr.match(/(\w|\s|\.|\$|\"|\'|(\((\w|\s|\.|\$|\,|\"|\')*\)))+/g);
+                    argsMatch.forEach((arg)=>{
                         params.push(evalUtil.evalArg(arg, context));
                     });
                 }

@@ -56,6 +56,7 @@ export default {
         },
         {
             type : "rect",
+            name : "aabb",
             style : {
                 x : -10,
                 y : -10,
@@ -65,11 +66,13 @@ export default {
                 autoLine : true
             },
             events : {
-                "click" : "onClick(this.getWidth(), this.getHeight().toString())"
+                "click" : "getChild(this.getComponentById('aabb'), this.getComponentByName(this.name))"
             },
             text : "法大f师傅eg大师傅大师傅士大夫士大夫士大efege夫法大师傅大gre师傅大师傅wfe士大夫士大夫士大夫法大师傅大",
             children : [
                 {
+                    id : "aabb",
+                    name : "aabb",
                     type : "rect",
                     style : {
                         x : -20,
@@ -77,6 +80,9 @@ export default {
                         width : 50,
                         height : 50,
                         backgroundColor : "#b63373"
+                    },
+                    events : {
+                        "click" : "onClick(this.getWidth(), this.getHeight().toString())"
                     }
                 }
             ]
