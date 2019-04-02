@@ -1,6 +1,6 @@
 # plutojs
 ## 介绍
-	canvas框架
+	基于canvas开发的游戏框架
 ## 安装及使用方式
 > 将plutojs.js引入到项目中，可以通过window.plutojs获取对象
 
