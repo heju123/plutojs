@@ -1,6 +1,6 @@
 import commonUtil from "./commonUtil";
-import * as TweenMax from "../../../libs/TweenLite/TweenMax.min.js";
-import * as EasePack from "../../../libs/TweenLite/easing/EasePack.min.js";
+//import * as TweenMax from "../../../libs/TweenLite/TweenMax.min.js";
+//import * as EasePack from "../../../libs/TweenLite/easing/EasePack.min.js";
 import * as ColorPropsPlugin from "../../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
 import Component from "../ui/components/component";
 
@@ -26,20 +26,20 @@ let animationUtil : any = {
      */
     executeAttrChange : (target : any, to : any, animation : any)=>{
         return new Promise((resolve, reject)=>{
-            to.ease = EasePack[animation.easeType][animation.easing];
-            to.onComplete = function() {
-                resolve();
-            };
-            if (animation.delay)
-            {
-                to.delay = animation.delay;
-            }
-            if (animation.repeat)
-            {
-                to.repeat = animation.repeat;
-            }
-            animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
-            TweenMax.to(target, animation.duration, to);
+            // to.ease = EasePack[animation.easeType][animation.easing];
+            // to.onComplete = function() {
+            //     resolve();
+            // };
+            // if (animation.delay)
+            // {
+            //     to.delay = animation.delay;
+            // }
+            // if (animation.repeat)
+            // {
+            //     to.repeat = animation.repeat;
+            // }
+            // animation.duration = commonUtil.getTimeSecForSuffix(animation.duration);
+            // TweenMax.to(target, animation.duration, to);
         });
     }
 };

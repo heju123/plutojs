@@ -3,14 +3,14 @@ const webpack = require('webpack');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const copyWebpackPlugin = require('copy-webpack-plugin');
-const uglifyJsPlugin = require('uglify-js-plugin');
+const DtsBundleWebpack = require('dts-bundle-webpack')
 
 function resolvePath(subdir) {
     return path.join(__dirname, ".", subdir);
 }
 
-module.exports = function(env){
-    var compile_mode = env;
+module.exports = function(arg1, mode){
+    var compile_mode = mode.mode;
 
     var output = {
         entry : {},
@@ -24,11 +24,18 @@ module.exports = function(env){
             alias: {}
         },
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.(ts|js)$/,
                     exclude: /node_modules/,
-                    loader: 'ts-loader'
+                    use: [
+                        {
+                            loader: 'ts-loader',
+                            options: {
+                                transpileOnly: false
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -40,7 +47,12 @@ module.exports = function(env){
                     dry: false
                 }),
             // keep module.id stable when vender modules does not change
-            new webpack.HashedModuleIdsPlugin()
+            new webpack.HashedModuleIdsPlugin(),
+            new DtsBundleWebpack({
+                name: 'pluto',
+                main: 'src/js/main.d.ts',
+                out: __dirname + '/dist/app.d.ts',
+            })
         ]
     };
 
@@ -48,18 +60,14 @@ module.exports = function(env){
     output.devtool = "source-map";
     output.output.filename = "[name].[chunkhash].js";
     output.resolve.alias['~'] = resolvePath('src');
+    output.optimization = {};
 
-    if (compile_mode == "prod")
+    if (compile_mode == "production")
     {
-        output.entry.app = __dirname + '/build/build.js';
+        output.entry.app = __dirname + '/src/js/main.ts';
         output.output.filename = "[name].js";
         output.devtool = "cheap-module-source-map";
-
-        output.plugins.push(new uglifyJsPlugin({
-            compress: true, //default 'true', you can pass 'false' to disable this plugin
-            debug: true, //default 'false', it will display some information in console
-            sourceMap: true
-        }));
+        output.optimization.minimize = true;
     }
     else//test
     {
@@ -71,21 +79,6 @@ module.exports = function(env){
             "./libs/TweenLite/plugins/ColorPropsPlugin.min.js"
         ];
 
-        output.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            // filename: "vendor.js"
-            // (Give the chunk a different name)
-
-            minChunks: Infinity,
-            // (with more entries, this ensures that no other module
-            //  goes into the vendor chunk)
-        }));
-
-        output.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            minChunks: Infinity
-        }));
-
         output.plugins.push(new htmlWebpackPlugin({
             filename: 'index.html',
             template: 'test/index.html',
@@ -96,7 +89,6 @@ module.exports = function(env){
                 removeAttributeQuotes: true,
                 minifyCSS: true
             },
-            // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }));
 

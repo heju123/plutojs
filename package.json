@@ -1,6 +1,6 @@
 {
   "name": "plutojs",
-  "version": "2.1.2",
+  "version": "2.2.1",
   "description": "plutojs",
   "main": "dist/app.js",
   "repository": {
@@ -17,20 +17,21 @@
   },
   "homepage": "https://github.com/heju123/plutojs#readme",
   "devDependencies": {
-    "babel-core": "*",
-    "babel-loader": "*",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
     "babel-preset-es2015": "*",
-    "clean-webpack-plugin": "*",
-    "webpack": "~3.10.0",
-    "html-webpack-plugin": "*",
-    "copy-webpack-plugin": "*",
-    "uglify-js-plugin": "*",
-    "lite-server": "^2.3.0",
-    "ts-loader": "*",
-    "typescript": "*"
+    "clean-webpack-plugin": "0.1.19",
+    "copy-webpack-plugin": "^5.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "lite-server": "^2.5.4",
+    "ts-loader": "6.0.2",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "3.1.0",
+    "dts-bundle-webpack": "1.0.2"
   },
   "scripts": {
-    "build": "webpack --env=prod",
+    "build": "webpack -p --mode production",
     "dev": "webpack --env=dev --progress --watch",
     "test": "lite-server"
   }
