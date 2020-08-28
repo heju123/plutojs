@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const copyWebpackPlugin = require('copy-webpack-plugin');
-const DtsBundleWebpack = require('dts-bundle-webpack')
 
 function resolvePath(subdir) {
     return path.join(__dirname, ".", subdir);
@@ -48,11 +47,6 @@ module.exports = function(arg1, mode){
                 }),
             // keep module.id stable when vender modules does not change
             new webpack.HashedModuleIdsPlugin(),
-            new DtsBundleWebpack({
-                name: 'pluto',
-                main: 'src/js/main.d.ts',
-                out: __dirname + '/dist/app.d.ts',
-            })
         ]
     };
 

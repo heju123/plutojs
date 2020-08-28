@@ -2,9 +2,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "allowJs": false,
+    "allowJs": true,
     "sourceMap": true,
-    "declaration": true,
     "lib": [
       "es5",
       "es2015",
