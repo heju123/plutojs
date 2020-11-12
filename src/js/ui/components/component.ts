@@ -201,7 +201,7 @@ abstract class Component {
             }
             // else if (typeof(cfgStyle[key]) === "function")
             // {
-            //     this.setStyle(key, cfgStyle[key].apply(this, []));
+            //     this.setStyle(key, cfgStyle[key].apply(this, [this]));
             // }
             else
             {
@@ -668,7 +668,7 @@ abstract class Component {
         {
             if (typeof(this.style.focus) === "function")
             {
-                this.style.focus.apply(this, []);
+                this.style.focus.apply(this, [this]);
             }
             else
             {
@@ -682,7 +682,7 @@ abstract class Component {
         {
             if (typeof(this.style.focusout) === "function")
             {
-                this.style.focusout.apply(this, []);
+                this.style.focusout.apply(this, [this]);
             }
             else
             {
@@ -697,7 +697,7 @@ abstract class Component {
         {
             if (typeof(this.style.hover) === "function")
             {
-                this.style.hover.apply(this, []);
+                this.style.hover.apply(this, [this]);
             }
             else
             {
@@ -719,7 +719,7 @@ abstract class Component {
         {
             if (typeof(this.style.hoverout) === "function")
             {
-                this.style.hoverout.apply(this, []);
+                this.style.hoverout.apply(this, [this]);
             }
             else
             {
@@ -742,7 +742,7 @@ abstract class Component {
         {
             if (typeof(this.style.active) === "function")
             {
-                this.style.active.apply(this, []);
+                this.style.active.apply(this, [this]);
             }
             else
             {
@@ -756,7 +756,7 @@ abstract class Component {
         {
             if (typeof(this.style.activeout) === "function")
             {
-                this.style.activeout.apply(this, []);
+                this.style.activeout.apply(this, [this]);
             }
             else
             {
@@ -1116,7 +1116,7 @@ abstract class Component {
     getX() : number{
         if (this.style.x && typeof(this.style.x) === "function")
         {
-            return this.style.x.apply(this, []);
+            return this.style.x.apply(this, [this]);
         }
         if (this.style.x && this.style.x.toString().indexOf("%") > -1)//百分比
         {
@@ -1128,7 +1128,7 @@ abstract class Component {
     getY() : number{
         if (this.style.y && typeof(this.style.y) === "function")
         {
-            return this.style.y.apply(this, []);
+            return this.style.y.apply(this, [this]);
         }
         if (this.style.y && this.style.y.toString().indexOf("%") > -1)//百分比
         {
@@ -1228,7 +1228,7 @@ abstract class Component {
         }
         if (typeof(this.style.width) === "function")
         {
-            return this.style.width.apply(this, []);
+            return this.style.width.apply(this, [this]);
         }
         if (this.style.width.toString().indexOf("%") > -1)//百分比
         {
@@ -1244,7 +1244,7 @@ abstract class Component {
         }
         if (typeof(this.style.height) === "function")
         {
-            return this.style.height.apply(this, []);
+            return this.style.height.apply(this, [this]);
         }
         if (this.style.height.toString().indexOf("%") > -1)
         {
