@@ -77,7 +77,10 @@ abstract class Component {
         //自适应宽度
         if (this.style.autoWidth)
         {
-            this.setStyle("width", this.getTextWidth());
+            let textWidth = this.getTextWidth();
+            if (textWidth && textWidth > 0){
+                this.setStyle("width", textWidth);
+            }
         }
 
         if (this.style.backgroundImages && this.style.backgroundImages.length > 0)//多背景图片轮询播放
@@ -1259,6 +1262,33 @@ abstract class Component {
     }
     getInnerHeight() : number{
         return this.getHeight() - (this.style.borderWidth || 0) * 2;
+    }
+
+    //获取所有子节点宽度总和
+    getChildrenWidth(): number{
+        if (this.children && this.children.length > 0){
+            let allWidth = 0;
+            this.children.forEach((child)=>{
+                child.afterInitPromise.then(()=>{
+                    allWidth += child.getWidth();
+                });
+            })
+            return allWidth;
+        }
+        return 0;
+    }
+    //获取所有子节点高度总和
+    getChildrenHeight(): number{
+        if (this.children && this.children.length > 0){
+            let allWidth = 0;
+            this.children.forEach((child)=>{
+                child.afterInitPromise.then(()=>{
+                    allWidth += child.getHeight();
+                });
+            })
+            return allWidth;
+        }
+        return 0;
     }
 
     /** 获取alpha值，如果当前组件无alpha，则取父节点的 */

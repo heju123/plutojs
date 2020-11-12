@@ -252,6 +252,32 @@ export default {
                     text : "readOnly"
                 },
                 {
+                    type: "rect",
+                    name: "autoWidthTest",
+                    style: {
+                        x: 100,
+                        y: 465,
+                        autoWidth: true,
+                        height: 30,
+                        borderColor: "#303030",
+                        borderWidth: 1
+                    },
+                    children: [
+                        {
+                            type: "rect",
+                            style: {
+                                x: 0,
+                                y: 0,
+                                autoWidth: true,
+                                height: '100%',
+                                lineHeight : 30,
+                                textAlign : "center",
+                            },
+                            text : "测试文字测试文字测试文字测试文字测试文字测试文字"
+                        }
+                    ]
+                },
+                {
                     type : "rect",
                     style : {
                         x : 360,
