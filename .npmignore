@@ -10,3 +10,4 @@ package-test.json
 plutojs.d.ts
 tsconfig.json
 webpack.config.js
+scripts

@@ -1,6 +1,6 @@
 {
   "name": "plutojs",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "plutojs",
   "main": "dist/src/js/main.js",
   "types": "dist/src/js/main.d.ts",
@@ -24,5 +24,8 @@
     "publish": "node scripts/publish.js",
     "dev": "webpack --env=dev --progress --watch",
     "test": "lite-server"
+  },
+  "publishConfig": {
+    "registry": "http://172.16.128.150:8081/repository/npm_hosted/"
   }
 }
