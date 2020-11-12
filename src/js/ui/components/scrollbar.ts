@@ -6,6 +6,8 @@ import MouseEvent from "../../event/type/mouseEvent";
 import WheelEvent from "../../event/type/wheelEvent";
 import ViewState from "../viewState";
 
+declare const require: any;
+
 const HOVER_TIME_OUT = 500;//hover时执行定时函数间隔
 const DEFAULT_SCROLLBAR_WIDTH = 10;//滚动条的默认宽度
 export default class Scrollbar extends Rect {

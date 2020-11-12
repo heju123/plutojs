@@ -6,6 +6,8 @@ import globalUtil from "../../util/globalUtil";
 import Component from "./component";
 import ViewState from "../viewState";
 
+declare const require: any;
+
 export default class Rect extends Component{
     constructor(parent? : Component | ViewState) {
         super(parent);

@@ -30,7 +30,7 @@ let httpUtil : any = {
             else
             {
                 // IE6, IE5 浏览器执行代码
-                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                xmlhttp=new (window as any).ActiveXObject("Microsoft.XMLHTTP");
             }
             xmlhttp.onreadystatechange = function()
             {
@@ -54,7 +54,7 @@ let httpUtil : any = {
             else
             {
                 // IE6, IE5 浏览器执行代码
-                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                xmlhttp=new (window as any).ActiveXObject("Microsoft.XMLHTTP");
             }
             xmlhttp.open('post',url,true);
             xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");

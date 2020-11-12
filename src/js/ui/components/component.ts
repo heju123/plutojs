@@ -12,6 +12,8 @@ import Particle from "../../effect/particle/particle";
 import LinkedList from "../../data/structure/linkedList";
 import LinkedItem from "../../data/structure/linkedItem";
 
+declare const require: any;
+
 abstract class Component {
     id : string;
     name : string;

@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
     "module": "commonjs",
     "target": "es5",
     "allowJs": true,
     "sourceMap": true,
+    "declaration": true,
     "lib": [
       "es5",
       "es2015",
       "dom"
-    ]
+    ],
+    "rootDirs": ["src"]
   },
   "files": [
-    "plutojs.d.ts"
+    "src/js/main.ts"
   ],
   "exclude": [
     "node_modules"
