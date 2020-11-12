@@ -1269,9 +1269,7 @@ abstract class Component {
         if (this.children && this.children.length > 0){
             let allWidth = 0;
             this.children.forEach((child)=>{
-                child.afterInitPromise.then(()=>{
-                    allWidth += child.getWidth();
-                });
+                allWidth += child.getWidth();
             })
             return allWidth;
         }
