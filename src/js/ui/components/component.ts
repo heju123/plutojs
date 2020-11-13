@@ -555,7 +555,7 @@ abstract class Component {
         this.setDefaultStyle();//如果样式丢失，则使用默认样式
         //半透明
         let alpha = this.getAlpha();
-        if (alpha)
+        if (alpha !== undefined)
         {
             ctx.globalAlpha = alpha;
         }
@@ -1289,7 +1289,7 @@ abstract class Component {
 
     /** 获取alpha值，如果当前组件无alpha，则取父节点的 */
     getAlpha() : number{
-        if (this.style.alpha)
+        if (this.style.alpha !== undefined)
         {
             return this.style.alpha;
         }
@@ -1401,7 +1401,7 @@ abstract class Component {
         {
             return 0;
         }
-        return this.text.length * parseInt(this.style.fontSize, 10);
+        return this.text.length * parseInt(this.style.lineHeight, 10);
     }
     getTextWidth() : number{
         if (!this.text)
@@ -1424,6 +1424,14 @@ abstract class Component {
             }
         });
         return allWidth;
+    }
+
+    /** 测量文字宽度，使用当前组件的fontSize和fontFamily */
+    measureTextWidth(text: string): number{
+        globalUtil.action.measureTextDom.style.fontSize = this.style.fontSize;
+        globalUtil.action.measureTextDom.style.fontFamily = this.style.fontFamily;
+        globalUtil.action.measureTextDom.innerText = text;
+        return globalUtil.action.measureTextDom.offsetWidth;
     }
 
     getChildren() : Array<Component> | Component{
