@@ -47,6 +47,11 @@ import Cache from "./cache/cache";
 
 import DomImage from "./ui/dom/domImage";
 
+import MouseEvent from "./event/type/mouseEvent";
+import ClickEvent from "./event/type/clickEvent";
+import KeyEvent from "./event/type/keyEvent";
+import WheelEvent from "./event/type/wheelEvent";
+
 class Main {
     fps : Fps;
 
@@ -107,4 +112,5 @@ export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,evalUt
     Acceleration,Collision,Friction,Physics,PhysicsQueue,Speed,
     BaseParticle,Particle,Stack,LinkedItem,LinkedList,
     Cache,
-    DomImage};
+    DomImage,
+    ClickEvent, MouseEvent, KeyEvent, WheelEvent};
