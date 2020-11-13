@@ -95,8 +95,8 @@ export default class ViewState{
         this.registerEvent("mousemove", (e)=>{
             if (e.sourceEvent.target === this.canvas)
             {
-                (<any>this.ctx).mouseAction.mx = e.pageX - (<any>this.ctx).canvasOffset.left;
-                (<any>this.ctx).mouseAction.my = e.pageY - (<any>this.ctx).canvasOffset.top;
+                (<any>this.ctx).mouseAction.mx = e.pageX;
+                (<any>this.ctx).mouseAction.my = e.pageY;
             }
             if (globalUtil.action.dragComponent)//拖动
             {

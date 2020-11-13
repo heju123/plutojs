@@ -4,8 +4,8 @@
 import Event from "./event";
 
 export default class MouseEvent extends Event{
-    pageX : number;
-    pageY : number;
+    pageX : number; // 得到的鼠标pageX已经转换成相对于canvas的坐标
+    pageY : number; // 得到的鼠标pageY已经转换成相对于canvas的坐标
     button : number;
 
     constructor(type : string) {

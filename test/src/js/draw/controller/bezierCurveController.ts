@@ -36,8 +36,8 @@ export default class BezierCurveController extends Controller{
     onMousemove(e){
         if (this.dragObj)
         {
-            this.dragObj.x = (<Controller>this).getX(e.pageX);
-            this.dragObj.y = (<Controller>this).getY(e.pageY);
+            this.dragObj.x = (<Controller>this).getRelativeX(e.pageX);
+            this.dragObj.y = (<Controller>this).getRelativeY(e.pageY);
         }
     }
     onMouseup(e){

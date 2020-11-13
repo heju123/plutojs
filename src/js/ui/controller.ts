@@ -22,10 +22,10 @@ export default class Controller{
         return y + this.component.getRealY();
     }
     //显示在界面上的真实坐标转换为相对坐标
-    getX(drawX){
+    getRelativeX(drawX){
         return drawX - this.component.getRealX();
     }
-    getY(drawY){
+    getRelativeY(drawY){
         return drawY - this.component.getRealY();
     }
 

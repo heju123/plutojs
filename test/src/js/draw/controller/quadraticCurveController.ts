@@ -42,8 +42,8 @@ export default class QuadraticCurveController extends Controller{
     onMousemove(e){
         if (this.dragging)
         {
-            this.ctrlPoint.x = (<Controller>this).getX(e.pageX);
-            this.ctrlPoint.y = (<Controller>this).getY(e.pageY);
+            this.ctrlPoint.x = (<Controller>this).getRelativeX(e.pageX);
+            this.ctrlPoint.y = (<Controller>this).getRelativeY(e.pageY);
         }
     }
     onMouseup(e){

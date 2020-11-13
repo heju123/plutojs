@@ -4,7 +4,7 @@ import * as EasePack from "../../../libs/TweenLite/easing/EasePack.min.js";
 import * as ColorPropsPlugin from "../../../libs/TweenLite/plugins/ColorPropsPlugin.min.js";
 import Component from "../ui/components/component";
 
-let animationUtil : any = {
+let animationUtil = {
     /**
      * 执行样式改变动画
      *

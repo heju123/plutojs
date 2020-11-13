@@ -37,7 +37,7 @@ export default class Fps{
         (<any>this).ctx.canvasOffset = this.offset(this.canvas);
         window.requestAnimationFrame = window.requestAnimationFrame || (<any>window).mozRequestAnimationFrame || (<any>window).webkitRequestAnimationFrame || (<any>window).msRequestAnimationFrame;
 
-        globalUtil.eventBus = new EventBus(this.canvas);
+        globalUtil.eventBus = new EventBus(this.canvas, this.ctx);
 
         this.domFactory = new DomFactory();
         globalUtil.domFactory = this.domFactory;

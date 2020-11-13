@@ -16,12 +16,14 @@ import Controller from "../ui/controller";
 
 export default class EventBus{
     private canvas : HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
     private eventListeners : Object;
     private eventNotifyQueue : Array<any>;
     private propagationEventQueue : Object;
 
-    constructor(canvas : HTMLCanvasElement){
+    constructor(canvas : HTMLCanvasElement, ctx: CanvasRenderingContext2D){
         this.canvas = canvas;
+        this.ctx = ctx;
         //注册事件列表
         this.eventListeners = {};
         //事件通知队列
@@ -245,8 +247,8 @@ export default class EventBus{
                 if (eventNotify.sourceEvent)
                 {
                     event.setButton(eventNotify.sourceEvent.button);
-                    event.setPageX(eventNotify.sourceEvent.pageX);
-                    event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setPageX(eventNotify.sourceEvent.pageX - (this.ctx as any).canvasOffset.left);
+                    event.setPageY(eventNotify.sourceEvent.pageY - (this.ctx as any).canvasOffset.top);
                     event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
@@ -255,8 +257,8 @@ export default class EventBus{
                 event.setCurrentTarget(eventNotify.listener.target);
                 if (eventNotify.sourceEvent)
                 {
-                    event.setPageX(eventNotify.sourceEvent.pageX);
-                    event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setPageX(eventNotify.sourceEvent.pageX - (this.ctx as any).canvasOffset.left);
+                    event.setPageY(eventNotify.sourceEvent.pageY - (this.ctx as any).canvasOffset.top);
                     event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
@@ -266,8 +268,8 @@ export default class EventBus{
                 if (eventNotify.sourceEvent)
                 {
                     event.setButton(eventNotify.sourceEvent.button);
-                    event.setPageX(eventNotify.sourceEvent.pageX);
-                    event.setPageY(eventNotify.sourceEvent.pageY);
+                    event.setPageX(eventNotify.sourceEvent.pageX - (this.ctx as any).canvasOffset.left);
+                    event.setPageY(eventNotify.sourceEvent.pageY - (this.ctx as any).canvasOffset.top);
                     event.setSourceEvent(eventNotify.sourceEvent);
                 }
                 break;
