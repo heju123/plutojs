@@ -12,10 +12,10 @@ export default class BezierCurveController extends Controller{
         super(component);
 
         (<Controller>this).registerEvent("$onViewLoaded", ()=>{
-            this.startPoint = new Point(0, 150);
+            this.startPoint = new Point(0, 40);
             this.ctrl1Point = new Point(10, 290);
             this.ctrl2Point = new Point(390, 10);
-            this.endPoint = new Point(400, 150);
+            this.endPoint = new Point(400, 220);
 
             this.bezierCurve = new BezierCurve((<Controller>this).component, this.ctrl1Point, this.ctrl2Point, this.endPoint);
         });

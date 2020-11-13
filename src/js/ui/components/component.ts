@@ -1278,11 +1278,11 @@ abstract class Component {
     //获取所有子节点高度总和
     getChildrenHeight(): number{
         if (this.children && this.children.length > 0){
-            let allWidth = 0;
+            let allHeight = 0;
             this.children.forEach((child)=>{
-                allWidth += child.getHeight();
+                allHeight += child.getHeight();
             })
-            return allWidth;
+            return allHeight;
         }
         return 0;
     }
@@ -1396,14 +1396,14 @@ abstract class Component {
     }
 
     /** 获取文本占的总高度 */
-    protected getTextHeight() : number{
+    getTextHeight() : number{
         if (!this.text)
         {
             return 0;
         }
         return this.text.length * parseInt(this.style.fontSize, 10);
     }
-    protected getTextWidth() : number{
+    getTextWidth() : number{
         if (!this.text)
         {
             return 0;
@@ -1417,10 +1417,10 @@ abstract class Component {
             }
             else
             {
-                globalUtil.action.measureTextDom.style["font-size"] = this.style.fontSize;
-                globalUtil.action.measureTextDom.style["font-family"] = this.style.fontFamily;
+                globalUtil.action.measureTextDom.style.fontSize = this.style.fontSize;
+                globalUtil.action.measureTextDom.style.fontFamily = this.style.fontFamily;
                 globalUtil.action.measureTextDom.innerText = row;
-                allWidth = globalUtil.action.measureTextDom.offsetWidth;
+                allWidth = Math.max(allWidth, globalUtil.action.measureTextDom.offsetWidth);
             }
         });
         return allWidth;
