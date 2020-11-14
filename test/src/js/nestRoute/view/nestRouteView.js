@@ -64,12 +64,7 @@ let output = {
                             animation : commonAnimation.buttonAnimation,
                             text : "路由1",
                             events : {
-                                "click" : {
-                                    callback : "changeRoute",
-                                    param : (self)=>{
-                                        return ["nestRoute.route1"];
-                                    }
-                                }
+                                "click" : "changeRoute('nestRoute.route1')"
                             }
                         },
                         {
@@ -82,12 +77,7 @@ let output = {
                             animation : commonAnimation.buttonAnimation,
                             text : "路由2",
                             events : {
-                                "click" : {
-                                    callback : "changeRoute",
-                                    param : (self)=>{
-                                        return ["nestRoute.route2"];
-                                    }
-                                }
+                                "click" : "changeRoute('nestRoute.route2')"
                             }
                         }
                     ]

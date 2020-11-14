@@ -149,12 +149,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "添加子节点",
                             events : {
-                                "click" : {
-                                    callback : "asyncAppendChild",
-                                    param : (self)=>{
-                                        return "scrollbar3";
-                                    }
-                                }
+                                "click" : "asyncAppendChild('scrollbar3')"
                             }
                         },
                         {
@@ -168,12 +163,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "移除子节点",
                             events : {
-                                "click" : {
-                                    callback : "asyncRemoveChild",
-                                    param : (self)=>{
-                                        return "scrollbar3";
-                                    }
-                                }
+                                "click" : "asyncRemoveChild('scrollbar3')"
                             }
                         },
                         {
@@ -187,12 +177,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "移除全部",
                             events : {
-                                "click" : {
-                                    callback : "asyncRemoveAllChildren",
-                                    param : (self)=>{
-                                        return "scrollbar3";
-                                    }
-                                }
+                                "click" : "asyncRemoveAllChildren('scrollbar3')"
                             }
                         },
                         {
@@ -241,12 +226,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "添加子节点",
                             events : {
-                                "click" : {
-                                    callback : "asyncAppendChild",
-                                    param : (self)=>{
-                                        return "scrollbar4";
-                                    }
-                                }
+                                "click" : "asyncAppendChild('scrollbar4')"
                             }
                         },
                         {
@@ -260,12 +240,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "移除子节点",
                             events : {
-                                "click" : {
-                                    callback : "asyncRemoveChild",
-                                    param : (self)=>{
-                                        return "scrollbar4";
-                                    }
-                                }
+                                "click" : "asyncRemoveChild('scrollbar4')"
                             }
                         },
                         {
@@ -279,12 +254,7 @@ export default {
                             animation : commonAnimation.buttonAnimation,
                             text : "移除全部",
                             events : {
-                                "click" : {
-                                    callback : "asyncRemoveAllChildren",
-                                    param : (self)=>{
-                                        return "scrollbar4";
-                                    }
-                                }
+                                "click" : "asyncRemoveAllChildren('scrollbar4')"
                             }
                         }
                     ]
