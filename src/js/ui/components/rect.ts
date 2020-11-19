@@ -117,23 +117,23 @@ export default class Rect extends Component{
 
     /** 设置后避免超出当前组件范围 */
     protected setClip(ctx : CanvasRenderingContext2D){
-        ctx.beginPath();
-        if (this.isDoingParentClip)
-        {
-            if (this.needTranslateOriginOfCoor2Center())
-            {
-                this.setOriginalCoor2Center(ctx);
-            }
-            //设置scale或rotate后可以将效果传递给子节点
-            this.setScaleEnable(ctx);//缩放
-            this.setRotateEnable(ctx);//旋转
-            if (this.needTranslateOriginOfCoor2Center())
-            {
-                this.restoreOriginalCoor2Zero(ctx);
-            }
-        }
         if (this.hasClip)//是否需要剪切边界
         {
+            ctx.beginPath();
+            if (this.isDoingParentClip)
+            {
+                if (this.needTranslateOriginOfCoor2Center())
+                {
+                    this.setOriginalCoor2Center(ctx);
+                }
+                //设置scale或rotate后可以将效果传递给子节点
+                this.setScaleEnable(ctx);//缩放
+                this.setRotateEnable(ctx);//旋转
+                if (this.needTranslateOriginOfCoor2Center())
+                {
+                    this.restoreOriginalCoor2Zero(ctx);
+                }
+            }
             if (this.style.borderRadius)
             {
                 this.getRectRadiusPath(this, ctx, this.style.borderRadius, -(this.style.borderWidth || 0));
@@ -145,8 +145,8 @@ export default class Rect extends Component{
                     this.getInnerWidth(), this.getInnerHeight());
             }
             ctx.clip();
+            ctx.closePath();
         }
-        ctx.closePath();
     }
 
     private getRectRadiusPath(arg1? : any, arg2? : any, arg3? : any, arg4? : any, arg5? : any, arg6? : any, arg7? : any) : void{
