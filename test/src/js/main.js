@@ -12,11 +12,6 @@ class TestMain {
 
         let main = new Main("mainBox");
         main.run(route);
-
-        setTimeout(()=>{
-            main = new Main("mainBox");
-            main.run(route);
-        }, 5000);
     }
 }
 

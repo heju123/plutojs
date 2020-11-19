@@ -9,12 +9,13 @@ import Component from "./components/component";
 import DomFactory from "./dom/domFactory";
 
 export default class Fps{
-    canvas : HTMLCanvasElement;
-    ctx : CanvasRenderingContext2D;
-    viewState : ViewState;
-    domFactory : DomFactory;
+    public canvas : HTMLCanvasElement;
+    public ctx : CanvasRenderingContext2D;
+    public viewState : ViewState;
+    public domFactory : DomFactory;
+    private isEnd: boolean = false;
 
-    constructor(mainBody:HTMLDivElement){
+    public constructor(mainBody:HTMLDivElement){
         globalUtil.showArea = <HTMLElement>document.createElement("DIV");
         globalUtil.showArea.style.width = "100%";
         globalUtil.showArea.style.height = "100%";
@@ -43,7 +44,7 @@ export default class Fps{
         globalUtil.domFactory = this.domFactory;
     }
 
-    offset(element:any) {
+    public offset(element:any) {
         element = element || this;
 
         let offest = {
@@ -75,14 +76,19 @@ export default class Fps{
         }
     }
 
-    setMainView(viewCfg : any){
+    public setMainView(viewCfg : any){
         this.viewState = new ViewState(this.canvas, this.ctx);
         this.viewState.init(viewCfg);
     }
 
     /** 开始循环绘制 */
-    startLoop(){
+    public startLoop(){
         window.requestAnimationFrame(this.draw.bind(this));
+    }
+
+    /** 停止绘制 */
+    public endLoop(){
+        this.isEnd = true;
     }
 
     /** 绘制子组件之前调用 */
@@ -156,6 +162,9 @@ export default class Fps{
     }
 
     private draw(){
+        if (this.isEnd){
+            return;
+        }
         //背景
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

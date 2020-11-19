@@ -10,7 +10,6 @@ import WheelEvent from "./type/wheelEvent";
 import Stack from "../data/structure/stack";
 import EventNotify from "./eventNotify";
 import globalUtil from "../util/globalUtil";
-import commonUtil from "../util/commonUtil";
 import Component from "../ui/components/component";
 import Controller from "../ui/controller";
 

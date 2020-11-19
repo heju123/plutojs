@@ -99,13 +99,18 @@ class Main {
         };
     }
 
-    setMainView(viewCfg : any){
+    public setMainView(viewCfg : any){
         this.fps.setMainView(viewCfg);
         this.fps.startLoop();
     }
 
-    run(viewCfg : any){
+    public run(viewCfg : any){
         this.setMainView(viewCfg);
+    }
+
+    /** 如果重新new一个Main实例，之前的那个Main一定要调用stop，不然会有意想不到的bug */
+    public stop(){
+        this.fps.endLoop();
     }
 }
 export {Main,commonUtil,httpUtil,Thread,Controller,MPromise,animationUtil,evalUtil,Component,Sprite,Router,Button,Checkbox,Input,Rect,Scrollbar,
