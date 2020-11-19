@@ -65,6 +65,7 @@ class Main {
         {
             mainBody = eleId;
         }
+        mainBody.innerHTML = '';
         this.fps = new Fps(mainBody);
 
         globalUtil.action = {};
@@ -77,7 +78,7 @@ class Main {
             globalUtil.action.inputListenerDom.style.top = "0px";
             globalUtil.action.inputListenerDom.style.opacity = 0;
             globalUtil.action.inputListenerDom.style["z-index"] = -1;
-            document.body.appendChild(globalUtil.action.inputListenerDom);
+            mainBody.appendChild(globalUtil.action.inputListenerDom);
         }
 
         //字符串长度检测
@@ -89,7 +90,7 @@ class Main {
             globalUtil.action.measureTextDom.style.top = "0px";
             globalUtil.action.measureTextDom.style.opacity = 0;
             globalUtil.action.measureTextDom.style["z-index"] = -1;
-            document.body.appendChild(globalUtil.action.measureTextDom);
+            mainBody.appendChild(globalUtil.action.measureTextDom);
         }
 
         //屏蔽鼠标右键菜单

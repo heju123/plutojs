@@ -35,19 +35,12 @@ export default class EventBus{
     }
 
     addDomEventListener(dom : any, type : string, callback : Function){
-        if (window.addEventListener)
-        {
-            dom.addEventListener(type, callback, false);
-        }
-        else
-        {
-            dom.attachEvent("on" + type, callback);
-        }
+        dom.addEventListener(type, callback, false);
     }
 
     private initDomEvent(){
         let clickCom;//click的组件
-        this.addDomEventListener(document, "mousedown", (e)=>{
+        this.addDomEventListener(this.canvas, "mousedown", (e)=>{
             this.createEventNotify(e, "mousedown");
             if (globalUtil.action.hoverComponent)
             {
@@ -55,11 +48,11 @@ export default class EventBus{
             }
         });
 
-        this.addDomEventListener(document, "mousemove", (e)=>{
+        this.addDomEventListener(this.canvas, "mousemove", (e)=>{
             this.createEventNotify(e, "mousemove");
         });
 
-        this.addDomEventListener(document, "mouseup", (e)=>{
+        this.addDomEventListener(this.canvas, "mouseup", (e)=>{
             this.createEventNotify(e, "mouseup");
             if (clickCom === globalUtil.action.hoverComponent)//按下和抬起必须是相同组件才触发click事件
             {
@@ -68,7 +61,7 @@ export default class EventBus{
             clickCom = undefined;
         });
 
-        this.addDomEventListener(document, "dblclick", (e)=>{
+        this.addDomEventListener(this.canvas, "dblclick", (e)=>{
             this.createEventNotify(e, "dblclick");
         });
 
@@ -99,7 +92,8 @@ export default class EventBus{
         return batchNo;
     }
 
-    /** 创建鼠标事件通知 */
+    /** 创建鼠标事件通知，例如mousedown或mousemove触发后会分别调用createEventNotify方法创建事件通知对象，
+     * 为了防止一个组件绑定了多个事件，所以用唯一的batchNo来区分 */
     private createEventNotify(e : any, type : string){
         if (!this.eventListeners[type])
         {
@@ -162,7 +156,7 @@ export default class EventBus{
         });
     }
 
-    //通知触发事件
+    //通知触发事件，要实现事件冒泡，所以再绘制前必须将notify对象添加进每一个绑定的节点
     doNotifyEvent(){
         this.eventNotifyQueue.forEach((eventFun)=>{
             if (eventFun && typeof(eventFun) == "function")
@@ -173,7 +167,8 @@ export default class EventBus{
         this.eventNotifyQueue.length = 0;
     }
 
-    //捕获事件
+    // 捕获事件，每一个绑定节点checkEvent后将满足条件的事件通过captureEvent方法传递回来，组件绘制是先绘制父节点，再绘制子节点，
+    // 所以可以利用堆结构实现冒泡事件
     captureEvent(eventNotify : any){
         if (!this.propagationEventQueue[eventNotify.batchNo])
         {
