@@ -11,7 +11,7 @@ export default class NestRouteController extends Controller{
         })
     }
 
-    changeRoute(param){
-        this.routeCom.changeRoute(param[0]);
+    changeRoute(routeName){
+        this.routeCom.changeRoute(routeName);
     }
 }

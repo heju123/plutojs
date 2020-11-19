@@ -70,12 +70,7 @@ export default {
                     animation : commonAnimation.buttonAnimation,
                     text : "放大",
                     events : {
-                        "click" : {
-                            callback : "zoomIn",
-                            param : (self)=>{
-                                return "drag1";
-                            }
-                        }
+                        "click" : "zoomIn('drag1')"
                     }
                 },
                 {
@@ -89,12 +84,7 @@ export default {
                     animation : commonAnimation.buttonAnimation,
                     text : "缩小",
                     events : {
-                        "click" : {
-                            callback : "zoomOut",
-                            param : (self)=>{
-                                return "drag1";
-                            }
-                        }
+                        "click" : "zoomOut('drag1')"
                     }
                 },
                 {
@@ -177,12 +167,7 @@ export default {
                     animation : commonAnimation.buttonAnimation,
                     text : "放大",
                     events : {
-                        "click" : {
-                            callback : "zoomIn",
-                            param : (self)=>{
-                                return "drag2";
-                            }
-                        }
+                        "click" : "zoomIn('drag2')"
                     }
                 },
                 {
@@ -196,12 +181,7 @@ export default {
                     animation : commonAnimation.buttonAnimation,
                     text : "缩小",
                     events : {
-                        "click" : {
-                            callback : "zoomOut",
-                            param : (self)=>{
-                                return "drag2";
-                            }
-                        }
+                        "click" : "zoomOut('drag2')"
                     }
                 }
             ]
