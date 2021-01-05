@@ -26,6 +26,6 @@
     "test": "lite-server"
   },
   "publishConfig": {
-    "registry": "http://172.16.128.150:8081/repository/npm_hosted/"
+    "registry": "http://172.16.254.105:8081/repository/npm_hosted/"
   }
 }
