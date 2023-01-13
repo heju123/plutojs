@@ -105,7 +105,7 @@ class Main {
     }
 
     public getViewState(){
-        this.fps.viewState;
+        return this.fps.viewState;
     }
 
     public run(viewCfg : any){

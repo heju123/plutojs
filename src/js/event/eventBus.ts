@@ -308,7 +308,7 @@ export default class EventBus{
      * @param event 发送的事件，里面的currentTarget对象会拿来和listener.target作比较，满足条件则执行事件，currentTarget表示需要将事件推送给哪个组件
      * @param toChildren 是否发送给子组件，如果listener.target是currentTarget的children也满足条件
      */
-    broadcastEvent(type : string, event : Event, toChildren? : boolean){
+    broadcastEvent(type : string, event? : Event, toChildren? : boolean){
         if (!this.eventListeners[type])
         {
             return;

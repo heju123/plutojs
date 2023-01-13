@@ -73,6 +73,8 @@ export default class MainController extends Controller{
     goMovement(e){
         let mainRoute = this.viewState.getComponentById("mainRoute");
         mainRoute.changeRoute("movement", true);
+
+        this.viewState.broadcastEvent("onClickGoMovement");//view加载完成事件（所有同步加载的视图加载完毕）
     }
 
     getAllInput(e)

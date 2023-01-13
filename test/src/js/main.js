@@ -12,6 +12,10 @@ class TestMain {
 
         let main = new Main("mainBox");
         main.run(route);
+
+        main.getViewState().registerEvent('onClickGoMovement', ()=>{
+            console.log('go movement')
+        })
     }
 }
 

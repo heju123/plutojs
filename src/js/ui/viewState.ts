@@ -330,6 +330,10 @@ export default class ViewState{
         globalUtil.eventBus.registerEvent(this, eventType, callback);
     }
 
+    broadcastEvent(type : string, event? : Event, toChildren? : boolean){
+        globalUtil.eventBus.broadcastEvent(type, event, toChildren);
+    }
+
     removeEvent(eventType : string, callback : Function){
         globalUtil.eventBus.removeEvent(this, eventType, callback);
     }
