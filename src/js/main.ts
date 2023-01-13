@@ -104,6 +104,10 @@ class Main {
         this.fps.startLoop();
     }
 
+    public getViewState(){
+        this.fps.viewState;
+    }
+
     public run(viewCfg : any){
         this.setMainView(viewCfg);
     }
