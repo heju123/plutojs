@@ -80,6 +80,22 @@ y坐标，相对于父组件
 旋转角度，角度为单位
 #### style.mirror
 镜像翻转；例：horizontal水平翻转，vertical垂直翻转
+#### style.shadow
+设置阴影；注意：如果当前rect设置了背景图片，阴影绘制不出来，应该是canvas问题，这种情况下只能多套一层实现
+例：
+```javascript
+export default {
+    type: "rect",
+    style : {
+      shadow: {
+           x: 0,
+           y: 0,
+           blur: 20,
+           color: '#939393'
+       }
+    }
+}
+```
 #### style.alwaysDraw
 组件在被遮挡的情况下是否仍然需要绘制
 #### animation

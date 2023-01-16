@@ -564,6 +564,8 @@ abstract class Component {
         {
             this.setOriginalCoor2Center(ctx);
         }
+        //阴影
+        this.setShadowEnable(ctx);
         //缩放
         this.setScaleEnable(ctx);
         //旋转
@@ -619,6 +621,18 @@ abstract class Component {
             {
                 ctx.scale(scaleArr[0], -scaleArr[1]);
             }
+        }
+    }
+
+    /** 设置ctx的阴影绘制 */
+    protected setShadowEnable(ctx : CanvasRenderingContext2D){
+        let shadowInfo = this.style.shadow;
+        if (shadowInfo !== undefined)
+        {
+            ctx.shadowOffsetX = shadowInfo.x;
+            ctx.shadowOffsetY = shadowInfo.y;
+            ctx.shadowBlur = shadowInfo.blur;
+            ctx.shadowColor = shadowInfo.color;
         }
     }
 
