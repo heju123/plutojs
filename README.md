@@ -57,7 +57,7 @@ y坐标，相对于父组件
 #### style.height
 高度
 #### style.lineHeight
-行高度，类似css的ling-height
+行高度，类似css的line-height
 #### style.backgroundColor
 背景颜色
 #### style.backgroundImage
