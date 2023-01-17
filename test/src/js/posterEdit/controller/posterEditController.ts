@@ -28,8 +28,23 @@ export default class PosterEditController extends Controller{
                 text1.initCfg(textView('text1', {
                     x: 100,
                     y: 100
-                }))
+                })).then(()=>{
+                    if (text1.controller){
+                        text1.controller.init();
+                    }
+                });
                 editImage1.appendChild(text1);
+            }
+        }
+    }
+
+    exportImage(){
+        let editContent = this.viewState.getComponentByName('editContent');
+        if (editContent){
+            let editImage1 = editContent.getComponentByName('editImage1');
+            if (editImage1){
+                let url = editImage1.transform2ImageUrl();
+                console.log(url)
             }
         }
     }

@@ -59,6 +59,18 @@ export default {
                     events : {
                         "click" : "addText"
                     }
+                },
+                {
+                    type : "button",
+                    style : Object.assign({}, commonStyle.buttonStyle, {
+                        autoWidth : true,
+                        height : 30
+                    }),
+                    animation : commonAnimation.buttonAnimation,
+                    text : "导出图片",
+                    events : {
+                        "click" : "exportImage"
+                    }
                 }
             ]
         },

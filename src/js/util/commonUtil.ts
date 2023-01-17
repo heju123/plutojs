@@ -306,6 +306,16 @@ let commonUtil : any = {
         else if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
             return "IE";
         } //判断是否IE浏览器
+    },
+    /** 将指定区域转化为图片地址 */
+    transform2ImageUrl: (oirCanvas: HTMLCanvasElement, left: number, top: number, width: number, height: number)=>{
+        let newCanvas = document.createElement('canvas');
+		let newCtx = newCanvas.getContext('2d');
+		newCanvas.width = width;
+		newCanvas.height = height;
+		newCtx.drawImage(oirCanvas, left, top, width, height, 0, 0, newCanvas.width, newCanvas.height);
+        let imgUrl = newCanvas.toDataURL("image/jpeg", 1.0);
+        return imgUrl;
     }
 };
 export default commonUtil;

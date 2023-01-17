@@ -721,7 +721,8 @@ abstract class Component {
                 this.copyStyle(this.style.hover);
             }
         }
-        if (this.style.cursor)
+        // 子组件和父组件同时设置了cursor属性，以子组件的为准
+        if (this.style.cursor && this.viewState.canvas.style.cursor === 'default')
         {
             this.viewState.canvas.style.cursor = this.style.cursor;
         }
@@ -1600,6 +1601,11 @@ abstract class Component {
     /** 触发事件 */
     triggerEvent(type : string){
         globalUtil.eventBus.triggerEvent(type, this);
+    }
+
+    /** 将指定区域转换为图片地址 */
+    transform2ImageUrl(){
+        return commonUtil.transform2ImageUrl(this.viewState.canvas, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight())
     }
 
     destroy(){

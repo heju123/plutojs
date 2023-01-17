@@ -9,14 +9,19 @@ export default (name, style)=>{
       x: style.x,
       y: style.y,
       width: 200,
-      height: 20,
+      height: 18,
       draggable: true,
       zIndex: 2,
       fontSize: '16px',
       borderWidth: 1,
       cursor : "move",
-      hover: {
-        borderColor: '#6CCFFF'
+      hover: function(){
+        this.style.borderColor = '#6CCFFF'
+        this.getComponentByName('resizeTop').style.alpha = 1;
+      },
+      hoverout: function(){
+        this.restoreStyle();
+        this.getComponentByName('resizeTop').style.alpha = 0;
       }
     },
     hasClip: false,
@@ -37,24 +42,29 @@ export default (name, style)=>{
       },
       {
         type: "rect",
+        name: "resizeTop",
         style: {
           x: function(){
             return this.parent.getWidth() / 2 - 10 / 2;
           },
-          y: -5,
-          width: 10,
-          height: 10,
+          y: -4,
+          width: 15,
+          height: 8,
           backgroundColor: '#ffffff',
           borderWidth: 1,
           borderColor: '#dfdfdf',
-          borderRadius: 5,
+          borderRadius: 3,
           shadow: {
             x: 0,
             y: 0,
             blur: 10,
             color: '#858585'
           },
-          zIndex: 2
+          zIndex: 2,
+          draggable: true,
+          alwaysDraw: true,
+          cursor : "n-resize",
+          alpha: 0
         }
       }
     ],

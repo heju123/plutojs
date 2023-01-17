@@ -97,7 +97,7 @@ export default {
 }
 ```
 #### style.alwaysDraw
-组件在被遮挡的情况下是否仍然需要绘制
+组件在被遮挡的情况下是否仍然需要绘制，默认情况下，为了节省性能，不在parent可视范围内的组件不会执行绘制，如果依然要绘制，就设置为true，一般和父组件的hasClip属性搭配使用
 #### animation
 动画属性；
 例：
@@ -245,7 +245,7 @@ component.triggerEvent("click");
 停止拖动，必须设置style.draggable属性
 注：拖动事件不能冒泡
 #### $onViewLoaded
-组件加载完成事件
+组件加载完成事件，注意：异步创建的组件会收不到此消息，初始化请再initCfg的回调里执行
 ## 布局
 目前只支持linearLayout线性布局
 例：
