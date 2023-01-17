@@ -1,6 +1,5 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
 import commonAnimation from "@/js/common//view/animation/commonAnimation";
-import {commonUtil} from "~/js/main";
 import PosterEditController from "../controller/posterEditController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
 

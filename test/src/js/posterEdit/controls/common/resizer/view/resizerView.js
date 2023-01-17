@@ -1,9 +1,9 @@
-import TextController from "../controller/textController";
+import ResizerController from "../controller/resizerController";
 
-export default (name, style)=>{
+export default (name, style, child)=>{
   let ret = {
     name : name,
-    controller: TextController,
+    controller: ResizerController,
     type: "rect",
     style: {
       x: style.x,
@@ -18,28 +18,17 @@ export default (name, style)=>{
       hover: function(){
         this.style.borderColor = '#6CCFFF'
         this.getComponentByName('resizeTop').style.alpha = 1;
+        this.getComponentByName('resizeBottom').style.alpha = 1;
       },
       hoverout: function(){
         this.restoreStyle();
         this.getComponentByName('resizeTop').style.alpha = 0;
+        this.getComponentByName('resizeBottom').style.alpha = 0;
       }
     },
     hasClip: false,
     children: [
-      {
-        type: "rect",
-        name: 'textPanel',
-        style: {
-          x: 0,
-          y: 0,
-          width: '100%',
-          height: '100%',
-          fontColor: '#ffffff',
-          multiLine: true,
-          zIndex: 1
-        },
-        text: name
-      },
+      child,
       {
         type: "rect",
         name: "resizeTop",
@@ -48,6 +37,33 @@ export default (name, style)=>{
             return this.parent.getWidth() / 2 - 10 / 2;
           },
           y: -4,
+          width: 15,
+          height: 8,
+          backgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#dfdfdf',
+          borderRadius: 3,
+          shadow: {
+            x: 0,
+            y: 0,
+            blur: 10,
+            color: '#858585'
+          },
+          zIndex: 2,
+          draggable: true,
+          alwaysDraw: true,
+          cursor : "n-resize",
+          alpha: 0
+        }
+      },
+      {
+        type: "rect",
+        name: "resizeBottom",
+        style: {
+          x: function(){
+            return this.parent.getWidth() / 2 - 10 / 2;
+          },
+          y: 12,
           width: 15,
           height: 8,
           backgroundColor: '#ffffff',

@@ -1,6 +1,7 @@
 import {Controller,Component,Rect} from "~/js/main";
 import editImageView from "../view/editImageView";
-import textView from "../view/textView";
+import textView from "../controls/text/view/textView";
+import resizerView from "../controls/common/resizer/view/resizerView";
 
 export default class PosterEditController extends Controller{
     constructor(component : Component) {
@@ -25,10 +26,10 @@ export default class PosterEditController extends Controller{
             let editImage1 = editContent.getComponentByName('editImage1');
             if (editImage1){
                 let text1 = new Rect(editImage1);
-                text1.initCfg(textView('text1', {
+                text1.initCfg(resizerView('text1', {
                     x: 100,
                     y: 100
-                })).then(()=>{
+                }, textView('text1'))).then(()=>{
                     if (text1.controller){
                         text1.controller.init();
                     }
