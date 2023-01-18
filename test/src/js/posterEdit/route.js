@@ -3,8 +3,8 @@ export default {
         view : (get) => {
             return new Promise((resolve, reject)=>{
                 require.ensure([], require => {
-                    get(require("./view/posterEditView").default, resolve, reject);
-                },'posterEditView');
+                    get(require("./view/posterEditTestView").default, resolve, reject);
+                },'posterEditTestView');
             });
         }
     }

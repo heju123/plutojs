@@ -1,12 +1,12 @@
 import commonStyle from "@/js/common//view/style/commonStyle";
 import commonAnimation from "@/js/common//view/animation/commonAnimation";
-import PosterEditController from "../controller/posterEditController";
+import PosterEditTestController from "../controller/posterEditTestController";
 import {topView,topHeight} from "@/js/common/view/top/topView";
 
 const TOOLHEIGHT = 40;
 
 export default {
-    controller : PosterEditController,
+    controller : PosterEditTestController,
     type : "rect",
     style : {
         x : 0,

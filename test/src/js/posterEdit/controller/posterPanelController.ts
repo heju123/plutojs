@@ -1,6 +1,6 @@
 import {Controller,Component,Rect} from "~/js/main";
 
-export default class EditImageController extends Controller{
+export default class PosterPanelController extends Controller{
     public selectedCom: Component;
 
     constructor(component : Component) {

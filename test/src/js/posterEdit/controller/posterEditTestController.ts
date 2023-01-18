@@ -1,9 +1,9 @@
-import {Controller,Component,Rect} from "~/js/main";
-import editImageView from "../view/editImageView";
+import {Controller,Component,Rect, commonUtil} from "~/js/main";
 import textView from "../controls/text/view/textView";
 import resizerView from "../controls/common/resizer/view/resizerView";
+import posterPanelView from "../view/posterPanelView";
 
-export default class PosterEditController extends Controller{
+export default class PosterEditTestController extends Controller{
     constructor(component : Component) {
         super(component);
     }
@@ -12,7 +12,7 @@ export default class PosterEditController extends Controller{
         let editContent = this.viewState.getComponentByName('editContent');
         if (editContent){
             let component = new Rect(editContent);
-            component.initCfg(editImageView('editImage1', '/images/bg.jpeg', {
+            component.initCfg(posterPanelView('posterPanel', '/images/bg.jpeg', {
                 x: 100,
                 y: 100
             }))
@@ -23,9 +23,9 @@ export default class PosterEditController extends Controller{
     addText(){
         let editContent = this.viewState.getComponentByName('editContent');
         if (editContent){
-            let editImage1 = editContent.getComponentByName('editImage1');
-            if (editImage1){
-                let text1 = new Rect(editImage1);
+            let posterPanel = editContent.getComponentByName('posterPanel');
+            if (posterPanel){
+                let text1 = new Rect(posterPanel);
                 text1.initCfg(resizerView('text1', {
                     x: 100,
                     y: 100,
@@ -36,7 +36,7 @@ export default class PosterEditController extends Controller{
                         text1.controller.init();
                     }
                 });
-                editImage1.appendChild(text1);
+                posterPanel.appendChild(text1);
             }
         }
     }
@@ -44,10 +44,11 @@ export default class PosterEditController extends Controller{
     exportImage(){
         let editContent = this.viewState.getComponentByName('editContent');
         if (editContent){
-            let editImage1 = editContent.getComponentByName('editImage1');
-            if (editImage1){
-                let url = editImage1.transform2ImageUrl();
-                console.log(url)
+            let posterPanel = editContent.getComponentByName('posterPanel');
+            if (posterPanel){
+                let base64 = posterPanel.transform2Base64();
+                console.log(base64)
+                console.log(commonUtil.getFileByBase64(base64, 'test.png'))
             }
         }
     }

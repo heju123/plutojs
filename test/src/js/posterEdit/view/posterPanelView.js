@@ -1,9 +1,9 @@
-import EditImageController from "../controller/editImageController";
+import PosterPanelController from "../controller/posterPanelController";
 
 export default (name, icon, style)=>{
   let ret = {
     name : name,
-    controller: EditImageController,
+    controller: PosterPanelController,
     type: "rect",
     style: {
       x: style.x,
