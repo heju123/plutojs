@@ -214,11 +214,7 @@ export default class ResizerController extends Controller{
 
     selectText(e){
         if (this.component.parent.controller.selectedTextCom !== this){
-            if (this.component.parent.controller.selectedTextCom){
-                this.component.parent.controller.onDelSelect();
-            }
-            this.component.parent.controller.selectedTextCom = this.component;
-            this.component.parent.controller.onSelect();
+            this.component.parent.controller.setSelectedCom(this.component);
         }
         e.stopPropagation();
     }

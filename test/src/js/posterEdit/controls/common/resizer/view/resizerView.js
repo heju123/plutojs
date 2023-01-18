@@ -17,25 +17,9 @@ export default (name, style, child)=>{
       cursor : "move",
       hover: function(){
         this.style.borderColor = '#6CCFFF'
-        this.getComponentByName('resizeTop').style.alpha = 1;
-        this.getComponentByName('resizeTopRight').style.alpha = 1;
-        this.getComponentByName('resizeRight').style.alpha = 1;
-        this.getComponentByName('resizeBottomRight').style.alpha = 1;
-        this.getComponentByName('resizeBottom').style.alpha = 1;
-        this.getComponentByName('resizeBottomLeft').style.alpha = 1;
-        this.getComponentByName('resizeLeft').style.alpha = 1;
-        this.getComponentByName('resizeTopLeft').style.alpha = 1;
       },
       hoverout: function(){
         this.restoreStyle();
-        this.getComponentByName('resizeTop').style.alpha = 0;
-        this.getComponentByName('resizeTopRight').style.alpha = 0;
-        this.getComponentByName('resizeRight').style.alpha = 0;
-        this.getComponentByName('resizeBottomRight').style.alpha = 0;
-        this.getComponentByName('resizeBottom').style.alpha = 0;
-        this.getComponentByName('resizeBottomLeft').style.alpha = 0;
-        this.getComponentByName('resizeLeft').style.alpha = 0;
-        this.getComponentByName('resizeTopLeft').style.alpha = 0;
       }
     },
     hasClip: false,
