@@ -22,8 +22,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "publish": "node scripts/publish.js",
-    "dev": "webpack --env=dev --progress --watch",
-    "test": "lite-server"
+    "dev": "webpack-dev-server --config ./webpack.config.js --mode development"
   },
   "publishConfig": {
     "registry": "http://172.16.254.105:8081/repository/npm_hosted/"

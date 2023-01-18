@@ -13,8 +13,10 @@ export default class PosterEditTestController extends Controller{
         if (editContent){
             let component = new Rect(editContent);
             component.initCfg(posterPanelView('posterPanel', '/images/bg.jpeg', {
-                x: 100,
-                y: 100
+                x: editContent.getInnerWidth() / 2 - 380 / 2,
+                y: editContent.getInnerHeight() / 2 - 620 / 2,
+                width: 380,
+                height: 620
             }))
             editContent.appendChild(component);
         }
@@ -27,8 +29,8 @@ export default class PosterEditTestController extends Controller{
             if (posterPanel){
                 let text1 = new Rect(posterPanel);
                 text1.initCfg(resizerView('text1', {
-                    x: 100,
-                    y: 100,
+                    x: posterPanel.getInnerWidth() / 2 - 100 / 2,
+                    y: posterPanel.getInnerHeight() / 2 - 20 / 2,
                     width: 100,
                     height: 20
                 }, textView('文本1文本1'))).then(()=>{

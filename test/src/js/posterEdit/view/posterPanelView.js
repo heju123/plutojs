@@ -8,8 +8,8 @@ export default (name, icon, style)=>{
     style: {
       x: style.x,
       y: style.y,
-      width: 380,
-      height: 620,
+      width: style.width,
+      height: style.height,
       draggable: true,
       backgroundColor: '#ffffff',
       shadow: {
