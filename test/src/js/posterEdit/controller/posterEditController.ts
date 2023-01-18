@@ -28,8 +28,10 @@ export default class PosterEditController extends Controller{
                 let text1 = new Rect(editImage1);
                 text1.initCfg(resizerView('text1', {
                     x: 100,
-                    y: 100
-                }, textView('text1'))).then(()=>{
+                    y: 100,
+                    width: 100,
+                    height: 20
+                }, textView('文本1文本1'))).then(()=>{
                     if (text1.controller){
                         text1.controller.init();
                     }

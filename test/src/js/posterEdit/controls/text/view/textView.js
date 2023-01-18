@@ -3,7 +3,7 @@ import TextController from "../controller/textController";
 export default (name)=>{
   let ret = {
       type: "rect",
-      name: name,
+      name: "textCom",
       controller: TextController,
       style: {
         x: 0,
@@ -12,7 +12,9 @@ export default (name)=>{
         height: '100%',
         fontColor: '#ffffff',
         multiLine: true,
-        zIndex: 1
+        autoLine: true,
+        zIndex: 1,
+        borderWidth: 2
       },
       text: name
   };
