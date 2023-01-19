@@ -30,10 +30,12 @@ export default class PosterEditTestController extends Controller{
                 let text1 = new Rect(posterPanel);
                 text1.initCfg(resizerView('text1', {
                     x: posterPanel.getInnerWidth() / 2 - 100 / 2,
-                    y: posterPanel.getInnerHeight() / 2 - 20 / 2,
+                    y: posterPanel.getInnerHeight() / 2 - 30 / 2,
                     width: 100,
-                    height: 20
-                }, textView('文本1文本1'))).then(()=>{
+                    height: 50
+                }, textView('文本1文本1', {
+                    fontSize: '38px'
+                }))).then(()=>{
                     if (text1.controller){
                         text1.controller.init();
                     }
@@ -51,6 +53,38 @@ export default class PosterEditTestController extends Controller{
                 let base64 = posterPanel.transform2Base64();
                 console.log(base64)
                 console.log(commonUtil.getFileByBase64(base64, 'test.png'))
+            }
+        }
+    }
+
+    changeFontFamily(){
+        let posterPanel = this.viewState.getComponentByName('posterPanel');
+        if (posterPanel && posterPanel.controller.selectedCom){
+            let textCom = posterPanel.controller.selectedCom.getComponentByName('textCom')
+            if (!textCom){
+                return;
+            }
+            let name = 'hanyijielongtaohuayuan'
+            // 检验字体是否已经安装
+            if ((document as any).fonts.check(`16px ${name}`, '上')) {
+                textCom.setStyle({
+                    'fontFamily': 'hanyijielongtaohuayuan'
+                })
+            }
+            else {
+                // 加载字体
+                const fontface = new (window as any).FontFace(name, `url('/fonts/${name}.ttf')`);
+                (document as any).fonts.add(fontface);
+                fontface.load();
+
+                fontface.loaded.then(() => {
+                    console.log('load')
+                    textCom.setStyle({
+                        'fontFamily': 'hanyijielongtaohuayuan'
+                    })
+                }).catch(err => {
+                    console.error(err)
+                });
             }
         }
     }

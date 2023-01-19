@@ -86,7 +86,12 @@ export default class Rect extends Component{
 
             ctx.font = this.style.fontSize + " " + this.style.fontFamily;
             ctx.fillStyle = this.style.fontColor;
-            ctx.textBaseline = this.style.textBaseline || "hanging";
+            ctx.textBaseline = this.style.textBaseline || "top";
+            // 计算文本高度，canvas绘制出来的文本矩形并不等于设置的fontSize
+            let metrics = ctx.measureText(this.getText().replace(/\n/g, ''));
+            // 参照文档https://developer.mozilla.org/zh-CN/docs/Web/API/TextMetrics
+            let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent; 
+            let lineHeight = this.style.lineHeight || fontHeight; //如果设置了lineHeight，文本高度就以lineHeight为准
             let char;
             let cindex;
             this.text.forEach((row, index)=>{
@@ -97,14 +102,15 @@ export default class Rect extends Component{
                     while (char = row.charAt(cindex))
                     {
                         ctx.fillText(char, this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10),
-                            this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+                            this.getTextRealY() + lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + lineHeight * index);
                         cindex++;
                     }
                 }
                 else
                 {
-                    ctx.fillText(row, this.getTextRealX(),
-                        this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index);
+                    let firstRowY = this.getTextRealY() + lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2;
+                    ctx.fillText(row, this.getTextRealX(), 
+                    firstRowY + lineHeight * index);
                 }
             });
             ctx.closePath();

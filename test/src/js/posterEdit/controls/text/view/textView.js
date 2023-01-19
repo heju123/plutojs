@@ -1,6 +1,6 @@
 import TextController from "../controller/textController";
 
-export default (name)=>{
+export default (name, style)=>{
   let ret = {
       type: "rect",
       name: "textCom",
@@ -14,7 +14,8 @@ export default (name)=>{
         multiLine: true,
         autoLine: true,
         zIndex: 1,
-        borderWidth: 2
+        borderWidth: 2,
+        fontSize: style && style.fontSize ? style.fontSize : '14px'
       },
       text: name
   };

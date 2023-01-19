@@ -38,7 +38,7 @@ export default class ResizerController extends Controller{
             resizeTopRight.registerEvent("onDrag", (e)=> {
                 let newY = resizeTopRight.getRealY() + 3;
                 let offset = this.component.getRealY() - newY;
-                let newHeight = this.component.getHeight() + offset
+                let newHeight = this.component.getHeight() + offset;
                 if (newHeight >= 20){
                     this.component.setRealY(newY)
                     this.component.setHeight(newHeight)

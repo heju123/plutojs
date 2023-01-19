@@ -69,7 +69,6 @@ abstract class Component {
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
 
         this.setDefaultStyle();
-        this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
     }
 
     init() : Promise<any>{

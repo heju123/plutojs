@@ -66,6 +66,18 @@ export default {
                         height : 30
                     }),
                     animation : commonAnimation.buttonAnimation,
+                    text : "改变选中文本字体",
+                    events : {
+                        "click" : "changeFontFamily"
+                    }
+                },
+                {
+                    type : "button",
+                    style : Object.assign({}, commonStyle.buttonStyle, {
+                        autoWidth : true,
+                        height : 30
+                    }),
+                    animation : commonAnimation.buttonAnimation,
                     text : "导出图片",
                     events : {
                         "click" : "exportImage"
