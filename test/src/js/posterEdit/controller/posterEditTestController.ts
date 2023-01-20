@@ -50,9 +50,12 @@ export default class PosterEditTestController extends Controller{
         if (editContent){
             let posterPanel = editContent.getComponentByName('posterPanel');
             if (posterPanel){
-                let base64 = posterPanel.transform2Base64();
-                console.log(base64)
-                console.log(commonUtil.getFileByBase64(base64, 'test.png'))
+                posterPanel.controller.setSelectedCom(undefined);
+                setTimeout(()=>{
+                    let base64 = posterPanel.transform2Base64();
+                    console.log(base64)
+                    console.log(commonUtil.getFileByBase64(base64, 'test.png'))
+                }, 500)
             }
         }
     }

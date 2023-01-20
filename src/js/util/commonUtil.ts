@@ -334,7 +334,7 @@ let commonUtil : any = {
 		newCanvas.width = width;
 		newCanvas.height = height;
 		newCtx.drawImage(oirCanvas, left, top, width, height, 0, 0, newCanvas.width, newCanvas.height);
-        let imgUrl = newCanvas.toDataURL("image/png", 1.0);
+        let imgUrl = newCanvas.toDataURL("image/jpeg", 1.0);
         return imgUrl;
     },
     /** 将base64转为File */
