@@ -10,7 +10,6 @@ export default (name, icon, style)=>{
       y: style.y,
       width: style.width,
       height: style.height,
-      draggable: true,
       backgroundColor: '#ffffff',
       shadow: {
         x: 0,
