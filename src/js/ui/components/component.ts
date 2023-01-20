@@ -35,6 +35,10 @@ abstract class Component {
     protected currentBackgroundImage : any;
     protected currentBackgroundImageIndex : number;
     protected backgroundImagesIntervalObj : number;
+    // 绘制文本的时候，文本矩形高度并不一定等于fontSize，默认情况下需要通过ctx.measureText来计算；如果设置了style.lineHeight，
+    // 以style.lineHeight为准，只有draw方法里面给ctx设置了相应字体属性，才能获取到正确的文本矩形高度，所以在Component里面定义一个变量缓存，
+    // 每一次draw的时候，会刷新这个变量，方便其他地方获取
+    protected lineHeight?: number; 
     isHover : boolean;
     isFocus : boolean;
     isActive : boolean;
@@ -1415,7 +1419,7 @@ abstract class Component {
         {
             return 0;
         }
-        return this.text.length * parseInt(this.style.lineHeight, 10);
+        return this.text.length * this.lineHeight;
     }
     getTextWidth() : number{
         if (!this.text)

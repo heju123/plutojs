@@ -178,7 +178,7 @@ export default class ViewState{
         if (!globalUtil.action.focusComponent.style.readOnly)//readOnly时禁止输入
         {
             globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
-            globalUtil.action.inputListenerDom.text = globalUtil.action.focusComponent.getText() || "";
+            globalUtil.action.inputListenerDom.value = globalUtil.action.focusComponent.getText() || "";
         }
     }
 
