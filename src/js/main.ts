@@ -53,7 +53,7 @@ import KeyEvent from "./event/type/keyEvent";
 import WheelEvent from "./event/type/wheelEvent";
 
 class Main {
-    fps : Fps;
+    private fps : Fps;
 
     constructor(eleId : HTMLElement | string){
         let mainBody : any;
