@@ -2,7 +2,6 @@
  * Created by heju on 2017/7/19.
  */
 import globalUtil from "../util/globalUtil";
-import commonUtil from "../util/commonUtil";
 import Rect from "./components/rect";
 import Router from "./components/router";
 import Input from "./components/input";
@@ -65,7 +64,7 @@ export default class ViewState{
                         event.setPageX(globalUtil.action.dragOffset.x);
                         event.setPageY(globalUtil.action.dragOffset.y);
                         event.setCurrentTarget(globalUtil.action.dragComponent);
-                        globalUtil.eventBus.broadcastEvent("startDrag", event, true);
+                        globalUtil.eventBus.broadcastEvent("startDrag", event);
                     }
                 }
             }
@@ -86,7 +85,7 @@ export default class ViewState{
                 event.setPageX(globalUtil.action.dragOffset.x);
                 event.setPageY(globalUtil.action.dragOffset.y);
                 event.setCurrentTarget(globalUtil.action.dragComponent);
-                globalUtil.eventBus.broadcastEvent("endDrag", event, true);
+                globalUtil.eventBus.broadcastEvent("endDrag", event);
 
                 globalUtil.action.dragComponent = undefined;
                 globalUtil.action.dragOffset = undefined;
@@ -107,7 +106,7 @@ export default class ViewState{
                 event.setPageX(globalUtil.action.dragOffset.x);
                 event.setPageY(globalUtil.action.dragOffset.y);
                 event.setCurrentTarget(globalUtil.action.dragComponent);
-                globalUtil.eventBus.broadcastEvent("onDrag", event, true);
+                globalUtil.eventBus.broadcastEvent("onDrag", event);
             }
         });
 
@@ -179,7 +178,7 @@ export default class ViewState{
         if (!globalUtil.action.focusComponent.style.readOnly)//readOnly时禁止输入
         {
             globalUtil.action.focusComponent.setText(globalUtil.action.inputListenerDom.value);
-            globalUtil.action.inputListenerDom.text = globalUtil.action.focusComponent.getText() || "";
+            globalUtil.action.inputListenerDom.value = globalUtil.action.focusComponent.getText() || "";
         }
     }
 

@@ -35,6 +35,10 @@ abstract class Component {
     protected currentBackgroundImage : any;
     protected currentBackgroundImageIndex : number;
     protected backgroundImagesIntervalObj : number;
+    // 绘制文本的时候，文本矩形高度并不一定等于fontSize，默认情况下需要通过ctx.measureText来计算；如果设置了style.lineHeight，
+    // 以style.lineHeight为准，只有draw方法里面给ctx设置了相应字体属性，才能获取到正确的文本矩形高度，所以在Component里面定义一个变量缓存，
+    // 每一次draw的时候，会刷新这个变量，方便其他地方获取
+    protected lineHeight?: number; 
     isHover : boolean;
     isFocus : boolean;
     isActive : boolean;
@@ -69,7 +73,6 @@ abstract class Component {
         this.originalStyle = {};//保存原来的样式，避免focus或hover后原来的样式丢失
 
         this.setDefaultStyle();
-        this.setStyle("lineHeight", parseInt(this.style.fontSize, 10));
     }
 
     init() : Promise<any>{
@@ -574,6 +577,8 @@ abstract class Component {
         {
             this.setOriginalCoor2Center(ctx);
         }
+        //阴影
+        this.setShadowEnable(ctx);
         //缩放
         this.setScaleEnable(ctx);
         //旋转
@@ -629,6 +634,18 @@ abstract class Component {
             {
                 ctx.scale(scaleArr[0], -scaleArr[1]);
             }
+        }
+    }
+
+    /** 设置ctx的阴影绘制 */
+    protected setShadowEnable(ctx : CanvasRenderingContext2D){
+        let shadowInfo = this.style.shadow;
+        if (shadowInfo !== undefined)
+        {
+            ctx.shadowOffsetX = shadowInfo.x;
+            ctx.shadowOffsetY = shadowInfo.y;
+            ctx.shadowBlur = shadowInfo.blur;
+            ctx.shadowColor = shadowInfo.color;
         }
     }
 
@@ -717,7 +734,8 @@ abstract class Component {
                 this.copyStyle(this.style.hover);
             }
         }
-        if (this.style.cursor)
+        // 子组件和父组件同时设置了cursor属性，以子组件的为准
+        if (this.style.cursor && this.viewState.canvas.style.cursor === 'default')
         {
             this.viewState.canvas.style.cursor = this.style.cursor;
         }
@@ -1411,7 +1429,7 @@ abstract class Component {
         {
             return 0;
         }
-        return this.text.length * parseInt(this.style.lineHeight, 10);
+        return this.text.length * this.lineHeight;
     }
     getTextWidth() : number{
         if (!this.text)
@@ -1596,6 +1614,11 @@ abstract class Component {
     /** 触发事件 */
     triggerEvent(type : string){
         globalUtil.eventBus.triggerEvent(type, this);
+    }
+
+    /** 将指定区域转换为图片地址 */
+    transform2Base64(){
+        return commonUtil.transform2Base64(this.viewState.canvas, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight())
     }
 
     destroy(){

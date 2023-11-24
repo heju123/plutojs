@@ -306,7 +306,7 @@ export default class EventBus{
      *
      * @param type
      * @param event 发送的事件，里面的currentTarget对象会拿来和listener.target作比较，满足条件则执行事件，currentTarget表示需要将事件推送给哪个组件
-     * @param toChildren 是否发送给子组件，如果listener.target是currentTarget的children也满足条件
+     * @param toChildren 是否发送给子组件，如果listener.target(绑定事件的组件)是currentTarget(触发事件的组件)的children也满足条件
      */
     broadcastEvent(type : string, event? : Event, toChildren? : boolean){
         if (!this.eventListeners[type])
@@ -324,16 +324,16 @@ export default class EventBus{
                 else
                 {
                     //event.currentTarget和listener.target都有可能是controller，所以需要转换成component再比较
-                    let currentTargetCom = this.getComponentByTarget(event.currentTarget);
-                    let targetCom = this.getComponentByTarget(listener.target);
-                    if (targetCom && currentTargetCom)
+                    let currentTargetCom = this.getComponentByTarget(event.currentTarget);// 触发事件的组件
+                    let bindEventTargetCom = this.getComponentByTarget(listener.target);// 绑定事件的组件
+                    if (bindEventTargetCom && currentTargetCom)
                     {
-                        if (!toChildren && currentTargetCom === targetCom)
+                        if (!toChildren && currentTargetCom === bindEventTargetCom)
                         {
                             listener.executeCallback(event);
                         }
-                        else if (toChildren && (currentTargetCom === targetCom ||
-                                currentTargetCom.parentOf(targetCom)))
+                        else if (toChildren && (currentTargetCom === bindEventTargetCom ||
+                            currentTargetCom.parentOf(bindEventTargetCom)))
                         {
                             listener.executeCallback(event);
                         }

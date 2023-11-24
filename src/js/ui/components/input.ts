@@ -39,6 +39,12 @@ export default class Input extends Scrollbar {
         this.setCommonStyle(ctx);
         this.setClip(ctx);
         ctx.beginPath();
+        ctx.font = this.style.fontSize + " " + this.style.fontFamily;
+        ctx.fillStyle = this.style.fontColor;
+        ctx.textBaseline = this.style.textBaseline || "top";
+        let metrics = ctx.measureText('测');
+        let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent; 
+        this.lineHeight = this.style.lineHeight || fontHeight;
         //focus
         if (globalUtil.action.focusComponent === this && !this.style.readOnly) {
             //绘制光标
@@ -68,7 +74,7 @@ export default class Input extends Scrollbar {
             textRow = textRow === undefined ? this.text.length - 1 : textRow;
         }
         this.textCursorX = selectionEnd * parseInt(this.style.fontSize) + 1;
-        this.textCursorY = this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * (textRow || 0);
+        this.textCursorY = this.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.lineHeight * (textRow || 0);
     }
 
     private drawTextCursor(ctx : CanvasRenderingContext2D){
@@ -79,8 +85,8 @@ export default class Input extends Scrollbar {
                 this.getTextCursorPos();
             }
             ctx.fillStyle="#000";
-            ctx.moveTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY + 2);
-            ctx.lineTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY + this.style.lineHeight - 2);
+            ctx.moveTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY);
+            ctx.lineTo(this.getTextRealX() + this.textCursorX, this.getTextRealY() + this.textCursorY + parseInt(this.style.fontSize, 10));
             ctx.stroke();
         }
         this.showTextCursorInterval++;
@@ -111,7 +117,7 @@ export default class Input extends Scrollbar {
                 while (char = row.charAt(cindex))
                 {
                     textX = this.getTextRealX() + cindex * parseInt(this.style.fontSize, 10);
-                    textY = this.getTextRealY() + this.style.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.style.lineHeight * index;
+                    textY = this.getTextRealY() + this.lineHeight / 2 - parseInt(this.style.fontSize, 10) / 2 + this.lineHeight * index;
                     if (my >= textY
                         && my <= textY + parseInt(this.style.fontSize, 10)
                         && mx >= textX
@@ -139,7 +145,7 @@ export default class Input extends Scrollbar {
         }
         else
         {
-            return oriY + this.getHeight() / 2 - this.style.lineHeight / 2;
+            return oriY + this.getHeight() / 2 - this.lineHeight / 2;
         }
     }
 

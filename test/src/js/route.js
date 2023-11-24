@@ -19,4 +19,5 @@ commonUtil.copyObject(require("./nestRoute/route").default, output.routes, false
 commonUtil.copyObject(require("./scrollbar/route").default, output.routes, false);
 commonUtil.copyObject(require("./cliptest/route").default, output.routes, false);
 commonUtil.copyObject(require("./particleEffects/route").default, output.routes, false);
+commonUtil.copyObject(require("./posterEdit/route").default, output.routes, false);
 export default output;

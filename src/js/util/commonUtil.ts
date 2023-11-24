@@ -1,4 +1,24 @@
 /**
+ * 二进制容器
+ * @param {String} base64Str
+ */
+const getUint8Arr = base64Str => {
+    // 截取base64的数据内容
+    let arr = base64Str.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        // 获取解码后的二进制数据的长度，用于后面创建二进制数据容器
+        n = bstr.length,
+        // 创建一个Uint8Array类型的数组以存放二进制数据
+        u8arr = new Uint8Array(n)
+    // 将二进制数据存入Uint8Array类型的数组中
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return { u8arr, mime }
+}
+
+/**
  * Created by heju on 2017/7/14.
  */
 let commonUtil : any = {
@@ -306,6 +326,21 @@ let commonUtil : any = {
         else if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
             return "IE";
         } //判断是否IE浏览器
+    },
+    /** 将指定区域转化为图片地址 */
+    transform2Base64: (oirCanvas: HTMLCanvasElement, left: number, top: number, width: number, height: number)=>{
+        let newCanvas = document.createElement('canvas');
+		let newCtx = newCanvas.getContext('2d');
+		newCanvas.width = width;
+		newCanvas.height = height;
+		newCtx.drawImage(oirCanvas, left, top, width, height, 0, 0, newCanvas.width, newCanvas.height);
+        let imgUrl = newCanvas.toDataURL("image/jpeg", 1.0);
+        return imgUrl;
+    },
+    /** 将base64转为File */
+    getFileByBase64: (base64: string, filename: string)=>{
+        let uint8 = getUint8Arr(base64)
+        return new File([uint8.u8arr], filename, { type: uint8.mime })
     }
 };
 export default commonUtil;

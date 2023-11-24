@@ -117,6 +117,14 @@ export default {
                                     events : {
                                         "click" : "goLink('particleEffects')"
                                     }
+                                }),
+                                getLinkView("海报编辑", {
+                                    style : {
+                                        fontSize : "18px"
+                                    },
+                                    events : {
+                                        "click" : "goLink('posterEdit')"
+                                    }
                                 })
                             ]
                         }
