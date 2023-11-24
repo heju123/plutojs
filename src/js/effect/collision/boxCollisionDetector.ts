@@ -1,6 +1,6 @@
+import { Component } from "src/js/main";
 import Map from "../../ui/components/game/map";
 import MPromise from "../../util/promise";
-import Component from "../../ui/components/Component";
 import Thread from "../../util/thread";
 import CollisionDetector from "./collisionDetector";
 

@@ -50,7 +50,7 @@ export default class Map extends Rect {
                         this.initWH();
                         this.onMapDataChanged();
                     }
-                    resolve();
+                    resolve(undefined);
                 }, ()=>{
                     reject();
                 });

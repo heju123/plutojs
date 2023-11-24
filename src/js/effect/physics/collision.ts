@@ -24,7 +24,7 @@ export default class Collision extends BasePhysics implements Physics{
         if (this.isDelay())
         {
             return new Promise((resolve, reject)=>{
-                resolve();
+                resolve(undefined);
             });
         }
         return new Promise((resolve, reject)=>{
@@ -45,7 +45,7 @@ export default class Collision extends BasePhysics implements Physics{
                     }, ()=>{
                     }).finally(()=>{
                         this.collisionDetector.detectCollision(this.target, x, y, this.detectCollisionThread, false).then(()=>{
-                            resolve();
+                            resolve(undefined);
                         }, (data)=>{
                             reject(new CollisionReject(data, this.direction));
                             if ((<any>this).target.onCollision && typeof((<any>this).target.onCollision) === "function")
@@ -58,7 +58,7 @@ export default class Collision extends BasePhysics implements Physics{
                 }
                 else
                 {
-                    resolve();
+                    resolve(undefined);
                 }
             },(data)=>{
                 reject(data);

@@ -28,7 +28,7 @@ let animationUtil = {
         return new Promise((resolve, reject)=>{
             to.ease = EasePack[animation.easeType][animation.easing];
             to.onComplete = function() {
-                resolve();
+                resolve(undefined);
             };
             if (animation.delay)
             {

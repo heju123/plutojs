@@ -104,7 +104,7 @@ abstract class Component {
             allPromise.push(new Promise((resolve)=> {
                 this.initBackgroundImageDom(this.currentBackgroundImage.url).then((imgDom) => {
                     this.currentBackgroundImage.dom = imgDom;
-                    resolve();
+                    resolve(undefined);
                 });
             }));
         }
@@ -113,13 +113,13 @@ abstract class Component {
             {
                 Promise.all(allPromise).then(()=>{
                     this.isInit = true;
-                    resolve();
+                    resolve(undefined);
                 });
             }
             else
             {
                 this.isInit = true;
-                resolve();
+                resolve(undefined);
             }
         });
         return this.afterInitPromise;
@@ -152,7 +152,7 @@ abstract class Component {
                     bgImages.forEach((bgi)=>{
                         bgi.dom = imgDom;
                     });
-                    resolve();
+                    resolve(undefined);
                 });
             }));
         }
@@ -162,7 +162,7 @@ abstract class Component {
                 allPromise.push(new Promise((resolve)=>{
                     this.initBackgroundImageDom(bgi.url).then((imgDom)=>{
                         bgi.dom = imgDom;
-                        resolve();
+                        resolve(undefined);
                     });
                 }));
             });
@@ -248,16 +248,26 @@ abstract class Component {
 
         if (cfg.controller && typeof(cfg.controller) == "function")
         {
-            this.controller = Object.create(cfg.controller.prototype);
             if (cfg.controllerParam && cfg.controllerParam instanceof Array)
             {
-                cfg.controllerParam.unshift(this);
-                cfg.controller.apply(this.controller, cfg.controllerParam);
+                this.controller = new cfg.controller(this, cfg.controllerParam);
             }
             else
             {
-                cfg.controller.apply(this.controller, [this]);
+                this.controller = new cfg.controller(this);
             }
+            
+            // 以下原有代码，新版本typescript要报错
+            // this.controller = Object.create(cfg.controller.prototype);
+            // if (cfg.controllerParam && cfg.controllerParam instanceof Array)
+            // {
+            //     cfg.controllerParam.unshift(this);
+            //     cfg.controller.apply(this.controller, cfg.controllerParam);
+            // }
+            // else
+            // {
+            //     cfg.controller.apply(this.controller, [this]);
+            // }
         }
         if (cfg.children)
         {
@@ -308,7 +318,7 @@ abstract class Component {
         else
         {
             return new Promise((resolve)=>{
-                resolve();
+                resolve(undefined);
             });
         }
     }
@@ -365,7 +375,7 @@ abstract class Component {
                 if (chiCfg.type === "dom")
                 {
                     globalUtil.domFactory.createDom(this, chiCfg.className, chiCfg);
-                    resolve();
+                    resolve(undefined);
                     return;
                 }
                 childCom = this.newComByType(chiCfg.type);

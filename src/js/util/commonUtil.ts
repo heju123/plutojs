@@ -96,12 +96,12 @@ let commonUtil : any = {
                 promises.push(new Promise(function(resolve, reject){
                     if (commonUtil.isIncludeScript(commonUtil.getFileNameFromUrl(scriptArr[i])))
                     {
-                        resolve();
+                        resolve(undefined);
                     }
                     else
                     {
                         commonUtil.asyncLoadScript(scriptArr[i], function(){
-                            resolve();
+                            resolve(undefined);
                         });
                     }
                 }));
@@ -111,7 +111,7 @@ let commonUtil : any = {
         else
         {
             return new Promise(function(resolve, reject){
-                resolve();
+                resolve(undefined);
             });
         }
     },
@@ -269,7 +269,7 @@ let commonUtil : any = {
         return new Promise((resolve, reject)=> {
             var ret = window.confirm(msg);
             if (ret) {
-                resolve();
+                resolve(undefined);
             }
             else {
                 reject();

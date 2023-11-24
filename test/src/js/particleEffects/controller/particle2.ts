@@ -57,7 +57,7 @@ export default class Particle2 extends BaseParticle implements Particle{
     }
     beforeDestroy() : Promise<any>{
         return new Promise((resolve, reject)=>{
-            resolve();
+            resolve(undefined);
         });
     }
     destroyed(){

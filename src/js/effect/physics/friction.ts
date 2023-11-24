@@ -16,7 +16,7 @@ export default class Friction extends BasePhysics implements Physics{
         if (this.isDelay())
         {
             return new Promise((resolve, reject)=>{
-                resolve();
+                resolve(undefined);
             });
         }
         return new Promise((resolve, reject)=>{
@@ -47,7 +47,7 @@ export default class Friction extends BasePhysics implements Physics{
                         this.target.ySpeed = Math.min(this.target.ySpeed, 0);
                     }
                 }
-                resolve();
+                resolve(undefined);
             }, (data)=>{
                 reject(data);
             });

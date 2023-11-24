@@ -12,7 +12,7 @@ export default class Speed extends BasePhysics implements Physics{
         if (this.isDelay())
         {
             return new Promise((resolve, reject)=>{
-                resolve();
+                resolve(undefined);
             });
         }
         return new Promise((resolve, reject)=>{
@@ -39,7 +39,7 @@ export default class Speed extends BasePhysics implements Physics{
                         this.target.setY(this.target.getY() + this.target.ySpeed);
                     }
                 }
-                resolve();
+                resolve(undefined);
             }, (data)=>{
                 if (data instanceof CollisionReject)//发生碰撞
                 {

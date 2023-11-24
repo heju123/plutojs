@@ -85,7 +85,7 @@ export default class Router extends Rect{
                         };
                         globalUtil.eventBus.broadcastEvent("$onViewLoaded", event, true);
 
-                        resolve();
+                        resolve(undefined);
                     });
                 }
                 else
@@ -97,12 +97,12 @@ export default class Router extends Rect{
                         }
                     });
                     this.currentChildren.active = true;
-                    resolve();
+                    resolve(undefined);
                 }
             }
             else
             {
-                resolve();
+                resolve(undefined);
             }
         });
     }

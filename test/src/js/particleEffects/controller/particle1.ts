@@ -59,7 +59,7 @@ export default class Particle1 extends BaseParticle implements Particle{
                 easeType : "Linear",
                 easing : "ease"
             }).then(()=>{
-                resolve();
+                resolve(undefined);
             });
         });
     }

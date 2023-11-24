@@ -46,7 +46,7 @@ export default class PhysicsQueue{
                 allPromise.push(physics.effect());
             });
             Promise.all(allPromise).then(()=>{
-                resolve();
+                resolve(undefined);
             }, ()=>{
                 reject();
             });

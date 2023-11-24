@@ -19,7 +19,7 @@ export default abstract class BasePhysics{
             return Promise.all(allPromise);
         }
         return new Promise((resolve, reject)=>{
-            resolve();
+            resolve(undefined);
         });
     }
 

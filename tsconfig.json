@@ -2,16 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es5",
+    "lib": ["es6", "dom"],
     "allowJs": true,
     "sourceMap": true,
     "declaration": true,
-    "lib": [
-      "es5",
-      "es2015",
-      "dom"
-    ],
     "rootDirs": ["src"]
   },
   "files": [
