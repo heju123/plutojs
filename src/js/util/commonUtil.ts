@@ -302,6 +302,7 @@ let commonUtil : any = {
     createImageDom : (url : string)=>{
         return new Promise((resolve, reject)=>{
             let img = new Image();
+            img.crossOrigin = 'anonymous';
             img.onload = function(){
                 resolve(this);
             };

@@ -1,6 +1,6 @@
 {
   "name": "plutojs",
-  "version": "2.3.29",
+  "version": "2.3.30",
   "description": "plutojs",
   "main": "dist/src/js/main.js",
   "types": "dist/src/js/main.d.ts",
