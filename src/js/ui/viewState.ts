@@ -186,7 +186,7 @@ export default class ViewState{
         globalUtil.eventBus.captureEvent(eventNotify);//为了最后执行mousedown事件，必须第一个占坑
     }
 
-    getComponentInChildrenByKey(key : string, val : string, com : Component) {
+    getComponentInChildrenByKey(key : string, val : string, com : Component): Component {
         let children = com.getChildren();
         if (children)
         {
@@ -261,13 +261,13 @@ export default class ViewState{
         }
     }
     /** 用key获取组件列表 */
-    getComponentsInChildrenByKey(key : string, val : string, com : Component) {
+    getComponentsInChildrenByKey(key : string, val : string, com : Component): Component[] {
         let retArr = [];
         this._getComponentsInChildrenByKey(retArr, key, val, com);
         return retArr;
     }
 
-    getComponentById(id : string){
+    getComponentById(id : string): Component{
         if (this.rootComponent.id && this.rootComponent.id === id)
         {
             return this.rootComponent;
@@ -278,7 +278,7 @@ export default class ViewState{
         }
     }
 
-    getComponentByName(name : string){
+    getComponentByName(name : string): Component{
         if (this.rootComponent.name && this.rootComponent.name === name)
         {
             return this.rootComponent;
@@ -290,7 +290,7 @@ export default class ViewState{
     }
 
     /** 用name获取组件集合 */
-    getComponentsByName(name : string){
+    getComponentsByName(name : string): Component[]{
         if (this.rootComponent.name && this.rootComponent.name === name)
         {
             return [this.rootComponent];
@@ -302,7 +302,7 @@ export default class ViewState{
     }
 
     /** 用type获取组件集合 */
-    getComponentsByType(type : string){
+    getComponentsByType(type : string): Component[]{
         if (this.rootComponent.type && this.rootComponent.type === type)
         {
             return [this.rootComponent];
