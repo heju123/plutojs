@@ -328,7 +328,7 @@ let commonUtil : any = {
         } //判断是否IE浏览器
     },
     /** 将指定区域转化为图片地址 */
-    transform2Base64: (oirCanvas: HTMLCanvasElement, left: number, top: number, width: number, height: number)=>{
+    transform2Base64: (oirCanvas: HTMLCanvasElement, left: number, top: number, width: number, height: number): string=>{
         let newCanvas = document.createElement('canvas');
 		let newCtx = newCanvas.getContext('2d');
 		newCanvas.width = width;

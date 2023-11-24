@@ -1617,7 +1617,7 @@ abstract class Component {
     }
 
     /** 将指定区域转换为图片地址 */
-    transform2Base64(){
+    transform2Base64(): string{
         return commonUtil.transform2Base64(this.viewState.canvas, this.getRealX(), this.getRealY(), this.getWidth(), this.getHeight())
     }
 
